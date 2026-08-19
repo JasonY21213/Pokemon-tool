@@ -45,6 +45,7 @@ import {
   type GrowthRateAssignmentAudit,
   type GrowthRateConflict,
 } from './growth-rate.ts'
+import { buildMoves, type MoveConflict, type QuarantinedMove } from './moves.ts'
 
 const STANDARD_TYPES = [
   ['bug', 'Bug'], ['dark', 'Dark'], ['dragon', 'Dragon'], ['electric', 'Electric'],
@@ -82,6 +83,9 @@ export interface BuildArtifacts {
   growthRateConflicts: GrowthRateConflict[]
   growthRateProvenanceCount: number
   expectedUnresolvedGrowthRateCount: number
+  quarantinedMoves: QuarantinedMove[]
+  moveConflicts: MoveConflict[]
+  moveMappingCounts: { automatic: number; ruleBased: number; manualException: number; unresolved: number }
   scopeNotes: string[]
 }
 
@@ -372,6 +376,8 @@ export async function buildSmokeArtifacts(
   const syclant = requiredPokedexRecord(data, 'syclant')
   if (syclant.num > 0) throw new Error('The CAP negative fixture unexpectedly has a positive national number')
   const forms = buildForms(data, source)
+  const localizationSource = await loadPokemonDatasetZhSource(source)
+  const moveBuild = buildMoves(data, source, localizationSource)
   const dataset = SmokeDatasetSchema.parse({
     types: buildTypes(data),
     natures: buildNatures(data),
@@ -379,9 +385,9 @@ export async function buildSmokeArtifacts(
     forms,
     abilities: buildAbilities(data, source, forms),
     growthRates: CANONICAL_GROWTH_RATES,
+    moves: moveBuild.stableMoves,
   })
   const audit = provenance(dataset, source)
-  const localizationSource = await loadPokemonDatasetZhSource(source)
   const localization = buildLocalization(dataset, localizationSource)
   const growthRates = buildGrowthRates(dataset, localizationSource, localization.formMappings)
   const resolvedDataset = SmokeDatasetSchema.parse({
@@ -389,13 +395,18 @@ export async function buildSmokeArtifacts(
     species: growthRates.species,
     forms: growthRates.forms,
   })
+  const resolvedLocalization: SmokeLocalization = {
+    ...localization.localization,
+    moves: { locale: 'zh-CN', entries: moveBuild.localizationEntries },
+  }
   return {
     dataset: resolvedDataset,
     source,
-    identityMatches: audit.identityMatches,
-    valueProvenance: [...audit.valueProvenance, ...localization.valueProvenance, ...growthRates.valueProvenance]
+    identityMatches: [...audit.identityMatches, ...moveBuild.identityMatches]
+      .sort((left, right) => left.entityId.localeCompare(right.entityId, 'en')),
+    valueProvenance: [...audit.valueProvenance, ...localization.valueProvenance, ...growthRates.valueProvenance, ...moveBuild.valueProvenance]
       .sort((left, right) => `${left.entityId}${left.fieldPath}`.localeCompare(`${right.entityId}${right.fieldPath}`, 'en')),
-    localization: localization.localization,
+    localization: resolvedLocalization,
     formLocalizationMappings: localization.formMappings,
     localizationMechanicsConflicts: localization.mechanicsConflicts,
     localizationProvenanceCount: localization.valueProvenance.length,
@@ -403,6 +414,9 @@ export async function buildSmokeArtifacts(
     growthRateConflicts: growthRates.conflicts,
     growthRateProvenanceCount: growthRates.valueProvenance.length,
     expectedUnresolvedGrowthRateCount: growthRates.expectedUnresolvedCount,
+    quarantinedMoves: moveBuild.quarantinedMoves,
+    moveConflicts: moveBuild.conflicts,
+    moveMappingCounts: moveBuild.mappingCounts,
     scopeNotes: [
       'Stellar exists in the fixed TypeChart but is explicitly excluded from the 18-type smoke matrix.',
       'Non-attacking TypeChart keys such as brn, par, powder, and prankster are not emitted as Types.',
@@ -411,6 +425,7 @@ export async function buildSmokeArtifacts(
       'requiredItemNames is a smoke-only source value; canonical Item entities are deferred beyond this slice.',
       'No converter cache layer is implemented in this slice; every run verifies and reads the pinned source.',
       'GrowthRate formulas and level 1-100 experience calculations are explicitly deferred.',
+      'Move output is restricted to twelve identity fixtures; Future Nihil Light is quarantined and excluded from stable runtime data.',
     ],
   }
 }
@@ -446,8 +461,10 @@ export async function runSmokePipeline(options: {
     ['forms.json', artifacts.dataset.forms],
     ['abilities.json', artifacts.dataset.abilities],
     ['growth-rates.json', artifacts.dataset.growthRates],
+    ['moves.json', artifacts.dataset.moves],
     ['localization/zh-CN.core.json', artifacts.localization.core],
     ['localization/zh-CN.abilities.json', artifacts.localization.abilities],
+    ['localization/zh-CN.moves.json', artifacts.localization.moves],
   ]
   for (const [path, value] of runtimeValues) await writeJson(join(runtimeRoot, path), value)
   const fileEntries = []
@@ -494,6 +511,18 @@ export async function runSmokePipeline(options: {
       expectedUnresolved: artifacts.expectedUnresolvedGrowthRateCount,
     },
   })
+  await writeJson(join(outputRoot, 'reports', 'move-mapping.json'), {
+    schemaVersion: 1,
+    sourceCommits: {
+      pokemonShowdown: artifacts.source.commit,
+      pokemonDatasetZh: artifacts.source.localization.commit,
+    },
+    fixtureCount: 12,
+    stableRuntimeCount: artifacts.dataset.moves.length,
+    mappingCounts: artifacts.moveMappingCounts,
+    conflicts: artifacts.moveConflicts,
+    quarantine: artifacts.quarantinedMoves,
+  })
   const report = SmokeReportSchema.parse({
     schemaVersion: 1,
     sourceCommits: {
@@ -508,6 +537,7 @@ export async function runSmokePipeline(options: {
       forms: artifacts.dataset.forms.length,
       abilities: artifacts.dataset.abilities.length,
       growthRates: artifacts.dataset.growthRates.length,
+      moves: artifacts.dataset.moves.length,
     },
     scopeNotes: artifacts.scopeNotes,
     issues: validation.issues,

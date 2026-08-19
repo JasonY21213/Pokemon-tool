@@ -41,7 +41,7 @@ const SourceLockSchema = z.object({
 }).strict()
 
 const RegistryEntitySchema = z.object({
-  kind: z.enum(['species', 'form', 'ability']),
+  kind: z.enum(['species', 'form', 'ability', 'move']),
   projectId: z.string().min(1),
   anchor: z.record(z.string(), z.union([z.string(), z.number()])),
   showdownId: z.string().regex(/^[a-z0-9]+$/),
@@ -91,6 +91,21 @@ const RawAbilityRecordSchema = z.object({
   isNonstandard: z.string().optional(),
 }).passthrough()
 
+const RawMoveRecordSchema = z.object({
+  num: z.number().int(),
+  name: z.string().min(1),
+  type: z.string().min(1),
+  category: z.enum(['Physical', 'Special', 'Status']),
+  basePower: z.number().nonnegative(),
+  accuracy: z.union([z.number().positive().max(100), z.literal(true)]),
+  pp: z.number().int().nonnegative(),
+  priority: z.number().int(),
+  target: z.string().min(1),
+  isNonstandard: z.string().optional(),
+  isMax: z.union([z.boolean(), z.string()]).optional(),
+  isZ: z.union([z.boolean(), z.string()]).optional(),
+}).passthrough()
+
 const RawNatureRecordSchema = z.object({
   name: z.string().min(1),
   plus: z.enum(['atk', 'def', 'spa', 'spd', 'spe']).optional(),
@@ -103,6 +118,7 @@ const RawTypeRecordSchema = z.object({
 
 export type RawPokedexRecord = z.infer<typeof RawPokedexRecordSchema>
 export type RawAbilityRecord = z.infer<typeof RawAbilityRecordSchema>
+export type RawMoveRecord = z.infer<typeof RawMoveRecordSchema>
 export type RawNatureRecord = z.infer<typeof RawNatureRecordSchema>
 export type RawTypeRecord = z.infer<typeof RawTypeRecordSchema>
 export type RegistryEntity = z.infer<typeof RegistryEntitySchema>
@@ -110,6 +126,7 @@ export type RegistryEntity = z.infer<typeof RegistryEntitySchema>
 export interface ShowdownSourceData {
   pokedex: Record<string, unknown>
   abilities: Record<string, unknown>
+  moves: Record<string, unknown>
   natures: Record<string, RawNatureRecord>
   typeChart: Record<string, RawTypeRecord>
 }
@@ -279,15 +296,17 @@ function parseRecord<T>(
 
 export async function loadShowdownSource(source: VerifiedSource): Promise<ShowdownSourceData> {
   const dataPath = join(source.cachePath, 'data')
-  const [pokedex, abilities, natures, typeChart] = await Promise.all([
+  const [pokedex, abilities, moves, natures, typeChart] = await Promise.all([
     importRecord(join(dataPath, 'pokedex.ts'), 'Pokedex'),
     importRecord(join(dataPath, 'abilities.ts'), 'Abilities'),
+    importRecord(join(dataPath, 'moves.ts'), 'Moves'),
     importRecord(join(dataPath, 'natures.ts'), 'Natures'),
     importRecord(join(dataPath, 'typechart.ts'), 'TypeChart'),
   ])
   return {
     pokedex,
     abilities,
+    moves,
     natures: parseRecord(natures, RawNatureRecordSchema, 'Nature'),
     typeChart: parseRecord(typeChart, RawTypeRecordSchema, 'Type'),
   }
@@ -306,6 +325,12 @@ export function parseAbilityRecord(value: unknown, id: string): RawAbilityRecord
   if (!parsed.success) {
     throw new Error(`Invalid Ability record ${id}: ${z.prettifyError(parsed.error)}`)
   }
+  return parsed.data
+}
+
+export function parseMoveRecord(value: unknown, id: string): RawMoveRecord {
+  const parsed = RawMoveRecordSchema.safeParse(value)
+  if (!parsed.success) throw new Error(`Invalid Move record ${id}: ${z.prettifyError(parsed.error)}`)
   return parsed.data
 }
 

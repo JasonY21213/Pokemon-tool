@@ -50,10 +50,14 @@ export function validateSmokeDataset(
     ...dataset.species.map(entity => entity.speciesId),
     ...dataset.forms.map(entity => entity.formId),
     ...dataset.abilities.map(entity => entity.abilityId),
+    ...dataset.moves.map(entity => entity.moveId),
   ]
   for (const id of duplicateValues(allEntityIds)) error('DUPLICATE_ID', `Entity ID occurs more than once: ${id}`)
   for (const number of duplicateValues(dataset.abilities.map(ability => String(ability.officialNumber)))) {
     error('DUPLICATE_ABILITY_NUMBER', `Ability official number occurs more than once: ${number}`)
+  }
+  for (const number of duplicateValues(dataset.moves.flatMap(move => move.officialNumber === null ? [] : [String(move.officialNumber)]))) {
+    error('DUPLICATE_MOVE_NUMBER', `Move official number occurs more than once: ${number}`)
   }
   for (const id of duplicateValues(dataset.growthRates.map(growthRate => growthRate.growthRateId))) {
     error('DUPLICATE_GROWTH_RATE_ID', `GrowthRate ID occurs more than once: ${id}`)
@@ -127,6 +131,12 @@ export function validateSmokeDataset(
   }
   for (const showdownId of duplicateValues(dataset.forms.map(form => form.showdownId))) {
     error('NON_UNIQUE_FORM_MAPPING', `Showdown Form ${showdownId} maps to multiple project Forms`)
+  }
+  for (const move of dataset.moves) {
+    if (!typeIds.has(move.typeId)) error('ORPHAN_MOVE_TYPE_REFERENCE', `${move.moveId} references ${move.typeId}`)
+  }
+  for (const showdownId of duplicateValues(dataset.moves.map(move => move.showdownId))) {
+    error('NON_UNIQUE_MOVE_MAPPING', `Showdown Move ${showdownId} maps to multiple project Moves`)
   }
 
   if (dataset.types.length !== 18) error('TYPE_COUNT', `Expected 18 standard attack Types, received ${dataset.types.length}`)
@@ -205,6 +215,7 @@ export function validateSmokeDataset(
     ['species', ['/speciesId', '/nationalDexNumber', '/canonicalName/en', '/defaultFormId', '/generation', '/growthRate/id', '/growthRate/status']],
     ['form', ['/formId', '/speciesId', '/canonicalName/en', '/types', '/baseStats', '/abilities', '/generation']],
     ['ability', ['/abilityId', '/officialNumber', '/canonicalName/en', '/generation']],
+    ['move', ['/moveId', '/officialNumber', '/showdownId', '/canonicalName/en', '/typeId', '/category', '/basePower', '/accuracy', '/pp', '/priority', '/target', '/generation', '/availability']],
   ])
   for (const entityId of allEntityIds) {
     const kind = entityId.slice(0, entityId.indexOf(':'))
@@ -229,7 +240,7 @@ export function validateSmokeDataset(
   if (localization) {
     const locale = SmokeLocalizationSchema.parse(localization)
     const canonicalIds = new Set(allEntityIds)
-    const localeEntries = [...locale.core.entries, ...locale.abilities.entries]
+    const localeEntries = [...locale.core.entries, ...locale.abilities.entries, ...locale.moves.entries]
     for (const id of duplicateValues(localeEntries.map(entry => entry.entityId))) {
       error('DUPLICATE_LOCALIZATION_KEY', `Localization entity occurs more than once: ${id}`)
     }
@@ -252,6 +263,14 @@ export function validateSmokeDataset(
       }
     }
     for (const entry of locale.abilities.entries) {
+      if (!provenanceKeys.has(`${entry.entityId}/localization/zh-CN/name`)) {
+        error('MISSING_LOCALIZATION_PROVENANCE', `${entry.entityId} zh-CN name has no ValueProvenance`)
+      }
+      if (entry.shortDescription && !provenanceKeys.has(`${entry.entityId}/localization/zh-CN/shortDescription`)) {
+        error('MISSING_LOCALIZATION_PROVENANCE', `${entry.entityId} zh-CN shortDescription has no ValueProvenance`)
+      }
+    }
+    for (const entry of locale.moves.entries) {
       if (!provenanceKeys.has(`${entry.entityId}/localization/zh-CN/name`)) {
         error('MISSING_LOCALIZATION_PROVENANCE', `${entry.entityId} zh-CN name has no ValueProvenance`)
       }

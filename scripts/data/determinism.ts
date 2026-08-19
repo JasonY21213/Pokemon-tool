@@ -1,8 +1,12 @@
 import { runSmokePipeline } from './pipeline.ts'
+import { join } from 'node:path'
+import { hashFile } from './serialization.ts'
 
 const first = await runSmokePipeline({ clean: true })
 const firstHashes = { ...first.runtimeHashes }
+firstHashes['reports/move-mapping.json'] = await hashFile(join(first.outputRoot, 'reports', 'move-mapping.json'))
 const second = await runSmokePipeline({ clean: true })
+second.runtimeHashes['reports/move-mapping.json'] = await hashFile(join(second.outputRoot, 'reports', 'move-mapping.json'))
 const paths = [...new Set([...Object.keys(firstHashes), ...Object.keys(second.runtimeHashes)])].sort()
 const mismatches = paths.filter(path => firstHashes[path] !== second.runtimeHashes[path])
 

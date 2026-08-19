@@ -9,10 +9,12 @@
       "cacheEnvironmentVariable": "POKEMON_TOOL_SHOWDOWN_CACHE",
       "selectedPaths": [
         { "path": "data/abilities.ts", "sha256": "60cd08e04a802b182cc9507a5514cd88300373dbb8a5833e3e049d27cf682942" },
+        { "path": "data/moves.ts", "sha256": "30e36c2295ce6e2088cbdbebc41fb554c32a8d52be5635ace6067aaf1532ed11" },
         { "path": "data/natures.ts", "sha256": "e05107d75d6cdb08e51e1dbd7c2365d1d3883f9c11acd2d63efe770a42ec9ee7" },
         { "path": "data/pokedex.ts", "sha256": "ea070678bfb5143511e8b88d8244dcc46e7f72b517c2adead4b1516f41452b27" },
         { "path": "data/typechart.ts", "sha256": "a5edf314e46d7f85c4017b9d074e4794c611321b007e98d0968774683f3d117c" },
         { "path": "sim/dex-abilities.ts", "sha256": "d798ae9d5e3e483d13a6572088354f5afbc416da9e1feca131e0eecccc8006ee" },
+        { "path": "sim/dex-moves.ts", "sha256": "fe98743ca5f28096a9919590199a257f91a64f89fca24789151ebf942515e92f" },
         { "path": "sim/dex-species.ts", "sha256": "d75751859b3106b30c1654369088150b933f35c456e3b89e2f3f8ceb0bb79b68" }
       ]
     },
@@ -24,6 +26,7 @@
       "cacheEnvironmentVariable": "POKEMON_TOOL_DATASET_ZH_CACHE",
       "selectedPaths": [
         { "path": "data/ability_list.json", "sha256": "135430faed1b9041821c27bbb09a6f58e1922c91bfd285595d7cd35daa2a99e7" },
+        { "path": "data/move_list.json", "sha256": "ce9e9d36783734659617353a528ec0be722ae433a8563009752f4b08ffa48759" },
         { "path": "data/pokemon/0006-喷火龙.json", "sha256": "1934583863c2a9d70b00f4f288c70b6ab9f9f3c3062c05e7aeb92be2ef10dc52" },
         { "path": "data/pokemon/0035-皮皮.json", "sha256": "5883b1636478eb88c44681b5aefe2672bcd7a899af3c12c46da8cb53264de465" },
         { "path": "data/pokemon/0058-卡蒂狗.json", "sha256": "5a1d78a9e6cd521395c9b2a41e4fa056716d13dee2b6fd5f42e2df8b72efbf4b" },

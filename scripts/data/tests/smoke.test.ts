@@ -7,6 +7,7 @@ import {
   requireUniqueAutomaticFormCandidate,
 } from '../localization.ts'
 import { buildGrowthRates, CANONICAL_GROWTH_RATES, parseGrowthRate } from '../growth-rate.ts'
+import { assertUniqueMoveNumbers, parseChineseAccuracy, parseChineseNumeric, requireZhMoveCandidate } from '../moves.ts'
 import { buildSmokeArtifacts, makeNationalSpeciesId, type BuildArtifacts } from '../pipeline.ts'
 import { loadPokemonDatasetZhSource, type PokemonDatasetZhAdapterOutput } from '../pokemon-dataset-zh.ts'
 import { validateSmokeDataset } from '../validation.ts'
@@ -44,7 +45,8 @@ describe('fixed Showdown smoke fixtures', () => {
       forms: artifacts.dataset.forms.length,
       abilities: artifacts.dataset.abilities.length,
       growthRates: artifacts.dataset.growthRates.length,
-    }, { types: 18, natures: 25, species: 9, forms: 19, abilities: 23, growthRates: 6 })
+      moves: artifacts.dataset.moves.length,
+    }, { types: 18, natures: 25, species: 9, forms: 19, abilities: 23, growthRates: 6, moves: 11 })
   })
 
   test('Charizard keeps base, both Mega Forms, and G-Max distinct', () => {
@@ -90,6 +92,76 @@ describe('fixed Showdown smoke fixtures', () => {
 
   test('complete smoke provenance validates', () => {
     assert.doesNotThrow(() => validate(artifacts.dataset))
+  })
+})
+
+describe('Move identity and core mechanics fixtures', () => {
+  test('official Move numbers are unique and duplicates fail', () => {
+    assert.doesNotThrow(() => assertUniqueMoveNumbers(artifacts.dataset.moves))
+    const duplicate = structuredClone(artifacts.dataset.moves)
+    duplicate[1].officialNumber = duplicate[0].officialNumber
+    assert.throws(() => assertUniqueMoveNumbers(duplicate), /DUPLICATE_MOVE_NUMBER/)
+  })
+
+  test('English identity mismatch is blocking', () => {
+    const candidates = structuredClone(localizationSource)
+    candidates.moves.find(move => move.officialNumberRaw === '1')!.englishName = 'Wrong Pound'
+    const pound = artifacts.dataset.moves.find(move => move.showdownId === 'pound')!
+    assert.throws(() => requireZhMoveCandidate(pound, candidates.moves), /ZH_MOVE_ENGLISH_CONFLICT/)
+  })
+
+  test('G-Max Wildfire uses the explicit no-number registry rule', () => {
+    const move = artifacts.dataset.moves.find(candidate => candidate.showdownId === 'gmaxwildfire')
+    assert.equal(move?.moveId, 'move:special:gmax-wildfire')
+    assert.equal(move?.officialNumber, null)
+    assert.equal(artifacts.identityMatches.find(match => match.entityId === move?.moveId)?.mappingClass, 'rule-based')
+  })
+
+  test('Showdown accuracy true becomes always, never percent 100', () => {
+    assert.deepEqual(artifacts.dataset.moves.find(move => move.showdownId === 'swift')?.accuracy, { kind: 'always' })
+  })
+
+  test('Chinese dash remains unknown and is not automatically always', () => {
+    assert.deepEqual(parseChineseAccuracy('—'), { kind: 'unknown' })
+  })
+
+  test('NumericSemantic distinguishes variable, not-applicable, and unknown', () => {
+    assert.deepEqual(artifacts.dataset.moves.find(move => move.showdownId === 'maxflare')?.basePower, { kind: 'variable' })
+    assert.deepEqual(artifacts.dataset.moves.find(move => move.showdownId === 'swordsdance')?.basePower, { kind: 'not-applicable' })
+    assert.deepEqual(parseChineseNumeric('—'), { kind: 'unknown' })
+  })
+
+  test('Nihil Light identity succeeds but its mechanics conflict is quarantined', () => {
+    const quarantined = artifacts.quarantinedMoves.find(entry => entry.move.showdownId === 'nihillight')
+    assert.ok(quarantined)
+    assert.equal(quarantined.move.moveId, 'move:0920')
+    assert.ok(quarantined.conflicts.some(conflict => conflict.code === 'MOVE_BASE_POWER_CONFLICT' && conflict.severity === 'error'))
+  })
+
+  test('Future Nihil Light is excluded from the stable runtime dataset', () => {
+    assert.equal(artifacts.dataset.moves.some(move => move.showdownId === 'nihillight'), false)
+    assert.equal(artifacts.quarantinedMoves[0].move.availability.lifecycle, 'future')
+  })
+
+  test('Chinese localization never overrides canonical mechanics', () => {
+    const malignant = artifacts.dataset.moves.find(move => move.showdownId === 'malignantchain')
+    assert.deepEqual(malignant?.basePower, { kind: 'numeric', value: 100 })
+    assert.equal(artifacts.localization.moves.entries.find(entry => entry.entityId === malignant?.moveId)?.name, '邪毒锁链')
+  })
+
+  test('Move identities and provenance resolve to locked source references', () => {
+    const referenceIds = new Set(artifacts.source.sourceReferences.map(reference => reference.sourceReferenceId))
+    const moveIdentities = artifacts.identityMatches.filter(match => match.entityKind === 'move')
+    const moveProvenance = artifacts.valueProvenance.filter(value => value.entityId.startsWith('move:'))
+    assert.equal(moveIdentities.length, 12)
+    assert.ok(moveIdentities.every(match => referenceIds.has(match.sourceReferenceId)))
+    assert.ok(moveProvenance.every(value => referenceIds.has(value.sourceReferenceId)))
+  })
+
+  test('every stable Move has complete identity and mechanics provenance', () => {
+    const keys = new Set(artifacts.valueProvenance.filter(value => value.selected).map(value => `${value.entityId}${value.fieldPath}`))
+    const fields = ['/moveId', '/officialNumber', '/showdownId', '/canonicalName/en', '/typeId', '/category', '/basePower', '/accuracy', '/pp', '/priority', '/target', '/generation', '/availability']
+    assert.ok(artifacts.dataset.moves.every(move => fields.every(field => keys.has(`${move.moveId}${field}`))))
   })
 })
 

@@ -34,6 +34,19 @@ const AbilityListEntrySchema = z.object({
 
 const AbilityListSchema = z.array(AbilityListEntrySchema)
 
+const MoveListEntrySchema = z.object({
+  id: z.string().min(1),
+  name_zh: z.string().min(1),
+  name_en: z.string().min(1),
+  type: z.string().min(1),
+  category: z.string().min(1),
+  power: z.string().min(1),
+  accuracy: z.string().min(1),
+  pp: z.string().min(1),
+  generation: z.number().int().positive(),
+}).passthrough()
+const MoveListSchema = z.array(MoveListEntrySchema)
+
 export interface ZhFormCandidate {
   nameZh: string
   typesZh: string[]
@@ -64,9 +77,25 @@ export interface ZhAbilityLocalizationCandidate {
   sourcePointer: string
 }
 
+export interface ZhMoveCandidate {
+  officialNumberRaw: string
+  englishName: string
+  chineseName: string
+  typeRaw: string
+  categoryRaw: string
+  powerRaw: string
+  accuracyRaw: string
+  ppRaw: string
+  generation: number
+  sourcePath: string
+  sourceReferenceId: string
+  sourcePointer: string
+}
+
 export interface PokemonDatasetZhAdapterOutput {
   species: ZhSpeciesLocalizationCandidate[]
   abilities: ZhAbilityLocalizationCandidate[]
+  moves: ZhMoveCandidate[]
 }
 
 const POKEMON_PATHS = [
@@ -83,6 +112,11 @@ const POKEMON_PATHS = [
 
 const SMOKE_ABILITY_NUMBERS = new Set([
   14, 18, 22, 26, 27, 50, 51, 56, 66, 70, 90, 91, 94, 95, 98, 107, 132, 151, 154, 158, 172, 181, 281,
+])
+const SMOKE_MOVE_NAMES = new Set([
+  'Pound', 'Swords Dance', 'Swift', 'Tri Attack', 'Triple Kick',
+  '10,000,000 Volt Thunderbolt', 'Max Flare', 'G-Max Wildfire',
+  'Ivy Cudgel', 'Tera Starstorm', 'Malignant Chain', 'Nihil Light',
 ])
 
 async function readJson(path: string): Promise<unknown> {
@@ -134,8 +168,29 @@ export async function loadPokemonDatasetZhSource(source: VerifiedSource): Promis
     }]
   })
 
+  const movePath = 'data/move_list.json'
+  const moveRows = MoveListSchema.parse(await readJson(join(source.localization.cachePath, ...movePath.split('/'))))
+  const moves = moveRows.flatMap((row, index): ZhMoveCandidate[] => {
+    if (!SMOKE_MOVE_NAMES.has(row.name_en)) return []
+    return [{
+      officialNumberRaw: row.id,
+      englishName: row.name_en,
+      chineseName: row.name_zh,
+      typeRaw: row.type,
+      categoryRaw: row.category,
+      powerRaw: row.power,
+      accuracyRaw: row.accuracy,
+      ppRaw: row.pp,
+      generation: row.generation,
+      sourcePath: movePath,
+      sourceReferenceId: sourceReferenceId(source, movePath),
+      sourcePointer: `/${index}`,
+    }]
+  })
+
   return {
     species: species.sort((left, right) => left.nationalDexNumber - right.nationalDexNumber),
     abilities: abilities.sort((left, right) => left.officialNumber - right.officialNumber),
+    moves: moves.sort((left, right) => left.englishName.localeCompare(right.englishName, 'en')),
   }
 }
