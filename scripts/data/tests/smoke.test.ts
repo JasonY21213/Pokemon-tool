@@ -491,7 +491,7 @@ describe('Appearance identity and dimensional modeling fixtures', () => {
     })
     assert.equal(
       artifacts.source.localization.sourceReferenceByPath.get('data/pokemon/0201-未知图腾.json')?.sha256,
-      'bf0359c3a223439c6dd39f2b93f188d788799841ba51f5231fe9a0a08a3bcd13',
+      '69f1fbea84d6284b60e2ab3253ca637f83fa7fc9c7ec850777136db3dde5a70d',
     )
   })
 

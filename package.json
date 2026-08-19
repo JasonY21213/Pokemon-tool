@@ -9,8 +9,11 @@
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json",
     "data:smoke": "node scripts/data/cli.ts",
-    "data:test": "node --test scripts/data/tests/smoke.test.ts",
-    "data:determinism": "node scripts/data/determinism.ts"
+    "data:test": "node --test scripts/data/tests/smoke.test.ts scripts/data/tests/full-dry-run.test.ts",
+    "data:determinism": "node scripts/data/determinism.ts",
+    "data:full": "node scripts/data/full-dry-run-cli.ts",
+    "data:full:test": "node --test scripts/data/tests/full-dry-run.test.ts",
+    "data:full:determinism": "node scripts/data/full-dry-run-determinism.ts"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^7.2.0",
