@@ -135,6 +135,56 @@
           "version": "82ce04e611d19a12556c3955125b048b36187f52"
         }
       ]
+    },
+    {
+      "decisionId": "review:evolution:slowking-predecessors:excel-legacy-error",
+      "domain": "evolution",
+      "selector": {
+        "canonicalField": "sourceFormId",
+        "entityIds": [
+          "evolution:slowpoke:slowking:trade-king-s-rock",
+          "evolution:slowpokegalar:slowkinggalar:useitem-galarica-wreath"
+        ]
+      },
+      "conflictReferences": [
+        "excel-check:0d985f293d003f80",
+        "excel-check:5f66cc0cfb8e00bd"
+      ],
+      "decision": "keep-canonical",
+      "selectedSource": "pokemon-showdown-and-pokemon-dataset-zh-consensus",
+      "selectedValue": {
+        "evolution:slowpoke:slowking:trade-king-s-rock": "form:0079:base",
+        "evolution:slowpokegalar:slowkinggalar:useitem-galarica-wreath": "form:0079:galar"
+      },
+      "observedValue": {
+        "source": "excel",
+        "value": "呆壳兽",
+        "locator": "全国图鉴!T266"
+      },
+      "classification": "confirmed-legacy-error",
+      "rationale": "The two fixed structured upstream sources independently identify Slowpoke and Galarian Slowpoke as the respective predecessors of Slowking, while the read-only Excel row supplies Slowbro for both edges. The canonical graph is therefore retained without changing Excel.",
+      "evidence": [
+        "Showdown data/pokedex.ts gives Slowking prevo Slowpoke and Galarian Slowking prevo Slowpoke-Galar.",
+        "pokemon-dataset-zh data/pokemon/0199-呆呆王.json contains two chains whose from value is 呆呆兽, separated by base and Galar form_name evidence.",
+        "Excel 全国图鉴!T266 stores 呆壳兽 as the predecessor for both canonical target edges."
+      ],
+      "status": "accepted",
+      "reviewedBy": "mechanics-conflict-resolution-round-2-fixed-source-review",
+      "reReviewPolicy": "Re-review both exact edges if either pinned upstream commit or the Excel fingerprint changes.",
+      "applicableSourceVersions": [
+        {
+          "sourceId": "pokemon-showdown",
+          "version": "84d7ceb4f009928221fce7a00e711bab263c5f4e"
+        },
+        {
+          "sourceId": "pokemon-dataset-zh",
+          "version": "82ce04e611d19a12556c3955125b048b36187f52"
+        },
+        {
+          "sourceId": "excel",
+          "version": "aa25849772c7d6ccbf56c24943cf97dbe9c34fae3211826b39a82658ddcb49e5"
+        }
+      ]
     }
   ]
 }

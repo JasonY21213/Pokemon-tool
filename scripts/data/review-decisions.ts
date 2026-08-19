@@ -15,7 +15,7 @@ const JsonValueSchema: z.ZodType<unknown> = z.lazy(() => z.union([
 
 const ReviewDecisionSchema = z.object({
   decisionId: z.string().regex(/^review:[a-z0-9:-]+$/),
-  domain: z.enum(['type-chart', 'ability-identity', 'move']),
+  domain: z.enum(['type-chart', 'ability-identity', 'move', 'evolution']),
   selector: z.record(z.string(), JsonValueSchema).refine(value => Object.keys(value).length > 0, 'Selector must be specific.'),
   conflictReferences: z.array(z.string().min(1)).min(1),
   decision: z.enum(['keep-canonical', 'select-evidenced-official-number-map', 'quarantine-from-current-release']),
@@ -27,6 +27,7 @@ const ReviewDecisionSchema = z.object({
   evidence: z.array(z.string().min(10)).min(1),
   status: z.enum(['accepted', 'review-required', 'retired']),
   reviewedBy: z.string().min(1),
+  reReviewPolicy: z.string().min(20).optional(),
   applicableSourceVersions: z.array(z.object({
     sourceId: z.enum(['pokemon-showdown', 'pokemon-dataset-zh', 'excel']),
     version: z.string().regex(/^[a-f0-9]{40}$|^[a-f0-9]{64}$/),
