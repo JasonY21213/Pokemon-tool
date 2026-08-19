@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "excelFingerprint": {
+    "relativePath": "data-source/Pokemon-data.xlsx",
+    "size": 3206646,
+    "sha256": "aa25849772c7d6ccbf56c24943cf97dbe9c34fae3211826b39a82658ddcb49e5",
+    "mtimeUtc": "2026-08-18T17:12:06.6075694Z",
+    "mtimeNs": 1787073126607569400
+  },
+  "totalComparisonRecords": 25660,
+  "classifications": {
+    "agree": 23392,
+    "canonical-only": 149,
+    "excel-only": 1104,
+    "conflict": 227,
+    "representation-difference": 684,
+    "suspected-legacy-error": 30,
+    "unverifiable": 74
+  },
+  "severity": {
+    "info": 23471,
+    "warning": 2035,
+    "error": 154,
+    "blocking": 0
+  },
+  "domainSummaries": {
+    "species": {
+      "canonicalSpecies": 1025,
+      "excelNationalNumbers": 1025,
+      "matched": 1025,
+      "canonicalOnly": 0,
+      "nameDifferences": 5,
+      "numberingConflicts": 0,
+      "englishNameEvidence": "unavailable-in-全国图鉴",
+      "categoryEvidence": "available-separately-as-migration-candidates"
+    },
+    "forms": {
+      "canonicalForms": 1380,
+      "reliableBaseMatches": 1025,
+      "reliableMechanicsMatches": 210,
+      "totalReliableMatches": 1235,
+      "canonicalOnlyRequiringIdentityMapping": 145,
+      "excelFullFormRows": 1446,
+      "appearanceRepresentationRows": 91,
+      "permanentFixturesReviewed": [
+        "Charizard",
+        "Rotom",
+        "Arceus",
+        "Zygarde",
+        "Ogerpon",
+        "Meowstic",
+        "Unown",
+        "Alcremie",
+        "Eevee"
+      ]
+    },
+    "mechanics": {
+      "typeComparisons": 1025,
+      "typeConflicts": 0,
+      "statComparisons": 7626,
+      "statConflicts": 0,
+      "abilitySlotComparisons": 3813,
+      "abilitySlotConflicts": 24
+    },
+    "abilities": {
+      "canonical": 316,
+      "excelRows": 319,
+      "duplicateNumber76Rows": 2,
+      "identityConflicts": 2,
+      "identityRepresentationDifferences": 7,
+      "canonicalBlocking284Preserved": true
+    },
+    "moves": {
+      "canonicalCandidates": 951,
+      "excelRows": 952,
+      "matchedByOfficialNumber": 900,
+      "canonicalOnly": 51,
+      "mechanicsConflicts": 126,
+      "dashSemanticsPreserved": 576,
+      "nihilLightQuarantined": true
+    },
+    "growth": {
+      "sixCurveTotals": 6,
+      "curveTotalsAgreed": 6,
+      "expandedTableComparisons": 600,
+      "expandedTableAgreed": 600,
+      "expandedTableConflicts": 0,
+      "speciesEvidenceLinked": 0,
+      "speciesEvidenceStatus": "no-species-link",
+      "ragingBoltRemainsUnresolved": true
+    },
+    "typeChart": {
+      "dimensions": "18x18",
+      "orientation": "attacking rows / defending columns",
+      "comparisons": 324,
+      "agreed": 323,
+      "conflicts": 1
+    },
+    "natures": {
+      "canonical": 25,
+      "comparisons": 50,
+      "agreed": 50,
+      "conflicts": 0
+    },
+    "evolutions": {
+      "canonicalEdges": 529,
+      "graphAgreed": 511,
+      "rawOrIncomplete": 17,
+      "levelAgreed": 372
+    },
+    "dexes": {
+      "counterpartsReviewed": 7,
+      "scopeDifferences": 4,
+      "hisuiQuarantinePreserved": true
+    },
+    "classifications": {
+      "migrationCandidateLabels": 10,
+      "totalOccurrences": 761,
+      "directCanonicalWrites": 0
+    },
+    "derived": {
+      "sheetsReviewed": 4,
+      "importedCanonicalRows": 0,
+      "dualTypeRowsTested": 171,
+      "dualTypeRowsMatched": 153,
+      "dualTypeRowsMismatched": 18,
+      "dualTypeRowsSkipped": 0,
+      "guessHelperStatus": "unverifiable-interactive-helper",
+      "statCalculatorStatus": "unverifiable-interactive-helper",
+      "growthExpandedRowsTested": 600,
+      "typeChartAlgorithmCoveredSeparately": true
+    },
+    "anomalies": {
+      "checked": 14,
+      "confirmed": 10,
+      "representationIssues": 4,
+      "notReproduced": 0
+    }
+  },
+  "canonicalMutations": 0
+}
