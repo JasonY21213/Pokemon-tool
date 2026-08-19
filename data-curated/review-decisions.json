@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "decisions": [
+    {
+      "decisionId": "review:type-chart:water-vs-flying:excel-legacy-error",
+      "domain": "type-chart",
+      "selector": {
+        "attackingTypeId": "type:water",
+        "defendingTypeId": "type:flying"
+      },
+      "conflictReferences": [
+        "generated/excel-cross-validation/type-chart.json#type:water->type:flying",
+        "generated/excel-cross-validation/derived-regression.json#water-flying-root-cause"
+      ],
+      "decision": "keep-canonical",
+      "selectedSource": "pokemon-showdown",
+      "selectedValue": 1,
+      "observedValue": {
+        "source": "excel",
+        "value": 0.5,
+        "locator": "属性克制!L5"
+      },
+      "classification": "confirmed-legacy-error",
+      "rationale": "The user reviewed the isolated base-chart discrepancy and confirmed that the Excel 0.5 value is a manual legacy entry error. The canonical Showdown 1x value remains unchanged.",
+      "evidence": [
+        "The fixed Showdown TypeChart resolves Water attacking Flying to neutral damage.",
+        "The read-only Excel matrix stores 0.5 at 属性克制!L5.",
+        "Exactly 18 derived rows containing Flying inherit the same Excel root error."
+      ],
+      "status": "accepted",
+      "reviewedBy": "user",
+      "applicableSourceVersions": [
+        {
+          "sourceId": "pokemon-showdown",
+          "version": "84d7ceb4f009928221fce7a00e711bab263c5f4e"
+        },
+        {
+          "sourceId": "excel",
+          "version": "aa25849772c7d6ccbf56c24943cf97dbe9c34fae3211826b39a82658ddcb49e5"
+        }
+      ]
+    },
+    {
+      "decisionId": "review:ability:ruin-number-collision:0284",
+      "domain": "ability-identity",
+      "selector": {
+        "sourceOfficialNumber": 284,
+        "showdownIds": [
+          "beadsofruin",
+          "tabletsofruin",
+          "vesselofruin"
+        ]
+      },
+      "conflictReferences": [
+        "conflict:8440e9f479324b9f",
+        "conflict:aff83a631e143ea6",
+        "conflict:e1aa233a1174f1af",
+        "generated/conflict-resolution/ability-0284.json"
+      ],
+      "decision": "select-evidenced-official-number-map",
+      "selectedSource": "pokemon-dataset-zh-and-excel-consensus",
+      "selectedValue": {
+        "vesselofruin": 284,
+        "tabletsofruin": 286,
+        "beadsofruin": 287
+      },
+      "observedValue": {
+        "source": "pokemon-showdown",
+        "value": {
+          "vesselofruin": 284,
+          "tabletsofruin": 284,
+          "beadsofruin": 284
+        },
+        "locator": "data/abilities.ts"
+      },
+      "classification": "confirmed-source-number-error",
+      "rationale": "All three Showdown keys and mechanics are distinct. The fixed Chinese source and the read-only Excel Ability list independently agree on 284, 286, and 287, so the collision can be resolved without merging identities or inventing numbers.",
+      "evidence": [
+        "pokemon-dataset-zh ability_list.json: Vessel #284, Tablets #286, Beads #287.",
+        "Excel 特性列表 rows 286, 288, and 289 contain the same three numbers and English names.",
+        "Showdown data/abilities.ts has separate IDs and mechanics but repeats num 284."
+      ],
+      "status": "accepted",
+      "reviewedBy": "conflict-resolution-round-1-fixed-source-review",
+      "applicableSourceVersions": [
+        {
+          "sourceId": "pokemon-showdown",
+          "version": "84d7ceb4f009928221fce7a00e711bab263c5f4e"
+        },
+        {
+          "sourceId": "pokemon-dataset-zh",
+          "version": "82ce04e611d19a12556c3955125b048b36187f52"
+        },
+        {
+          "sourceId": "excel",
+          "version": "aa25849772c7d6ccbf56c24943cf97dbe9c34fae3211826b39a82658ddcb49e5"
+        }
+      ]
+    },
+    {
+      "decisionId": "review:move:nihil-light:current-release-quarantine",
+      "domain": "move",
+      "selector": {
+        "entityId": "move:0920",
+        "showdownId": "nihillight"
+      },
+      "conflictReferences": [
+        "conflict:3c5986ef9e19b1af",
+        "generated/full-dry-run/reports/conflicts.json#move:0920"
+      ],
+      "decision": "quarantine-from-current-release",
+      "selectedSource": null,
+      "selectedValue": null,
+      "observedValue": {
+        "source": "cross-source-conflict",
+        "value": "Showdown and pokemon-dataset-zh mechanics differ",
+        "locator": "data/moves.ts + data/move_list.json"
+      },
+      "classification": "reviewed-quarantine",
+      "rationale": "Nihil Light is a Future Move with resolved identity but conflicting mechanics. Current scope policy supports retaining its identity and provenance while excluding it from the current stable release until the pinned sources can be reviewed again.",
+      "evidence": [
+        "Showdown marks Nihil Light as Future.",
+        "The mechanics conflict is preserved in build-time reports.",
+        "The existing stable candidate already excludes quarantined Future mechanics."
+      ],
+      "status": "accepted",
+      "reviewedBy": "project-scope-policy",
+      "applicableSourceVersions": [
+        {
+          "sourceId": "pokemon-showdown",
+          "version": "84d7ceb4f009928221fce7a00e711bab263c5f4e"
+        },
+        {
+          "sourceId": "pokemon-dataset-zh",
+          "version": "82ce04e611d19a12556c3955125b048b36187f52"
+        }
+      ]
+    }
+  ]
+}

@@ -9,18 +9,19 @@
   },
   "totalComparisonRecords": 25660,
   "classifications": {
-    "agree": 23392,
+    "agree": 23400,
     "canonical-only": 149,
     "excel-only": 1104,
-    "conflict": 227,
+    "conflict": 203,
     "representation-difference": 684,
     "suspected-legacy-error": 30,
-    "unverifiable": 74
+    "confirmed-legacy-error": 19,
+    "unverifiable": 71
   },
   "severity": {
-    "info": 23471,
-    "warning": 2035,
-    "error": 154,
+    "info": 23497,
+    "warning": 2030,
+    "error": 133,
     "blocking": 0
   },
   "domainSummaries": {
@@ -60,15 +61,15 @@
       "statComparisons": 7626,
       "statConflicts": 0,
       "abilitySlotComparisons": 3813,
-      "abilitySlotConflicts": 24
+      "abilitySlotConflicts": 21
     },
     "abilities": {
       "canonical": 316,
       "excelRows": 319,
       "duplicateNumber76Rows": 2,
-      "identityConflicts": 2,
+      "identityConflicts": 0,
       "identityRepresentationDifferences": 7,
-      "canonicalBlocking284Preserved": true
+      "reviewedNumberCollision284Resolved": true
     },
     "moves": {
       "canonicalCandidates": 951,
@@ -94,7 +95,8 @@
       "orientation": "attacking rows / defending columns",
       "comparisons": 324,
       "agreed": 323,
-      "conflicts": 1
+      "conflicts": 0,
+      "reviewedLegacyErrors": 1
     },
     "natures": {
       "canonical": 25,
@@ -124,6 +126,8 @@
       "dualTypeRowsTested": 171,
       "dualTypeRowsMatched": 153,
       "dualTypeRowsMismatched": 18,
+      "reviewedRootCausePropagations": 18,
+      "unresolvedDualTypeMismatches": 0,
       "dualTypeRowsSkipped": 0,
       "guessHelperStatus": "unverifiable-interactive-helper",
       "statCalculatorStatus": "unverifiable-interactive-helper",

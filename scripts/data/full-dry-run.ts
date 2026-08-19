@@ -7,6 +7,12 @@ import { buildSmokeArtifacts } from './pipeline.ts'
 import { parseGrowthRate } from './growth-rate.ts'
 import { serializeJson, writeJson } from './serialization.ts'
 import {
+  loadReviewDecisions,
+  decisionTargetsMove,
+  reviewedAbilityNumber,
+  type ReviewDecision,
+} from './review-decisions.ts'
+import {
   getProjectRoot,
   loadShowdownSource,
   parseAbilityRecord,
@@ -330,39 +336,44 @@ function buildSpeciesAndForms(
 function buildAbilities(
   data: Record<string, unknown>, zhRows: RawZhAbility[], source: VerifiedSource,
   proposals: RegistryProposal[], conflicts: DryRunConflict[], provenance: Array<Record<string, unknown>>,
+  decisions: ReviewDecision[],
 ): { abilities: Array<Record<string, unknown>>; localization: Array<Record<string, unknown>> } {
   const zhByNumber = new Map(zhRows.map(row => [Number(row.id), row]))
   const registry = new Map(source.registry.filter(entry => entry.kind === 'ability').map(entry => [entry.showdownId, entry]))
   const abilities = []
   const localization = []
-  const parsed = Object.entries(data).map(([showdownId, value]) => ({ showdownId, raw: parseAbilityRecord(value, showdownId) }))
+  const parsed = Object.entries(data).map(([showdownId, value]) => {
+    const raw = parseAbilityRecord(value, showdownId)
+    return { showdownId, raw, officialNumber: reviewedAbilityNumber(decisions, showdownId, raw.num) }
+  })
     .filter(item => item.raw.num > 0)
   const numberCounts = new Map<number, number>()
-  for (const item of parsed) numberCounts.set(item.raw.num, (numberCounts.get(item.raw.num) ?? 0) + 1)
-  for (const { showdownId, raw } of parsed) {
-    const hasNumberCollision = (numberCounts.get(raw.num) ?? 0) > 1
+  for (const item of parsed) numberCounts.set(item.officialNumber, (numberCounts.get(item.officialNumber) ?? 0) + 1)
+  for (const { showdownId, raw, officialNumber } of parsed) {
+    const hasNumberCollision = (numberCounts.get(officialNumber) ?? 0) > 1
+    const numberWasReviewed = officialNumber !== raw.num
     const id = hasNumberCollision
       ? `ability:unresolved:${showdownId}`
-      : `ability:${raw.num.toString().padStart(4, '0')}`
+      : `ability:${officialNumber.toString().padStart(4, '0')}`
     if (hasNumberCollision) {
-      conflict(conflicts, 'identity', 'blocking', id, 'ABILITY_NUMBER_COLLISION', `Official Ability number ${raw.num} is shared by ${numberCounts.get(raw.num)} Showdown records.`)
+      conflict(conflicts, 'identity', 'blocking', id, 'ABILITY_NUMBER_COLLISION', `Reviewed Ability number ${officialNumber} is shared by ${numberCounts.get(officialNumber)} records.`)
     }
-    const zh = hasNumberCollision ? undefined : zhByNumber.get(raw.num)
-    let mappingClass: MappingClass = 'automatic'
+    const zh = hasNumberCollision ? undefined : zhByNumber.get(officialNumber)
+    let mappingClass: MappingClass = numberWasReviewed ? 'manual-exception' : 'automatic'
     if (hasNumberCollision) {
       mappingClass = 'unresolved'
     } else if (!zh) {
       mappingClass = 'unresolved'
-      conflict(conflicts, 'localization', 'warning', id, 'ABILITY_ZH_MISSING', `No zh-CN Ability row for #${raw.num} ${raw.name}.`)
+      conflict(conflicts, 'localization', 'warning', id, 'ABILITY_ZH_MISSING', `No zh-CN Ability row for #${officialNumber} ${raw.name}.`)
     } else if (toId(zh.name_en) !== showdownId) {
-      const isKnownGroupedName = (raw.num === 266 || raw.num === 267) && toId(zh.name_en) === 'asone'
-      mappingClass = (raw.num >= 301 && raw.num <= 304) || isKnownGroupedName ? 'rule-based' : 'unresolved'
+      const isKnownGroupedName = (officialNumber === 266 || officialNumber === 267) && toId(zh.name_en) === 'asone'
+      mappingClass = (officialNumber >= 301 && officialNumber <= 304) || isKnownGroupedName ? 'rule-based' : 'unresolved'
       if (mappingClass === 'unresolved') conflict(conflicts, 'identity', 'blocking', id, 'ABILITY_ENGLISH_MISMATCH', `${raw.name} != ${zh.name_en}`)
     }
-    abilities.push({ abilityId: id, officialNumber: raw.num, showdownId, canonicalName: { en: raw.name }, generation: raw.gen ?? null, availability: raw.isNonstandard ?? null, mappingClass, dataStatus: mappingClass === 'unresolved' ? 'unresolved' : 'complete' })
+    abilities.push({ abilityId: id, officialNumber, showdownId, canonicalName: { en: raw.name }, generation: raw.gen ?? zh?.generation ?? null, availability: raw.isNonstandard ?? null, mappingClass, dataStatus: mappingClass === 'unresolved' ? 'unresolved' : 'complete', reviewDecisionId: numberWasReviewed || (raw.num === 284 && ['vesselofruin', 'tabletsofruin', 'beadsofruin'].includes(showdownId)) ? 'review:ability:ruin-number-collision:0284' : undefined })
     if (zh) localization.push({ entityId: id, name: zh.name_zh, shortDescription: zh.description || undefined, mappingClass })
-    provenance.push({ entityId: id, domain: 'ability', sourcePaths: ['data/abilities.ts', ...(zh ? ['data/ability_list.json'] : [])] })
-    if (!registry.has(showdownId)) proposals.push({ entityKind: 'ability', proposedProjectId: id, immutableAnchors: { officialNumber: raw.num }, showdownId, reason: 'Official numbered Ability discovered by full dry run.', status: mappingClass === 'unresolved' ? 'review-required' : 'proposed' })
+    provenance.push({ entityId: id, domain: 'ability', sourcePaths: ['data/abilities.ts', ...(zh ? ['data/ability_list.json'] : [])], reviewDecisionId: numberWasReviewed || raw.num === 284 ? 'review:ability:ruin-number-collision:0284' : undefined })
+    if (!registry.has(showdownId)) proposals.push({ entityKind: 'ability', proposedProjectId: id, immutableAnchors: { officialNumber }, showdownId, reason: numberWasReviewed ? 'Official number selected by reviewed fixed-source consensus.' : 'Official numbered Ability discovered by full dry run.', status: mappingClass === 'unresolved' ? 'review-required' : 'proposed' })
   }
   return {
     abilities: abilities.sort((left, right) => Number(left.officialNumber) - Number(right.officialNumber)
@@ -374,6 +385,7 @@ function buildAbilities(
 function buildMoves(
   data: Record<string, unknown>, zhRows: RawZhMove[], source: VerifiedSource,
   proposals: RegistryProposal[], conflicts: DryRunConflict[], provenance: Array<Record<string, unknown>>,
+  decisions: ReviewDecision[],
 ): { moves: Array<Record<string, unknown>>; localization: Array<Record<string, unknown>> } {
   const zhByEnglish = new Map<string, RawZhMove[]>()
   for (const row of zhRows) zhByEnglish.set(toId(row.name_en), [...(zhByEnglish.get(toId(row.name_en)) ?? []), row])
@@ -412,9 +424,14 @@ function buildMoves(
         // Chinese type labels are not compared as English identity.
       }
     }
+    const reviewedQuarantine = decisions.find(decision =>
+      decision.decisionId === 'review:move:nihil-light:current-release-quarantine'
+      && decision.status === 'accepted'
+      && decisionTargetsMove(decision, id, showdownId))
     for (const field of mechanicsConflicts) {
-      const severity: Severity = showdownId === 'nihillight' ? 'error' : 'warning'
-      conflict(conflicts, 'mechanics', severity, id, 'MOVE_MECHANICS_CONFLICT', `${raw.name} differs from zh source at ${field}.`)
+      const severity: Severity = reviewedQuarantine ? 'warning' : showdownId === 'nihillight' ? 'error' : 'warning'
+      const code = reviewedQuarantine ? 'MOVE_MECHANICS_CONFLICT_REVIEWED_QUARANTINE' : 'MOVE_MECHANICS_CONFLICT'
+      conflict(conflicts, 'mechanics', severity, id, code, `${raw.name} differs from zh source at ${field}.${reviewedQuarantine ? ` Reviewed by ${reviewedQuarantine.decisionId}.` : ''}`)
     }
     const quarantined = raw.isNonstandard === 'Future' || mappingClass === 'unresolved' || mechanicsConflicts.some(() => showdownId === 'nihillight')
     moves.push({
@@ -422,9 +439,10 @@ function buildMoves(
       typeId: `type:${raw.type.toLowerCase()}`, category: raw.category.toLowerCase(), basePower: raw.basePower,
       accuracy: raw.accuracy === true ? 'always' : raw.accuracy, pp: raw.pp, priority: raw.priority, target: raw.target,
       availability: raw.isNonstandard ?? 'current', mappingClass, dataStatus: quarantined ? 'quarantined' : 'complete', mechanicsConflictCount: mechanicsConflicts.length,
+      reviewDecisionId: reviewedQuarantine?.decisionId,
     })
     if (zh && !quarantined) localization.push({ entityId: id, name: zh.name_zh, mappingClass })
-    provenance.push({ entityId: id, domain: 'move', sourcePaths: ['data/moves.ts', ...(zh ? ['data/move_list.json'] : [])] })
+    provenance.push({ entityId: id, domain: 'move', sourcePaths: ['data/moves.ts', ...(zh ? ['data/move_list.json'] : [])], reviewDecisionId: reviewedQuarantine?.decisionId })
     if (!existing) proposals.push({ entityKind: 'move', proposedProjectId: id, immutableAnchors: numbered ? { officialNumber: raw.num } : { specialToken: slug(raw.name) }, showdownId, reason: numbered ? 'Official numbered Move discovered by full dry run.' : 'Unnumbered/special Move requires reviewed stable ID.', status: mappingClass === 'unresolved' ? 'review-required' : 'proposed' })
   }
   return {
@@ -627,14 +645,15 @@ export async function buildFullDryRun(options: { fullCachePath?: string } = {}):
   const sourceVerifyMs = performance.now() - stage
   stage = performance.now()
   const showdown = await loadShowdownSource(source)
+  const reviewDecisions = await loadReviewDecisions()
   const parseMs = performance.now() - stage
   stage = performance.now()
   const proposals: RegistryProposal[] = []
   const conflicts: DryRunConflict[] = []
   const provenance: Array<Record<string, unknown>> = []
   const speciesForms = buildSpeciesAndForms(showdown.pokedex, fullZh.pokemon, source, proposals, conflicts, provenance)
-  const abilityBuild = buildAbilities(showdown.abilities, fullZh.abilities, source, proposals, conflicts, provenance)
-  const moveBuild = buildMoves(showdown.moves, fullZh.moves, source, proposals, conflicts, provenance)
+  const abilityBuild = buildAbilities(showdown.abilities, fullZh.abilities, source, proposals, conflicts, provenance, reviewDecisions)
+  const moveBuild = buildMoves(showdown.moves, fullZh.moves, source, proposals, conflicts, provenance, reviewDecisions)
   const growthRates = buildGrowth(fullZh.pokemon, conflicts, provenance)
   const smoke = await buildSmokeArtifacts()
   const formCounts = new Map<number, number>()

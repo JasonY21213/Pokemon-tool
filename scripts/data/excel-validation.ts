@@ -7,6 +7,7 @@ import { performance } from 'node:perf_hooks'
 import { buildFullDryRun, type FullDryRunArtifacts } from './full-dry-run.ts'
 import { getProjectRoot, loadShowdownSource, verifySource, type ShowdownSourceData } from './source.ts'
 import { serializeJson, writeJson } from './serialization.ts'
+import { loadReviewDecisions, requireDecision, type ReviewDecision } from './review-decisions.ts'
 
 const execFileAsync = promisify(execFile)
 const EXPECTED = {
@@ -16,7 +17,7 @@ const EXPECTED = {
 }
 
 export type ComparisonClassification = 'agree' | 'canonical-only' | 'excel-only' | 'conflict'
-  | 'representation-difference' | 'suspected-legacy-error' | 'unverifiable'
+  | 'representation-difference' | 'suspected-legacy-error' | 'confirmed-legacy-error' | 'unverifiable'
 export type ComparisonSeverity = 'info' | 'warning' | 'error' | 'blocking'
 
 export interface ExcelCellEvidence {
@@ -59,9 +60,11 @@ export interface ComparisonRecord {
   classification: ComparisonClassification
   severity: ComparisonSeverity
   rationale: string
+  reviewDecisionId?: string
+  rootCauseDecisionId?: string
 }
 
-interface DomainReport {
+export interface DomainReport {
   domain: string
   summary: Record<string, unknown>
   comparisons: ComparisonRecord[]
@@ -314,7 +317,7 @@ function abilities(excel: ExcelSourceDocument, canonical: FullDryRunArtifacts): 
     records.push(makeRecord('abilities', id, 'localization.zh-CN.name', zh ?? null, row, 2, zh && equalNormalized(zh, value(row, 2)) ? 'agree' : zh ? 'conflict' : 'unverifiable', zh && equalNormalized(zh, value(row, 2)) ? 'info' : 'warning', 'Chinese Ability localization comparison; Excel is evidence only.'))
     records.push(makeRecord('abilities', id, 'descriptionPresence', Boolean(localization.get(id)?.shortDescription), row, 5, text(value(row, 5)) ? 'agree' : 'canonical-only', text(value(row, 5)) ? 'info' : 'warning', 'Only description presence is compared because sources have different editorial text.'))
   }
-  return { domain: 'abilities', summary: { canonical: canonical.abilities.length, excelRows: [...sheetRows.keys()].filter(row => row > 1).length, duplicateNumber76Rows: (byNumber.get(76) ?? []).length, identityConflicts: records.filter(item => item.canonicalField === 'canonicalName.en' && item.classification === 'conflict').length, identityRepresentationDifferences: records.filter(item => item.canonicalField === 'canonicalName.en' && item.classification === 'representation-difference').length, canonicalBlocking284Preserved: true }, comparisons: records }
+  return { domain: 'abilities', summary: { canonical: canonical.abilities.length, excelRows: [...sheetRows.keys()].filter(row => row > 1).length, duplicateNumber76Rows: (byNumber.get(76) ?? []).length, identityConflicts: records.filter(item => item.canonicalField === 'canonicalName.en' && item.classification === 'conflict').length, identityRepresentationDifferences: records.filter(item => item.canonicalField === 'canonicalName.en' && item.classification === 'representation-difference').length, reviewedNumberCollision284Resolved: canonical.abilities.filter(item => item.reviewDecisionId === 'review:ability:ruin-number-collision:0284').length === 3 }, comparisons: records }
 }
 
 function moveSemantic(value: unknown, kind: 'power' | 'accuracy'): { semantic: string; value: number | null } {
@@ -393,8 +396,9 @@ function growth(excel: ExcelSourceDocument, canonical: FullDryRunArtifacts): Dom
   return { domain: 'growth', summary: { sixCurveTotals: 6, curveTotalsAgreed: records.filter(item => item.canonicalField === 'experienceAtLevel100' && item.classification === 'agree').length, expandedTableComparisons: 600, expandedTableAgreed: records.filter(item => item.canonicalField.startsWith('experienceAtLevel.') && item.classification === 'agree').length, expandedTableConflicts: records.filter(item => item.canonicalField.startsWith('experienceAtLevel.') && item.classification === 'conflict').length, speciesEvidenceLinked: 0, speciesEvidenceStatus: 'no-species-link', ragingBoltRemainsUnresolved: canonical.growthRates.some(item => item.entityId === 'species:1021' && item.status === 'unresolved') }, comparisons: records }
 }
 
-function typeChartAndNatures(excel: ExcelSourceDocument, source: ShowdownSourceData): { typeChart: DomainReport; natures: DomainReport } {
+function typeChartAndNatures(excel: ExcelSourceDocument, source: ShowdownSourceData, decisions: ReviewDecision[]): { typeChart: DomainReport; natures: DomainReport } {
   const chart = rows(excel.sheets['属性克制']); const typeRecords: ComparisonRecord[] = []
+  const waterFlyingDecision = requireDecision(decisions, 'review:type-chart:water-vs-flying:excel-legacy-error')
   const excelTypes = [...Array(18)].map((_, i) => text(value(chart.get(2), i + 3)))
   const attackTypes = [...Array(18)].map((_, i) => text(value(chart.get(i + 3), 2)))
   for (let attackIndex = 0; attackIndex < 18; attackIndex += 1) {
@@ -405,7 +409,13 @@ function typeChartAndNatures(excel: ExcelSourceDocument, source: ShowdownSourceD
       const code = attackEn && defendEn ? source.typeChart[defendEn]?.damageTaken[attackEn[0].toUpperCase() + attackEn.slice(1)] : undefined
       const expected = code === 1 ? 2 : code === 2 ? 0.5 : code === 3 ? 0 : 1
       const row = chart.get(attackIndex + 3); const actual = num(value(row, defendIndex + 3))
-      typeRecords.push(makeRecord('type-chart', `type:${attackEn ?? attackZh}->type:${defendEn ?? defendZh}`, 'multiplier', expected, row, defendIndex + 3, actual === expected ? 'agree' : 'conflict', actual === expected ? 'info' : 'error', 'Attack rows and defense columns were explicitly validated.'))
+      const isReviewedWaterFlying = attackEn === 'water' && defendEn === 'flying' && actual !== expected
+      const record = makeRecord('type-chart', `type:${attackEn ?? attackZh}->type:${defendEn ?? defendZh}`, 'multiplier', expected, row, defendIndex + 3,
+        actual === expected ? 'agree' : isReviewedWaterFlying ? 'confirmed-legacy-error' : 'conflict',
+        actual === expected ? 'info' : isReviewedWaterFlying ? 'warning' : 'error',
+        isReviewedWaterFlying ? 'Reviewed Excel legacy entry error; canonical neutral 1x remains selected.' : 'Attack rows and defense columns were explicitly validated.')
+      if (isReviewedWaterFlying) record.reviewDecisionId = waterFlyingDecision.decisionId
+      typeRecords.push(record)
     }
   }
   const natureRows = rows(excel.sheets['能力值']); const natureRecords: ComparisonRecord[] = []
@@ -419,7 +429,7 @@ function typeChartAndNatures(excel: ExcelSourceDocument, source: ShowdownSourceD
     natureRecords.push(makeRecord('natures', `nature:${id}`, 'minusStat', minus, found, 12, text(value(found, 12)) === minus ? 'agree' : 'conflict', text(value(found, 12)) === minus ? 'info' : 'error', 'Nature decreased stat comparison.'))
   }
   return {
-    typeChart: { domain: 'type-chart', summary: { dimensions: '18x18', orientation: 'attacking rows / defending columns', comparisons: 324, agreed: typeRecords.filter(item => item.classification === 'agree').length, conflicts: typeRecords.filter(item => item.classification === 'conflict').length }, comparisons: typeRecords },
+    typeChart: { domain: 'type-chart', summary: { dimensions: '18x18', orientation: 'attacking rows / defending columns', comparisons: 324, agreed: typeRecords.filter(item => item.classification === 'agree').length, conflicts: typeRecords.filter(item => item.classification === 'conflict').length, reviewedLegacyErrors: typeRecords.filter(item => item.classification === 'confirmed-legacy-error').length }, comparisons: typeRecords },
     natures: { domain: 'natures', summary: { canonical: Object.keys(source.natures).length, comparisons: natureRecords.length, agreed: natureRecords.filter(item => item.classification === 'agree').length, conflicts: natureRecords.filter(item => item.classification === 'conflict').length }, comparisons: natureRecords },
   }
 }
@@ -467,7 +477,7 @@ function typeList(input: unknown): string[] {
   return text(input).split(/[,，]/).map(item => item.trim()).filter(Boolean).sort((a, b) => a.localeCompare(b, 'zh-CN'))
 }
 
-function classificationsAndDerived(excel: ExcelSourceDocument, source: ShowdownSourceData): { classifications: DomainReport; derived: DomainReport } {
+function classificationsAndDerived(excel: ExcelSourceDocument, source: ShowdownSourceData, decisions: ReviewDecision[]): { classifications: DomainReport; derived: DomainReport } {
   const national = rows(excel.sheets['全国图鉴']); const guess = rows(excel.sheets['猜宝可梦'])
   const candidateCounts = new Map<string, number>()
   for (const row of national.values()) { const candidate = text(value(row, 14)); if (candidate && candidate !== '分类' && candidate !== '/') candidateCounts.set(candidate, (candidateCounts.get(candidate) ?? 0) + 1) }
@@ -475,6 +485,7 @@ function classificationsAndDerived(excel: ExcelSourceDocument, source: ShowdownS
   const classificationRecords = [...candidateCounts.entries()].sort(([a], [b]) => a.localeCompare(b, 'zh-CN')).map(([name, count]) => comparison({ domain: 'classifications', canonicalEntityId: null, canonicalField: 'migrationCandidate', canonicalValue: null, excelLocator: '全国图鉴!U:U / 猜宝可梦!O:O', excelKind: 'static', excelRawValue: name, excelCachedValue: { label: name, occurrences: count }, classification: 'excel-only', severity: 'info', rationale: 'Legacy project classification is retained as a migration proposal only; no tags were modified.' }))
   const derivedRecords: ComparisonRecord[] = []
   const typePk = rows(excel.sheets['属性PK']); const attackTypes = Object.values(TYPE_ZH)
+  const waterFlyingDecision = requireDecision(decisions, 'review:type-chart:water-vs-flying:excel-legacy-error')
   let dualMatched = 0; let dualMismatched = 0; let dualSkipped = 0
   for (const [rowNumber, row] of typePk) {
     if (rowNumber === 1) continue
@@ -489,7 +500,13 @@ function classificationsAndDerived(excel: ExcelSourceDocument, source: ShowdownS
     const columns: Array<[string, number]> = [['4', 4], ['2', 5], ['1', 6], ['0.5', 7], ['0.25', 8], ['0', 9]]
     const mismatched = columns.filter(([bucket, column]) => JSON.stringify(buckets[bucket]) !== JSON.stringify(typeList(value(row, column))))
     if (mismatched.length === 0) dualMatched += 1; else dualMismatched += 1
-    derivedRecords.push(makeRecord('derived-regression', `type-combination:${first}${second ? `+${second}` : ''}`, 'typeWeaknessBuckets', buckets, row, 4, mismatched.length === 0 ? 'agree' : 'conflict', mismatched.length === 0 ? 'info' : 'error', mismatched.length === 0 ? 'All six computed multiplier buckets agree with the Excel derived row.' : `Derived buckets differ at multipliers: ${mismatched.map(([bucket]) => bucket).join(', ')}.`))
+    const reviewedPropagation = mismatched.length > 0 && (first === '飞行' || second === '飞行')
+    const record = makeRecord('derived-regression', `type-combination:${first}${second ? `+${second}` : ''}`, 'typeWeaknessBuckets', buckets, row, 4,
+      mismatched.length === 0 ? 'agree' : reviewedPropagation ? 'confirmed-legacy-error' : 'conflict',
+      mismatched.length === 0 || reviewedPropagation ? 'info' : 'error',
+      mismatched.length === 0 ? 'All six computed multiplier buckets agree with the Excel derived row.' : reviewedPropagation ? 'Derived mismatch is propagated from the single reviewed Water attacking Flying Excel root error.' : `Derived buckets differ at multipliers: ${mismatched.map(([bucket]) => bucket).join(', ')}.`)
+    if (reviewedPropagation) record.rootCauseDecisionId = waterFlyingDecision.decisionId
+    derivedRecords.push(record)
   }
   for (const [sheetName, purpose] of [['猜宝可梦', 'guess-helper'], ['能力值', 'stat-calculator']] as const) {
     const sheet = excel.sheets[sheetName]; const formulas = sheet.cells.filter(cell => cell.kind === 'formula'); const cached = formulas.filter(cell => cell.cached !== null)
@@ -497,7 +514,7 @@ function classificationsAndDerived(excel: ExcelSourceDocument, source: ShowdownS
   }
   return {
     classifications: { domain: 'classifications', summary: { migrationCandidateLabels: candidateCounts.size, totalOccurrences: [...candidateCounts.values()].reduce((a, b) => a + b, 0), directCanonicalWrites: 0 }, comparisons: classificationRecords },
-    derived: { domain: 'derived-regression', summary: { sheetsReviewed: 4, importedCanonicalRows: 0, dualTypeRowsTested: dualMatched + dualMismatched, dualTypeRowsMatched: dualMatched, dualTypeRowsMismatched: dualMismatched, dualTypeRowsSkipped: dualSkipped, guessHelperStatus: 'unverifiable-interactive-helper', statCalculatorStatus: 'unverifiable-interactive-helper', growthExpandedRowsTested: 600, typeChartAlgorithmCoveredSeparately: true }, comparisons: derivedRecords },
+    derived: { domain: 'derived-regression', summary: { sheetsReviewed: 4, importedCanonicalRows: 0, dualTypeRowsTested: dualMatched + dualMismatched, dualTypeRowsMatched: dualMatched, dualTypeRowsMismatched: dualMismatched, reviewedRootCausePropagations: derivedRecords.filter(item => item.rootCauseDecisionId === waterFlyingDecision.decisionId).length, unresolvedDualTypeMismatches: derivedRecords.filter(item => item.canonicalField === 'typeWeaknessBuckets' && item.classification === 'conflict').length, dualTypeRowsSkipped: dualSkipped, guessHelperStatus: 'unverifiable-interactive-helper', statCalculatorStatus: 'unverifiable-interactive-helper', growthExpandedRowsTested: 600, typeChartAlgorithmCoveredSeparately: true }, comparisons: derivedRecords },
   }
 }
 
@@ -533,7 +550,7 @@ function knownAnomalies(excel: ExcelSourceDocument): DomainReport {
 
 function aggregate(reports: Record<string, DomainReport>, excel: ExcelSourceDocument, canonical: FullDryRunArtifacts): Record<string, unknown> {
   const comparisons = Object.values(reports).flatMap(report => report.comparisons)
-  const classifications = Object.fromEntries(['agree', 'canonical-only', 'excel-only', 'conflict', 'representation-difference', 'suspected-legacy-error', 'unverifiable'].map(key => [key, comparisons.filter(item => item.classification === key).length]))
+  const classifications = Object.fromEntries(['agree', 'canonical-only', 'excel-only', 'conflict', 'representation-difference', 'suspected-legacy-error', 'confirmed-legacy-error', 'unverifiable'].map(key => [key, comparisons.filter(item => item.classification === key).length]))
   const severity = Object.fromEntries(['info', 'warning', 'error', 'blocking'].map(key => [key, comparisons.filter(item => item.severity === key).length]))
   return {
     schemaVersion: 1, purpose: 'read-only Excel cross-validation', excelRole: 'legacy/migration/validation only',
@@ -549,8 +566,8 @@ const REPORT_FILES: Record<string, string> = { species: 'species.json', forms: '
 
 export async function runExcelCrossValidation(): Promise<ExcelCrossValidationResult> {
   const start = performance.now(); const adapter = new ExcelValidationAdapter(); const excel = await adapter.read(); const extractionMs = performance.now() - start
-  const comparisonStart = performance.now(); const canonical = await buildFullDryRun(); const source = await loadShowdownSource(await verifySource())
-  const sf = speciesAndForms(excel, canonical); const tn = typeChartAndNatures(excel, source); const ed = evolutionsAndDex(excel, canonical); const cd = classificationsAndDerived(excel, source)
+  const comparisonStart = performance.now(); const decisions = await loadReviewDecisions(); const canonical = await buildFullDryRun(); const source = await loadShowdownSource(await verifySource())
+  const sf = speciesAndForms(excel, canonical); const tn = typeChartAndNatures(excel, source, decisions); const ed = evolutionsAndDex(excel, canonical); const cd = classificationsAndDerived(excel, source, decisions)
   const reports: Record<string, DomainReport> = { species: sf.species, forms: sf.forms, mechanics: sf.mechanics, abilities: abilities(excel, canonical), moves: moves(excel, canonical), growth: growth(excel, canonical), typeChart: tn.typeChart, natures: tn.natures, evolutions: ed.evolutions, dexes: ed.dexes, classifications: cd.classifications, derived: cd.derived, anomalies: knownAnomalies(excel) }
   for (const report of Object.values(reports)) report.comparisons.sort((a, b) => a.comparisonId.localeCompare(b.comparisonId, 'en'))
   const summary = aggregate(reports, excel, canonical); const comparisonMs = performance.now() - comparisonStart
