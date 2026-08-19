@@ -142,6 +142,10 @@ function slug(value: string): string {
   return normalized || 'unresolved'
 }
 
+function specialMoveToken(value: string): string {
+  return slug(value).replace(/^g-max-/, 'gmax-')
+}
+
 function speciesId(num: number): string {
   return `species:${num.toString().padStart(4, '0')}`
 }
@@ -400,7 +404,7 @@ function buildMoves(
   for (const { showdownId, raw } of parsed) {
     const numbered = raw.num < 1000 && numberCounts.get(raw.num) === 1
     const existing = registry.get(showdownId)
-    const id = existing?.projectId ?? (numbered ? `move:${raw.num.toString().padStart(4, '0')}` : `move:special:${slug(raw.name)}`)
+    const id = existing?.projectId ?? (numbered ? `move:${raw.num.toString().padStart(4, '0')}` : `move:special:${specialMoveToken(raw.name)}`)
     let mappingClass: MappingClass = numbered ? 'automatic' : 'rule-based'
     if (ids.has(id)) {
       mappingClass = 'unresolved'
@@ -443,7 +447,7 @@ function buildMoves(
     })
     if (zh && !quarantined) localization.push({ entityId: id, name: zh.name_zh, mappingClass })
     provenance.push({ entityId: id, domain: 'move', sourcePaths: ['data/moves.ts', ...(zh ? ['data/move_list.json'] : [])], reviewDecisionId: reviewedQuarantine?.decisionId })
-    if (!existing) proposals.push({ entityKind: 'move', proposedProjectId: id, immutableAnchors: numbered ? { officialNumber: raw.num } : { specialToken: slug(raw.name) }, showdownId, reason: numbered ? 'Official numbered Move discovered by full dry run.' : 'Unnumbered/special Move requires reviewed stable ID.', status: mappingClass === 'unresolved' ? 'review-required' : 'proposed' })
+    if (!existing) proposals.push({ entityKind: 'move', proposedProjectId: id, immutableAnchors: numbered ? { officialNumber: raw.num } : { specialToken: specialMoveToken(raw.name) }, showdownId, reason: numbered ? 'Official numbered Move discovered by full dry run.' : 'Unnumbered/special Move requires reviewed stable ID.', status: mappingClass === 'unresolved' ? 'review-required' : 'proposed' })
   }
   return {
     moves: moves.sort((left, right) => String(left.moveId).localeCompare(String(right.moveId), 'en')),

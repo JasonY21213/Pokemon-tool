@@ -48,6 +48,13 @@ const RegistryEntitySchema = z.object({
   status: z.literal('active'),
   firstSeen: SourceCommitSchema,
   lastSeen: SourceCommitSchema,
+  availability: z.literal('future').optional(),
+  review: z.object({
+    batchId: z.literal('registry-review-round-1'),
+    classification: z.enum(['safe-bulk-accept', 'rule-based-accept']),
+    proposalStatus: z.enum(['proposed', 'review-required']),
+    note: z.string().min(1),
+  }).strict().optional(),
 }).strict()
 
 const RegistrySchema = z.object({
