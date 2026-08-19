@@ -53,6 +53,7 @@ export function validateSmokeDataset(
     ...dataset.moves.map(entity => entity.moveId),
     ...dataset.appearances.map(entity => entity.appearanceId),
     ...dataset.evolutions.map(entity => entity.evolutionId),
+    ...dataset.dexes.map(entity => entity.dexId),
   ]
   for (const id of duplicateValues(allEntityIds)) error('DUPLICATE_ID', `Entity ID occurs more than once: ${id}`)
   for (const number of duplicateValues(dataset.abilities.map(ability => String(ability.officialNumber)))) {
@@ -98,6 +99,7 @@ export function validateSmokeDataset(
   const typeIds = new Set(dataset.types.map(entity => entity.typeId))
   const growthRateIds = new Set(dataset.growthRates.map(entity => entity.growthRateId))
   const appearanceIds = new Set(dataset.appearances.map(entity => entity.appearanceId))
+  const dexIds = new Set(dataset.dexes.map(entity => entity.dexId))
   for (const species of dataset.species) {
     if (species.nationalDexNumber <= 0) error('NON_POSITIVE_NATIONAL_NUMBER', `${species.speciesId} has an invalid national number`)
     const defaultForm = dataset.forms.find(form => form.formId === species.defaultFormId)
@@ -193,6 +195,18 @@ export function validateSmokeDataset(
   for (const showdownId of duplicateValues(dataset.moves.map(move => move.showdownId))) {
     error('NON_UNIQUE_MOVE_MAPPING', `Showdown Move ${showdownId} maps to multiple project Moves`)
   }
+  const dexEntryKeys = new Set<string>()
+  for (const entry of dataset.dexEntries) {
+    if (!dexIds.has(entry.dexId)) error('ORPHAN_DEX_ENTRY_DEX', `${entry.dexId}:${entry.regionalNumber} references a missing Dex`)
+    if (!speciesIds.has(entry.speciesId)) error('ORPHAN_DEX_ENTRY_SPECIES', `${entry.dexId}:${entry.regionalNumber} references ${entry.speciesId}`)
+    if (entry.formId && !formIds.has(entry.formId)) error('ORPHAN_DEX_ENTRY_FORM', `${entry.dexId}:${entry.regionalNumber} references ${entry.formId}`)
+    const owner = entry.formId ? dataset.forms.find(form => form.formId === entry.formId) : undefined
+    if (owner && owner.speciesId !== entry.speciesId) error('DEX_ENTRY_FORM_SPECIES_MISMATCH', `${entry.formId} does not belong to ${entry.speciesId}`)
+    const key = `${entry.dexId}:${entry.regionalNumber}`
+    if (dexEntryKeys.has(key)) error('DUPLICATE_DEX_REGIONAL_NUMBER', `${key} occurs more than once`)
+    dexEntryKeys.add(key)
+    if (entry.regionalSortKey !== entry.regionalNumber.padStart(8, '0')) error('DEX_SORT_KEY', `${key} has an invalid sort key`)
+  }
 
   if (dataset.types.length !== 18) error('TYPE_COUNT', `Expected 18 standard attack Types, received ${dataset.types.length}`)
   if (dataset.types.some(type => type.typeId === 'type:stellar')) error('STELLAR_SCOPE', 'Stellar must not be mixed into the 18-type smoke matrix')
@@ -287,7 +301,7 @@ export function validateSmokeDataset(
   }
   const matchedEntities = new Set(identityMatches.map(match => match.entityId))
   for (const entityId of allEntityIds) {
-    if (!matchedEntities.has(entityId)) error('MISSING_IDENTITY_PROVENANCE', `${entityId} has no IdentityMatch`)
+    if (!entityId.startsWith('dex:') && !matchedEntities.has(entityId)) error('MISSING_IDENTITY_PROVENANCE', `${entityId} has no IdentityMatch`)
   }
   const provenanceKeys = new Set(valueProvenance.map(value => `${value.entityId}${value.fieldPath}`))
   const requiredFields = new Map<string, string[]>([
@@ -299,11 +313,18 @@ export function validateSmokeDataset(
     ['move', ['/moveId', '/officialNumber', '/showdownId', '/canonicalName/en', '/typeId', '/category', '/basePower', '/accuracy', '/pp', '/priority', '/target', '/generation', '/availability']],
     ['appearance', ['/appearanceId', '/speciesId', '/formId', '/isDefault', '/aspects', '/availability', '/dataStatus']],
     ['evolution', ['/evolutionId', '/source', '/target', '/methodToken', '/conditionTextKey']],
+    ['dex', ['/dexId', '/regionId', '/gameIds', '/versionIds', '/subdex', '/scope', '/dataStatus']],
   ])
   for (const entityId of allEntityIds) {
     const kind = entityId.slice(0, entityId.indexOf(':'))
     for (const field of requiredFields.get(kind) ?? []) {
       if (!provenanceKeys.has(`${entityId}${field}`)) error('MISSING_VALUE_PROVENANCE', `${entityId}${field} has no ValueProvenance`)
+    }
+  }
+  for (const entry of dataset.dexEntries) {
+    const prefix = `${entry.dexId}/entries/${entry.regionalNumber}/${entry.speciesId}`
+    for (const field of ['/regionalNumber', '/speciesId', '/formId']) {
+      if (!provenanceKeys.has(`${prefix}${field}`)) error('MISSING_DEX_ENTRY_PROVENANCE', `${prefix}${field} has no ValueProvenance`)
     }
   }
   for (const form of dataset.forms.filter(candidate => candidate.growthRateOverride !== null)) {
@@ -333,7 +354,7 @@ export function validateSmokeDataset(
   if (localization) {
     const locale = SmokeLocalizationSchema.parse(localization)
     const canonicalIds = new Set(allEntityIds)
-    const localeEntries = [...locale.core.entries, ...locale.abilities.entries, ...locale.moves.entries, ...locale.evolutions.entries, ...locale.appearances.entries]
+    const localeEntries = [...locale.core.entries, ...locale.abilities.entries, ...locale.moves.entries, ...locale.evolutions.entries, ...locale.appearances.entries, ...locale.dexes.entries]
     for (const id of duplicateValues(localeEntries.map(entry => entry.entityId))) {
       error('DUPLICATE_LOCALIZATION_KEY', `Localization entity occurs more than once: ${id}`)
     }
@@ -385,6 +406,14 @@ export function validateSmokeDataset(
       }
       if (!provenanceKeys.has(`${entry.entityId}/localization/zh-CN/aspectLabels`)) {
         error('MISSING_LOCALIZATION_PROVENANCE', `${entry.entityId} zh-CN aspect labels have no ValueProvenance`)
+      }
+    }
+    for (const entry of locale.dexes.entries) {
+      if (!provenanceKeys.has(`${entry.entityId}/localization/zh-CN/name`)) {
+        error('MISSING_LOCALIZATION_PROVENANCE', `${entry.entityId} zh-CN Dex name has no ValueProvenance`)
+      }
+      if (entry.shortLabel && !provenanceKeys.has(`${entry.entityId}/localization/zh-CN/shortLabel`)) {
+        error('MISSING_LOCALIZATION_PROVENANCE', `${entry.entityId} zh-CN Dex short label has no ValueProvenance`)
       }
     }
     for (const value of valueProvenance.filter(item => item.fieldPath.startsWith('/localization/'))) {

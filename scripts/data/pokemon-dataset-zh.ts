@@ -148,13 +148,15 @@ const POKEMON_PATHS = [
   'data/pokemon/0471-冰伊布.json',
   'data/pokemon/0678-超能妙喵.json',
   'data/pokemon/0700-仙子伊布.json',
+  'data/pokemon/0808-美录坦.json',
+  'data/pokemon/0809-美录梅塔.json',
   'data/pokemon/0868-小仙奶.json',
   'data/pokemon/0869-霜奶仙.json',
   'data/pokemon/1021-猛雷鼓.json',
 ] as const
 
 const SMOKE_ABILITY_NUMBERS = new Set([
-  10, 11, 14, 18, 22, 26, 27, 28, 34, 39, 50, 51, 56, 62, 66, 70, 81, 90, 91, 93, 94, 95, 98, 102, 107, 115, 132, 151, 154, 156, 158, 165, 172, 175, 181, 182, 281,
+  10, 11, 14, 18, 22, 26, 27, 28, 34, 39, 42, 50, 51, 56, 62, 66, 70, 81, 89, 90, 91, 93, 94, 95, 98, 102, 107, 115, 132, 151, 154, 156, 158, 165, 172, 175, 181, 182, 281,
 ])
 const SMOKE_MOVE_NAMES = new Set([
   'Pound', 'Swords Dance', 'Swift', 'Tri Attack', 'Triple Kick',

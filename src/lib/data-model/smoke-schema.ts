@@ -18,6 +18,7 @@ export const GrowthRateIdSchema = z.enum([
 export const MoveIdSchema = z.string().regex(/^move:(?:\d{4}|special:[a-z0-9-]+)$/)
 export const AppearanceIdSchema = z.string().regex(/^appearance:\d{4}:[a-z0-9-]+(?::[a-z0-9-]+)*$/)
 export const EvolutionIdSchema = z.string().regex(/^evolution:[a-z0-9:-]+$/)
+export const DexIdSchema = z.string().regex(/^dex:[a-z0-9-]+(?::[a-z0-9-]+)+$/)
 export const EntityIdSchema = z.union([
   SpeciesIdSchema,
   FormIdSchema,
@@ -28,6 +29,7 @@ export const EntityIdSchema = z.union([
   MoveIdSchema,
   AppearanceIdSchema,
   EvolutionIdSchema,
+  DexIdSchema,
 ])
 
 export const StatIdSchema = z.enum(['hp', 'atk', 'def', 'spa', 'spd', 'spe'])
@@ -138,6 +140,25 @@ export const AppearanceSchema = z.object({
   dataStatus: DataStatusSchema,
 }).strict()
 
+export const DexSchema = z.object({
+  dexId: DexIdSchema,
+  regionId: z.string().regex(/^region:[a-z0-9-]+$/).nullable(),
+  gameIds: z.array(z.string().regex(/^game:[a-z0-9-]+$/)),
+  versionIds: z.array(z.string().regex(/^version:[a-z0-9-]+$/)),
+  subdex: z.string().regex(/^[a-z0-9-]+$/).nullable(),
+  scope: z.string().min(1),
+  dataStatus: z.literal('complete'),
+}).strict()
+
+export const DexEntrySchema = z.object({
+  dexId: DexIdSchema,
+  regionalNumber: z.string().regex(/^\d{3}$/),
+  regionalSortKey: z.string().regex(/^\d{8}$/),
+  speciesId: SpeciesIdSchema,
+  formId: FormIdSchema.nullable(),
+  sourceName: z.string().min(1),
+}).strict()
+
 export const EntityRefSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('species'), id: SpeciesIdSchema }).strict(),
   z.object({ kind: z.literal('form'), id: FormIdSchema }).strict(),
@@ -220,20 +241,32 @@ export const FormSchema = z.object({
   dataStatus: DataStatusSchema,
 }).strict()
 
-export const SourceReferenceSchema = z.object({
-  sourceReferenceId: z.string().regex(/^src:(pokemon-showdown|pokemon-dataset-zh):[0-9a-f]{16}$/),
+export const SourceReferenceIdSchema = z.string().regex(/^src:(pokemon-showdown|pokemon-dataset-zh|local-curated):[0-9a-f]{16}$/)
+const UpstreamSourceReferenceSchema = z.object({
+  sourceReferenceId: SourceReferenceIdSchema,
   source: z.enum(['pokemon-showdown', 'pokemon-dataset-zh']),
   commit: SourceCommitSchema,
   path: z.string().min(1),
   sha256: Sha256Schema,
 }).strict()
+const CuratedSourceReferenceSchema = z.object({
+  sourceReferenceId: SourceReferenceIdSchema,
+  source: z.literal('local-curated'),
+  revision: Sha256Schema,
+  path: z.string().min(1),
+  sha256: Sha256Schema,
+}).strict()
+export const SourceReferenceSchema = z.discriminatedUnion('source', [
+  UpstreamSourceReferenceSchema,
+  CuratedSourceReferenceSchema,
+])
 
 export const IdentityMatchSchema = z.object({
   entityId: EntityIdSchema,
   entityKind: z.enum(['species', 'form', 'ability', 'type', 'nature', 'move', 'appearance', 'evolution']),
   showdownId: z.string().min(1),
   mappingClass: z.enum(['automatic', 'rule-based', 'manual-exception']),
-  sourceReferenceId: SourceReferenceSchema.shape.sourceReferenceId,
+  sourceReferenceId: SourceReferenceIdSchema,
 }).strict()
 
 export const AppearanceMatchSchema = z.object({
@@ -243,13 +276,13 @@ export const AppearanceMatchSchema = z.object({
   evidenceKind: z.enum(['cosmetic-identity', 'aspect', 'localization', 'coverage']),
   aspectDimensions: z.array(AppearanceAspectSchema.shape.dimension),
   mappingClass: z.enum(['automatic', 'rule-based', 'manual-exception', 'unresolved']),
-  sourceReferenceId: SourceReferenceSchema.shape.sourceReferenceId,
+  sourceReferenceId: SourceReferenceIdSchema,
 }).strict()
 
 export const ValueProvenanceSchema = z.object({
   entityId: EntityIdSchema,
   fieldPath: z.string().startsWith('/'),
-  sourceReferenceId: SourceReferenceSchema.shape.sourceReferenceId,
+  sourceReferenceId: SourceReferenceIdSchema,
   method: z.enum(['source-literal', 'showdown-dex-rule', 'project-normalization', 'curated-exception']),
   mappingClass: z.enum(['automatic', 'rule-based', 'manual-exception']),
   selected: z.boolean(),
@@ -316,12 +349,24 @@ export const AppearanceLocalizationSchema = z.object({
   entries: z.array(AppearanceLocalizationEntrySchema),
 }).strict()
 
+export const DexLocalizationEntrySchema = z.object({
+  entityId: DexIdSchema,
+  name: z.string().min(1),
+  shortLabel: z.string().min(1).optional(),
+}).strict()
+
+export const DexLocalizationSchema = z.object({
+  locale: z.literal('zh-CN'),
+  entries: z.array(DexLocalizationEntrySchema),
+}).strict()
+
 export const SmokeLocalizationSchema = z.object({
   core: CoreLocalizationSchema,
   abilities: AbilityLocalizationSchema,
   moves: MoveLocalizationSchema,
   evolutions: EvolutionLocalizationSchema,
   appearances: AppearanceLocalizationSchema,
+  dexes: DexLocalizationSchema,
 }).strict()
 
 export const SmokeDatasetSchema = z.object({
@@ -334,6 +379,8 @@ export const SmokeDatasetSchema = z.object({
   moves: z.array(MoveSchema),
   appearances: z.array(AppearanceSchema),
   evolutions: z.array(EvolutionEdgeSchema),
+  dexes: z.array(DexSchema),
+  dexEntries: z.array(DexEntrySchema),
 }).strict()
 
 export const ValidationIssueSchema = z.object({
@@ -359,6 +406,8 @@ export const SmokeReportSchema = z.object({
     moves: z.number().int().nonnegative(),
     appearances: z.number().int().nonnegative(),
     evolutions: z.number().int().nonnegative(),
+    dexes: z.number().int().nonnegative(),
+    dexEntries: z.number().int().nonnegative(),
   }).strict(),
   scopeNotes: z.array(z.string()),
   issues: z.array(ValidationIssueSchema),
@@ -391,6 +440,10 @@ export type AppearanceLocalizationEntry = z.infer<typeof AppearanceLocalizationE
 export type EvolutionEdge = z.infer<typeof EvolutionEdgeSchema>
 export type EvolutionCondition = z.infer<typeof EvolutionConditionSchema>
 export type EvolutionId = z.infer<typeof EvolutionIdSchema>
+export type Dex = z.infer<typeof DexSchema>
+export type DexEntry = z.infer<typeof DexEntrySchema>
+export type DexId = z.infer<typeof DexIdSchema>
+export type DexLocalizationEntry = z.infer<typeof DexLocalizationEntrySchema>
 export type GrowthRate = z.infer<typeof GrowthRateSchema>
 export type GrowthRateId = z.infer<typeof GrowthRateIdSchema>
 export type GrowthRateResolution = z.infer<typeof GrowthRateResolutionSchema>

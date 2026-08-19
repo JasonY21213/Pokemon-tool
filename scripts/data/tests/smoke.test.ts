@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { before, describe, test } from 'node:test'
 import {
   AppearanceSchema,
+  DexSchema,
   type EvolutionCondition,
   type EvolutionEdge,
   type SmokeDataset,
@@ -15,6 +16,7 @@ import { buildGrowthRates, CANONICAL_GROWTH_RATES, parseGrowthRate } from '../gr
 import { assertUniqueMoveNumbers, parseChineseAccuracy, parseChineseNumeric, requireZhMoveCandidate } from '../moves.ts'
 import { assertUniqueEvolutionMappings, buildEvolutions } from '../evolutions.ts'
 import { ALCREMIE_PROOF_APPEARANCE_IDS, stableAppearanceId } from '../appearances.ts'
+import { assertDexEntryUniqueness, stableDexId } from '../dexes.ts'
 import { buildSmokeArtifacts, makeNationalSpeciesId, type BuildArtifacts } from '../pipeline.ts'
 import { loadPokemonDatasetZhSource, type PokemonDatasetZhAdapterOutput } from '../pokemon-dataset-zh.ts'
 import { validateSmokeDataset } from '../validation.ts'
@@ -37,7 +39,7 @@ function clonedDataset(): SmokeDataset {
 function validate(dataset: SmokeDataset): void {
   validateSmokeDataset(
     dataset,
-    artifacts.source.sourceReferences,
+    artifacts.sourceReferences,
     artifacts.identityMatches,
     artifacts.valueProvenance,
     artifacts.localization,
@@ -56,7 +58,7 @@ describe('fixed Showdown smoke fixtures', () => {
       abilities: artifacts.dataset.abilities.length,
       growthRates: artifacts.dataset.growthRates.length,
       moves: artifacts.dataset.moves.length,
-    }, { types: 18, natures: 25, species: 22, forms: 33, abilities: 37, growthRates: 6, moves: 11 })
+    }, { types: 18, natures: 25, species: 24, forms: 35, abilities: 39, growthRates: 6, moves: 11 })
   })
 
   test('Charizard keeps base, both Mega Forms, and G-Max distinct', () => {
@@ -160,7 +162,7 @@ describe('Move identity and core mechanics fixtures', () => {
   })
 
   test('Move identities and provenance resolve to locked source references', () => {
-    const referenceIds = new Set(artifacts.source.sourceReferences.map(reference => reference.sourceReferenceId))
+    const referenceIds = new Set(artifacts.sourceReferences.map(reference => reference.sourceReferenceId))
     const moveIdentities = artifacts.identityMatches.filter(match => match.entityKind === 'move')
     const moveProvenance = artifacts.valueProvenance.filter(value => value.entityId.startsWith('move:'))
     assert.equal(moveIdentities.length, 12)
@@ -302,7 +304,7 @@ describe('EvolutionEdge and Appearance fixtures', () => {
   })
 
   test('Evolution and Appearance provenance is complete and resolvable', () => {
-    const references = new Set(artifacts.source.sourceReferences.map(reference => reference.sourceReferenceId))
+    const references = new Set(artifacts.sourceReferences.map(reference => reference.sourceReferenceId))
     const values = artifacts.valueProvenance.filter(value => value.entityId.startsWith('evolution:') || value.entityId.startsWith('appearance:'))
     assert.ok(values.length > 0)
     assert.ok(values.every(value => references.has(value.sourceReferenceId)))
@@ -441,7 +443,7 @@ describe('Appearance identity and dimensional modeling fixtures', () => {
   })
 
   test('each Appearance has resolvable Showdown and Chinese evidence records', () => {
-    const referenceIds = new Set(artifacts.source.sourceReferences.map(reference => reference.sourceReferenceId))
+    const referenceIds = new Set(artifacts.sourceReferences.map(reference => reference.sourceReferenceId))
     assert.equal(artifacts.appearanceMatches.length, 182)
     for (const appearance of artifacts.dataset.appearances) {
       const matches = artifacts.appearanceMatches.filter(match => match.appearanceId === appearance.appearanceId)
@@ -468,7 +470,7 @@ describe('Appearance identity and dimensional modeling fixtures', () => {
 
   test('Appearance provenance is complete and selected from fixed references', () => {
     const values = artifacts.valueProvenance.filter(value => value.entityId.startsWith('appearance:'))
-    const referenceIds = new Set(artifacts.source.sourceReferences.map(reference => reference.sourceReferenceId))
+    const referenceIds = new Set(artifacts.sourceReferences.map(reference => reference.sourceReferenceId))
     assert.equal(values.length, 847)
     assert.ok(values.every(value => value.selected && referenceIds.has(value.sourceReferenceId) && value.sourcePointer))
     const keys = new Set(values.map(value => `${value.entityId}${value.fieldPath}`))
@@ -526,6 +528,8 @@ describe('pokemon-dataset-zh localization fixtures', () => {
         ['species:0479', '洛托姆'],
         ['species:0678', '超能妙喵'],
         ['species:0700', '仙子伊布'],
+        ['species:0808', '美录坦'],
+        ['species:0809', '美录梅塔'],
         ['species:0868', '小仙奶'],
         ['species:0869', '霜奶仙'],
         ['species:1021', '猛雷鼓'],
@@ -547,7 +551,7 @@ describe('pokemon-dataset-zh localization fixtures', () => {
 
   test('all fixture Abilities map by official number and English name', () => {
     const mappings = mapAbilityLocalizations(artifacts.dataset, localizationSource.abilities)
-    assert.equal(mappings.length, 37)
+    assert.equal(mappings.length, 39)
     assert.deepEqual(mappings.map(mapping => mapping.entry.entityId), artifacts.dataset.abilities.map(ability => ability.abilityId))
   })
 
@@ -555,7 +559,7 @@ describe('pokemon-dataset-zh localization fixtures', () => {
     const candidates = structuredClone(localizationSource.abilities)
     candidates[1].chineseName = candidates[0].chineseName
     const mappings = mapAbilityLocalizations(artifacts.dataset, candidates)
-    assert.equal(new Set(mappings.map(mapping => mapping.entry.entityId)).size, 37)
+    assert.equal(new Set(mappings.map(mapping => mapping.entry.entityId)).size, 39)
   })
 
   test('non-unique Form mechanics match cannot pass as automatic', () => {
@@ -577,13 +581,13 @@ describe('pokemon-dataset-zh localization fixtures', () => {
     localization.core.entries = localization.core.entries.filter(entry => entry.entityId !== 'species:0006')
     assert.doesNotThrow(() => validateSmokeDataset(
       artifacts.dataset,
-      artifacts.source.sourceReferences,
+      artifacts.sourceReferences,
       artifacts.identityMatches,
       artifacts.valueProvenance,
     ))
     assert.throws(() => validateSmokeDataset(
       artifacts.dataset,
-      artifacts.source.sourceReferences,
+      artifacts.sourceReferences,
       artifacts.identityMatches,
       artifacts.valueProvenance,
       localization,
@@ -595,9 +599,9 @@ describe('pokemon-dataset-zh localization fixtures', () => {
       automatic: artifacts.formLocalizationMappings.filter(mapping => mapping.mappingClass === 'automatic').length,
       ruleBased: artifacts.formLocalizationMappings.filter(mapping => mapping.mappingClass === 'rule-based').length,
       unresolved: artifacts.formLocalizationMappings.filter(mapping => mapping.mappingClass === 'unresolved').length,
-    }, { automatic: 30, ruleBased: 2, unresolved: 1 })
+    }, { automatic: 32, ruleBased: 2, unresolved: 1 })
     assert.equal(artifacts.localizationMechanicsConflicts.length, 0)
-    assert.equal(artifacts.localizationProvenanceCount, 139)
+    assert.equal(artifacts.localizationProvenanceCount, 147)
     assert.doesNotThrow(() => validate(artifacts.dataset))
   })
 })
@@ -636,7 +640,7 @@ describe('GrowthRate canonical mapping fixtures', () => {
   })
 
   test('all fixture Species receive their default GrowthRate', () => {
-    assert.equal(artifacts.growthRateAssignments.filter(assignment => assignment.field === '/growthRate').length, 22)
+    assert.equal(artifacts.growthRateAssignments.filter(assignment => assignment.field === '/growthRate').length, 24)
     assert.ok(artifacts.dataset.species.every(species => species.growthRate.status === 'resolved'
       || species.speciesId === 'species:1021'))
   })
@@ -668,7 +672,7 @@ describe('GrowthRate canonical mapping fixtures', () => {
 
   test('every selected GrowthRate field has an exact source pointer and selected provenance', () => {
     const growthProvenance = artifacts.valueProvenance.filter(value => value.fieldPath.startsWith('/growthRate'))
-    assert.equal(growthProvenance.length, 46)
+    assert.equal(growthProvenance.length, 50)
     assert.ok(growthProvenance.every(value => value.selected && value.sourcePointer?.endsWith('/experience_100')))
   })
 
@@ -681,12 +685,148 @@ describe('GrowthRate canonical mapping fixtures', () => {
     assert.deepEqual(ragingBolt?.growthRate, { id: null, status: 'unresolved' })
     const result = validateSmokeDataset(
       artifacts.dataset,
-      artifacts.source.sourceReferences,
+      artifacts.sourceReferences,
       artifacts.identityMatches,
       artifacts.valueProvenance,
       artifacts.localization,
     )
     assert.deepEqual(result.issues.map(issue => issue.code), ['EXPECTED_UNRESOLVED_GROWTH_RATE'])
+  })
+})
+
+describe('Regional Dex and DexEntry fixtures', () => {
+  test('only seven resolved Dex fixtures enter stable runtime', () => {
+    assert.equal(artifacts.dataset.dexes.length, 7)
+    assert.ok(!artifacts.dataset.dexes.some(dex => dex.dexId === 'dex:la:hisui'))
+  })
+
+  test('resolved Dex IDs are explicit curated identities', () => {
+    assert.deepEqual(artifacts.dataset.dexes.map(dex => dex.dexId), [
+      'dex:hoenn:expanded-211', 'dex:kanto:expanded-153', 'dex:sinnoh:expanded-210',
+      'dex:sv:blueberry', 'dex:sv:kitakami', 'dex:sv:paldea', 'dex:swsh:galar',
+    ])
+  })
+
+  test('all eight fixed sources are scanned with audited row counts', () => {
+    assert.deepEqual(artifacts.dexScopeAudits.map(audit => [audit.dexId, audit.rawRowCount, audit.uniqueRegionalNumberCount]), [
+      ['dex:kanto:expanded-153', 153, 153], ['dex:sinnoh:expanded-210', 210, 210],
+      ['dex:swsh:galar', 400, 400], ['dex:sv:paldea', 400, 400],
+      ['dex:sv:kitakami', 200, 200], ['dex:sv:blueberry', 243, 243],
+      ['dex:hoenn:expanded-211', 211, 211], ['dex:la:hisui', 708, 242],
+    ])
+  })
+
+  test('Kanto preserves source-defined entries 152 Meltan and 153 Melmetal', () => {
+    const kanto = artifacts.dataset.dexEntries.filter(entry => entry.dexId === 'dex:kanto:expanded-153')
+    assert.deepEqual(kanto.filter(entry => ['152', '153'].includes(entry.regionalNumber)), [
+      { dexId: 'dex:kanto:expanded-153', regionalNumber: '152', regionalSortKey: '00000152', speciesId: 'species:0808', formId: null, sourceName: '美录坦' },
+      { dexId: 'dex:kanto:expanded-153', regionalNumber: '153', regionalSortKey: '00000153', speciesId: 'species:0809', formId: null, sourceName: '美录梅塔' },
+    ])
+  })
+
+  test('fixture-selected stable DexEntry output has 65 relations', () => {
+    assert.equal(artifacts.dataset.dexEntries.length, 65)
+  })
+
+  test('Hisui remains one unresolved quarantined scope', () => {
+    assert.equal(artifacts.quarantinedDexScopes.length, 1)
+    assert.deepEqual({
+      dexId: artifacts.quarantinedDexScopes[0].dexId,
+      rows: artifacts.quarantinedDexScopes[0].rawRowCount,
+      unique: artifacts.quarantinedDexScopes[0].uniqueRegionalNumberCount,
+    }, { dexId: 'dex:la:hisui', rows: 708, unique: 242 })
+  })
+
+  test('Hisui reset detection preserves all seven segment lengths', () => {
+    assert.deepEqual(artifacts.quarantinedDexScopes[0].detectedSegments.map(segment => segment.rowCount), [245, 85, 75, 96, 90, 91, 26])
+  })
+
+  test('Hisui report preserves three first-table form duplicate groups', () => {
+    assert.deepEqual(artifacts.quarantinedDexScopes[0].duplicateFormEvidence.map(item => item.regionalNumber), ['168', '169', '202'])
+  })
+
+  test('Hisui is the only Dex conflict and is an error', () => {
+    assert.deepEqual(artifacts.dexConflicts.map(conflict => [conflict.code, conflict.severity, conflict.dexId]), [
+      ['DEX_SCOPE_UNRESOLVED', 'error', 'dex:la:hisui'],
+    ])
+  })
+
+  test('all eight Dex input files have pinned upstream references', () => {
+    const paths = artifacts.source.localization.sourceReferences.map(reference => reference.path).filter(path => path.startsWith('data/pokedex/'))
+    assert.deepEqual(paths.sort((a, b) => a.localeCompare(b, 'zh-CN')), [
+      'data/pokedex/丰缘.json', 'data/pokedex/伽勒尔.json', 'data/pokedex/关都.json', 'data/pokedex/帕底亚-北上.json',
+      'data/pokedex/帕底亚-蓝莓.json', 'data/pokedex/帕底亚.json', 'data/pokedex/洗翠.json', 'data/pokedex/神奥.json',
+    ].sort((a, b) => a.localeCompare(b, 'zh-CN')))
+  })
+
+  test('stable runtime regional numbers are unique within each Dex', () => {
+    assert.doesNotThrow(() => assertDexEntryUniqueness(artifacts.dataset.dexes, artifacts.dataset.dexEntries))
+  })
+
+  test('duplicate regional numbers fail under the default policy', () => {
+    const duplicate = structuredClone(artifacts.dataset.dexEntries[0])
+    assert.throws(() => assertDexEntryUniqueness(artifacts.dataset.dexes, [...artifacts.dataset.dexEntries, duplicate]), /DEX_ENTRY_DUPLICATE_REGIONAL_NUMBER/)
+  })
+
+  test('same-Species distinct-Form duplicates require an explicit policy', () => {
+    const dex = artifacts.dataset.dexes[0]
+    const entries = [
+      { dexId: dex.dexId, regionalNumber: '001', regionalSortKey: '00000001', speciesId: 'species:0006', formId: 'form:0006:mega-x', sourceName: 'fixture-x' },
+      { dexId: dex.dexId, regionalNumber: '001', regionalSortKey: '00000001', speciesId: 'species:0006', formId: 'form:0006:mega-y', sourceName: 'fixture-y' },
+    ]
+    assert.doesNotThrow(() => assertDexEntryUniqueness([dex], entries, new Map([[dex.dexId, 'same-species-distinct-forms']])))
+  })
+
+  test('Dex stable ID does not depend on a source filename', () => {
+    const before = { dexId: 'dex:sv:kitakami', sourceSelector: { path: 'before.json' } }
+    const after = { dexId: 'dex:sv:kitakami', sourceSelector: { path: 'renamed.json' } }
+    assert.equal(stableDexId(before), stableDexId(after))
+  })
+
+  test('every stable Dex has localization and canonical provenance', () => {
+    const localized = new Set(artifacts.localization.dexes.entries.map(entry => entry.entityId))
+    const provenance = new Set(artifacts.valueProvenance.map(value => `${value.entityId}${value.fieldPath}`))
+    assert.ok(artifacts.dataset.dexes.every(dex => localized.has(dex.dexId)
+      && provenance.has(`${dex.dexId}/dexId`)
+      && provenance.has(`${dex.dexId}/localization/zh-CN/name`)))
+  })
+
+  test('duplicate Dex IDs fail canonical validation', () => {
+    const dataset = clonedDataset()
+    dataset.dexes.push(structuredClone(dataset.dexes[0]))
+    assert.throws(() => validate(dataset), /DUPLICATE_ID/)
+  })
+
+  test('unresolved Dex data cannot satisfy the stable runtime schema', () => {
+    assert.throws(() => DexSchema.parse({ ...artifacts.dataset.dexes[0], dataStatus: 'unresolved' }))
+  })
+
+  test('orphan DexEntry Species references fail', () => {
+    const dataset = clonedDataset()
+    dataset.dexEntries[0].speciesId = 'species:9999'
+    assert.throws(() => validate(dataset), /ORPHAN_DEX_ENTRY_SPECIES/)
+  })
+
+  test('orphan DexEntry Form references fail', () => {
+    const dataset = clonedDataset()
+    dataset.dexEntries[0].formId = 'form:9999:base'
+    assert.throws(() => validate(dataset), /ORPHAN_DEX_ENTRY_FORM/)
+  })
+
+  test('Dex localization keys must resolve to stable Dex entities', () => {
+    const localization = structuredClone(artifacts.localization)
+    localization.dexes.entries.push({ entityId: 'dex:missing:scope', name: '不存在' })
+    assert.throws(() => validateSmokeDataset(
+      artifacts.dataset, artifacts.sourceReferences, artifacts.identityMatches,
+      artifacts.valueProvenance, localization,
+    ), /ORPHAN_LOCALIZATION_KEY/)
+  })
+
+  test('Dex and DexEntry output use the required stable ordering', () => {
+    const dexIds = artifacts.dataset.dexes.map(dex => dex.dexId)
+    assert.deepEqual(dexIds, [...dexIds].sort((a, b) => a.localeCompare(b, 'en')))
+    const entryKeys = artifacts.dataset.dexEntries.map(entry => `${entry.dexId}:${entry.regionalSortKey}:${entry.speciesId}:${entry.formId ?? ''}`)
+    assert.deepEqual(entryKeys, [...entryKeys].sort((a, b) => a.localeCompare(b, 'en')))
   })
 })
 

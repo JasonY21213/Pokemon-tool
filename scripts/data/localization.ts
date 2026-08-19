@@ -295,6 +295,7 @@ export function buildLocalization(
     moves: { locale: 'zh-CN', entries: [] },
     evolutions: { locale: 'zh-CN', entries: [] },
     appearances: { locale: 'zh-CN', entries: [] },
+    dexes: { locale: 'zh-CN', entries: [] },
   })
   return {
     localization,

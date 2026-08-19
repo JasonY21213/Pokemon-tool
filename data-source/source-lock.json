@@ -27,6 +27,14 @@
       "selectedPaths": [
         { "path": "data/ability_list.json", "sha256": "135430faed1b9041821c27bbb09a6f58e1922c91bfd285595d7cd35daa2a99e7" },
         { "path": "data/move_list.json", "sha256": "ce9e9d36783734659617353a528ec0be722ae433a8563009752f4b08ffa48759" },
+        { "path": "data/pokedex/丰缘.json", "sha256": "1d691907f7dcc5b1aa1d81ee297c9d284b221d3b665df492f91647b763a8af29" },
+        { "path": "data/pokedex/伽勒尔.json", "sha256": "69b7db811396e47e847f5548285c59e5bf49af6ce5cb1e422d125c3aa3cec25c" },
+        { "path": "data/pokedex/关都.json", "sha256": "e8d64a3c05af6e95533b84a3db3a9e80631471dcbe9cdefc69fafd7ee70db6ed" },
+        { "path": "data/pokedex/帕底亚-北上.json", "sha256": "4798bb4caa3e614acd1699dc8bcc01691100bb4b19e0acec250122167143069c" },
+        { "path": "data/pokedex/帕底亚-蓝莓.json", "sha256": "285578f855e34d53e0037291bf9fde13f2bef149b6d38bd9092da48e2163cc7c" },
+        { "path": "data/pokedex/帕底亚.json", "sha256": "6336f81383dd1362f363c5d676a5bbfebfd15548637e252dc501c660f834a02b" },
+        { "path": "data/pokedex/洗翠.json", "sha256": "d3e509bb565258574de1a79e545666ab75f494dfd1a7d900383706a8922bb58c" },
+        { "path": "data/pokedex/神奥.json", "sha256": "fd9c2592daa60bb7afe58c2d1cbf90b8594ea4d5f54bf1e7a2c04b8c4f4484da" },
         { "path": "data/pokemon/0006-喷火龙.json", "sha256": "1934583863c2a9d70b00f4f288c70b6ab9f9f3c3062c05e7aeb92be2ef10dc52" },
         { "path": "data/pokemon/0035-皮皮.json", "sha256": "5883b1636478eb88c44681b5aefe2672bcd7a899af3c12c46da8cb53264de465" },
         { "path": "data/pokemon/0064-勇基拉.json", "sha256": "b8c06ccbc67ff10374658402244d5c8ad6704713ed7f3a7e8291a0c9ff24e98c" },
@@ -46,6 +54,8 @@
         { "path": "data/pokemon/0471-冰伊布.json", "sha256": "76f49b29860240fd7951d41cc5c9a4573a8f8297de099a750128b14f9c6bdb95" },
         { "path": "data/pokemon/0678-超能妙喵.json", "sha256": "d1bb0e401dae668031991101a8dcf40245c813386d8afe648eedb18c8c98fc5f" },
         { "path": "data/pokemon/0700-仙子伊布.json", "sha256": "fc022efa0df4b295cf79d8fc178c858fb48e56aab90ce49a45516eff25f31cd0" },
+        { "path": "data/pokemon/0808-美录坦.json", "sha256": "5734f02fbae17368ca260f224ca1d6dc5f106738407c15429071e4f409c36674" },
+        { "path": "data/pokemon/0809-美录梅塔.json", "sha256": "f9d28f67353b041956d8eb8cb41e7c4cf803e1d48b3e00101ae012334cf58a82" },
         { "path": "data/pokemon/0868-小仙奶.json", "sha256": "8a1fe48bd3d293b1fa66b5bccb403de1c32a1eb4cb62b4b622ce16689b4f9524" },
         { "path": "data/pokemon/0869-霜奶仙.json", "sha256": "01d9c48ba36e861300cef1c0ebae87e0b08ede8a71b9e6041c86834330825e1d" },
         { "path": "data/pokemon/1021-猛雷鼓.json", "sha256": "2b77709f5baca4a476df32fd6bc4edffc8b02b0fa9e13158b9f24528a4196723" }

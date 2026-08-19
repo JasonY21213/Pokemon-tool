@@ -30,5 +30,7 @@ console.log(JSON.stringify({
     moves: result.dataset.moves.length,
     appearances: result.dataset.appearances.length,
     evolutions: result.dataset.evolutions.length,
+    dexes: result.dataset.dexes.length,
+    dexEntries: result.dataset.dexEntries.length,
   },
 }, null, 2))

@@ -49,6 +49,7 @@ import {
 import { buildMoves, type MoveConflict, type QuarantinedMove } from './moves.ts'
 import { buildEvolutions, type EvolutionConflict } from './evolutions.ts'
 import { buildAppearances, type AppearanceConflict } from './appearances.ts'
+import { buildDexes, type DexConflict, type DexScopeAudit, type QuarantinedDexScope } from './dexes.ts'
 
 const STANDARD_TYPES = [
   ['bug', 'Bug'], ['dark', 'Dark'], ['dragon', 'Dragon'], ['electric', 'Electric'],
@@ -65,6 +66,7 @@ const FORM_IDS = [
   'leafeon', 'glaceon', 'sylveon', 'unown', 'milcery', 'alcremie', 'alcremiegmax',
   'rotom', 'rotomheat', 'rotomwash', 'rotomfrost', 'rotomfan', 'rotommow',
   'meowstic', 'meowsticf',
+  'meltan', 'melmetal',
   'ragingbolt',
 ] as const
 
@@ -73,6 +75,7 @@ const SPECIES_IDS = [
   'kadabra', 'alakazam', 'vaporeon', 'jolteon', 'flareon', 'espeon', 'umbreon',
   'leafeon', 'glaceon', 'sylveon', 'unown', 'milcery', 'alcremie',
   'rotom', 'meowstic', 'ragingbolt',
+  'meltan', 'melmetal',
 ] as const
 const SLOT_ORDER = new Map([['0', 0], ['1', 1], ['H', 2], ['S', 3]])
 const projectRoot = getProjectRoot()
@@ -82,6 +85,7 @@ export interface BuildArtifacts {
   source: VerifiedSource
   identityMatches: IdentityMatch[]
   valueProvenance: ValueProvenance[]
+  sourceReferences: SourceReference[]
   localization: SmokeLocalization
   formLocalizationMappings: FormLocalizationMapping[]
   localizationMechanicsConflicts: LocalizationConflict[]
@@ -106,6 +110,9 @@ export interface BuildArtifacts {
     alcremieExcludedCoverageRecords: number
     showdownAlcremieCreams: number
   }
+  dexConflicts: DexConflict[]
+  dexScopeAudits: DexScopeAudit[]
+  quarantinedDexScopes: QuarantinedDexScope[]
   scopeNotes: string[]
 }
 
@@ -410,6 +417,8 @@ export async function buildSmokeArtifacts(
     moves: moveBuild.stableMoves,
     appearances: appearanceBuild.appearances,
     evolutions: evolutionBuild.evolutions,
+    dexes: [],
+    dexEntries: [],
   })
   const audit = provenance(dataset, source)
   const localization = buildLocalization(dataset, localizationSource)
@@ -424,15 +433,27 @@ export async function buildSmokeArtifacts(
     moves: { locale: 'zh-CN', entries: moveBuild.localizationEntries },
     evolutions: { locale: 'zh-CN', entries: evolutionBuild.localizationEntries },
     appearances: { locale: 'zh-CN', entries: appearanceBuild.localizationEntries },
+    dexes: { locale: 'zh-CN', entries: [] },
+  }
+  const dexBuild = await buildDexes(resolvedDataset, source)
+  const finalDataset = SmokeDatasetSchema.parse({
+    ...resolvedDataset,
+    dexes: dexBuild.dexes,
+    dexEntries: dexBuild.dexEntries,
+  })
+  const finalLocalization: SmokeLocalization = {
+    ...resolvedLocalization,
+    dexes: { locale: 'zh-CN', entries: dexBuild.localizationEntries },
   }
   return {
-    dataset: resolvedDataset,
+    dataset: finalDataset,
     source,
+    sourceReferences: [...source.sourceReferences, ...dexBuild.sourceReferences],
     identityMatches: [...audit.identityMatches, ...moveBuild.identityMatches, ...appearanceBuild.identityMatches, ...evolutionBuild.identityMatches]
       .sort((left, right) => left.entityId.localeCompare(right.entityId, 'en')),
-    valueProvenance: [...audit.valueProvenance, ...localization.valueProvenance, ...growthRates.valueProvenance, ...moveBuild.valueProvenance, ...appearanceBuild.valueProvenance, ...evolutionBuild.valueProvenance]
+    valueProvenance: [...audit.valueProvenance, ...localization.valueProvenance, ...growthRates.valueProvenance, ...moveBuild.valueProvenance, ...appearanceBuild.valueProvenance, ...evolutionBuild.valueProvenance, ...dexBuild.valueProvenance]
       .sort((left, right) => `${left.entityId}${left.fieldPath}`.localeCompare(`${right.entityId}${right.fieldPath}`, 'en')),
-    localization: resolvedLocalization,
+    localization: finalLocalization,
     formLocalizationMappings: localization.formMappings,
     localizationMechanicsConflicts: localization.mechanicsConflicts,
     localizationProvenanceCount: localization.valueProvenance.length,
@@ -449,6 +470,9 @@ export async function buildSmokeArtifacts(
     appearanceConflicts: appearanceBuild.conflicts,
     appearanceMappingCounts: appearanceBuild.mappingCounts,
     appearanceSourceCoverage: appearanceBuild.sourceCoverage,
+    dexConflicts: dexBuild.conflicts,
+    dexScopeAudits: dexBuild.scopeAudits,
+    quarantinedDexScopes: dexBuild.quarantine,
     scopeNotes: [
       'Stellar exists in the fixed TypeChart but is explicitly excluded from the 18-type smoke matrix.',
       'Non-attacking TypeChart keys such as brn, par, powder, and prankster are not emitted as Types.',
@@ -460,6 +484,7 @@ export async function buildSmokeArtifacts(
       'Move output is restricted to twelve identity fixtures; Future Nihil Light is quarantined and excluded from stable runtime data.',
       'Evolution output is restricted to Eevee, Kadabra, and Milcery proof relationships; Alcremie appearance conditions remain partial where the fixed sources omit direction, duration, or time.',
       'Appearance output is restricted to 28 Unown glyphs and 63 Alcremie cream-by-sweet combinations; image binaries and unrelated cosmetics remain out of scope.',
+      'Dex output scans eight fixed files but emits only seven resolved Dex fixtures and relations to Species already present in the smoke dataset; Hisui remains quarantined.',
     ],
   }
 }
@@ -482,7 +507,7 @@ export async function runSmokePipeline(options: {
   const artifacts = await buildSmokeArtifacts(options.cachePath, options.localizationCachePath)
   const validation = validateSmokeDataset(
     artifacts.dataset,
-    artifacts.source.sourceReferences,
+    artifacts.sourceReferences,
     artifacts.identityMatches,
     artifacts.valueProvenance,
     artifacts.localization,
@@ -498,11 +523,14 @@ export async function runSmokePipeline(options: {
     ['moves.json', artifacts.dataset.moves],
     ['appearances.json', artifacts.dataset.appearances],
     ['evolutions.json', artifacts.dataset.evolutions],
+    ['dexes.json', artifacts.dataset.dexes],
+    ['dex-entries.json', artifacts.dataset.dexEntries],
     ['localization/zh-CN.core.json', artifacts.localization.core],
     ['localization/zh-CN.abilities.json', artifacts.localization.abilities],
     ['localization/zh-CN.moves.json', artifacts.localization.moves],
     ['localization/zh-CN.evolutions.json', artifacts.localization.evolutions],
     ['localization/zh-CN.appearances.json', artifacts.localization.appearances],
+    ['localization/zh-CN.dexes.json', artifacts.localization.dexes],
   ]
   for (const [path, value] of runtimeValues) await writeJson(join(runtimeRoot, path), value)
   const fileEntries = []
@@ -519,7 +547,7 @@ export async function runSmokePipeline(options: {
     files: fileEntries,
   })
   await writeJson(join(runtimeRoot, 'manifest.json'), manifest)
-  await writeJson(join(outputRoot, 'provenance', 'source-references.json'), artifacts.source.sourceReferences)
+  await writeJson(join(outputRoot, 'provenance', 'source-references.json'), artifacts.sourceReferences)
   await writeJson(join(outputRoot, 'provenance', 'identity-matches.json'), artifacts.identityMatches)
   await writeJson(join(outputRoot, 'provenance', 'value-provenance.json'), artifacts.valueProvenance)
   await writeJson(join(outputRoot, 'reports', 'registry-proposals.json'), [])
@@ -588,6 +616,15 @@ export async function runSmokePipeline(options: {
     conflicts: artifacts.appearanceConflicts,
     matches: artifacts.appearanceMatches,
   })
+  await writeJson(join(outputRoot, 'reports', 'dex-mapping.json'), {
+    schemaVersion: 1,
+    sourceCommit: artifacts.source.localization.commit,
+    resolvedDexCount: artifacts.dataset.dexes.length,
+    stableRuntimeEntryCount: artifacts.dataset.dexEntries.length,
+    scopeAudits: artifacts.dexScopeAudits,
+    conflicts: artifacts.dexConflicts,
+    quarantine: artifacts.quarantinedDexScopes,
+  })
   const report = SmokeReportSchema.parse({
     schemaVersion: 1,
     sourceCommits: {
@@ -605,6 +642,8 @@ export async function runSmokePipeline(options: {
       moves: artifacts.dataset.moves.length,
       appearances: artifacts.dataset.appearances.length,
       evolutions: artifacts.dataset.evolutions.length,
+      dexes: artifacts.dataset.dexes.length,
+      dexEntries: artifacts.dataset.dexEntries.length,
     },
     scopeNotes: artifacts.scopeNotes,
     issues: validation.issues,
