@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json",
     "data:smoke": "node scripts/data/cli.ts",
-    "data:test": "node --test scripts/data/tests/smoke.test.ts scripts/data/tests/full-dry-run.test.ts scripts/data/tests/excel-cross-validation.test.ts scripts/data/tests/conflict-resolution.test.ts scripts/data/tests/registry-review.test.ts",
+    "data:test": "node --test scripts/data/tests/smoke.test.ts scripts/data/tests/full-dry-run.test.ts scripts/data/tests/excel-cross-validation.test.ts scripts/data/tests/conflict-resolution.test.ts scripts/data/tests/registry-review.test.ts scripts/data/tests/form-review-round1.test.ts",
     "data:determinism": "node scripts/data/determinism.ts",
     "data:full": "node scripts/data/full-dry-run-cli.ts",
     "data:full:test": "node --test scripts/data/tests/full-dry-run.test.ts",
@@ -21,7 +21,10 @@
     "data:conflicts:determinism": "node scripts/data/conflict-resolution-determinism.ts",
     "data:registry:plan": "node scripts/data/registry-review-cli.ts --plan",
     "data:registry:apply": "node scripts/data/registry-review-cli.ts --apply",
-    "data:registry:determinism": "node scripts/data/registry-review-determinism.ts"
+    "data:registry:determinism": "node scripts/data/registry-review-determinism.ts",
+    "data:form-review:plan": "node scripts/data/form-review-round1-cli.ts --plan",
+    "data:form-review:apply": "node scripts/data/form-review-round1-cli.ts --apply",
+    "data:form-review:determinism": "node scripts/data/form-review-round1-determinism.ts"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^7.2.0",

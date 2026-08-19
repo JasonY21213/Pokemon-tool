@@ -6,6 +6,7 @@ import { getProjectRoot, type RegistryEntity, verifySource } from './source.ts'
 import { serializeJson, writeJson } from './serialization.ts'
 
 export const REGISTRY_REVIEW_BATCH = 'registry-review-round-1' as const
+const FORM_REVIEW_BATCH = 'form-review-round-1' as const
 type AcceptedReviewClassification = 'safe-bulk-accept' | 'rule-based-accept'
 export type ReviewClassification = AcceptedReviewClassification
   | 'manual-review-required' | 'quarantine-reject'
@@ -68,7 +69,7 @@ function entityMap(full: FullDryRunArtifacts): Map<string, Record<string, unknow
 }
 
 function proposalFromReviewedEntity(entity: RegistryEntity): RegistryProposal | null {
-  if (!entity.review || entity.review.batchId !== REGISTRY_REVIEW_BATCH) return null
+  if (!entity.review || ![REGISTRY_REVIEW_BATCH, FORM_REVIEW_BATCH].includes(entity.review.batchId)) return null
   if (!['species', 'form', 'ability', 'move'].includes(entity.kind)) return null
   return {
     entityKind: entity.kind as RegistryProposal['entityKind'],
@@ -176,10 +177,21 @@ function mappingCounts(records: RegistryReviewRecord[]): Record<string, number> 
 
 export async function buildRegistryReviewArtifacts(): Promise<RegistryReviewArtifacts> {
   const root = getProjectRoot(); const registry = JSON.parse(await readFile(resolve(root, 'data-curated', 'id-registry.json'), 'utf8')) as RegistryDocument
-  const baselineEntities = registry.entities.filter(entity => entity.review?.batchId !== REGISTRY_REVIEW_BATCH)
+  const baselineEntities = registry.entities.filter(entity => !entity.review)
   const full = await buildFullDryRun(); const byId = entityMap(full)
   const proposals = reviewBatchProposals(full, registry)
-  const reviewed = proposals.map(proposal => classifyRegistryProposal(proposal, byId.get(proposal.proposedProjectId))).sort(stableRecordSort)
+  const reviewedRegistry = new Map(registry.entities.filter(entity => entity.review).map(entity => [entity.projectId, entity]))
+  const reviewed = proposals.map(proposal => {
+    const stabilized = reviewedRegistry.get(proposal.proposedProjectId)
+    if (stabilized?.review?.batchId === FORM_REVIEW_BATCH && proposal.entityKind === 'form') {
+      return {
+        ...proposal, mappingClass: String(byId.get(proposal.proposedProjectId)?.mappingClass ?? 'unresolved'),
+        reviewClassification: stabilized.review.classification,
+        category: 'form-review-round1-accepted', rationale: stabilized.review.note,
+      } satisfies RegistryReviewRecord
+    }
+    return classifyRegistryProposal(proposal, byId.get(proposal.proposedProjectId))
+  }).sort(stableRecordSort)
   if (reviewed.length !== 3562) throw new Error(`REGISTRY_REVIEW_BATCH_COUNT_MISMATCH: ${reviewed.length}`)
   const accepted = reviewed.filter(record => record.reviewClassification === 'safe-bulk-accept' || record.reviewClassification === 'rule-based-accept')
   const manualReview = reviewed.filter(record => record.reviewClassification === 'manual-review-required')
