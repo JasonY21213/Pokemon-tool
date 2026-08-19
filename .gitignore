@@ -5,6 +5,7 @@ node_modules/
 # Production builds
 dist/
 build/
+generated/
 
 # Svelte and Vite generated files
 .svelte-kit/

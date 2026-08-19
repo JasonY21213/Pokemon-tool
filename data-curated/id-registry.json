@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "84d7ceb4f009928221fce7a00e711bab263c5f4e",
+  "entities": [
+    { "kind": "species", "projectId": "species:0006", "anchor": { "nationalDexNumber": 6 }, "showdownId": "charizard", "status": "active", "firstSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e", "lastSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e" },
+    { "kind": "species", "projectId": "species:0479", "anchor": { "nationalDexNumber": 479 }, "showdownId": "rotom", "status": "active", "firstSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e", "lastSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e" },
+    { "kind": "species", "projectId": "species:0678", "anchor": { "nationalDexNumber": 678 }, "showdownId": "meowstic", "status": "active", "firstSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e", "lastSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e" },
+
+    { "kind": "form", "projectId": "form:0006:base", "anchor": { "speciesId": "species:0006", "formToken": "base" }, "showdownId": "charizard", "status": "active", "firstSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e", "lastSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e" },
+    { "kind": "form", "projectId": "form:0006:mega-x", "anchor": { "speciesId": "species:0006", "formToken": "mega-x" }, "showdownId": "charizardmegax", "status": "active", "firstSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e", "lastSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e" },
+    { "kind": "form", "projectId": "form:0006:mega-y", "anchor": { "speciesId": "species:0006", "formToken": "mega-y" }, "showdownId": "charizardmegay", "status": "active", "firstSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e", "lastSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e" },
+    { "kind": "form", "projectId": "form:0006:gmax", "anchor": { "speciesId": "species:0006", "formToken": "gmax" }, "showdownId": "charizardgmax", "status": "active", "firstSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e", "lastSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e" },
+
+    { "kind": "form", "projectId": "form:0479:base", "anchor": { "speciesId": "species:0479", "formToken": "base" }, "showdownId": "rotom", "status": "active", "firstSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e", "lastSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e" },
+    { "kind": "form", "projectId": "form:0479:heat", "anchor": { "speciesId": "species:0479", "formToken": "heat" }, "showdownId": "rotomheat", "status": "active", "firstSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e", "lastSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e" },
+    { "kind": "form", "projectId": "form:0479:wash", "anchor": { "speciesId": "species:0479", "formToken": "wash" }, "showdownId": "rotomwash", "status": "active", "firstSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e", "lastSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e" },
+    { "kind": "form", "projectId": "form:0479:frost", "anchor": { "speciesId": "species:0479", "formToken": "frost" }, "showdownId": "rotomfrost", "status": "active", "firstSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e", "lastSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e" },
+    { "kind": "form", "projectId": "form:0479:fan", "anchor": { "speciesId": "species:0479", "formToken": "fan" }, "showdownId": "rotomfan", "status": "active", "firstSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e", "lastSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e" },
+    { "kind": "form", "projectId": "form:0479:mow", "anchor": { "speciesId": "species:0479", "formToken": "mow" }, "showdownId": "rotommow", "status": "active", "firstSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e", "lastSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e" },
+
+    { "kind": "form", "projectId": "form:0678:base", "anchor": { "speciesId": "species:0678", "formToken": "base" }, "showdownId": "meowstic", "status": "active", "firstSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e", "lastSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e" },
+    { "kind": "form", "projectId": "form:0678:female", "anchor": { "speciesId": "species:0678", "formToken": "female" }, "showdownId": "meowsticf", "status": "active", "firstSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e", "lastSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e" },
+
+    { "kind": "ability", "projectId": "ability:0026", "anchor": { "officialNumber": 26 }, "showdownId": "levitate", "status": "active", "firstSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e", "lastSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e" },
+    { "kind": "ability", "projectId": "ability:0051", "anchor": { "officialNumber": 51 }, "showdownId": "keeneye", "status": "active", "firstSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e", "lastSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e" },
+    { "kind": "ability", "projectId": "ability:0066", "anchor": { "officialNumber": 66 }, "showdownId": "blaze", "status": "active", "firstSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e", "lastSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e" },
+    { "kind": "ability", "projectId": "ability:0070", "anchor": { "officialNumber": 70 }, "showdownId": "drought", "status": "active", "firstSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e", "lastSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e" },
+    { "kind": "ability", "projectId": "ability:0094", "anchor": { "officialNumber": 94 }, "showdownId": "solarpower", "status": "active", "firstSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e", "lastSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e" },
+    { "kind": "ability", "projectId": "ability:0151", "anchor": { "officialNumber": 151 }, "showdownId": "infiltrator", "status": "active", "firstSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e", "lastSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e" },
+    { "kind": "ability", "projectId": "ability:0158", "anchor": { "officialNumber": 158 }, "showdownId": "prankster", "status": "active", "firstSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e", "lastSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e" },
+    { "kind": "ability", "projectId": "ability:0172", "anchor": { "officialNumber": 172 }, "showdownId": "competitive", "status": "active", "firstSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e", "lastSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e" },
+    { "kind": "ability", "projectId": "ability:0181", "anchor": { "officialNumber": 181 }, "showdownId": "toughclaws", "status": "active", "firstSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e", "lastSeen": "84d7ceb4f009928221fce7a00e711bab263c5f4e" }
+  ]
+}
