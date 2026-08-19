@@ -14,6 +14,7 @@ import {
 import { buildGrowthRates, CANONICAL_GROWTH_RATES, parseGrowthRate } from '../growth-rate.ts'
 import { assertUniqueMoveNumbers, parseChineseAccuracy, parseChineseNumeric, requireZhMoveCandidate } from '../moves.ts'
 import { assertUniqueEvolutionMappings, buildEvolutions } from '../evolutions.ts'
+import { ALCREMIE_PROOF_APPEARANCE_IDS, stableAppearanceId } from '../appearances.ts'
 import { buildSmokeArtifacts, makeNationalSpeciesId, type BuildArtifacts } from '../pipeline.ts'
 import { loadPokemonDatasetZhSource, type PokemonDatasetZhAdapterOutput } from '../pokemon-dataset-zh.ts'
 import { validateSmokeDataset } from '../validation.ts'
@@ -55,7 +56,7 @@ describe('fixed Showdown smoke fixtures', () => {
       abilities: artifacts.dataset.abilities.length,
       growthRates: artifacts.dataset.growthRates.length,
       moves: artifacts.dataset.moves.length,
-    }, { types: 18, natures: 25, species: 21, forms: 31, abilities: 37, growthRates: 6, moves: 11 })
+    }, { types: 18, natures: 25, species: 22, forms: 33, abilities: 37, growthRates: 6, moves: 11 })
   })
 
   test('Charizard keeps base, both Mega Forms, and G-Max distinct', () => {
@@ -231,10 +232,11 @@ describe('EvolutionEdge and Appearance fixtures', () => {
   })
 
   test('Milcery resultAppearanceId resolves to one of three proof Appearances', () => {
-    assert.equal(artifacts.dataset.appearances.length, 3)
     const appearanceIds = new Set(artifacts.dataset.appearances.map(appearance => appearance.appearanceId))
+    assert.ok(ALCREMIE_PROOF_APPEARANCE_IDS.every(appearanceId => appearanceIds.has(appearanceId)))
     assert.ok(artifacts.dataset.evolutions.filter(candidate => candidate.source.id === 'form:0868:base')
-      .every(candidate => candidate.resultAppearanceId !== null && appearanceIds.has(candidate.resultAppearanceId)))
+      .every(candidate => candidate.resultAppearanceId !== null
+        && ALCREMIE_PROOF_APPEARANCE_IDS.includes(candidate.resultAppearanceId as typeof ALCREMIE_PROOF_APPEARANCE_IDS[number])))
   })
 
   test('Showdown source/target mismatch is blocking', () => {
@@ -248,7 +250,7 @@ describe('EvolutionEdge and Appearance fixtures', () => {
         },
       },
     }
-    assert.throws(() => buildEvolutions(data, artifacts.source, localizationSource), /EVOLUTION_GRAPH_TARGET_MISMATCH/)
+    assert.throws(() => buildEvolutions(data, artifacts.source, localizationSource, artifacts.dataset.appearances), /EVOLUTION_GRAPH_TARGET_MISMATCH/)
   })
 
   test('orphan evolution target is rejected', () => {
@@ -272,7 +274,7 @@ describe('EvolutionEdge and Appearance fixtures', () => {
 
   test('invalid resultAppearanceId is rejected', () => {
     const dataset = clonedDataset()
-    dataset.evolutions.find(candidate => candidate.resultAppearanceId)!.resultAppearanceId = 'appearance:0869:mint-cream:star-sweet'
+    dataset.evolutions.find(candidate => candidate.resultAppearanceId)!.resultAppearanceId = 'appearance:0869:unknown-cream:unknown-sweet'
     assert.throws(() => validate(dataset), /ORPHAN_RESULT_APPEARANCE/)
   })
 
@@ -285,7 +287,7 @@ describe('EvolutionEdge and Appearance fixtures', () => {
   test('missing raw text produces partial data without discarding structured mechanics', () => {
     const source = structuredClone(localizationSource)
     source.evolutions = source.evolutions.filter(candidate => !(candidate.documentNationalDexNumber === 133 && candidate.targetNameZh === '水伊布'))
-    const result = buildEvolutions(showdownData, artifacts.source, source)
+    const result = buildEvolutions(showdownData, artifacts.source, source, artifacts.dataset.appearances)
     const water = result.evolutions.find(candidate => candidate.methodToken === 'water-stone')!
     assert.equal(water.dataStatus, 'partial')
     assert.equal(water.conditionTextKey, null)
@@ -319,6 +321,185 @@ describe('EvolutionEdge and Appearance fixtures', () => {
   })
 })
 
+describe('Appearance identity and dimensional modeling fixtures', () => {
+  const unown = () => artifacts.dataset.appearances.filter(appearance => appearance.speciesId === 'species:0201')
+  const alcremie = () => artifacts.dataset.appearances.filter(appearance => appearance.speciesId === 'species:0869')
+
+  test('Unown emits exactly 28 glyph Appearances', () => {
+    assert.equal(unown().length, 28)
+    assert.deepEqual(
+      new Set(unown().map(appearance => appearance.aspects[0].value)),
+      new Set([...'abcdefghijklmnopqrstuvwxyz', 'exclamation', 'question']),
+    )
+    assert.ok(unown().every(appearance => appearance.aspects.length === 1
+      && appearance.aspects[0].dimension === 'glyph'))
+  })
+
+  test('Unown glyphs remain Appearances of one base Form', () => {
+    assert.deepEqual(
+      artifacts.dataset.forms.filter(form => form.speciesId === 'species:0201').map(form => form.formId),
+      ['form:0201:base'],
+    )
+    assert.ok(unown().every(appearance => appearance.formId === 'form:0201:base'))
+  })
+
+  test('Alcremie emits the complete 9 by 7 Cartesian product', () => {
+    const appearances = alcremie()
+    const creams = new Set(appearances.flatMap(appearance => appearance.aspects
+      .filter(aspect => aspect.dimension === 'cream').map(aspect => aspect.value)))
+    const sweets = new Set(appearances.flatMap(appearance => appearance.aspects
+      .filter(aspect => aspect.dimension === 'sweet').map(aspect => aspect.value)))
+    const combinations = new Set(appearances.map(appearance => appearance.aspects
+      .map(aspect => `${aspect.dimension}:${aspect.value}`).sort().join('|')))
+    assert.equal(appearances.length, 63)
+    assert.equal(creams.size, 9)
+    assert.equal(sweets.size, 7)
+    assert.equal(combinations.size, creams.size * sweets.size)
+    assert.ok([...creams].every(cream => [...sweets].every(sweet => combinations.has(`cream:${cream}|sweet:${sweet}`))))
+  })
+
+  test('Alcremie G-Max remains a Form and never becomes an Appearance owner', () => {
+    assert.deepEqual(
+      artifacts.dataset.forms.filter(form => form.speciesId === 'species:0869').map(form => form.formId),
+      ['form:0869:base', 'form:0869:gmax'],
+    )
+    assert.ok(alcremie().every(appearance => appearance.formId === 'form:0869:base'))
+    assert.equal(artifacts.dataset.appearances.some(appearance => appearance.formId === 'form:0869:gmax'), false)
+  })
+
+  test('default policy is explicit and does not invent an Alcremie sweet default', () => {
+    assert.deepEqual(unown().filter(appearance => appearance.isDefault).map(appearance => appearance.appearanceId), ['appearance:0201:a'])
+    assert.equal(alcremie().some(appearance => appearance.isDefault), false)
+  })
+
+  test('the three Evolution proof Appearance IDs remain stable and resolvable', () => {
+    const ids = new Set(alcremie().map(appearance => appearance.appearanceId))
+    assert.ok(ALCREMIE_PROOF_APPEARANCE_IDS.every(appearanceId => ids.has(appearanceId)))
+    assert.ok(artifacts.dataset.evolutions.filter(evolution => evolution.resultAppearanceId)
+      .every(evolution => ids.has(evolution.resultAppearanceId!)))
+  })
+
+  test('stable IDs derive only from national number and controlled aspect tokens', () => {
+    const renamedDisplayValue = '任意本地化名称'
+    assert.ok(renamedDisplayValue)
+    assert.equal(stableAppearanceId(201, ['question']), 'appearance:0201:question')
+    assert.equal(stableAppearanceId(869, ['ruby-cream', 'star-sweet']), 'appearance:0869:ruby-cream:star-sweet')
+    assert.throws(() => stableAppearanceId(869, ['Ruby Cream']), /INVALID_APPEARANCE_ASPECT_TOKEN/)
+  })
+
+  test('aspect dimensions are controlled and unique within each Appearance', () => {
+    assert.ok(artifacts.dataset.appearances.every(appearance => {
+      const dimensions = appearance.aspects.map(aspect => aspect.dimension)
+      return dimensions.length === new Set(dimensions).size
+        && dimensions.every(dimension => ['glyph', 'cream', 'sweet'].includes(dimension))
+    }))
+  })
+
+  test('duplicate Appearance IDs are rejected', () => {
+    const dataset = clonedDataset()
+    dataset.appearances.push(structuredClone(dataset.appearances[0]))
+    assert.throws(() => validate(dataset), /DUPLICATE_APPEARANCE_ID/)
+  })
+
+  test('duplicate aspect combinations for one owner are rejected', () => {
+    const dataset = clonedDataset()
+    const first = dataset.appearances.find(appearance => appearance.appearanceId === 'appearance:0201:b')!
+    const second = dataset.appearances.find(appearance => appearance.appearanceId === 'appearance:0201:c')!
+    second.aspects = structuredClone(first.aspects)
+    assert.throws(() => validate(dataset), /DUPLICATE_APPEARANCE_COMBINATION/)
+  })
+
+  test('multiple defaults for one owner are rejected', () => {
+    const dataset = clonedDataset()
+    dataset.appearances.find(appearance => appearance.appearanceId === 'appearance:0201:b')!.isDefault = true
+    assert.throws(() => validate(dataset), /MULTIPLE_DEFAULT_APPEARANCES/)
+  })
+
+  test('orphan Appearance Form references are rejected', () => {
+    const dataset = clonedDataset()
+    dataset.appearances[0].formId = 'form:0201:missing'
+    assert.throws(() => validate(dataset), /ORPHAN_APPEARANCE_FORM/)
+  })
+
+  test('all 91 mappings are rule-based with no conflicts or unresolved records', () => {
+    assert.deepEqual(artifacts.appearanceMappingCounts, {
+      automatic: 0,
+      ruleBased: 91,
+      manualException: 0,
+      unresolved: 0,
+    })
+    assert.deepEqual(artifacts.appearanceConflicts, [])
+  })
+
+  test('Showdown cream evidence is explicitly one-to-many across sweets', () => {
+    const rubyCreamMatches = artifacts.appearanceMatches.filter(match => match.source === 'pokemon-showdown'
+      && match.upstreamKey === 'Alcremie-Ruby-Cream')
+    assert.equal(rubyCreamMatches.length, 7)
+    assert.equal(new Set(rubyCreamMatches.map(match => match.appearanceId)).size, 7)
+    assert.ok(rubyCreamMatches.every(match => match.evidenceKind === 'aspect'
+      && match.aspectDimensions.join() === 'cream'))
+  })
+
+  test('each Appearance has resolvable Showdown and Chinese evidence records', () => {
+    const referenceIds = new Set(artifacts.source.sourceReferences.map(reference => reference.sourceReferenceId))
+    assert.equal(artifacts.appearanceMatches.length, 182)
+    for (const appearance of artifacts.dataset.appearances) {
+      const matches = artifacts.appearanceMatches.filter(match => match.appearanceId === appearance.appearanceId)
+      assert.deepEqual(new Set(matches.map(match => match.source)), new Set(['pokemon-showdown', 'pokemon-dataset-zh']))
+      assert.ok(matches.every(match => referenceIds.has(match.sourceReferenceId)))
+    }
+    assert.ok(artifacts.appearanceMatches.filter(match => match.source === 'pokemon-showdown'
+      && match.appearanceId.startsWith('appearance:0201:')).every(match => match.evidenceKind === 'cosmetic-identity'))
+  })
+
+  test('Chinese Appearance localization covers all stable IDs and controlled aspects', () => {
+    const entries = artifacts.localization.appearances.entries
+    assert.equal(entries.length, 91)
+    assert.deepEqual(entries.find(entry => entry.entityId === 'appearance:0201:a'), {
+      entityId: 'appearance:0201:a',
+      name: '未知图腾-（A）',
+      shortLabel: 'A',
+      aspectLabels: [{ dimension: 'glyph', value: 'a', label: 'A' }],
+    })
+    const rubyStar = entries.find(entry => entry.entityId === 'appearance:0869:ruby-cream:star-sweet')!
+    assert.equal(rubyStar.name, '霜奶仙-奶香红钻-星星糖饰')
+    assert.deepEqual(rubyStar.aspectLabels.map(label => label.dimension), ['cream', 'sweet'])
+  })
+
+  test('Appearance provenance is complete and selected from fixed references', () => {
+    const values = artifacts.valueProvenance.filter(value => value.entityId.startsWith('appearance:'))
+    const referenceIds = new Set(artifacts.source.sourceReferences.map(reference => reference.sourceReferenceId))
+    assert.equal(values.length, 847)
+    assert.ok(values.every(value => value.selected && referenceIds.has(value.sourceReferenceId) && value.sourcePointer))
+    const keys = new Set(values.map(value => `${value.entityId}${value.fieldPath}`))
+    assert.ok(artifacts.dataset.appearances.every(appearance => [
+      '/appearanceId', '/speciesId', '/formId', '/isDefault', '/aspects', '/availability', '/dataStatus',
+      '/localization/zh-CN/name', '/localization/zh-CN/aspectLabels',
+    ].every(field => keys.has(`${appearance.appearanceId}${field}`))))
+  })
+
+  test('fixed source coverage distinguishes 63 combinations from 8 excluded records', () => {
+    assert.deepEqual(artifacts.appearanceSourceCoverage, {
+      unownHomeImages: 28,
+      showdownUnownGlyphs: 28,
+      alcremieHomeImages: 71,
+      alcremieCombinations: 63,
+      alcremieExcludedCoverageRecords: 8,
+      showdownAlcremieCreams: 9,
+    })
+    assert.equal(
+      artifacts.source.localization.sourceReferenceByPath.get('data/pokemon/0201-未知图腾.json')?.sha256,
+      'bf0359c3a223439c6dd39f2b93f188d788799841ba51f5231fe9a0a08a3bcd13',
+    )
+  })
+
+  test('Appearance output order and aspect order are deterministic', () => {
+    const ids = artifacts.dataset.appearances.map(appearance => appearance.appearanceId)
+    assert.deepEqual(ids, [...ids].sort((left, right) => left.localeCompare(right, 'en')))
+    assert.ok(alcremie().every(appearance => appearance.aspects.map(aspect => aspect.dimension).join() === 'cream,sweet'))
+  })
+})
+
 describe('pokemon-dataset-zh localization fixtures', () => {
   test('all fixture Species map by number and validated English name', () => {
     assert.deepEqual(
@@ -337,6 +518,7 @@ describe('pokemon-dataset-zh localization fixtures', () => {
         ['species:0136', '火伊布'],
         ['species:0196', '太阳伊布'],
         ['species:0197', '月亮伊布'],
+        ['species:0201', '未知图腾'],
         ['species:0285', '蘑蘑菇'],
         ['species:0290', '土居忍士'],
         ['species:0470', '叶伊布'],
@@ -413,9 +595,9 @@ describe('pokemon-dataset-zh localization fixtures', () => {
       automatic: artifacts.formLocalizationMappings.filter(mapping => mapping.mappingClass === 'automatic').length,
       ruleBased: artifacts.formLocalizationMappings.filter(mapping => mapping.mappingClass === 'rule-based').length,
       unresolved: artifacts.formLocalizationMappings.filter(mapping => mapping.mappingClass === 'unresolved').length,
-    }, { automatic: 29, ruleBased: 1, unresolved: 1 })
+    }, { automatic: 30, ruleBased: 2, unresolved: 1 })
     assert.equal(artifacts.localizationMechanicsConflicts.length, 0)
-    assert.equal(artifacts.localizationProvenanceCount, 135)
+    assert.equal(artifacts.localizationProvenanceCount, 139)
     assert.doesNotThrow(() => validate(artifacts.dataset))
   })
 })
@@ -454,7 +636,7 @@ describe('GrowthRate canonical mapping fixtures', () => {
   })
 
   test('all fixture Species receive their default GrowthRate', () => {
-    assert.equal(artifacts.growthRateAssignments.filter(assignment => assignment.field === '/growthRate').length, 21)
+    assert.equal(artifacts.growthRateAssignments.filter(assignment => assignment.field === '/growthRate').length, 22)
     assert.ok(artifacts.dataset.species.every(species => species.growthRate.status === 'resolved'
       || species.speciesId === 'species:1021'))
   })
@@ -486,7 +668,7 @@ describe('GrowthRate canonical mapping fixtures', () => {
 
   test('every selected GrowthRate field has an exact source pointer and selected provenance', () => {
     const growthProvenance = artifacts.valueProvenance.filter(value => value.fieldPath.startsWith('/growthRate'))
-    assert.equal(growthProvenance.length, 44)
+    assert.equal(growthProvenance.length, 46)
     assert.ok(growthProvenance.every(value => value.selected && value.sourcePointer?.endsWith('/experience_100')))
   })
 

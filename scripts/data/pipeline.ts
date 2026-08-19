@@ -12,6 +12,7 @@ import {
   TypeSchema,
   ValueProvenanceSchema,
   type Ability,
+  type AppearanceMatch,
   type Availability,
   type Form,
   type IdentityMatch,
@@ -47,6 +48,7 @@ import {
 } from './growth-rate.ts'
 import { buildMoves, type MoveConflict, type QuarantinedMove } from './moves.ts'
 import { buildEvolutions, type EvolutionConflict } from './evolutions.ts'
+import { buildAppearances, type AppearanceConflict } from './appearances.ts'
 
 const STANDARD_TYPES = [
   ['bug', 'Bug'], ['dark', 'Dark'], ['dragon', 'Dragon'], ['electric', 'Electric'],
@@ -60,7 +62,7 @@ const FORM_IDS = [
   'charizard', 'charizardmegax', 'charizardmegay', 'charizardgmax',
   'clefairy', 'growlithe', 'eevee', 'eeveestarter', 'shroomish', 'nincada',
   'kadabra', 'alakazam', 'vaporeon', 'jolteon', 'flareon', 'espeon', 'umbreon',
-  'leafeon', 'glaceon', 'sylveon', 'milcery', 'alcremie',
+  'leafeon', 'glaceon', 'sylveon', 'unown', 'milcery', 'alcremie', 'alcremiegmax',
   'rotom', 'rotomheat', 'rotomwash', 'rotomfrost', 'rotomfan', 'rotommow',
   'meowstic', 'meowsticf',
   'ragingbolt',
@@ -69,7 +71,7 @@ const FORM_IDS = [
 const SPECIES_IDS = [
   'charizard', 'clefairy', 'growlithe', 'eevee', 'shroomish', 'nincada',
   'kadabra', 'alakazam', 'vaporeon', 'jolteon', 'flareon', 'espeon', 'umbreon',
-  'leafeon', 'glaceon', 'sylveon', 'milcery', 'alcremie',
+  'leafeon', 'glaceon', 'sylveon', 'unown', 'milcery', 'alcremie',
   'rotom', 'meowstic', 'ragingbolt',
 ] as const
 const SLOT_ORDER = new Map([['0', 0], ['1', 1], ['H', 2], ['S', 3]])
@@ -93,6 +95,17 @@ export interface BuildArtifacts {
   moveMappingCounts: { automatic: number; ruleBased: number; manualException: number; unresolved: number }
   evolutionConflicts: EvolutionConflict[]
   evolutionMappingCounts: { automatic: number; ruleBased: number; manualException: number; unresolved: number }
+  appearanceMatches: AppearanceMatch[]
+  appearanceConflicts: AppearanceConflict[]
+  appearanceMappingCounts: { automatic: number; ruleBased: number; manualException: number; unresolved: number }
+  appearanceSourceCoverage: {
+    unownHomeImages: number
+    showdownUnownGlyphs: number
+    alcremieHomeImages: number
+    alcremieCombinations: number
+    alcremieExcludedCoverageRecords: number
+    showdownAlcremieCreams: number
+  }
   scopeNotes: string[]
 }
 
@@ -385,7 +398,8 @@ export async function buildSmokeArtifacts(
   const forms = buildForms(data, source)
   const localizationSource = await loadPokemonDatasetZhSource(source)
   const moveBuild = buildMoves(data, source, localizationSource)
-  const evolutionBuild = buildEvolutions(data, source, localizationSource)
+  const appearanceBuild = buildAppearances(data, source, localizationSource)
+  const evolutionBuild = buildEvolutions(data, source, localizationSource, appearanceBuild.appearances)
   const dataset = SmokeDatasetSchema.parse({
     types: buildTypes(data),
     natures: buildNatures(data),
@@ -394,7 +408,7 @@ export async function buildSmokeArtifacts(
     abilities: buildAbilities(data, source, forms),
     growthRates: CANONICAL_GROWTH_RATES,
     moves: moveBuild.stableMoves,
-    appearances: evolutionBuild.appearances,
+    appearances: appearanceBuild.appearances,
     evolutions: evolutionBuild.evolutions,
   })
   const audit = provenance(dataset, source)
@@ -409,13 +423,14 @@ export async function buildSmokeArtifacts(
     ...localization.localization,
     moves: { locale: 'zh-CN', entries: moveBuild.localizationEntries },
     evolutions: { locale: 'zh-CN', entries: evolutionBuild.localizationEntries },
+    appearances: { locale: 'zh-CN', entries: appearanceBuild.localizationEntries },
   }
   return {
     dataset: resolvedDataset,
     source,
-    identityMatches: [...audit.identityMatches, ...moveBuild.identityMatches, ...evolutionBuild.identityMatches]
+    identityMatches: [...audit.identityMatches, ...moveBuild.identityMatches, ...appearanceBuild.identityMatches, ...evolutionBuild.identityMatches]
       .sort((left, right) => left.entityId.localeCompare(right.entityId, 'en')),
-    valueProvenance: [...audit.valueProvenance, ...localization.valueProvenance, ...growthRates.valueProvenance, ...moveBuild.valueProvenance, ...evolutionBuild.valueProvenance]
+    valueProvenance: [...audit.valueProvenance, ...localization.valueProvenance, ...growthRates.valueProvenance, ...moveBuild.valueProvenance, ...appearanceBuild.valueProvenance, ...evolutionBuild.valueProvenance]
       .sort((left, right) => `${left.entityId}${left.fieldPath}`.localeCompare(`${right.entityId}${right.fieldPath}`, 'en')),
     localization: resolvedLocalization,
     formLocalizationMappings: localization.formMappings,
@@ -430,6 +445,10 @@ export async function buildSmokeArtifacts(
     moveMappingCounts: moveBuild.mappingCounts,
     evolutionConflicts: evolutionBuild.conflicts,
     evolutionMappingCounts: evolutionBuild.mappingCounts,
+    appearanceMatches: appearanceBuild.appearanceMatches,
+    appearanceConflicts: appearanceBuild.conflicts,
+    appearanceMappingCounts: appearanceBuild.mappingCounts,
+    appearanceSourceCoverage: appearanceBuild.sourceCoverage,
     scopeNotes: [
       'Stellar exists in the fixed TypeChart but is explicitly excluded from the 18-type smoke matrix.',
       'Non-attacking TypeChart keys such as brn, par, powder, and prankster are not emitted as Types.',
@@ -440,6 +459,7 @@ export async function buildSmokeArtifacts(
       'GrowthRate formulas and level 1-100 experience calculations are explicitly deferred.',
       'Move output is restricted to twelve identity fixtures; Future Nihil Light is quarantined and excluded from stable runtime data.',
       'Evolution output is restricted to Eevee, Kadabra, and Milcery proof relationships; Alcremie appearance conditions remain partial where the fixed sources omit direction, duration, or time.',
+      'Appearance output is restricted to 28 Unown glyphs and 63 Alcremie cream-by-sweet combinations; image binaries and unrelated cosmetics remain out of scope.',
     ],
   }
 }
@@ -482,6 +502,7 @@ export async function runSmokePipeline(options: {
     ['localization/zh-CN.abilities.json', artifacts.localization.abilities],
     ['localization/zh-CN.moves.json', artifacts.localization.moves],
     ['localization/zh-CN.evolutions.json', artifacts.localization.evolutions],
+    ['localization/zh-CN.appearances.json', artifacts.localization.appearances],
   ]
   for (const [path, value] of runtimeValues) await writeJson(join(runtimeRoot, path), value)
   const fileEntries = []
@@ -550,6 +571,22 @@ export async function runSmokePipeline(options: {
     appearanceCount: artifacts.dataset.appearances.length,
     mappingCounts: artifacts.evolutionMappingCounts,
     conflicts: artifacts.evolutionConflicts,
+  })
+  await writeJson(join(outputRoot, 'reports', 'appearance-mapping.json'), {
+    schemaVersion: 1,
+    sourceCommits: {
+      pokemonShowdown: artifacts.source.commit,
+      pokemonDatasetZh: artifacts.source.localization.commit,
+    },
+    appearanceCount: artifacts.dataset.appearances.length,
+    mappingCounts: artifacts.appearanceMappingCounts,
+    sourceCoverage: artifacts.appearanceSourceCoverage,
+    defaultPolicy: {
+      unown: 'glyph-a-from-showdown-baseForme',
+      alcremie: 'none-source-does-not-identify-a-default-sweet',
+    },
+    conflicts: artifacts.appearanceConflicts,
+    matches: artifacts.appearanceMatches,
   })
   const report = SmokeReportSchema.parse({
     schemaVersion: 1,

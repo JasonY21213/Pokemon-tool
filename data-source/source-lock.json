@@ -38,6 +38,7 @@
         { "path": "data/pokemon/0136-火伊布.json", "sha256": "89104212f6f35f8c4bbef2ac141f51044620dff777b8b3e00881e0a7bfafcd8b" },
         { "path": "data/pokemon/0196-太阳伊布.json", "sha256": "0e6089556698ebf00b881df1ccad921b1e9edb59f26e7bc5f4b53e402d95d56e" },
         { "path": "data/pokemon/0197-月亮伊布.json", "sha256": "e32267675046bc098dac03f19a3b57c67be895a672551aba33447c8ef06294e6" },
+        { "path": "data/pokemon/0201-未知图腾.json", "sha256": "bf0359c3a223439c6dd39f2b93f188d788799841ba51f5231fe9a0a08a3bcd13" },
         { "path": "data/pokemon/0285-蘑蘑菇.json", "sha256": "94fc4cee4c287fe163ee90664e364249cac72daa040d98fe8adcec5fad848cb1" },
         { "path": "data/pokemon/0290-土居忍士.json", "sha256": "a77985af8b10c30fd246dbee60ca0c39c1984515ff4152400b85ddb760ae5972" },
         { "path": "data/pokemon/0479-洛托姆.json", "sha256": "849506374efd2034f5230423930e661caa616c353c6198db63f7ac9a3b8c7ff3" },

@@ -11,6 +11,8 @@ export type {
   AccuracySemantic,
   NumericSemantic,
   Appearance,
+  AppearanceMatch,
+  AppearanceLocalizationEntry,
   EvolutionEdge,
   EvolutionCondition,
   EvolutionId,

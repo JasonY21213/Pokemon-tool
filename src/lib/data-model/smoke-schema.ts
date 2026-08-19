@@ -16,7 +16,7 @@ export const GrowthRateIdSchema = z.enum([
   'growth:fluctuating',
 ])
 export const MoveIdSchema = z.string().regex(/^move:(?:\d{4}|special:[a-z0-9-]+)$/)
-export const AppearanceIdSchema = z.string().regex(/^appearance:\d{4}:[a-z0-9-]+:[a-z0-9-]+$/)
+export const AppearanceIdSchema = z.string().regex(/^appearance:\d{4}:[a-z0-9-]+(?::[a-z0-9-]+)*$/)
 export const EvolutionIdSchema = z.string().regex(/^evolution:[a-z0-9:-]+$/)
 export const EntityIdSchema = z.union([
   SpeciesIdSchema,
@@ -124,7 +124,7 @@ export const MoveSchema = z.object({
 }).strict()
 
 export const AppearanceAspectSchema = z.object({
-  dimension: z.string().regex(/^[a-z][a-z0-9-]*$/),
+  dimension: z.enum(['glyph', 'cream', 'sweet']),
   value: z.string().regex(/^[a-z0-9-]+$/),
 }).strict()
 
@@ -132,7 +132,9 @@ export const AppearanceSchema = z.object({
   appearanceId: AppearanceIdSchema,
   speciesId: SpeciesIdSchema,
   formId: FormIdSchema.nullable(),
+  isDefault: z.boolean(),
   aspects: z.array(AppearanceAspectSchema).min(1),
+  availability: AvailabilitySchema,
   dataStatus: DataStatusSchema,
 }).strict()
 
@@ -234,6 +236,16 @@ export const IdentityMatchSchema = z.object({
   sourceReferenceId: SourceReferenceSchema.shape.sourceReferenceId,
 }).strict()
 
+export const AppearanceMatchSchema = z.object({
+  appearanceId: AppearanceIdSchema,
+  source: z.enum(['pokemon-showdown', 'pokemon-dataset-zh']),
+  upstreamKey: z.string().min(1),
+  evidenceKind: z.enum(['cosmetic-identity', 'aspect', 'localization', 'coverage']),
+  aspectDimensions: z.array(AppearanceAspectSchema.shape.dimension),
+  mappingClass: z.enum(['automatic', 'rule-based', 'manual-exception', 'unresolved']),
+  sourceReferenceId: SourceReferenceSchema.shape.sourceReferenceId,
+}).strict()
+
 export const ValueProvenanceSchema = z.object({
   entityId: EntityIdSchema,
   fieldPath: z.string().startsWith('/'),
@@ -288,11 +300,28 @@ export const EvolutionLocalizationSchema = z.object({
   entries: z.array(EvolutionLocalizationEntrySchema),
 }).strict()
 
+export const AppearanceLocalizationEntrySchema = z.object({
+  entityId: AppearanceIdSchema,
+  name: z.string().min(1),
+  shortLabel: z.string().min(1).optional(),
+  aspectLabels: z.array(z.object({
+    dimension: AppearanceAspectSchema.shape.dimension,
+    value: AppearanceAspectSchema.shape.value,
+    label: z.string().min(1),
+  }).strict()).min(1),
+}).strict()
+
+export const AppearanceLocalizationSchema = z.object({
+  locale: z.literal('zh-CN'),
+  entries: z.array(AppearanceLocalizationEntrySchema),
+}).strict()
+
 export const SmokeLocalizationSchema = z.object({
   core: CoreLocalizationSchema,
   abilities: AbilityLocalizationSchema,
   moves: MoveLocalizationSchema,
   evolutions: EvolutionLocalizationSchema,
+  appearances: AppearanceLocalizationSchema,
 }).strict()
 
 export const SmokeDatasetSchema = z.object({
@@ -357,6 +386,8 @@ export type MoveId = z.infer<typeof MoveIdSchema>
 export type AccuracySemantic = z.infer<typeof AccuracySemanticSchema>
 export type NumericSemantic = z.infer<typeof NumericSemanticSchema>
 export type Appearance = z.infer<typeof AppearanceSchema>
+export type AppearanceMatch = z.infer<typeof AppearanceMatchSchema>
+export type AppearanceLocalizationEntry = z.infer<typeof AppearanceLocalizationEntrySchema>
 export type EvolutionEdge = z.infer<typeof EvolutionEdgeSchema>
 export type EvolutionCondition = z.infer<typeof EvolutionConditionSchema>
 export type EvolutionId = z.infer<typeof EvolutionIdSchema>

@@ -68,8 +68,13 @@ const RawStatBlockSchema = z.object({
 const RawPokedexRecordSchema = z.object({
   num: z.number().int(),
   name: z.string().min(1),
+  baseForme: z.string().min(1).optional(),
   baseSpecies: z.string().min(1).optional(),
   forme: z.string().min(1).optional(),
+  cosmeticFormes: z.array(z.string().min(1)).optional(),
+  formeOrder: z.array(z.string().min(1)).optional(),
+  isCosmeticForme: z.boolean().optional(),
+  canGigantamax: z.string().min(1).optional(),
   types: z.array(z.string().min(1)).min(1).max(2),
   baseStats: RawStatBlockSchema,
   abilities: z.record(z.string(), z.string().min(1)),

@@ -1,5 +1,4 @@
 import {
-  AppearanceSchema,
   EvolutionEdgeSchema,
   IdentityMatchSchema,
   ValueProvenanceSchema,
@@ -9,6 +8,7 @@ import {
   type IdentityMatch,
   type ValueProvenance,
 } from '../../src/lib/data-model/smoke-schema.ts'
+import { ALCREMIE_PROOF_APPEARANCE_IDS, appearanceCandidateForId } from './appearances.ts'
 import type { PokemonDatasetZhAdapterOutput, ZhEvolutionCandidate } from './pokemon-dataset-zh.ts'
 import { parsePokedexRecord, type RegistryEntity, type ShowdownSourceData, type VerifiedSource } from './source.ts'
 
@@ -26,14 +26,6 @@ interface EdgeDefinition {
   conditions: EvolutionCondition[]
 }
 
-interface AppearanceDefinition {
-  appearanceId: string
-  showdownId: string
-  chineseName: string
-  cream: string
-  sweet: string
-}
-
 export interface EvolutionConflict {
   code: string
   evolutionId: string
@@ -45,37 +37,12 @@ export interface EvolutionConflict {
 
 export interface EvolutionBuildResult {
   evolutions: EvolutionEdge[]
-  appearances: Appearance[]
   localizationEntries: Array<{ entityId: string; conditionText: string }>
   identityMatches: IdentityMatch[]
   valueProvenance: ValueProvenance[]
   conflicts: EvolutionConflict[]
   mappingCounts: { automatic: number; ruleBased: number; manualException: number; unresolved: number }
 }
-
-const APPEARANCE_DEFINITIONS: AppearanceDefinition[] = [
-  {
-    appearanceId: 'appearance:0869:vanilla-cream:strawberry-sweet',
-    showdownId: 'alcremie',
-    chineseName: '霜奶仙-奶香香草-草莓糖饰',
-    cream: 'vanilla-cream',
-    sweet: 'strawberry-sweet',
-  },
-  {
-    appearanceId: 'appearance:0869:ruby-cream:strawberry-sweet',
-    showdownId: 'alcremierubycream',
-    chineseName: '霜奶仙-奶香红钻-草莓糖饰',
-    cream: 'ruby-cream',
-    sweet: 'strawberry-sweet',
-  },
-  {
-    appearanceId: 'appearance:0869:matcha-cream:strawberry-sweet',
-    showdownId: 'alcremiematchacream',
-    chineseName: '霜奶仙-奶香抹茶-草莓糖饰',
-    cream: 'matcha-cream',
-    sweet: 'strawberry-sweet',
-  },
-]
 
 function raw(textKey: string): EvolutionCondition {
   return { kind: 'raw', textKey }
@@ -132,14 +99,14 @@ const KADABRA_DEFINITION: EdgeDefinition = {
   conditions: [{ kind: 'trade' }],
 }
 
-const MILCERY_DEFINITIONS: EdgeDefinition[] = APPEARANCE_DEFINITIONS.map(appearance => ({
+const MILCERY_DEFINITIONS: EdgeDefinition[] = ALCREMIE_PROOF_APPEARANCE_IDS.map(appearanceId => ({
   sourceShowdownId: 'milcery',
   targetShowdownId: 'alcremie',
   sourceFormId: 'form:0868:base',
   targetFormId: 'form:0869:base',
-  methodToken: `spin-${appearance.cream.replace('-cream', '')}-strawberry`,
+  methodToken: `spin-${appearanceId.split(':')[2].replace('-cream', '')}-strawberry`,
   mappingClass: 'manual-exception',
-  resultAppearanceId: appearance.appearanceId,
+  resultAppearanceId: appearanceId,
   dataStatus: 'partial',
   conditions: [
     { kind: 'held-item', itemId: 'item:strawberry-sweet' },
@@ -225,6 +192,7 @@ export function buildEvolutions(
   data: ShowdownSourceData,
   source: VerifiedSource,
   zh: PokemonDatasetZhAdapterOutput,
+  appearances: Appearance[],
 ): EvolutionBuildResult {
   const definitions = [...EEVEE_DEFINITIONS, KADABRA_DEFINITION, ...MILCERY_DEFINITIONS]
   const pokedexReference = showdownReference(source)
@@ -233,41 +201,6 @@ export function buildEvolutions(
   const provenance: ValueProvenance[] = []
   const localizationEntries: Array<{ entityId: string; conditionText: string }> = []
   const conflicts: EvolutionConflict[] = []
-
-  const appearanceResults = APPEARANCE_DEFINITIONS.map(definition => {
-    const candidate = zh.appearances.find(value => value.nameZh === definition.chineseName)
-    if (!candidate) throw new Error(`APPEARANCE_SOURCE_MISSING: ${definition.chineseName}`)
-    registryEntry(source, 'appearance', definition.appearanceId)
-    const appearance = AppearanceSchema.parse({
-      appearanceId: definition.appearanceId,
-      speciesId: 'species:0869',
-      formId: 'form:0869:base',
-      aspects: [
-        { dimension: 'cream', value: definition.cream },
-        { dimension: 'sweet', value: definition.sweet },
-      ],
-      dataStatus: 'complete',
-    })
-    identities.push(IdentityMatchSchema.parse({
-      entityId: appearance.appearanceId,
-      entityKind: 'appearance',
-      showdownId: definition.showdownId,
-      mappingClass: 'manual-exception',
-      sourceReferenceId: candidate.sourceReferenceId,
-    }))
-    for (const fieldPath of ['/appearanceId', '/speciesId', '/formId', '/aspects']) {
-      provenance.push(ValueProvenanceSchema.parse({
-        entityId: appearance.appearanceId,
-        fieldPath,
-        sourceReferenceId: candidate.sourceReferenceId,
-        method: fieldPath === '/aspects' ? 'project-normalization' : 'curated-exception',
-        mappingClass: 'manual-exception',
-        selected: true,
-        sourcePointer: candidate.sourcePointer,
-      }))
-    }
-    return appearance
-  })
 
   for (const definition of definitions) {
     validateGraph(definition, data)
@@ -287,6 +220,9 @@ export function buildEvolutions(
       conditionTextKey: candidate ? key : null,
       dataStatus: candidate ? definition.dataStatus : 'partial',
     })
+    if (edge.resultAppearanceId && !appearances.some(appearance => appearance.appearanceId === edge.resultAppearanceId)) {
+      throw new Error(`EVOLUTION_RESULT_APPEARANCE_MISSING: ${edge.resultAppearanceId}`)
+    }
     evolutions.push(edge)
     identities.push(IdentityMatchSchema.parse({
       entityId: edge.evolutionId,
@@ -312,14 +248,12 @@ export function buildEvolutions(
     for (const [index, condition] of conditions.entries()) {
       if (condition.kind === 'raw' && candidate) add(`/conditions/${index}`, candidate.sourceReferenceId, 'source-literal', candidate.sourcePointer)
       else if (definition.resultAppearanceId && (condition.kind === 'held-item' || condition.kind === 'spin')) {
-        const appearance = zh.appearances.find(value => value.nameZh === APPEARANCE_DEFINITIONS.find(item => item.appearanceId === definition.resultAppearanceId)?.chineseName)
-        if (!appearance) throw new Error(`APPEARANCE_PROVENANCE_MISSING: ${definition.resultAppearanceId}`)
+        const appearance = appearanceCandidateForId(zh, definition.resultAppearanceId)
         add(`/conditions/${index}`, appearance.sourceReferenceId, 'curated-exception', appearance.sourcePointer)
       } else add(`/conditions/${index}`, pokedexReference, 'project-normalization', structuredConditionPointer(condition, targetPointer))
     }
     if (edge.resultAppearanceId) {
-      const appearance = zh.appearances.find(value => value.nameZh === APPEARANCE_DEFINITIONS.find(item => item.appearanceId === edge.resultAppearanceId)?.chineseName)
-      if (!appearance) throw new Error(`APPEARANCE_PROVENANCE_MISSING: ${edge.resultAppearanceId}`)
+      const appearance = appearanceCandidateForId(zh, edge.resultAppearanceId)
       add('/resultAppearanceId', appearance.sourceReferenceId, 'curated-exception', appearance.sourcePointer)
     }
     if (candidate) {
@@ -345,7 +279,6 @@ export function buildEvolutions(
   evolutions.sort((left, right) => `${left.source.id}:${left.target.id}:${left.evolutionId}`.localeCompare(`${right.source.id}:${right.target.id}:${right.evolutionId}`, 'en'))
   return {
     evolutions,
-    appearances: appearanceResults.sort((left, right) => left.appearanceId.localeCompare(right.appearanceId, 'en')),
     localizationEntries: localizationEntries.sort((left, right) => left.entityId.localeCompare(right.entityId, 'en')),
     identityMatches: identities.sort((left, right) => left.entityId.localeCompare(right.entityId, 'en')),
     valueProvenance: provenance.sort((left, right) => `${left.entityId}:${left.fieldPath}`.localeCompare(`${right.entityId}:${right.fieldPath}`, 'en')),

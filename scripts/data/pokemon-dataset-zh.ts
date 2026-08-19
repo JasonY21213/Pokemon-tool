@@ -113,6 +113,7 @@ export interface ZhEvolutionCandidate {
 }
 
 export interface ZhAppearanceCandidate {
+  nationalDexNumber: number
   nameZh: string
   sourcePath: string
   sourceReferenceId: string
@@ -139,6 +140,7 @@ const POKEMON_PATHS = [
   'data/pokemon/0136-火伊布.json',
   'data/pokemon/0196-太阳伊布.json',
   'data/pokemon/0197-月亮伊布.json',
+  'data/pokemon/0201-未知图腾.json',
   'data/pokemon/0285-蘑蘑菇.json',
   'data/pokemon/0290-土居忍士.json',
   'data/pokemon/0479-洛托姆.json',
@@ -206,15 +208,10 @@ export async function loadPokemonDatasetZhSource(source: VerifiedSource): Promis
         })
       }
     }
-    if (raw.pokedex_id === '0869') {
-      const selectedNames = new Set([
-        '霜奶仙-奶香香草-草莓糖饰',
-        '霜奶仙-奶香红钻-草莓糖饰',
-        '霜奶仙-奶香抹茶-草莓糖饰',
-      ])
+    if (raw.pokedex_id === '0201' || raw.pokedex_id === '0869') {
       for (const [index, image] of (raw.home_images ?? []).entries()) {
-        if (!selectedNames.has(image.name)) continue
         appearances.push({
+          nationalDexNumber: Number(raw.pokedex_id),
           nameZh: image.name,
           sourcePath,
           sourceReferenceId: sourceReferenceId(source, sourcePath),

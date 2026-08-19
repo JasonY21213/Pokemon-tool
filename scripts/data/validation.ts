@@ -67,6 +67,9 @@ export function validateSmokeDataset(
   for (const id of duplicateValues(dataset.evolutions.map(evolution => evolution.evolutionId))) {
     error('DUPLICATE_EVOLUTION_ID', `Evolution ID occurs more than once: ${id}`)
   }
+  for (const id of duplicateValues(dataset.appearances.map(appearance => appearance.appearanceId))) {
+    error('DUPLICATE_APPEARANCE_ID', `Appearance ID occurs more than once: ${id}`)
+  }
 
   const expectedGrowthRates = new Map([
     ['growth:erratic', 600_000],
@@ -144,6 +147,27 @@ export function validateSmokeDataset(
   for (const appearance of dataset.appearances) {
     if (!speciesIds.has(appearance.speciesId)) error('ORPHAN_APPEARANCE_SPECIES', `${appearance.appearanceId} references ${appearance.speciesId}`)
     if (appearance.formId && !formIds.has(appearance.formId)) error('ORPHAN_APPEARANCE_FORM', `${appearance.appearanceId} references ${appearance.formId}`)
+    const ownerForm = appearance.formId ? dataset.forms.find(form => form.formId === appearance.formId) : undefined
+    if (ownerForm && ownerForm.speciesId !== appearance.speciesId) {
+      error('APPEARANCE_FORM_SPECIES_MISMATCH', `${appearance.appearanceId} Form belongs to ${ownerForm.speciesId}`)
+    }
+    for (const dimension of duplicateValues(appearance.aspects.map(aspect => aspect.dimension))) {
+      error('DUPLICATE_APPEARANCE_DIMENSION', `${appearance.appearanceId} repeats aspect dimension ${dimension}`)
+    }
+  }
+  const appearanceCombinations = dataset.appearances.map(appearance => {
+    const aspects = [...appearance.aspects]
+      .sort((left, right) => `${left.dimension}:${left.value}`.localeCompare(`${right.dimension}:${right.value}`, 'en'))
+      .map(aspect => `${aspect.dimension}=${aspect.value}`).join('&')
+    return `${appearance.speciesId}:${appearance.formId ?? 'none'}:${aspects}`
+  })
+  for (const combination of duplicateValues(appearanceCombinations)) {
+    error('DUPLICATE_APPEARANCE_COMBINATION', `Appearance aspect combination occurs more than once: ${combination}`)
+  }
+  const appearanceOwners = new Set(dataset.appearances.map(appearance => appearance.formId ?? appearance.speciesId))
+  for (const owner of appearanceOwners) {
+    const defaults = dataset.appearances.filter(appearance => (appearance.formId ?? appearance.speciesId) === owner && appearance.isDefault)
+    if (defaults.length > 1) error('MULTIPLE_DEFAULT_APPEARANCES', `${owner} has ${defaults.length} default Appearances`)
   }
   const evolutionRefExists = (reference: { kind: 'species' | 'form'; id: string }) => reference.kind === 'species'
     ? speciesIds.has(reference.id as never)
@@ -225,6 +249,32 @@ export function validateSmokeDataset(
     if (!maleHidden || !femaleHidden || maleHidden === femaleHidden) error('MEOWSTIC_ABILITY_SLOTS', 'Meowstic hidden Ability difference must be preserved')
   }
 
+  const unownAppearances = dataset.appearances.filter(appearance => appearance.speciesId === 'species:0201')
+  const alcremieAppearances = dataset.appearances.filter(appearance => appearance.speciesId === 'species:0869')
+  if (unownAppearances.length !== 28) error('UNOWN_APPEARANCE_COUNT', `Expected 28 Unown Appearances, received ${unownAppearances.length}`)
+  if (alcremieAppearances.length !== 63) error('ALCREMIE_APPEARANCE_COUNT', `Expected 63 Alcremie Appearances, received ${alcremieAppearances.length}`)
+  if (dataset.forms.filter(candidate => candidate.speciesId === 'species:0201').length !== 1) {
+    error('UNOWN_FORM_BOUNDARY', 'Unown glyphs must share one mechanics Form')
+  }
+  if (dataset.forms.filter(candidate => candidate.speciesId === 'species:0869').length !== 2) {
+    error('ALCREMIE_FORM_BOUNDARY', 'Alcremie must keep base and G-Max as two Forms')
+  }
+  const glyphValues = new Set(unownAppearances.flatMap(appearance => appearance.aspects.filter(aspect => aspect.dimension === 'glyph').map(aspect => aspect.value)))
+  if (glyphValues.size !== 28 || unownAppearances.some(appearance => appearance.aspects.length !== 1)) {
+    error('UNOWN_GLYPH_COVERAGE', 'Unown must have 28 unique one-dimensional glyph Appearances')
+  }
+  const creams = new Set(alcremieAppearances.flatMap(appearance => appearance.aspects.filter(aspect => aspect.dimension === 'cream').map(aspect => aspect.value)))
+  const sweets = new Set(alcremieAppearances.flatMap(appearance => appearance.aspects.filter(aspect => aspect.dimension === 'sweet').map(aspect => aspect.value)))
+  if (creams.size !== 9 || sweets.size !== 7 || alcremieAppearances.length !== creams.size * sweets.size) {
+    error('ALCREMIE_CARTESIAN_PRODUCT', `Expected complete 9x7 Alcremie aspects, received ${creams.size}x${sweets.size}`)
+  }
+  if (unownAppearances.filter(appearance => appearance.isDefault).map(appearance => appearance.appearanceId).join() !== 'appearance:0201:a') {
+    error('UNOWN_DEFAULT_APPEARANCE', 'Showdown baseForme A must be the sole Unown default Appearance')
+  }
+  if (alcremieAppearances.some(appearance => appearance.isDefault)) {
+    error('ALCREMIE_DEFAULT_APPEARANCE', 'No Alcremie combination may be guessed as default without sweet evidence')
+  }
+
   const referenceIds = new Set(sourceReferences.map(reference => reference.sourceReferenceId))
   for (const duplicate of duplicateValues(sourceReferences.map(reference => reference.sourceReferenceId))) {
     error('DUPLICATE_SOURCE_REFERENCE', `Source reference ID is not unique: ${duplicate}`)
@@ -247,7 +297,7 @@ export function validateSmokeDataset(
     ['form', ['/formId', '/speciesId', '/canonicalName/en', '/types', '/baseStats', '/abilities', '/generation']],
     ['ability', ['/abilityId', '/officialNumber', '/canonicalName/en', '/generation']],
     ['move', ['/moveId', '/officialNumber', '/showdownId', '/canonicalName/en', '/typeId', '/category', '/basePower', '/accuracy', '/pp', '/priority', '/target', '/generation', '/availability']],
-    ['appearance', ['/appearanceId', '/speciesId', '/formId', '/aspects']],
+    ['appearance', ['/appearanceId', '/speciesId', '/formId', '/isDefault', '/aspects', '/availability', '/dataStatus']],
     ['evolution', ['/evolutionId', '/source', '/target', '/methodToken', '/conditionTextKey']],
   ])
   for (const entityId of allEntityIds) {
@@ -283,7 +333,7 @@ export function validateSmokeDataset(
   if (localization) {
     const locale = SmokeLocalizationSchema.parse(localization)
     const canonicalIds = new Set(allEntityIds)
-    const localeEntries = [...locale.core.entries, ...locale.abilities.entries, ...locale.moves.entries, ...locale.evolutions.entries]
+    const localeEntries = [...locale.core.entries, ...locale.abilities.entries, ...locale.moves.entries, ...locale.evolutions.entries, ...locale.appearances.entries]
     for (const id of duplicateValues(localeEntries.map(entry => entry.entityId))) {
       error('DUPLICATE_LOCALIZATION_KEY', `Localization entity occurs more than once: ${id}`)
     }
@@ -324,6 +374,17 @@ export function validateSmokeDataset(
     for (const entry of locale.evolutions.entries) {
       if (!provenanceKeys.has(`${entry.entityId}/localization/zh-CN/conditionText`)) {
         error('MISSING_LOCALIZATION_PROVENANCE', `${entry.entityId} zh-CN condition text has no ValueProvenance`)
+      }
+    }
+    for (const entry of locale.appearances.entries) {
+      if (!provenanceKeys.has(`${entry.entityId}/localization/zh-CN/name`)) {
+        error('MISSING_LOCALIZATION_PROVENANCE', `${entry.entityId} zh-CN appearance name has no ValueProvenance`)
+      }
+      if (entry.shortLabel && !provenanceKeys.has(`${entry.entityId}/localization/zh-CN/shortLabel`)) {
+        error('MISSING_LOCALIZATION_PROVENANCE', `${entry.entityId} zh-CN short label has no ValueProvenance`)
+      }
+      if (!provenanceKeys.has(`${entry.entityId}/localization/zh-CN/aspectLabels`)) {
+        error('MISSING_LOCALIZATION_PROVENANCE', `${entry.entityId} zh-CN aspect labels have no ValueProvenance`)
       }
     }
     for (const value of valueProvenance.filter(item => item.fieldPath.startsWith('/localization/'))) {
