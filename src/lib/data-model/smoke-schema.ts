@@ -111,8 +111,8 @@ export const FormSchema = z.object({
 }).strict()
 
 export const SourceReferenceSchema = z.object({
-  sourceReferenceId: z.string().regex(/^src:pokemon-showdown:[0-9a-f]{16}$/),
-  source: z.literal('pokemon-showdown'),
+  sourceReferenceId: z.string().regex(/^src:(pokemon-showdown|pokemon-dataset-zh):[0-9a-f]{16}$/),
+  source: z.enum(['pokemon-showdown', 'pokemon-dataset-zh']),
   commit: SourceCommitSchema,
   path: z.string().min(1),
   sha256: Sha256Schema,
@@ -131,6 +131,37 @@ export const ValueProvenanceSchema = z.object({
   fieldPath: z.string().startsWith('/'),
   sourceReferenceId: SourceReferenceSchema.shape.sourceReferenceId,
   method: z.enum(['source-literal', 'showdown-dex-rule', 'project-normalization']),
+  mappingClass: z.enum(['automatic', 'rule-based', 'manual-exception']),
+  selected: z.boolean(),
+  sourcePointer: z.string().startsWith('/').optional(),
+}).strict()
+
+export const CoreLocalizationEntrySchema = z.object({
+  entityId: z.union([SpeciesIdSchema, FormIdSchema]),
+  name: z.string().min(1),
+  aliases: z.array(z.string().min(1)),
+  formLabel: z.string().min(1).nullable(),
+}).strict()
+
+export const AbilityLocalizationEntrySchema = z.object({
+  entityId: AbilityIdSchema,
+  name: z.string().min(1),
+  shortDescription: z.string().min(1).optional(),
+}).strict()
+
+export const CoreLocalizationSchema = z.object({
+  locale: z.literal('zh-CN'),
+  entries: z.array(CoreLocalizationEntrySchema),
+}).strict()
+
+export const AbilityLocalizationSchema = z.object({
+  locale: z.literal('zh-CN'),
+  entries: z.array(AbilityLocalizationEntrySchema),
+}).strict()
+
+export const SmokeLocalizationSchema = z.object({
+  core: CoreLocalizationSchema,
+  abilities: AbilityLocalizationSchema,
 }).strict()
 
 export const SmokeDatasetSchema = z.object({
@@ -149,7 +180,10 @@ export const ValidationIssueSchema = z.object({
 
 export const SmokeReportSchema = z.object({
   schemaVersion: z.literal(1),
-  sourceCommit: SourceCommitSchema,
+  sourceCommits: z.object({
+    pokemonShowdown: SourceCommitSchema,
+    pokemonDatasetZh: SourceCommitSchema,
+  }).strict(),
   status: z.enum(['passed', 'failed']),
   counts: z.object({
     types: z.number().int().nonnegative(),
@@ -165,10 +199,10 @@ export const SmokeReportSchema = z.object({
 export const SmokeManifestSchema = z.object({
   schemaVersion: z.literal(1),
   dataVersion: z.string().regex(/^sha256:[0-9a-f]{64}$/),
-  source: z.object({
-    id: z.literal('pokemon-showdown'),
+  sources: z.array(z.object({
+    id: z.enum(['pokemon-showdown', 'pokemon-dataset-zh']),
     commit: SourceCommitSchema,
-  }).strict(),
+  }).strict()).length(2),
   files: z.array(z.object({
     path: z.string().min(1),
     sha256: Sha256Schema,
@@ -186,3 +220,6 @@ export type IdentityMatch = z.infer<typeof IdentityMatchSchema>
 export type ValueProvenance = z.infer<typeof ValueProvenanceSchema>
 export type SmokeDataset = z.infer<typeof SmokeDatasetSchema>
 export type SmokeReport = z.infer<typeof SmokeReportSchema>
+export type CoreLocalizationEntry = z.infer<typeof CoreLocalizationEntrySchema>
+export type AbilityLocalizationEntry = z.infer<typeof AbilityLocalizationEntrySchema>
+export type SmokeLocalization = z.infer<typeof SmokeLocalizationSchema>

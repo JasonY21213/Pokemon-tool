@@ -17,6 +17,7 @@ import {
   type IdentityMatch,
   type Nature,
   type SmokeDataset,
+  type SmokeLocalization,
   type SourceReference,
   type Species,
   type TypeEntity,
@@ -36,6 +37,8 @@ import {
   type VerifiedSource,
 } from './source.ts'
 import { validateSmokeDataset } from './validation.ts'
+import { buildLocalization, type FormLocalizationMapping, type LocalizationConflict } from './localization.ts'
+import { loadPokemonDatasetZhSource } from './pokemon-dataset-zh.ts'
 
 const STANDARD_TYPES = [
   ['bug', 'Bug'], ['dark', 'Dark'], ['dragon', 'Dragon'], ['electric', 'Electric'],
@@ -60,12 +63,19 @@ export interface BuildArtifacts {
   source: VerifiedSource
   identityMatches: IdentityMatch[]
   valueProvenance: ValueProvenance[]
+  localization: SmokeLocalization
+  formLocalizationMappings: FormLocalizationMapping[]
+  localizationMechanicsConflicts: LocalizationConflict[]
+  localizationProvenanceCount: number
   scopeNotes: string[]
 }
 
 export interface PipelineResult {
   dataset: SmokeDataset
-  sourceCommit: string
+  sourceCommits: {
+    pokemonShowdown: string
+    pokemonDatasetZh: string
+  }
   outputRoot: string
   runtimeHashes: Record<string, string>
 }
@@ -294,7 +304,14 @@ function provenance(
   const identityMatches: IdentityMatch[] = []
   const values: ValueProvenance[] = []
   const addValue = (entityId: string, fieldPath: string, sourceReferenceId: string, method: ValueProvenance['method']) => {
-    values.push(ValueProvenanceSchema.parse({ entityId, fieldPath, sourceReferenceId, method }))
+    values.push(ValueProvenanceSchema.parse({
+      entityId,
+      fieldPath,
+      sourceReferenceId,
+      method,
+      mappingClass: 'automatic',
+      selected: true,
+    }))
   }
 
   for (const entity of dataset.types) {
@@ -329,8 +346,11 @@ function provenance(
   }
 }
 
-export async function buildSmokeArtifacts(cacheOverride?: string): Promise<BuildArtifacts> {
-  const source = await verifySource(cacheOverride)
+export async function buildSmokeArtifacts(
+  cacheOverride?: string,
+  localizationCacheOverride?: string,
+): Promise<BuildArtifacts> {
+  const source = await verifySource(cacheOverride, localizationCacheOverride)
   const data = await loadShowdownSource(source)
   const syclant = requiredPokedexRecord(data, 'syclant')
   if (syclant.num > 0) throw new Error('The CAP negative fixture unexpectedly has a positive national number')
@@ -343,10 +363,18 @@ export async function buildSmokeArtifacts(cacheOverride?: string): Promise<Build
     abilities: buildAbilities(data, source, forms),
   })
   const audit = provenance(dataset, source)
+  const localizationSource = await loadPokemonDatasetZhSource(source)
+  const localization = buildLocalization(dataset, localizationSource)
   return {
     dataset,
     source,
-    ...audit,
+    identityMatches: audit.identityMatches,
+    valueProvenance: [...audit.valueProvenance, ...localization.valueProvenance]
+      .sort((left, right) => `${left.entityId}${left.fieldPath}`.localeCompare(`${right.entityId}${right.fieldPath}`, 'en')),
+    localization: localization.localization,
+    formLocalizationMappings: localization.formMappings,
+    localizationMechanicsConflicts: localization.mechanicsConflicts,
+    localizationProvenanceCount: localization.valueProvenance.length,
     scopeNotes: [
       'Stellar exists in the fixed TypeChart but is explicitly excluded from the 18-type smoke matrix.',
       'Non-attacking TypeChart keys such as brn, par, powder, and prankster are not emitted as Types.',
@@ -366,11 +394,21 @@ async function clearGeneratedOutput(outputRoot: string): Promise<void> {
   await mkdir(resolvedOutput, { recursive: true })
 }
 
-export async function runSmokePipeline(options: { cachePath?: string; clean?: boolean } = {}): Promise<PipelineResult> {
+export async function runSmokePipeline(options: {
+  cachePath?: string
+  localizationCachePath?: string
+  clean?: boolean
+} = {}): Promise<PipelineResult> {
   const outputRoot = resolve(projectRoot, 'generated')
   if (options.clean ?? true) await clearGeneratedOutput(outputRoot)
-  const artifacts = await buildSmokeArtifacts(options.cachePath)
-  const validation = validateSmokeDataset(artifacts.dataset, artifacts.source.sourceReferences, artifacts.identityMatches, artifacts.valueProvenance)
+  const artifacts = await buildSmokeArtifacts(options.cachePath, options.localizationCachePath)
+  const validation = validateSmokeDataset(
+    artifacts.dataset,
+    artifacts.source.sourceReferences,
+    artifacts.identityMatches,
+    artifacts.valueProvenance,
+    artifacts.localization,
+  )
   const runtimeRoot = join(outputRoot, 'smoke-runtime')
   const runtimeValues: Array<[string, unknown]> = [
     ['types.json', artifacts.dataset.types],
@@ -378,6 +416,8 @@ export async function runSmokePipeline(options: { cachePath?: string; clean?: bo
     ['species.json', artifacts.dataset.species],
     ['forms.json', artifacts.dataset.forms],
     ['abilities.json', artifacts.dataset.abilities],
+    ['localization/zh-CN.core.json', artifacts.localization.core],
+    ['localization/zh-CN.abilities.json', artifacts.localization.abilities],
   ]
   for (const [path, value] of runtimeValues) await writeJson(join(runtimeRoot, path), value)
   const fileEntries = []
@@ -387,7 +427,10 @@ export async function runSmokePipeline(options: { cachePath?: string; clean?: bo
   const manifest = SmokeManifestSchema.parse({
     schemaVersion: 1,
     dataVersion: `sha256:${dataVersion}`,
-    source: { id: 'pokemon-showdown', commit: artifacts.source.commit },
+    sources: [
+      { id: 'pokemon-showdown', commit: artifacts.source.commit },
+      { id: 'pokemon-dataset-zh', commit: artifacts.source.localization.commit },
+    ],
     files: fileEntries,
   })
   await writeJson(join(runtimeRoot, 'manifest.json'), manifest)
@@ -395,9 +438,24 @@ export async function runSmokePipeline(options: { cachePath?: string; clean?: bo
   await writeJson(join(outputRoot, 'provenance', 'identity-matches.json'), artifacts.identityMatches)
   await writeJson(join(outputRoot, 'provenance', 'value-provenance.json'), artifacts.valueProvenance)
   await writeJson(join(outputRoot, 'reports', 'registry-proposals.json'), [])
+  await writeJson(join(outputRoot, 'reports', 'localization-mapping.json'), {
+    schemaVersion: 1,
+    sourceCommit: artifacts.source.localization.commit,
+    formMappings: artifacts.formLocalizationMappings,
+    mappingCounts: {
+      automatic: artifacts.formLocalizationMappings.filter(mapping => mapping.mappingClass === 'automatic').length,
+      ruleBased: artifacts.formLocalizationMappings.filter(mapping => mapping.mappingClass === 'rule-based').length,
+      unresolved: artifacts.formLocalizationMappings.filter(mapping => mapping.mappingClass === 'unresolved').length,
+    },
+    mechanicsConflicts: artifacts.localizationMechanicsConflicts,
+    localizationProvenanceCount: artifacts.localizationProvenanceCount,
+  })
   const report = SmokeReportSchema.parse({
     schemaVersion: 1,
-    sourceCommit: artifacts.source.commit,
+    sourceCommits: {
+      pokemonShowdown: artifacts.source.commit,
+      pokemonDatasetZh: artifacts.source.localization.commit,
+    },
     status: 'passed',
     counts: {
       types: artifacts.dataset.types.length,
@@ -414,5 +472,13 @@ export async function runSmokePipeline(options: { cachePath?: string; clean?: bo
   for (const [path] of [...runtimeValues, ['manifest.json', manifest] as [string, unknown]]) {
     runtimeHashes[path] = await hashFile(join(runtimeRoot, path))
   }
-  return { dataset: artifacts.dataset, sourceCommit: artifacts.source.commit, outputRoot, runtimeHashes }
+  return {
+    dataset: artifacts.dataset,
+    sourceCommits: {
+      pokemonShowdown: artifacts.source.commit,
+      pokemonDatasetZh: artifacts.source.localization.commit,
+    },
+    outputRoot,
+    runtimeHashes,
+  }
 }

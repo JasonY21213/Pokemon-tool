@@ -1,7 +1,9 @@
 import {
+  SmokeLocalizationSchema,
   SmokeDatasetSchema,
   type IdentityMatch,
   type SmokeDataset,
+  type SmokeLocalization,
   type SourceReference,
   type ValueProvenance,
 } from '../../src/lib/data-model/smoke-schema.ts'
@@ -35,6 +37,7 @@ export function validateSmokeDataset(
   sourceReferences: SourceReference[],
   identityMatches: IdentityMatch[],
   valueProvenance: ValueProvenance[],
+  localization?: SmokeLocalization,
 ): ValidationResult {
   const dataset = SmokeDatasetSchema.parse(input)
   const issues: ValidationIssue[] = []
@@ -168,6 +171,45 @@ export function validateSmokeDataset(
     const kind = entityId.slice(0, entityId.indexOf(':'))
     for (const field of requiredFields.get(kind) ?? []) {
       if (!provenanceKeys.has(`${entityId}${field}`)) error('MISSING_VALUE_PROVENANCE', `${entityId}${field} has no ValueProvenance`)
+    }
+  }
+
+  if (localization) {
+    const locale = SmokeLocalizationSchema.parse(localization)
+    const canonicalIds = new Set(allEntityIds)
+    const localeEntries = [...locale.core.entries, ...locale.abilities.entries]
+    for (const id of duplicateValues(localeEntries.map(entry => entry.entityId))) {
+      error('DUPLICATE_LOCALIZATION_KEY', `Localization entity occurs more than once: ${id}`)
+    }
+    for (const entry of localeEntries) {
+      if (!canonicalIds.has(entry.entityId)) {
+        error('ORPHAN_LOCALIZATION_KEY', `Localization references missing canonical entity ${entry.entityId}`)
+      }
+    }
+    const coreById = new Map(locale.core.entries.map(entry => [entry.entityId, entry]))
+    for (const species of dataset.species) {
+      const entry = coreById.get(species.speciesId)
+      if (!entry?.name) error('MISSING_REQUIRED_SPECIES_LOCALIZATION', `${species.speciesId} requires a zh-CN name`)
+    }
+    for (const entry of locale.core.entries) {
+      if (!provenanceKeys.has(`${entry.entityId}/localization/zh-CN/name`)) {
+        error('MISSING_LOCALIZATION_PROVENANCE', `${entry.entityId} zh-CN name has no ValueProvenance`)
+      }
+      if (entry.formLabel !== null && !provenanceKeys.has(`${entry.entityId}/localization/zh-CN/formLabel`)) {
+        error('MISSING_LOCALIZATION_PROVENANCE', `${entry.entityId} zh-CN formLabel has no ValueProvenance`)
+      }
+    }
+    for (const entry of locale.abilities.entries) {
+      if (!provenanceKeys.has(`${entry.entityId}/localization/zh-CN/name`)) {
+        error('MISSING_LOCALIZATION_PROVENANCE', `${entry.entityId} zh-CN name has no ValueProvenance`)
+      }
+      if (entry.shortDescription && !provenanceKeys.has(`${entry.entityId}/localization/zh-CN/shortDescription`)) {
+        error('MISSING_LOCALIZATION_PROVENANCE', `${entry.entityId} zh-CN shortDescription has no ValueProvenance`)
+      }
+    }
+    for (const value of valueProvenance.filter(item => item.fieldPath.startsWith('/localization/'))) {
+      if (!value.selected) error('UNSELECTED_LOCALIZATION_PROVENANCE', `${value.entityId}${value.fieldPath} is not selected`)
+      if (!value.sourcePointer) error('MISSING_LOCALIZATION_SOURCE_POINTER', `${value.entityId}${value.fieldPath} has no JSON Pointer`)
     }
   }
 

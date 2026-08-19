@@ -17,16 +17,27 @@ const SelectedPathSchema = z.object({
   sha256: Sha256Schema,
 }).strict()
 
-const SourceLockSchema = z.object({
-  schemaVersion: z.literal(1),
-  sources: z.array(z.object({
+const ShowdownSourceLockSchema = z.object({
     sourceId: z.literal('pokemon-showdown'),
     repo: z.literal('https://github.com/smogon/pokemon-showdown'),
     commit: SourceCommitSchema,
     acquisition: z.literal('external-sparse-cache'),
     cacheEnvironmentVariable: z.literal('POKEMON_TOOL_SHOWDOWN_CACHE'),
     selectedPaths: z.array(SelectedPathSchema).min(1),
-  }).strict()).length(1),
+}).strict()
+
+const PokemonDatasetZhSourceLockSchema = z.object({
+  sourceId: z.literal('pokemon-dataset-zh'),
+  repo: z.literal('https://github.com/42arch/pokemon-dataset-zh'),
+  commit: SourceCommitSchema,
+  acquisition: z.literal('external-object-cache'),
+  cacheEnvironmentVariable: z.literal('POKEMON_TOOL_DATASET_ZH_CACHE'),
+  selectedPaths: z.array(SelectedPathSchema).min(1),
+}).strict()
+
+const SourceLockSchema = z.object({
+  schemaVersion: z.literal(1),
+  sources: z.tuple([ShowdownSourceLockSchema, PokemonDatasetZhSourceLockSchema]),
 }).strict()
 
 const RegistryEntitySchema = z.object({
@@ -108,6 +119,12 @@ export interface VerifiedSource {
   commit: string
   sourceReferences: SourceReference[]
   sourceReferenceByPath: ReadonlyMap<string, SourceReference>
+  localization: {
+    cachePath: string
+    commit: string
+    sourceReferences: SourceReference[]
+    sourceReferenceByPath: ReadonlyMap<string, SourceReference>
+  }
   registry: RegistryEntity[]
 }
 
@@ -126,52 +143,114 @@ function defaultCachePath(commit: string): string {
   return join(localAppData, 'pokemon-tool', 'upstream', 'pokemon-showdown', commit)
 }
 
-function makeSourceReference(commit: string, path: string, fileHash: string): SourceReference {
-  const identity = JSON.stringify({ source: 'pokemon-showdown', commit, path, sha256: fileHash })
+function defaultLocalizationCachePath(commit: string): string {
+  const localAppData = process.env.LOCALAPPDATA ?? join(homedir(), 'AppData', 'Local')
+  return join(localAppData, 'pokemon-tool', 'upstream', 'pokemon-dataset-zh', commit)
+}
+
+function makeSourceReference(
+  source: 'pokemon-showdown' | 'pokemon-dataset-zh',
+  commit: string,
+  path: string,
+  fileHash: string,
+): SourceReference {
+  const identity = JSON.stringify({ source, commit, path, sha256: fileHash })
   return SourceReferenceSchema.parse({
-    sourceReferenceId: `src:pokemon-showdown:${sha256(identity).slice(0, 16)}`,
-    source: 'pokemon-showdown',
+    sourceReferenceId: `src:${source}:${sha256(identity).slice(0, 16)}`,
+    source,
     commit,
     path,
     sha256: fileHash,
   })
 }
 
-export async function verifySource(cacheOverride?: string): Promise<VerifiedSource> {
-  const lock = SourceLockSchema.parse(await readJson(join(projectRoot, 'data-source', 'source-lock.json')))
-  const source = lock.sources[0]
-  const cachePath = resolve(cacheOverride ?? process.env[source.cacheEnvironmentVariable] ?? defaultCachePath(source.commit))
-
+function verifyGitRevision(cachePath: string, expectedCommit: string): void {
+  const safePath = cachePath.replaceAll('\\', '/')
   let actualCommit: string
   try {
     actualCommit = execFileSync(
       'git',
-      ['-c', `safe.directory=${cachePath.replaceAll('\\', '/')}`, '-C', cachePath, 'rev-parse', 'HEAD'],
+      ['-c', `safe.directory=${safePath}`, '-C', cachePath, 'rev-parse', 'HEAD'],
       { encoding: 'utf8' },
     ).trim()
-  } catch (error) {
-    throw new Error(`Pokémon Showdown cache is unavailable at the configured path. ${String(error)}`)
+  } catch {
+    actualCommit = execFileSync(
+      'git',
+      ['-c', `safe.directory=${safePath}`, '-C', cachePath, 'rev-parse', 'FETCH_HEAD'],
+      { encoding: 'utf8' },
+    ).trim()
   }
-  if (actualCommit !== source.commit) {
-    throw new Error(`Showdown source SHA mismatch: expected ${source.commit}, received ${actualCommit}`)
+  if (actualCommit !== expectedCommit) {
+    throw new Error(`Source SHA mismatch at external cache: expected ${expectedCommit}, received ${actualCommit}`)
   }
+}
 
+async function verifySelectedFiles(
+  sourceName: 'pokemon-showdown' | 'pokemon-dataset-zh',
+  cachePath: string,
+  commit: string,
+  selectedPaths: Array<z.infer<typeof SelectedPathSchema>>,
+): Promise<SourceReference[]> {
   const sourceReferences: SourceReference[] = []
-  for (const selected of source.selectedPaths) {
+  for (const selected of selectedPaths) {
     const bytes = await readFile(join(cachePath, ...selected.path.split('/')))
     const actualHash = sha256(bytes)
     if (actualHash !== selected.sha256) {
       throw new Error(`Source hash mismatch for ${selected.path}: expected ${selected.sha256}, received ${actualHash}`)
     }
-    sourceReferences.push(makeSourceReference(source.commit, selected.path, actualHash))
+    sourceReferences.push(makeSourceReference(sourceName, commit, selected.path, actualHash))
+  }
+  return sourceReferences
+}
+
+export async function verifySource(
+  cacheOverride?: string,
+  localizationCacheOverride?: string,
+): Promise<VerifiedSource> {
+  const lock = SourceLockSchema.parse(await readJson(join(projectRoot, 'data-source', 'source-lock.json')))
+  const showdown = lock.sources[0]
+  const localizationSource = lock.sources[1]
+  const cachePath = resolve(cacheOverride ?? process.env[showdown.cacheEnvironmentVariable] ?? defaultCachePath(showdown.commit))
+  const localizationCachePath = resolve(
+    localizationCacheOverride
+      ?? process.env[localizationSource.cacheEnvironmentVariable]
+      ?? defaultLocalizationCachePath(localizationSource.commit),
+  )
+
+  try {
+    verifyGitRevision(cachePath, showdown.commit)
+    verifyGitRevision(localizationCachePath, localizationSource.commit)
+  } catch (error) {
+    throw new Error(`Pinned upstream cache is unavailable or invalid. ${String(error)}`)
   }
 
+  const showdownReferences = await verifySelectedFiles('pokemon-showdown', cachePath, showdown.commit, showdown.selectedPaths)
+  const localizationReferences = await verifySelectedFiles(
+    'pokemon-dataset-zh',
+    localizationCachePath,
+    localizationSource.commit,
+    localizationSource.selectedPaths,
+  )
+
   const registryDocument = RegistrySchema.parse(await readJson(join(projectRoot, 'data-curated', 'id-registry.json')))
-  if (registryDocument.sourceCommit !== source.commit) {
+  if (registryDocument.sourceCommit !== showdown.commit) {
     throw new Error('ID registry source commit does not match source-lock.json')
   }
-  const sourceReferenceByPath = new Map(sourceReferences.map(reference => [reference.path, reference]))
-  return { cachePath, commit: source.commit, sourceReferences, sourceReferenceByPath, registry: registryDocument.entities }
+  const sourceReferenceByPath = new Map(showdownReferences.map(reference => [reference.path, reference]))
+  const localizationSourceReferenceByPath = new Map(localizationReferences.map(reference => [reference.path, reference]))
+  return {
+    cachePath,
+    commit: showdown.commit,
+    sourceReferences: [...showdownReferences, ...localizationReferences],
+    sourceReferenceByPath,
+    localization: {
+      cachePath: localizationCachePath,
+      commit: localizationSource.commit,
+      sourceReferences: localizationReferences,
+      sourceReferenceByPath: localizationSourceReferenceByPath,
+    },
+    registry: registryDocument.entities,
+  }
 }
 
 async function importRecord(path: string, exportName: string): Promise<Record<string, unknown>> {

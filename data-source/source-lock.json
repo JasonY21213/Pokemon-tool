@@ -15,6 +15,19 @@
         { "path": "sim/dex-abilities.ts", "sha256": "d798ae9d5e3e483d13a6572088354f5afbc416da9e1feca131e0eecccc8006ee" },
         { "path": "sim/dex-species.ts", "sha256": "d75751859b3106b30c1654369088150b933f35c456e3b89e2f3f8ceb0bb79b68" }
       ]
+    },
+    {
+      "sourceId": "pokemon-dataset-zh",
+      "repo": "https://github.com/42arch/pokemon-dataset-zh",
+      "commit": "82ce04e611d19a12556c3955125b048b36187f52",
+      "acquisition": "external-object-cache",
+      "cacheEnvironmentVariable": "POKEMON_TOOL_DATASET_ZH_CACHE",
+      "selectedPaths": [
+        { "path": "data/ability_list.json", "sha256": "135430faed1b9041821c27bbb09a6f58e1922c91bfd285595d7cd35daa2a99e7" },
+        { "path": "data/pokemon/0006-喷火龙.json", "sha256": "1934583863c2a9d70b00f4f288c70b6ab9f9f3c3062c05e7aeb92be2ef10dc52" },
+        { "path": "data/pokemon/0479-洛托姆.json", "sha256": "849506374efd2034f5230423930e661caa616c353c6198db63f7ac9a3b8c7ff3" },
+        { "path": "data/pokemon/0678-超能妙喵.json", "sha256": "d1bb0e401dae668031991101a8dcf40245c813386d8afe648eedb18c8c98fc5f" }
+      ]
     }
   ]
 }

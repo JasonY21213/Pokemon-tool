@@ -3,6 +3,7 @@ export type {
   Availability,
   Form,
   Nature,
+  SmokeLocalization,
   SmokeDataset,
   Species,
   TypeEntity,
