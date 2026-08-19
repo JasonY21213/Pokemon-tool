@@ -16,6 +16,8 @@ export const GrowthRateIdSchema = z.enum([
   'growth:fluctuating',
 ])
 export const MoveIdSchema = z.string().regex(/^move:(?:\d{4}|special:[a-z0-9-]+)$/)
+export const AppearanceIdSchema = z.string().regex(/^appearance:\d{4}:[a-z0-9-]+:[a-z0-9-]+$/)
+export const EvolutionIdSchema = z.string().regex(/^evolution:[a-z0-9:-]+$/)
 export const EntityIdSchema = z.union([
   SpeciesIdSchema,
   FormIdSchema,
@@ -24,6 +26,8 @@ export const EntityIdSchema = z.union([
   NatureIdSchema,
   GrowthRateIdSchema,
   MoveIdSchema,
+  AppearanceIdSchema,
+  EvolutionIdSchema,
 ])
 
 export const StatIdSchema = z.enum(['hp', 'atk', 'def', 'spa', 'spd', 'spe'])
@@ -119,6 +123,47 @@ export const MoveSchema = z.object({
   dataStatus: DataStatusSchema,
 }).strict()
 
+export const AppearanceAspectSchema = z.object({
+  dimension: z.string().regex(/^[a-z][a-z0-9-]*$/),
+  value: z.string().regex(/^[a-z0-9-]+$/),
+}).strict()
+
+export const AppearanceSchema = z.object({
+  appearanceId: AppearanceIdSchema,
+  speciesId: SpeciesIdSchema,
+  formId: FormIdSchema.nullable(),
+  aspects: z.array(AppearanceAspectSchema).min(1),
+  dataStatus: DataStatusSchema,
+}).strict()
+
+export const EntityRefSchema = z.discriminatedUnion('kind', [
+  z.object({ kind: z.literal('species'), id: SpeciesIdSchema }).strict(),
+  z.object({ kind: z.literal('form'), id: FormIdSchema }).strict(),
+])
+
+export const EvolutionConditionSchema = z.discriminatedUnion('kind', [
+  z.object({ kind: z.literal('item'), itemId: z.string().regex(/^item:[a-z0-9-]+$/) }).strict(),
+  z.object({ kind: z.literal('trade') }).strict(),
+  z.object({ kind: z.literal('friendship'), metric: z.enum(['friendship', 'affection', 'either']), minimum: z.number().int().nonnegative().nullable() }).strict(),
+  z.object({ kind: z.literal('time'), value: z.enum(['day', 'night', 'unknown']) }).strict(),
+  z.object({ kind: z.literal('move-known'), typeId: TypeIdSchema }).strict(),
+  z.object({ kind: z.literal('held-item'), itemId: z.string().regex(/^item:[a-z0-9-]+$/) }).strict(),
+  z.object({ kind: z.literal('spin'), direction: z.enum(['clockwise', 'counterclockwise', 'either', 'unknown']), minDurationSeconds: z.number().positive().nullable() }).strict(),
+  z.object({ kind: z.literal('level'), minimum: z.number().int().positive().nullable() }).strict(),
+  z.object({ kind: z.literal('raw'), textKey: z.string().regex(/^evolution-text:[a-z0-9:-]+$/) }).strict(),
+])
+
+export const EvolutionEdgeSchema = z.object({
+  evolutionId: EvolutionIdSchema,
+  methodToken: z.string().regex(/^[a-z0-9-]+$/),
+  source: EntityRefSchema,
+  target: EntityRefSchema,
+  conditions: z.array(EvolutionConditionSchema).min(1),
+  resultAppearanceId: AppearanceIdSchema.nullable(),
+  conditionTextKey: z.string().regex(/^evolution-text:[a-z0-9:-]+$/).nullable(),
+  dataStatus: DataStatusSchema,
+}).strict()
+
 export const GrowthRateResolutionSchema = z.object({
   id: GrowthRateIdSchema.nullable(),
   status: z.enum(['resolved', 'unresolved']),
@@ -183,7 +228,7 @@ export const SourceReferenceSchema = z.object({
 
 export const IdentityMatchSchema = z.object({
   entityId: EntityIdSchema,
-  entityKind: z.enum(['species', 'form', 'ability', 'type', 'nature', 'move']),
+  entityKind: z.enum(['species', 'form', 'ability', 'type', 'nature', 'move', 'appearance', 'evolution']),
   showdownId: z.string().min(1),
   mappingClass: z.enum(['automatic', 'rule-based', 'manual-exception']),
   sourceReferenceId: SourceReferenceSchema.shape.sourceReferenceId,
@@ -233,10 +278,21 @@ export const MoveLocalizationSchema = z.object({
   entries: z.array(MoveLocalizationEntrySchema),
 }).strict()
 
+export const EvolutionLocalizationEntrySchema = z.object({
+  entityId: EvolutionIdSchema,
+  conditionText: z.string().min(1),
+}).strict()
+
+export const EvolutionLocalizationSchema = z.object({
+  locale: z.literal('zh-CN'),
+  entries: z.array(EvolutionLocalizationEntrySchema),
+}).strict()
+
 export const SmokeLocalizationSchema = z.object({
   core: CoreLocalizationSchema,
   abilities: AbilityLocalizationSchema,
   moves: MoveLocalizationSchema,
+  evolutions: EvolutionLocalizationSchema,
 }).strict()
 
 export const SmokeDatasetSchema = z.object({
@@ -247,6 +303,8 @@ export const SmokeDatasetSchema = z.object({
   abilities: z.array(AbilitySchema),
   growthRates: z.array(GrowthRateSchema),
   moves: z.array(MoveSchema),
+  appearances: z.array(AppearanceSchema),
+  evolutions: z.array(EvolutionEdgeSchema),
 }).strict()
 
 export const ValidationIssueSchema = z.object({
@@ -270,6 +328,8 @@ export const SmokeReportSchema = z.object({
     abilities: z.number().int().nonnegative(),
     growthRates: z.number().int().nonnegative(),
     moves: z.number().int().nonnegative(),
+    appearances: z.number().int().nonnegative(),
+    evolutions: z.number().int().nonnegative(),
   }).strict(),
   scopeNotes: z.array(z.string()),
   issues: z.array(ValidationIssueSchema),
@@ -296,6 +356,10 @@ export type Move = z.infer<typeof MoveSchema>
 export type MoveId = z.infer<typeof MoveIdSchema>
 export type AccuracySemantic = z.infer<typeof AccuracySemanticSchema>
 export type NumericSemantic = z.infer<typeof NumericSemanticSchema>
+export type Appearance = z.infer<typeof AppearanceSchema>
+export type EvolutionEdge = z.infer<typeof EvolutionEdgeSchema>
+export type EvolutionCondition = z.infer<typeof EvolutionConditionSchema>
+export type EvolutionId = z.infer<typeof EvolutionIdSchema>
 export type GrowthRate = z.infer<typeof GrowthRateSchema>
 export type GrowthRateId = z.infer<typeof GrowthRateIdSchema>
 export type GrowthRateResolution = z.infer<typeof GrowthRateResolutionSchema>

@@ -51,6 +51,8 @@ export function validateSmokeDataset(
     ...dataset.forms.map(entity => entity.formId),
     ...dataset.abilities.map(entity => entity.abilityId),
     ...dataset.moves.map(entity => entity.moveId),
+    ...dataset.appearances.map(entity => entity.appearanceId),
+    ...dataset.evolutions.map(entity => entity.evolutionId),
   ]
   for (const id of duplicateValues(allEntityIds)) error('DUPLICATE_ID', `Entity ID occurs more than once: ${id}`)
   for (const number of duplicateValues(dataset.abilities.map(ability => String(ability.officialNumber)))) {
@@ -61,6 +63,9 @@ export function validateSmokeDataset(
   }
   for (const id of duplicateValues(dataset.growthRates.map(growthRate => growthRate.growthRateId))) {
     error('DUPLICATE_GROWTH_RATE_ID', `GrowthRate ID occurs more than once: ${id}`)
+  }
+  for (const id of duplicateValues(dataset.evolutions.map(evolution => evolution.evolutionId))) {
+    error('DUPLICATE_EVOLUTION_ID', `Evolution ID occurs more than once: ${id}`)
   }
 
   const expectedGrowthRates = new Map([
@@ -89,6 +94,7 @@ export function validateSmokeDataset(
   const abilityIds = new Set(dataset.abilities.map(entity => entity.abilityId))
   const typeIds = new Set(dataset.types.map(entity => entity.typeId))
   const growthRateIds = new Set(dataset.growthRates.map(entity => entity.growthRateId))
+  const appearanceIds = new Set(dataset.appearances.map(entity => entity.appearanceId))
   for (const species of dataset.species) {
     if (species.nationalDexNumber <= 0) error('NON_POSITIVE_NATIONAL_NUMBER', `${species.speciesId} has an invalid national number`)
     const defaultForm = dataset.forms.find(form => form.formId === species.defaultFormId)
@@ -134,6 +140,31 @@ export function validateSmokeDataset(
   }
   for (const move of dataset.moves) {
     if (!typeIds.has(move.typeId)) error('ORPHAN_MOVE_TYPE_REFERENCE', `${move.moveId} references ${move.typeId}`)
+  }
+  for (const appearance of dataset.appearances) {
+    if (!speciesIds.has(appearance.speciesId)) error('ORPHAN_APPEARANCE_SPECIES', `${appearance.appearanceId} references ${appearance.speciesId}`)
+    if (appearance.formId && !formIds.has(appearance.formId)) error('ORPHAN_APPEARANCE_FORM', `${appearance.appearanceId} references ${appearance.formId}`)
+  }
+  const evolutionRefExists = (reference: { kind: 'species' | 'form'; id: string }) => reference.kind === 'species'
+    ? speciesIds.has(reference.id as never)
+    : formIds.has(reference.id as never)
+  for (const evolution of dataset.evolutions) {
+    if (!evolutionRefExists(evolution.source)) error('ORPHAN_EVOLUTION_SOURCE', `${evolution.evolutionId} source does not resolve`)
+    if (!evolutionRefExists(evolution.target)) error('ORPHAN_EVOLUTION_TARGET', `${evolution.evolutionId} target does not resolve`)
+    if (evolution.resultAppearanceId && !appearanceIds.has(evolution.resultAppearanceId)) {
+      error('ORPHAN_RESULT_APPEARANCE', `${evolution.evolutionId} references ${evolution.resultAppearanceId}`)
+    }
+    for (const condition of evolution.conditions) {
+      if (condition.kind === 'move-known' && !typeIds.has(condition.typeId)) {
+        error('ORPHAN_EVOLUTION_TYPE', `${evolution.evolutionId} references ${condition.typeId}`)
+      }
+    }
+  }
+  for (const duplicate of duplicateValues(dataset.evolutions.map(edge => `${edge.source.kind}:${edge.source.id}:${edge.target.kind}:${edge.target.id}:${edge.methodToken}`))) {
+    error('NON_UNIQUE_EVOLUTION_MAPPING', `Evolution source/target/method occurs more than once: ${duplicate}`)
+  }
+  if (dataset.evolutions.some(edge => edge.source.kind === 'form' && edge.source.id === 'form:0133:partner')) {
+    error('PARTNER_EEVEE_EVOLUTION', 'Partner Eevee must not inherit base Eevee evolution edges')
   }
   for (const showdownId of duplicateValues(dataset.moves.map(move => move.showdownId))) {
     error('NON_UNIQUE_MOVE_MAPPING', `Showdown Move ${showdownId} maps to multiple project Moves`)
@@ -216,6 +247,8 @@ export function validateSmokeDataset(
     ['form', ['/formId', '/speciesId', '/canonicalName/en', '/types', '/baseStats', '/abilities', '/generation']],
     ['ability', ['/abilityId', '/officialNumber', '/canonicalName/en', '/generation']],
     ['move', ['/moveId', '/officialNumber', '/showdownId', '/canonicalName/en', '/typeId', '/category', '/basePower', '/accuracy', '/pp', '/priority', '/target', '/generation', '/availability']],
+    ['appearance', ['/appearanceId', '/speciesId', '/formId', '/aspects']],
+    ['evolution', ['/evolutionId', '/source', '/target', '/methodToken', '/conditionTextKey']],
   ])
   for (const entityId of allEntityIds) {
     const kind = entityId.slice(0, entityId.indexOf(':'))
@@ -230,6 +263,16 @@ export function validateSmokeDataset(
       }
     }
   }
+  for (const evolution of dataset.evolutions) {
+    for (const index of evolution.conditions.keys()) {
+      if (!provenanceKeys.has(`${evolution.evolutionId}/conditions/${index}`)) {
+        error('MISSING_EVOLUTION_CONDITION_PROVENANCE', `${evolution.evolutionId}/conditions/${index} has no ValueProvenance`)
+      }
+    }
+    if (evolution.resultAppearanceId && !provenanceKeys.has(`${evolution.evolutionId}/resultAppearanceId`)) {
+      error('MISSING_EVOLUTION_APPEARANCE_PROVENANCE', `${evolution.evolutionId}/resultAppearanceId has no ValueProvenance`)
+    }
+  }
   for (const value of valueProvenance.filter(item => item.fieldPath.startsWith('/growthRate'))) {
     if (!value.selected) error('UNSELECTED_GROWTH_RATE_PROVENANCE', `${value.entityId}${value.fieldPath} is not selected`)
     if (!value.sourcePointer?.endsWith('/experience_100')) {
@@ -240,7 +283,7 @@ export function validateSmokeDataset(
   if (localization) {
     const locale = SmokeLocalizationSchema.parse(localization)
     const canonicalIds = new Set(allEntityIds)
-    const localeEntries = [...locale.core.entries, ...locale.abilities.entries, ...locale.moves.entries]
+    const localeEntries = [...locale.core.entries, ...locale.abilities.entries, ...locale.moves.entries, ...locale.evolutions.entries]
     for (const id of duplicateValues(localeEntries.map(entry => entry.entityId))) {
       error('DUPLICATE_LOCALIZATION_KEY', `Localization entity occurs more than once: ${id}`)
     }
@@ -276,6 +319,11 @@ export function validateSmokeDataset(
       }
       if (entry.shortDescription && !provenanceKeys.has(`${entry.entityId}/localization/zh-CN/shortDescription`)) {
         error('MISSING_LOCALIZATION_PROVENANCE', `${entry.entityId} zh-CN shortDescription has no ValueProvenance`)
+      }
+    }
+    for (const entry of locale.evolutions.entries) {
+      if (!provenanceKeys.has(`${entry.entityId}/localization/zh-CN/conditionText`)) {
+        error('MISSING_LOCALIZATION_PROVENANCE', `${entry.entityId} zh-CN condition text has no ValueProvenance`)
       }
     }
     for (const value of valueProvenance.filter(item => item.fieldPath.startsWith('/localization/'))) {

@@ -46,6 +46,7 @@ import {
   type GrowthRateConflict,
 } from './growth-rate.ts'
 import { buildMoves, type MoveConflict, type QuarantinedMove } from './moves.ts'
+import { buildEvolutions, type EvolutionConflict } from './evolutions.ts'
 
 const STANDARD_TYPES = [
   ['bug', 'Bug'], ['dark', 'Dark'], ['dragon', 'Dragon'], ['electric', 'Electric'],
@@ -58,6 +59,8 @@ const STANDARD_TYPES = [
 const FORM_IDS = [
   'charizard', 'charizardmegax', 'charizardmegay', 'charizardgmax',
   'clefairy', 'growlithe', 'eevee', 'eeveestarter', 'shroomish', 'nincada',
+  'kadabra', 'alakazam', 'vaporeon', 'jolteon', 'flareon', 'espeon', 'umbreon',
+  'leafeon', 'glaceon', 'sylveon', 'milcery', 'alcremie',
   'rotom', 'rotomheat', 'rotomwash', 'rotomfrost', 'rotomfan', 'rotommow',
   'meowstic', 'meowsticf',
   'ragingbolt',
@@ -65,6 +68,8 @@ const FORM_IDS = [
 
 const SPECIES_IDS = [
   'charizard', 'clefairy', 'growlithe', 'eevee', 'shroomish', 'nincada',
+  'kadabra', 'alakazam', 'vaporeon', 'jolteon', 'flareon', 'espeon', 'umbreon',
+  'leafeon', 'glaceon', 'sylveon', 'milcery', 'alcremie',
   'rotom', 'meowstic', 'ragingbolt',
 ] as const
 const SLOT_ORDER = new Map([['0', 0], ['1', 1], ['H', 2], ['S', 3]])
@@ -86,6 +91,8 @@ export interface BuildArtifacts {
   quarantinedMoves: QuarantinedMove[]
   moveConflicts: MoveConflict[]
   moveMappingCounts: { automatic: number; ruleBased: number; manualException: number; unresolved: number }
+  evolutionConflicts: EvolutionConflict[]
+  evolutionMappingCounts: { automatic: number; ruleBased: number; manualException: number; unresolved: number }
   scopeNotes: string[]
 }
 
@@ -378,6 +385,7 @@ export async function buildSmokeArtifacts(
   const forms = buildForms(data, source)
   const localizationSource = await loadPokemonDatasetZhSource(source)
   const moveBuild = buildMoves(data, source, localizationSource)
+  const evolutionBuild = buildEvolutions(data, source, localizationSource)
   const dataset = SmokeDatasetSchema.parse({
     types: buildTypes(data),
     natures: buildNatures(data),
@@ -386,6 +394,8 @@ export async function buildSmokeArtifacts(
     abilities: buildAbilities(data, source, forms),
     growthRates: CANONICAL_GROWTH_RATES,
     moves: moveBuild.stableMoves,
+    appearances: evolutionBuild.appearances,
+    evolutions: evolutionBuild.evolutions,
   })
   const audit = provenance(dataset, source)
   const localization = buildLocalization(dataset, localizationSource)
@@ -398,13 +408,14 @@ export async function buildSmokeArtifacts(
   const resolvedLocalization: SmokeLocalization = {
     ...localization.localization,
     moves: { locale: 'zh-CN', entries: moveBuild.localizationEntries },
+    evolutions: { locale: 'zh-CN', entries: evolutionBuild.localizationEntries },
   }
   return {
     dataset: resolvedDataset,
     source,
-    identityMatches: [...audit.identityMatches, ...moveBuild.identityMatches]
+    identityMatches: [...audit.identityMatches, ...moveBuild.identityMatches, ...evolutionBuild.identityMatches]
       .sort((left, right) => left.entityId.localeCompare(right.entityId, 'en')),
-    valueProvenance: [...audit.valueProvenance, ...localization.valueProvenance, ...growthRates.valueProvenance, ...moveBuild.valueProvenance]
+    valueProvenance: [...audit.valueProvenance, ...localization.valueProvenance, ...growthRates.valueProvenance, ...moveBuild.valueProvenance, ...evolutionBuild.valueProvenance]
       .sort((left, right) => `${left.entityId}${left.fieldPath}`.localeCompare(`${right.entityId}${right.fieldPath}`, 'en')),
     localization: resolvedLocalization,
     formLocalizationMappings: localization.formMappings,
@@ -417,6 +428,8 @@ export async function buildSmokeArtifacts(
     quarantinedMoves: moveBuild.quarantinedMoves,
     moveConflicts: moveBuild.conflicts,
     moveMappingCounts: moveBuild.mappingCounts,
+    evolutionConflicts: evolutionBuild.conflicts,
+    evolutionMappingCounts: evolutionBuild.mappingCounts,
     scopeNotes: [
       'Stellar exists in the fixed TypeChart but is explicitly excluded from the 18-type smoke matrix.',
       'Non-attacking TypeChart keys such as brn, par, powder, and prankster are not emitted as Types.',
@@ -426,6 +439,7 @@ export async function buildSmokeArtifacts(
       'No converter cache layer is implemented in this slice; every run verifies and reads the pinned source.',
       'GrowthRate formulas and level 1-100 experience calculations are explicitly deferred.',
       'Move output is restricted to twelve identity fixtures; Future Nihil Light is quarantined and excluded from stable runtime data.',
+      'Evolution output is restricted to Eevee, Kadabra, and Milcery proof relationships; Alcremie appearance conditions remain partial where the fixed sources omit direction, duration, or time.',
     ],
   }
 }
@@ -462,9 +476,12 @@ export async function runSmokePipeline(options: {
     ['abilities.json', artifacts.dataset.abilities],
     ['growth-rates.json', artifacts.dataset.growthRates],
     ['moves.json', artifacts.dataset.moves],
+    ['appearances.json', artifacts.dataset.appearances],
+    ['evolutions.json', artifacts.dataset.evolutions],
     ['localization/zh-CN.core.json', artifacts.localization.core],
     ['localization/zh-CN.abilities.json', artifacts.localization.abilities],
     ['localization/zh-CN.moves.json', artifacts.localization.moves],
+    ['localization/zh-CN.evolutions.json', artifacts.localization.evolutions],
   ]
   for (const [path, value] of runtimeValues) await writeJson(join(runtimeRoot, path), value)
   const fileEntries = []
@@ -523,6 +540,17 @@ export async function runSmokePipeline(options: {
     conflicts: artifacts.moveConflicts,
     quarantine: artifacts.quarantinedMoves,
   })
+  await writeJson(join(outputRoot, 'reports', 'evolution-mapping.json'), {
+    schemaVersion: 1,
+    sourceCommits: {
+      pokemonShowdown: artifacts.source.commit,
+      pokemonDatasetZh: artifacts.source.localization.commit,
+    },
+    edgeCount: artifacts.dataset.evolutions.length,
+    appearanceCount: artifacts.dataset.appearances.length,
+    mappingCounts: artifacts.evolutionMappingCounts,
+    conflicts: artifacts.evolutionConflicts,
+  })
   const report = SmokeReportSchema.parse({
     schemaVersion: 1,
     sourceCommits: {
@@ -538,6 +566,8 @@ export async function runSmokePipeline(options: {
       abilities: artifacts.dataset.abilities.length,
       growthRates: artifacts.dataset.growthRates.length,
       moves: artifacts.dataset.moves.length,
+      appearances: artifacts.dataset.appearances.length,
+      evolutions: artifacts.dataset.evolutions.length,
     },
     scopeNotes: artifacts.scopeNotes,
     issues: validation.issues,

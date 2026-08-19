@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict'
 import { before, describe, test } from 'node:test'
-import type { SmokeDataset } from '../../../src/lib/data-model/smoke-schema.ts'
+import {
+  AppearanceSchema,
+  type EvolutionCondition,
+  type EvolutionEdge,
+  type SmokeDataset,
+} from '../../../src/lib/data-model/smoke-schema.ts'
 import {
   mapAbilityLocalizations,
   mapSpeciesLocalizations,
@@ -8,16 +13,20 @@ import {
 } from '../localization.ts'
 import { buildGrowthRates, CANONICAL_GROWTH_RATES, parseGrowthRate } from '../growth-rate.ts'
 import { assertUniqueMoveNumbers, parseChineseAccuracy, parseChineseNumeric, requireZhMoveCandidate } from '../moves.ts'
+import { assertUniqueEvolutionMappings, buildEvolutions } from '../evolutions.ts'
 import { buildSmokeArtifacts, makeNationalSpeciesId, type BuildArtifacts } from '../pipeline.ts'
 import { loadPokemonDatasetZhSource, type PokemonDatasetZhAdapterOutput } from '../pokemon-dataset-zh.ts'
 import { validateSmokeDataset } from '../validation.ts'
+import { loadShowdownSource, type ShowdownSourceData } from '../source.ts'
 
 let artifacts: BuildArtifacts
 let localizationSource: PokemonDatasetZhAdapterOutput
+let showdownData: ShowdownSourceData
 
 before(async () => {
   artifacts = await buildSmokeArtifacts()
   localizationSource = await loadPokemonDatasetZhSource(artifacts.source)
+  showdownData = await loadShowdownSource(artifacts.source)
 })
 
 function clonedDataset(): SmokeDataset {
@@ -46,7 +55,7 @@ describe('fixed Showdown smoke fixtures', () => {
       abilities: artifacts.dataset.abilities.length,
       growthRates: artifacts.dataset.growthRates.length,
       moves: artifacts.dataset.moves.length,
-    }, { types: 18, natures: 25, species: 9, forms: 19, abilities: 23, growthRates: 6, moves: 11 })
+    }, { types: 18, natures: 25, species: 21, forms: 31, abilities: 37, growthRates: 6, moves: 11 })
   })
 
   test('Charizard keeps base, both Mega Forms, and G-Max distinct', () => {
@@ -165,6 +174,151 @@ describe('Move identity and core mechanics fixtures', () => {
   })
 })
 
+describe('EvolutionEdge and Appearance fixtures', () => {
+  const edge = (methodToken: string) => artifacts.dataset.evolutions.find(candidate => candidate.methodToken === methodToken)!
+
+  test('Eevee base Form has exactly eight independent branches', () => {
+    const edges = artifacts.dataset.evolutions.filter(candidate => candidate.source.kind === 'form' && candidate.source.id === 'form:0133:base')
+    assert.equal(edges.length, 8)
+    assert.equal(new Set(edges.map(candidate => candidate.target.id)).size, 8)
+  })
+
+  test('Partner Eevee inherits no evolution edges', () => {
+    assert.equal(artifacts.dataset.evolutions.filter(candidate => candidate.source.id === 'form:0133:partner').length, 0)
+  })
+
+  test('Water Stone is a structured item condition', () => {
+    assert.ok(edge('water-stone').conditions.some(condition => condition.kind === 'item' && condition.itemId === 'item:water-stone'))
+  })
+
+  test('Espeon uses friendship AND day conditions', () => {
+    const conditions = edge('friendship-day').conditions
+    assert.ok(conditions.some(condition => condition.kind === 'friendship'))
+    assert.ok(conditions.some(condition => condition.kind === 'time' && condition.value === 'day'))
+  })
+
+  test('Umbreon uses friendship AND night conditions', () => {
+    const conditions = edge('friendship-night').conditions
+    assert.ok(conditions.some(condition => condition.kind === 'friendship'))
+    assert.ok(conditions.some(condition => condition.kind === 'time' && condition.value === 'night'))
+  })
+
+  test('Sylveon keeps the Fairy move-known branch', () => {
+    assert.ok(edge('affection-fairy-move').conditions.some(condition => condition.kind === 'move-known' && condition.typeId === 'type:fairy'))
+  })
+
+  test('Kadabra to Alakazam selects trade as canonical mechanics', () => {
+    const trade = edge('trade')
+    assert.deepEqual(trade.source, { kind: 'form', id: 'form:0064:base' })
+    assert.deepEqual(trade.target, { kind: 'form', id: 'form:0065:base' })
+    assert.ok(trade.conditions.some(condition => condition.kind === 'trade'))
+  })
+
+  test('Kadabra Linking Cord alternative stays raw instead of becoming trade AND item', () => {
+    const trade = edge('trade')
+    assert.equal(trade.conditions.some(condition => condition.kind === 'item' || condition.kind === 'held-item'), false)
+    assert.match(artifacts.localization.evolutions.entries.find(entry => entry.entityId === trade.evolutionId)!.conditionText, /联系绳/)
+    assert.ok(artifacts.evolutionConflicts.some(conflict => conflict.evolutionId === trade.evolutionId && conflict.severity === 'warning'))
+  })
+
+  test('Milcery edges retain held-item, spin, raw fallback, and partial status', () => {
+    const edges = artifacts.dataset.evolutions.filter(candidate => candidate.source.id === 'form:0868:base')
+    assert.equal(edges.length, 3)
+    assert.ok(edges.every(candidate => candidate.dataStatus === 'partial'
+      && candidate.conditions.some(condition => condition.kind === 'held-item')
+      && candidate.conditions.some(condition => condition.kind === 'spin' && condition.direction === 'unknown')
+      && candidate.conditions.some(condition => condition.kind === 'raw')))
+  })
+
+  test('Milcery resultAppearanceId resolves to one of three proof Appearances', () => {
+    assert.equal(artifacts.dataset.appearances.length, 3)
+    const appearanceIds = new Set(artifacts.dataset.appearances.map(appearance => appearance.appearanceId))
+    assert.ok(artifacts.dataset.evolutions.filter(candidate => candidate.source.id === 'form:0868:base')
+      .every(candidate => candidate.resultAppearanceId !== null && appearanceIds.has(candidate.resultAppearanceId)))
+  })
+
+  test('Showdown source/target mismatch is blocking', () => {
+    const data: ShowdownSourceData = {
+      ...showdownData,
+      pokedex: {
+        ...showdownData.pokedex,
+        vaporeon: {
+          ...(showdownData.pokedex.vaporeon as Record<string, unknown>),
+          prevo: 'Pikachu',
+        },
+      },
+    }
+    assert.throws(() => buildEvolutions(data, artifacts.source, localizationSource), /EVOLUTION_GRAPH_TARGET_MISMATCH/)
+  })
+
+  test('orphan evolution target is rejected', () => {
+    const dataset = clonedDataset()
+    dataset.evolutions[0].target = { kind: 'form', id: 'form:9999:base' }
+    assert.throws(() => validate(dataset), /ORPHAN_EVOLUTION_TARGET/)
+  })
+
+  test('duplicate evolution ID is rejected', () => {
+    const dataset = clonedDataset()
+    dataset.evolutions.push(structuredClone(dataset.evolutions[0]))
+    assert.throws(() => validate(dataset), /DUPLICATE_ID|DUPLICATE_EVOLUTION_ID/)
+  })
+
+  test('same source target and method cannot be disguised as an OR alternative', () => {
+    const edges = structuredClone(artifacts.dataset.evolutions)
+    const duplicateMethod = structuredClone(edges[0])
+    duplicateMethod.evolutionId = 'evolution:0064-base:0065-base:trade-alternative'
+    assert.throws(() => assertUniqueEvolutionMappings([...edges, duplicateMethod]), /NON_UNIQUE_EVOLUTION_MAPPING/)
+  })
+
+  test('invalid resultAppearanceId is rejected', () => {
+    const dataset = clonedDataset()
+    dataset.evolutions.find(candidate => candidate.resultAppearanceId)!.resultAppearanceId = 'appearance:0869:mint-cream:star-sweet'
+    assert.throws(() => validate(dataset), /ORPHAN_RESULT_APPEARANCE/)
+  })
+
+  test('Appearance schema rejects battle mechanics fields', () => {
+    const appearance = structuredClone(artifacts.dataset.appearances[0]) as unknown as Record<string, unknown>
+    appearance.baseStats = { hp: 1 }
+    assert.throws(() => AppearanceSchema.parse(appearance))
+  })
+
+  test('missing raw text produces partial data without discarding structured mechanics', () => {
+    const source = structuredClone(localizationSource)
+    source.evolutions = source.evolutions.filter(candidate => !(candidate.documentNationalDexNumber === 133 && candidate.targetNameZh === '水伊布'))
+    const result = buildEvolutions(showdownData, artifacts.source, source)
+    const water = result.evolutions.find(candidate => candidate.methodToken === 'water-stone')!
+    assert.equal(water.dataStatus, 'partial')
+    assert.equal(water.conditionTextKey, null)
+    assert.ok(water.conditions.some(condition => condition.kind === 'item'))
+    assert.equal(water.conditions.some(condition => condition.kind === 'raw'), false)
+  })
+
+  test('structured mechanics remain selected when localized raw text differs', () => {
+    const trade = edge('trade')
+    assert.ok(trade.conditions.some(condition => condition.kind === 'trade'))
+    assert.ok(artifacts.evolutionConflicts.some(conflict => conflict.resolution === 'structured-selected-raw-preserved'))
+  })
+
+  test('Evolution and Appearance provenance is complete and resolvable', () => {
+    const references = new Set(artifacts.source.sourceReferences.map(reference => reference.sourceReferenceId))
+    const values = artifacts.valueProvenance.filter(value => value.entityId.startsWith('evolution:') || value.entityId.startsWith('appearance:'))
+    assert.ok(values.length > 0)
+    assert.ok(values.every(value => references.has(value.sourceReferenceId)))
+    const keys = new Set(values.map(value => `${value.entityId}${value.fieldPath}`))
+    assert.ok(artifacts.dataset.evolutions.every(candidate => [
+      '/evolutionId', '/source', '/target', '/methodToken', '/conditionTextKey',
+    ].every(field => keys.has(`${candidate.evolutionId}${field}`))
+      && candidate.conditions.every((_, index) => keys.has(`${candidate.evolutionId}/conditions/${index}`))))
+    const conditionPointer = (candidate: EvolutionEdge, kind: EvolutionCondition['kind']) => {
+      const index = candidate.conditions.findIndex(condition => condition.kind === kind)
+      return values.find(value => value.entityId === candidate.evolutionId && value.fieldPath === `/conditions/${index}`)?.sourcePointer
+    }
+    assert.equal(conditionPointer(edge('water-stone'), 'item'), '/vaporeon/evoItem')
+    assert.equal(conditionPointer(edge('friendship-day'), 'time'), '/espeon/evoCondition')
+    assert.equal(conditionPointer(edge('trade'), 'trade'), '/alakazam/evoType')
+  })
+})
+
 describe('pokemon-dataset-zh localization fixtures', () => {
   test('all fixture Species map by number and validated English name', () => {
     assert.deepEqual(
@@ -175,11 +329,23 @@ describe('pokemon-dataset-zh localization fixtures', () => {
         ['species:0006', '喷火龙'],
         ['species:0035', '皮皮'],
         ['species:0058', '卡蒂狗'],
+        ['species:0064', '勇基拉'],
+        ['species:0065', '胡地'],
         ['species:0133', '伊布'],
+        ['species:0134', '水伊布'],
+        ['species:0135', '雷伊布'],
+        ['species:0136', '火伊布'],
+        ['species:0196', '太阳伊布'],
+        ['species:0197', '月亮伊布'],
         ['species:0285', '蘑蘑菇'],
         ['species:0290', '土居忍士'],
+        ['species:0470', '叶伊布'],
+        ['species:0471', '冰伊布'],
         ['species:0479', '洛托姆'],
         ['species:0678', '超能妙喵'],
+        ['species:0700', '仙子伊布'],
+        ['species:0868', '小仙奶'],
+        ['species:0869', '霜奶仙'],
         ['species:1021', '猛雷鼓'],
       ],
     )
@@ -199,7 +365,7 @@ describe('pokemon-dataset-zh localization fixtures', () => {
 
   test('all fixture Abilities map by official number and English name', () => {
     const mappings = mapAbilityLocalizations(artifacts.dataset, localizationSource.abilities)
-    assert.equal(mappings.length, 23)
+    assert.equal(mappings.length, 37)
     assert.deepEqual(mappings.map(mapping => mapping.entry.entityId), artifacts.dataset.abilities.map(ability => ability.abilityId))
   })
 
@@ -207,7 +373,7 @@ describe('pokemon-dataset-zh localization fixtures', () => {
     const candidates = structuredClone(localizationSource.abilities)
     candidates[1].chineseName = candidates[0].chineseName
     const mappings = mapAbilityLocalizations(artifacts.dataset, candidates)
-    assert.equal(new Set(mappings.map(mapping => mapping.entry.entityId)).size, 23)
+    assert.equal(new Set(mappings.map(mapping => mapping.entry.entityId)).size, 37)
   })
 
   test('non-unique Form mechanics match cannot pass as automatic', () => {
@@ -247,9 +413,9 @@ describe('pokemon-dataset-zh localization fixtures', () => {
       automatic: artifacts.formLocalizationMappings.filter(mapping => mapping.mappingClass === 'automatic').length,
       ruleBased: artifacts.formLocalizationMappings.filter(mapping => mapping.mappingClass === 'rule-based').length,
       unresolved: artifacts.formLocalizationMappings.filter(mapping => mapping.mappingClass === 'unresolved').length,
-    }, { automatic: 17, ruleBased: 1, unresolved: 1 })
+    }, { automatic: 29, ruleBased: 1, unresolved: 1 })
     assert.equal(artifacts.localizationMechanicsConflicts.length, 0)
-    assert.equal(artifacts.localizationProvenanceCount, 83)
+    assert.equal(artifacts.localizationProvenanceCount, 135)
     assert.doesNotThrow(() => validate(artifacts.dataset))
   })
 })
@@ -287,8 +453,8 @@ describe('GrowthRate canonical mapping fixtures', () => {
     })
   })
 
-  test('all nine fixture Species receive their default GrowthRate', () => {
-    assert.equal(artifacts.growthRateAssignments.filter(assignment => assignment.field === '/growthRate').length, 9)
+  test('all fixture Species receive their default GrowthRate', () => {
+    assert.equal(artifacts.growthRateAssignments.filter(assignment => assignment.field === '/growthRate').length, 21)
     assert.ok(artifacts.dataset.species.every(species => species.growthRate.status === 'resolved'
       || species.speciesId === 'species:1021'))
   })
@@ -320,7 +486,7 @@ describe('GrowthRate canonical mapping fixtures', () => {
 
   test('every selected GrowthRate field has an exact source pointer and selected provenance', () => {
     const growthProvenance = artifacts.valueProvenance.filter(value => value.fieldPath.startsWith('/growthRate'))
-    assert.equal(growthProvenance.length, 20)
+    assert.equal(growthProvenance.length, 44)
     assert.ok(growthProvenance.every(value => value.selected && value.sourcePointer?.endsWith('/experience_100')))
   })
 

@@ -22,6 +22,16 @@ const PokemonDocumentSchema = z.object({
   name_en: z.string().min(1),
   pokedex_id: z.string().regex(/^\d{4}$/),
   forms: z.array(PokemonFormSchema).min(1),
+  evolution_chains: z.array(z.array(z.object({
+    name: z.string().min(1),
+    text: z.string().nullable(),
+    from: z.string().nullable(),
+  }).passthrough()).min(1)).optional(),
+  home_images: z.array(z.object({
+    name: z.string().min(1),
+    image: z.string().min(1).optional(),
+    shiny: z.string().min(1).optional(),
+  }).passthrough()).optional(),
 }).passthrough()
 
 const AbilityListEntrySchema = z.object({
@@ -92,26 +102,57 @@ export interface ZhMoveCandidate {
   sourcePointer: string
 }
 
+export interface ZhEvolutionCandidate {
+  documentNationalDexNumber: number
+  sourceNameZh: string
+  targetNameZh: string
+  rawText: string
+  sourcePath: string
+  sourceReferenceId: string
+  sourcePointer: string
+}
+
+export interface ZhAppearanceCandidate {
+  nameZh: string
+  sourcePath: string
+  sourceReferenceId: string
+  sourcePointer: string
+}
+
 export interface PokemonDatasetZhAdapterOutput {
   species: ZhSpeciesLocalizationCandidate[]
   abilities: ZhAbilityLocalizationCandidate[]
   moves: ZhMoveCandidate[]
+  evolutions: ZhEvolutionCandidate[]
+  appearances: ZhAppearanceCandidate[]
 }
 
 const POKEMON_PATHS = [
   'data/pokemon/0006-喷火龙.json',
   'data/pokemon/0035-皮皮.json',
+  'data/pokemon/0064-勇基拉.json',
+  'data/pokemon/0065-胡地.json',
   'data/pokemon/0058-卡蒂狗.json',
   'data/pokemon/0133-伊布.json',
+  'data/pokemon/0134-水伊布.json',
+  'data/pokemon/0135-雷伊布.json',
+  'data/pokemon/0136-火伊布.json',
+  'data/pokemon/0196-太阳伊布.json',
+  'data/pokemon/0197-月亮伊布.json',
   'data/pokemon/0285-蘑蘑菇.json',
   'data/pokemon/0290-土居忍士.json',
   'data/pokemon/0479-洛托姆.json',
+  'data/pokemon/0470-叶伊布.json',
+  'data/pokemon/0471-冰伊布.json',
   'data/pokemon/0678-超能妙喵.json',
+  'data/pokemon/0700-仙子伊布.json',
+  'data/pokemon/0868-小仙奶.json',
+  'data/pokemon/0869-霜奶仙.json',
   'data/pokemon/1021-猛雷鼓.json',
 ] as const
 
 const SMOKE_ABILITY_NUMBERS = new Set([
-  14, 18, 22, 26, 27, 50, 51, 56, 66, 70, 90, 91, 94, 95, 98, 107, 132, 151, 154, 158, 172, 181, 281,
+  10, 11, 14, 18, 22, 26, 27, 28, 34, 39, 50, 51, 56, 62, 66, 70, 81, 90, 91, 93, 94, 95, 98, 102, 107, 115, 132, 151, 154, 156, 158, 165, 172, 175, 181, 182, 281,
 ])
 const SMOKE_MOVE_NAMES = new Set([
   'Pound', 'Swords Dance', 'Swift', 'Tri Attack', 'Triple Kick',
@@ -131,6 +172,8 @@ function sourceReferenceId(source: VerifiedSource, path: string): string {
 
 export async function loadPokemonDatasetZhSource(source: VerifiedSource): Promise<PokemonDatasetZhAdapterOutput> {
   const species: ZhSpeciesLocalizationCandidate[] = []
+  const evolutions: ZhEvolutionCandidate[] = []
+  const appearances: ZhAppearanceCandidate[] = []
   for (const sourcePath of POKEMON_PATHS) {
     const raw = PokemonDocumentSchema.parse(await readJson(join(source.localization.cachePath, ...sourcePath.split('/'))))
     species.push({
@@ -149,6 +192,36 @@ export async function loadPokemonDatasetZhSource(source: VerifiedSource): Promis
       sourceReferenceId: sourceReferenceId(source, sourcePath),
       sourcePointer: '/name_zh',
     })
+    for (const [chainIndex, chain] of (raw.evolution_chains ?? []).entries()) {
+      for (const [nodeIndex, node] of chain.entries()) {
+        if (!node.from || !node.text) continue
+        evolutions.push({
+          documentNationalDexNumber: Number(raw.pokedex_id),
+          sourceNameZh: node.from,
+          targetNameZh: node.name,
+          rawText: node.text,
+          sourcePath,
+          sourceReferenceId: sourceReferenceId(source, sourcePath),
+          sourcePointer: `/evolution_chains/${chainIndex}/${nodeIndex}/text`,
+        })
+      }
+    }
+    if (raw.pokedex_id === '0869') {
+      const selectedNames = new Set([
+        '霜奶仙-奶香香草-草莓糖饰',
+        '霜奶仙-奶香红钻-草莓糖饰',
+        '霜奶仙-奶香抹茶-草莓糖饰',
+      ])
+      for (const [index, image] of (raw.home_images ?? []).entries()) {
+        if (!selectedNames.has(image.name)) continue
+        appearances.push({
+          nameZh: image.name,
+          sourcePath,
+          sourceReferenceId: sourceReferenceId(source, sourcePath),
+          sourcePointer: `/home_images/${index}/name`,
+        })
+      }
+    }
   }
 
   const abilityPath = 'data/ability_list.json'
@@ -192,5 +265,7 @@ export async function loadPokemonDatasetZhSource(source: VerifiedSource): Promis
     species: species.sort((left, right) => left.nationalDexNumber - right.nationalDexNumber),
     abilities: abilities.sort((left, right) => left.officialNumber - right.officialNumber),
     moves: moves.sort((left, right) => left.englishName.localeCompare(right.englishName, 'en')),
+    evolutions: evolutions.sort((left, right) => `${left.sourceNameZh}:${left.targetNameZh}`.localeCompare(`${right.sourceNameZh}:${right.targetNameZh}`, 'zh-CN')),
+    appearances: appearances.sort((left, right) => left.nameZh.localeCompare(right.nameZh, 'zh-CN')),
   }
 }

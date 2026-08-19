@@ -41,7 +41,7 @@ const SourceLockSchema = z.object({
 }).strict()
 
 const RegistryEntitySchema = z.object({
-  kind: z.enum(['species', 'form', 'ability', 'move']),
+  kind: z.enum(['species', 'form', 'ability', 'move', 'appearance', 'evolution']),
   projectId: z.string().min(1),
   anchor: z.record(z.string(), z.union([z.string(), z.number()])),
   showdownId: z.string().regex(/^[a-z0-9]+$/),
@@ -82,6 +82,12 @@ const RawPokedexRecordSchema = z.object({
   requiredItem: z.string().min(1).optional(),
   requiredItems: z.array(z.string().min(1)).optional(),
   requiredAbility: z.string().min(1).optional(),
+  prevo: z.string().min(1).optional(),
+  evos: z.array(z.string().min(1)).optional(),
+  evoType: z.string().min(1).optional(),
+  evoItem: z.string().min(1).optional(),
+  evoCondition: z.string().min(1).optional(),
+  evoLevel: z.number().int().positive().optional(),
 }).passthrough()
 
 const RawAbilityRecordSchema = z.object({

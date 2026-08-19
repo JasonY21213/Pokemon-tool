@@ -293,6 +293,7 @@ export function buildLocalization(
       entries: abilities.map(mapping => mapping.entry).sort((left, right) => left.entityId.localeCompare(right.entityId, 'en')),
     }),
     moves: { locale: 'zh-CN', entries: [] },
+    evolutions: { locale: 'zh-CN', entries: [] },
   })
   return {
     localization,

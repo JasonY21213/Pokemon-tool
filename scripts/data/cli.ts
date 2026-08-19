@@ -28,5 +28,7 @@ console.log(JSON.stringify({
     abilities: result.dataset.abilities.length,
     growthRates: result.dataset.growthRates.length,
     moves: result.dataset.moves.length,
+    appearances: result.dataset.appearances.length,
+    evolutions: result.dataset.evolutions.length,
   },
 }, null, 2))
