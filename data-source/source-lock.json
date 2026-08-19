@@ -25,8 +25,14 @@
       "selectedPaths": [
         { "path": "data/ability_list.json", "sha256": "135430faed1b9041821c27bbb09a6f58e1922c91bfd285595d7cd35daa2a99e7" },
         { "path": "data/pokemon/0006-喷火龙.json", "sha256": "1934583863c2a9d70b00f4f288c70b6ab9f9f3c3062c05e7aeb92be2ef10dc52" },
+        { "path": "data/pokemon/0035-皮皮.json", "sha256": "5883b1636478eb88c44681b5aefe2672bcd7a899af3c12c46da8cb53264de465" },
+        { "path": "data/pokemon/0058-卡蒂狗.json", "sha256": "5a1d78a9e6cd521395c9b2a41e4fa056716d13dee2b6fd5f42e2df8b72efbf4b" },
+        { "path": "data/pokemon/0133-伊布.json", "sha256": "b928fc794b908576b3d114f6d623e6c9671082c2bb837812933247bbd5204d4a" },
+        { "path": "data/pokemon/0285-蘑蘑菇.json", "sha256": "94fc4cee4c287fe163ee90664e364249cac72daa040d98fe8adcec5fad848cb1" },
+        { "path": "data/pokemon/0290-土居忍士.json", "sha256": "a77985af8b10c30fd246dbee60ca0c39c1984515ff4152400b85ddb760ae5972" },
         { "path": "data/pokemon/0479-洛托姆.json", "sha256": "849506374efd2034f5230423930e661caa616c353c6198db63f7ac9a3b8c7ff3" },
-        { "path": "data/pokemon/0678-超能妙喵.json", "sha256": "d1bb0e401dae668031991101a8dcf40245c813386d8afe648eedb18c8c98fc5f" }
+        { "path": "data/pokemon/0678-超能妙喵.json", "sha256": "d1bb0e401dae668031991101a8dcf40245c813386d8afe648eedb18c8c98fc5f" },
+        { "path": "data/pokemon/1021-猛雷鼓.json", "sha256": "2b77709f5baca4a476df32fd6bc4edffc8b02b0fa9e13158b9f24528a4196723" }
       ]
     }
   ]

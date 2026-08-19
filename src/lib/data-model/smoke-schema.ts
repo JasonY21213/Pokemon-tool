@@ -7,12 +7,21 @@ export const FormIdSchema = z.string().regex(/^form:\d{4}:[a-z0-9-]+$/)
 export const AbilityIdSchema = z.string().regex(/^ability:\d{4}$/)
 export const TypeIdSchema = z.string().regex(/^type:[a-z]+$/)
 export const NatureIdSchema = z.string().regex(/^nature:[a-z]+$/)
+export const GrowthRateIdSchema = z.enum([
+  'growth:erratic',
+  'growth:fast',
+  'growth:medium-fast',
+  'growth:medium-slow',
+  'growth:slow',
+  'growth:fluctuating',
+])
 export const EntityIdSchema = z.union([
   SpeciesIdSchema,
   FormIdSchema,
   AbilityIdSchema,
   TypeIdSchema,
   NatureIdSchema,
+  GrowthRateIdSchema,
 ])
 
 export const StatIdSchema = z.enum(['hp', 'atk', 'def', 'spa', 'spd', 'spe'])
@@ -77,6 +86,25 @@ export const AbilitySchema = z.object({
   dataStatus: DataStatusSchema,
 }).strict()
 
+export const GrowthRateResolutionSchema = z.object({
+  id: GrowthRateIdSchema.nullable(),
+  status: z.enum(['resolved', 'unresolved']),
+}).strict().superRefine((value, context) => {
+  if ((value.status === 'resolved') !== (value.id !== null)) {
+    context.addIssue({
+      code: 'custom',
+      message: 'resolved GrowthRate requires an id; unresolved GrowthRate requires null',
+    })
+  }
+})
+
+export const GrowthRateSchema = z.object({
+  growthRateId: GrowthRateIdSchema,
+  canonicalName: z.enum(['erratic', 'fast', 'medium-fast', 'medium-slow', 'slow', 'fluctuating']),
+  formulaId: z.enum(['erratic', 'fast', 'mediumFast', 'mediumSlow', 'slow', 'fluctuating']),
+  level100Total: z.number().int().positive(),
+}).strict()
+
 export const SpeciesSchema = z.object({
   speciesId: SpeciesIdSchema,
   nationalDexNumber: z.number().int().positive(),
@@ -84,6 +112,7 @@ export const SpeciesSchema = z.object({
   canonicalName: CanonicalNameSchema,
   generation: z.number().int().positive(),
   defaultFormId: FormIdSchema,
+  growthRate: GrowthRateResolutionSchema,
   availability: AvailabilitySchema,
   dataStatus: DataStatusSchema,
 }).strict()
@@ -106,6 +135,7 @@ export const FormSchema = z.object({
   changesFromFormIds: z.array(FormIdSchema),
   requiredItemNames: z.array(z.string().min(1)),
   requiredAbilityId: AbilityIdSchema.nullable(),
+  growthRateOverride: GrowthRateResolutionSchema.nullable(),
   availability: AvailabilitySchema,
   dataStatus: DataStatusSchema,
 }).strict()
@@ -170,6 +200,7 @@ export const SmokeDatasetSchema = z.object({
   species: z.array(SpeciesSchema),
   forms: z.array(FormSchema),
   abilities: z.array(AbilitySchema),
+  growthRates: z.array(GrowthRateSchema),
 }).strict()
 
 export const ValidationIssueSchema = z.object({
@@ -191,6 +222,7 @@ export const SmokeReportSchema = z.object({
     species: z.number().int().nonnegative(),
     forms: z.number().int().nonnegative(),
     abilities: z.number().int().nonnegative(),
+    growthRates: z.number().int().nonnegative(),
   }).strict(),
   scopeNotes: z.array(z.string()),
   issues: z.array(ValidationIssueSchema),
@@ -213,6 +245,9 @@ export type Availability = z.infer<typeof AvailabilitySchema>
 export type TypeEntity = z.infer<typeof TypeSchema>
 export type Nature = z.infer<typeof NatureSchema>
 export type Ability = z.infer<typeof AbilitySchema>
+export type GrowthRate = z.infer<typeof GrowthRateSchema>
+export type GrowthRateId = z.infer<typeof GrowthRateIdSchema>
+export type GrowthRateResolution = z.infer<typeof GrowthRateResolutionSchema>
 export type Species = z.infer<typeof SpeciesSchema>
 export type Form = z.infer<typeof FormSchema>
 export type SourceReference = z.infer<typeof SourceReferenceSchema>

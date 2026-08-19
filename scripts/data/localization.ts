@@ -42,9 +42,12 @@ export interface LocalizationBuildResult {
 }
 
 const ZH_TYPE_IDS = new Map<string, string>([
-  ['火', 'type:fire'], ['飞行', 'type:flying'], ['龙', 'type:dragon'],
-  ['电', 'type:electric'], ['幽灵', 'type:ghost'], ['水', 'type:water'],
-  ['冰', 'type:ice'], ['草', 'type:grass'], ['超能力', 'type:psychic'],
+  ['一般', 'type:normal'], ['格斗', 'type:fighting'], ['飞行', 'type:flying'],
+  ['毒', 'type:poison'], ['地面', 'type:ground'], ['岩石', 'type:rock'],
+  ['虫', 'type:bug'], ['幽灵', 'type:ghost'], ['钢', 'type:steel'],
+  ['火', 'type:fire'], ['水', 'type:water'], ['草', 'type:grass'],
+  ['电', 'type:electric'], ['超能力', 'type:psychic'], ['冰', 'type:ice'],
+  ['龙', 'type:dragon'], ['恶', 'type:dark'], ['妖精', 'type:fairy'],
 ])
 
 function normalizedEnglish(value: string): string {

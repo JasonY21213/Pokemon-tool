@@ -42,6 +42,7 @@ export function validateSmokeDataset(
   const dataset = SmokeDatasetSchema.parse(input)
   const issues: ValidationIssue[] = []
   const error = (code: string, message: string) => issues.push({ code, severity: 'error', message })
+  const warning = (code: string, message: string) => issues.push({ code, severity: 'warning', message })
 
   const allEntityIds = [
     ...dataset.types.map(entity => entity.typeId),
@@ -54,11 +55,36 @@ export function validateSmokeDataset(
   for (const number of duplicateValues(dataset.abilities.map(ability => String(ability.officialNumber)))) {
     error('DUPLICATE_ABILITY_NUMBER', `Ability official number occurs more than once: ${number}`)
   }
+  for (const id of duplicateValues(dataset.growthRates.map(growthRate => growthRate.growthRateId))) {
+    error('DUPLICATE_GROWTH_RATE_ID', `GrowthRate ID occurs more than once: ${id}`)
+  }
+
+  const expectedGrowthRates = new Map([
+    ['growth:erratic', 600_000],
+    ['growth:fast', 800_000],
+    ['growth:medium-fast', 1_000_000],
+    ['growth:medium-slow', 1_059_860],
+    ['growth:slow', 1_250_000],
+    ['growth:fluctuating', 1_640_000],
+  ])
+  if (dataset.growthRates.length !== expectedGrowthRates.size) {
+    error('GROWTH_RATE_COUNT', `Expected six canonical GrowthRates, received ${dataset.growthRates.length}`)
+  }
+  for (const [id, total] of expectedGrowthRates) {
+    const growthRate = dataset.growthRates.find(candidate => candidate.growthRateId === id)
+    if (!growthRate || growthRate.level100Total !== total) {
+      error('GROWTH_RATE_TOTAL', `${id} must have Lv.100 total ${total}`)
+    }
+  }
+  for (const total of duplicateValues(dataset.growthRates.map(growthRate => String(growthRate.level100Total)))) {
+    error('DUPLICATE_GROWTH_RATE_TOTAL', `GrowthRate Lv.100 total occurs more than once: ${total}`)
+  }
 
   const speciesIds = new Set(dataset.species.map(entity => entity.speciesId))
   const formIds = new Set(dataset.forms.map(entity => entity.formId))
   const abilityIds = new Set(dataset.abilities.map(entity => entity.abilityId))
   const typeIds = new Set(dataset.types.map(entity => entity.typeId))
+  const growthRateIds = new Set(dataset.growthRates.map(entity => entity.growthRateId))
   for (const species of dataset.species) {
     if (species.nationalDexNumber <= 0) error('NON_POSITIVE_NATIONAL_NUMBER', `${species.speciesId} has an invalid national number`)
     const defaultForm = dataset.forms.find(form => form.formId === species.defaultFormId)
@@ -67,6 +93,12 @@ export function validateSmokeDataset(
     }
     const baseForms = dataset.forms.filter(form => form.speciesId === species.speciesId && form.formKind === 'base')
     if (baseForms.length !== 1) error('NON_UNIQUE_BASE_FORM', `${species.speciesId} has ${baseForms.length} base Forms`)
+    if (species.growthRate.status === 'resolved' && species.growthRate.id && !growthRateIds.has(species.growthRate.id)) {
+      error('ORPHAN_GROWTH_RATE', `${species.speciesId} references ${species.growthRate.id}`)
+    }
+    if (species.growthRate.status === 'unresolved') {
+      warning('EXPECTED_UNRESOLVED_GROWTH_RATE', `${species.speciesId} GrowthRate remains unresolved by source evidence`)
+    }
   }
   for (const form of dataset.forms) {
     if (!speciesIds.has(form.speciesId)) error('ORPHAN_SPECIES_REFERENCE', `${form.formId} references ${form.speciesId}`)
@@ -84,6 +116,13 @@ export function validateSmokeDataset(
     }
     if (form.requiredAbilityId && !abilityIds.has(form.requiredAbilityId)) {
       error('ORPHAN_REQUIRED_ABILITY', `${form.formId} requires ${form.requiredAbilityId}`)
+    }
+    if (form.growthRateOverride?.id && !growthRateIds.has(form.growthRateOverride.id)) {
+      error('ORPHAN_GROWTH_RATE', `${form.formId} references ${form.growthRateOverride.id}`)
+    }
+    const owner = dataset.species.find(species => species.speciesId === form.speciesId)
+    if (form.growthRateOverride && owner && sameValue(form.growthRateOverride, owner.growthRate)) {
+      error('REDUNDANT_GROWTH_RATE_OVERRIDE', `${form.formId} repeats its Species default GrowthRate`)
     }
   }
   for (const showdownId of duplicateValues(dataset.forms.map(form => form.showdownId))) {
@@ -163,7 +202,7 @@ export function validateSmokeDataset(
   const requiredFields = new Map<string, string[]>([
     ['type', ['/canonicalName/en', '/damageTaken']],
     ['nature', ['/canonicalName/en', '/plusStat', '/minusStat', '/neutral']],
-    ['species', ['/speciesId', '/nationalDexNumber', '/canonicalName/en', '/defaultFormId', '/generation']],
+    ['species', ['/speciesId', '/nationalDexNumber', '/canonicalName/en', '/defaultFormId', '/generation', '/growthRate/id', '/growthRate/status']],
     ['form', ['/formId', '/speciesId', '/canonicalName/en', '/types', '/baseStats', '/abilities', '/generation']],
     ['ability', ['/abilityId', '/officialNumber', '/canonicalName/en', '/generation']],
   ])
@@ -171,6 +210,19 @@ export function validateSmokeDataset(
     const kind = entityId.slice(0, entityId.indexOf(':'))
     for (const field of requiredFields.get(kind) ?? []) {
       if (!provenanceKeys.has(`${entityId}${field}`)) error('MISSING_VALUE_PROVENANCE', `${entityId}${field} has no ValueProvenance`)
+    }
+  }
+  for (const form of dataset.forms.filter(candidate => candidate.growthRateOverride !== null)) {
+    for (const field of ['/growthRateOverride/id', '/growthRateOverride/status']) {
+      if (!provenanceKeys.has(`${form.formId}${field}`)) {
+        error('MISSING_GROWTH_RATE_PROVENANCE', `${form.formId}${field} has no ValueProvenance`)
+      }
+    }
+  }
+  for (const value of valueProvenance.filter(item => item.fieldPath.startsWith('/growthRate'))) {
+    if (!value.selected) error('UNSELECTED_GROWTH_RATE_PROVENANCE', `${value.entityId}${value.fieldPath} is not selected`)
+    if (!value.sourcePointer?.endsWith('/experience_100')) {
+      error('MISSING_GROWTH_RATE_SOURCE_POINTER', `${value.entityId}${value.fieldPath} lacks an experience_100 locator`)
     }
   }
 

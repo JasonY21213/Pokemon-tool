@@ -39,6 +39,12 @@ import {
 import { validateSmokeDataset } from './validation.ts'
 import { buildLocalization, type FormLocalizationMapping, type LocalizationConflict } from './localization.ts'
 import { loadPokemonDatasetZhSource } from './pokemon-dataset-zh.ts'
+import {
+  buildGrowthRates,
+  CANONICAL_GROWTH_RATES,
+  type GrowthRateAssignmentAudit,
+  type GrowthRateConflict,
+} from './growth-rate.ts'
 
 const STANDARD_TYPES = [
   ['bug', 'Bug'], ['dark', 'Dark'], ['dragon', 'Dragon'], ['electric', 'Electric'],
@@ -50,11 +56,16 @@ const STANDARD_TYPES = [
 
 const FORM_IDS = [
   'charizard', 'charizardmegax', 'charizardmegay', 'charizardgmax',
+  'clefairy', 'growlithe', 'eevee', 'eeveestarter', 'shroomish', 'nincada',
   'rotom', 'rotomheat', 'rotomwash', 'rotomfrost', 'rotomfan', 'rotommow',
   'meowstic', 'meowsticf',
+  'ragingbolt',
 ] as const
 
-const SPECIES_IDS = ['charizard', 'rotom', 'meowstic'] as const
+const SPECIES_IDS = [
+  'charizard', 'clefairy', 'growlithe', 'eevee', 'shroomish', 'nincada',
+  'rotom', 'meowstic', 'ragingbolt',
+] as const
 const SLOT_ORDER = new Map([['0', 0], ['1', 1], ['H', 2], ['S', 3]])
 const projectRoot = getProjectRoot()
 
@@ -67,6 +78,10 @@ export interface BuildArtifacts {
   formLocalizationMappings: FormLocalizationMapping[]
   localizationMechanicsConflicts: LocalizationConflict[]
   localizationProvenanceCount: number
+  growthRateAssignments: GrowthRateAssignmentAudit[]
+  growthRateConflicts: GrowthRateConflict[]
+  growthRateProvenanceCount: number
+  expectedUnresolvedGrowthRateCount: number
   scopeNotes: string[]
 }
 
@@ -237,6 +252,7 @@ function buildForms(data: ShowdownSourceData, source: VerifiedSource): Form[] {
       requiredAbilityId: raw.requiredAbility
         ? registryEntry(source, 'ability', toShowdownId(raw.requiredAbility)).projectId
         : null,
+      growthRateOverride: null,
       availability: availability(raw.isNonstandard),
       dataStatus: 'complete',
     })
@@ -259,6 +275,7 @@ function buildSpecies(data: ShowdownSourceData, source: VerifiedSource): Species
       canonicalName: { en: raw.name },
       generation: deriveSpeciesGeneration(raw.num, raw.forme),
       defaultFormId: baseForm.projectId,
+      growthRate: { id: null, status: 'unresolved' },
       availability: availability(raw.isNonstandard),
       dataStatus: 'complete',
     })
@@ -361,20 +378,31 @@ export async function buildSmokeArtifacts(
     species: buildSpecies(data, source),
     forms,
     abilities: buildAbilities(data, source, forms),
+    growthRates: CANONICAL_GROWTH_RATES,
   })
   const audit = provenance(dataset, source)
   const localizationSource = await loadPokemonDatasetZhSource(source)
   const localization = buildLocalization(dataset, localizationSource)
+  const growthRates = buildGrowthRates(dataset, localizationSource, localization.formMappings)
+  const resolvedDataset = SmokeDatasetSchema.parse({
+    ...dataset,
+    species: growthRates.species,
+    forms: growthRates.forms,
+  })
   return {
-    dataset,
+    dataset: resolvedDataset,
     source,
     identityMatches: audit.identityMatches,
-    valueProvenance: [...audit.valueProvenance, ...localization.valueProvenance]
+    valueProvenance: [...audit.valueProvenance, ...localization.valueProvenance, ...growthRates.valueProvenance]
       .sort((left, right) => `${left.entityId}${left.fieldPath}`.localeCompare(`${right.entityId}${right.fieldPath}`, 'en')),
     localization: localization.localization,
     formLocalizationMappings: localization.formMappings,
     localizationMechanicsConflicts: localization.mechanicsConflicts,
     localizationProvenanceCount: localization.valueProvenance.length,
+    growthRateAssignments: growthRates.assignments,
+    growthRateConflicts: growthRates.conflicts,
+    growthRateProvenanceCount: growthRates.valueProvenance.length,
+    expectedUnresolvedGrowthRateCount: growthRates.expectedUnresolvedCount,
     scopeNotes: [
       'Stellar exists in the fixed TypeChart but is explicitly excluded from the 18-type smoke matrix.',
       'Non-attacking TypeChart keys such as brn, par, powder, and prankster are not emitted as Types.',
@@ -382,6 +410,7 @@ export async function buildSmokeArtifacts(
       'The CAP negative fixture Syclant is checked but never receives a species:* ID or runtime entity.',
       'requiredItemNames is a smoke-only source value; canonical Item entities are deferred beyond this slice.',
       'No converter cache layer is implemented in this slice; every run verifies and reads the pinned source.',
+      'GrowthRate formulas and level 1-100 experience calculations are explicitly deferred.',
     ],
   }
 }
@@ -416,6 +445,7 @@ export async function runSmokePipeline(options: {
     ['species.json', artifacts.dataset.species],
     ['forms.json', artifacts.dataset.forms],
     ['abilities.json', artifacts.dataset.abilities],
+    ['growth-rates.json', artifacts.dataset.growthRates],
     ['localization/zh-CN.core.json', artifacts.localization.core],
     ['localization/zh-CN.abilities.json', artifacts.localization.abilities],
   ]
@@ -450,6 +480,20 @@ export async function runSmokePipeline(options: {
     mechanicsConflicts: artifacts.localizationMechanicsConflicts,
     localizationProvenanceCount: artifacts.localizationProvenanceCount,
   })
+  await writeJson(join(outputRoot, 'reports', 'growth-rate-mapping.json'), {
+    schemaVersion: 1,
+    sourceCommit: artifacts.source.localization.commit,
+    assignments: artifacts.growthRateAssignments,
+    conflicts: artifacts.growthRateConflicts,
+    counts: {
+      canonicalGrowthRates: artifacts.dataset.growthRates.length,
+      speciesDefaults: artifacts.growthRateAssignments.filter(assignment => assignment.field === '/growthRate').length,
+      formOverrides: artifacts.growthRateAssignments.filter(assignment => assignment.field === '/growthRateOverride').length,
+      provenance: artifacts.growthRateProvenanceCount,
+      conflicts: artifacts.growthRateConflicts.length,
+      expectedUnresolved: artifacts.expectedUnresolvedGrowthRateCount,
+    },
+  })
   const report = SmokeReportSchema.parse({
     schemaVersion: 1,
     sourceCommits: {
@@ -463,6 +507,7 @@ export async function runSmokePipeline(options: {
       species: artifacts.dataset.species.length,
       forms: artifacts.dataset.forms.length,
       abilities: artifacts.dataset.abilities.length,
+      growthRates: artifacts.dataset.growthRates.length,
     },
     scopeNotes: artifacts.scopeNotes,
     issues: validation.issues,

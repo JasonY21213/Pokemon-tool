@@ -6,6 +6,7 @@ import {
   mapSpeciesLocalizations,
   requireUniqueAutomaticFormCandidate,
 } from '../localization.ts'
+import { buildGrowthRates, CANONICAL_GROWTH_RATES, parseGrowthRate } from '../growth-rate.ts'
 import { buildSmokeArtifacts, makeNationalSpeciesId, type BuildArtifacts } from '../pipeline.ts'
 import { loadPokemonDatasetZhSource, type PokemonDatasetZhAdapterOutput } from '../pokemon-dataset-zh.ts'
 import { validateSmokeDataset } from '../validation.ts'
@@ -42,7 +43,8 @@ describe('fixed Showdown smoke fixtures', () => {
       species: artifacts.dataset.species.length,
       forms: artifacts.dataset.forms.length,
       abilities: artifacts.dataset.abilities.length,
-    }, { types: 18, natures: 25, species: 3, forms: 12, abilities: 9 })
+      growthRates: artifacts.dataset.growthRates.length,
+    }, { types: 18, natures: 25, species: 9, forms: 19, abilities: 23, growthRates: 6 })
   })
 
   test('Charizard keeps base, both Mega Forms, and G-Max distinct', () => {
@@ -92,15 +94,21 @@ describe('fixed Showdown smoke fixtures', () => {
 })
 
 describe('pokemon-dataset-zh localization fixtures', () => {
-  test('three required Species map by number and validated English name', () => {
+  test('all fixture Species map by number and validated English name', () => {
     assert.deepEqual(
       artifacts.localization.core.entries
         .filter(entry => entry.entityId.startsWith('species:'))
         .map(entry => [entry.entityId, entry.name]),
       [
         ['species:0006', '喷火龙'],
+        ['species:0035', '皮皮'],
+        ['species:0058', '卡蒂狗'],
+        ['species:0133', '伊布'],
+        ['species:0285', '蘑蘑菇'],
+        ['species:0290', '土居忍士'],
         ['species:0479', '洛托姆'],
         ['species:0678', '超能妙喵'],
+        ['species:1021', '猛雷鼓'],
       ],
     )
   })
@@ -117,9 +125,9 @@ describe('pokemon-dataset-zh localization fixtures', () => {
     assert.throws(() => mapSpeciesLocalizations(artifacts.dataset, candidates), /ZH_SPECIES_ENGLISH_CONFLICT/)
   })
 
-  test('all nine Abilities map by official number and English name', () => {
+  test('all fixture Abilities map by official number and English name', () => {
     const mappings = mapAbilityLocalizations(artifacts.dataset, localizationSource.abilities)
-    assert.equal(mappings.length, 9)
+    assert.equal(mappings.length, 23)
     assert.deepEqual(mappings.map(mapping => mapping.entry.entityId), artifacts.dataset.abilities.map(ability => ability.abilityId))
   })
 
@@ -127,7 +135,7 @@ describe('pokemon-dataset-zh localization fixtures', () => {
     const candidates = structuredClone(localizationSource.abilities)
     candidates[1].chineseName = candidates[0].chineseName
     const mappings = mapAbilityLocalizations(artifacts.dataset, candidates)
-    assert.equal(new Set(mappings.map(mapping => mapping.entry.entityId)).size, 9)
+    assert.equal(new Set(mappings.map(mapping => mapping.entry.entityId)).size, 23)
   })
 
   test('non-unique Form mechanics match cannot pass as automatic', () => {
@@ -167,10 +175,98 @@ describe('pokemon-dataset-zh localization fixtures', () => {
       automatic: artifacts.formLocalizationMappings.filter(mapping => mapping.mappingClass === 'automatic').length,
       ruleBased: artifacts.formLocalizationMappings.filter(mapping => mapping.mappingClass === 'rule-based').length,
       unresolved: artifacts.formLocalizationMappings.filter(mapping => mapping.mappingClass === 'unresolved').length,
-    }, { automatic: 11, ruleBased: 1, unresolved: 0 })
+    }, { automatic: 17, ruleBased: 1, unresolved: 1 })
     assert.equal(artifacts.localizationMechanicsConflicts.length, 0)
-    assert.equal(artifacts.localizationProvenanceCount, 43)
+    assert.equal(artifacts.localizationProvenanceCount, 83)
     assert.doesNotThrow(() => validate(artifacts.dataset))
+  })
+})
+
+describe('GrowthRate canonical mapping fixtures', () => {
+  test('all six Chinese labels and Lv.100 totals resolve to the canonical identities', () => {
+    assert.deepEqual([
+      '600,000（最快）',
+      '800,000（快）',
+      '1,000,000（较快）',
+      '1,059,860（较慢）',
+      '1,250,000（慢）',
+      '1,640,000（最慢）',
+    ].map(raw => parseGrowthRate(raw).growthRateId), [
+      'growth:erratic',
+      'growth:fast',
+      'growth:medium-fast',
+      'growth:medium-slow',
+      'growth:slow',
+      'growth:fluctuating',
+    ])
+  })
+
+  test('a Chinese label and Lv.100 total mismatch is blocking', () => {
+    assert.throws(() => parseGrowthRate('1,000,000（较慢）'), /GROWTH_RATE_SOURCE_CONFLICT/)
+  })
+
+  test('unknown remains a legal unresolved source value without a guessed curve', () => {
+    assert.deepEqual(parseGrowthRate('未知'), {
+      status: 'unresolved',
+      growthRateId: null,
+      level100Total: null,
+      rawLabel: '未知',
+      rawValue: '未知',
+    })
+  })
+
+  test('all nine fixture Species receive their default GrowthRate', () => {
+    assert.equal(artifacts.growthRateAssignments.filter(assignment => assignment.field === '/growthRate').length, 9)
+    assert.ok(artifacts.dataset.species.every(species => species.growthRate.status === 'resolved'
+      || species.speciesId === 'species:1021'))
+  })
+
+  test('Forms matching their Species default do not emit redundant overrides', () => {
+    const overrides = artifacts.dataset.forms.filter(form => form.growthRateOverride !== null)
+    assert.deepEqual(overrides.map(form => form.formId), ['form:0133:partner'])
+  })
+
+  test('Partner Eevee receives the medium-slow override', () => {
+    const partner = artifacts.dataset.forms.find(form => form.formId === 'form:0133:partner')
+    assert.deepEqual(partner?.growthRateOverride, { id: 'growth:medium-slow', status: 'resolved' })
+  })
+
+  test('Partner Eevee does not change the Eevee Species default', () => {
+    const eevee = artifacts.dataset.species.find(species => species.speciesId === 'species:0133')
+    assert.deepEqual(eevee?.growthRate, { id: 'growth:medium-fast', status: 'resolved' })
+  })
+
+  test('a differing source Form without canonical identity becomes a conflict, not an override', () => {
+    const source = structuredClone(localizationSource)
+    const growlithe = source.species.find(candidate => candidate.nationalDexNumber === 58)!
+    growlithe.forms[1].experience100Raw = '800,000（快）'
+    const result = buildGrowthRates(artifacts.dataset, source, artifacts.formLocalizationMappings)
+    assert.equal(result.conflicts.length, 1)
+    assert.equal(result.conflicts[0].code, 'UNMAPPED_FORM_GROWTH_RATE_DIFFERENCE')
+    assert.equal(result.conflicts[0].formId, null)
+  })
+
+  test('every selected GrowthRate field has an exact source pointer and selected provenance', () => {
+    const growthProvenance = artifacts.valueProvenance.filter(value => value.fieldPath.startsWith('/growthRate'))
+    assert.equal(growthProvenance.length, 20)
+    assert.ok(growthProvenance.every(value => value.selected && value.sourcePointer?.endsWith('/experience_100')))
+  })
+
+  test('canonical totals are unique and Raging Bolt is the one expected unresolved warning', () => {
+    assert.deepEqual(CANONICAL_GROWTH_RATES.map(rate => rate.level100Total), [
+      600_000, 800_000, 1_000_000, 1_059_860, 1_250_000, 1_640_000,
+    ])
+    assert.equal(new Set(CANONICAL_GROWTH_RATES.map(rate => rate.level100Total)).size, 6)
+    const ragingBolt = artifacts.dataset.species.find(species => species.speciesId === 'species:1021')
+    assert.deepEqual(ragingBolt?.growthRate, { id: null, status: 'unresolved' })
+    const result = validateSmokeDataset(
+      artifacts.dataset,
+      artifacts.source.sourceReferences,
+      artifacts.identityMatches,
+      artifacts.valueProvenance,
+      artifacts.localization,
+    )
+    assert.deepEqual(result.issues.map(issue => issue.code), ['EXPECTED_UNRESOLVED_GROWTH_RATE'])
   })
 })
 

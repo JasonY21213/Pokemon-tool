@@ -14,6 +14,7 @@ const PokemonFormSchema = z.object({
     male: z.number().min(0).max(100),
     female: z.number().min(0).max(100),
   }).strict().optional(),
+  experience_100: z.string().min(1),
 }).passthrough()
 
 const PokemonDocumentSchema = z.object({
@@ -38,6 +39,7 @@ export interface ZhFormCandidate {
   typesZh: string[]
   abilitiesZh: Array<{ name: string; isHidden: boolean }>
   genderRatio?: { male: number; female: number }
+  experience100Raw: string
   sourcePointer: string
 }
 
@@ -69,11 +71,19 @@ export interface PokemonDatasetZhAdapterOutput {
 
 const POKEMON_PATHS = [
   'data/pokemon/0006-喷火龙.json',
+  'data/pokemon/0035-皮皮.json',
+  'data/pokemon/0058-卡蒂狗.json',
+  'data/pokemon/0133-伊布.json',
+  'data/pokemon/0285-蘑蘑菇.json',
+  'data/pokemon/0290-土居忍士.json',
   'data/pokemon/0479-洛托姆.json',
   'data/pokemon/0678-超能妙喵.json',
+  'data/pokemon/1021-猛雷鼓.json',
 ] as const
 
-const SMOKE_ABILITY_NUMBERS = new Set([26, 51, 66, 70, 94, 151, 158, 172, 181])
+const SMOKE_ABILITY_NUMBERS = new Set([
+  14, 18, 22, 26, 27, 50, 51, 56, 66, 70, 90, 91, 94, 95, 98, 107, 132, 151, 154, 158, 172, 181, 281,
+])
 
 async function readJson(path: string): Promise<unknown> {
   return JSON.parse(await readFile(path, 'utf8')) as unknown
@@ -98,6 +108,7 @@ export async function loadPokemonDatasetZhSource(source: VerifiedSource): Promis
         typesZh: [...form.types],
         abilitiesZh: form.abilities.map(ability => ({ name: ability.name, isHidden: ability.is_hidden })),
         ...(form.gender_ratio ? { genderRatio: form.gender_ratio } : {}),
+        experience100Raw: form.experience_100,
         sourcePointer: `/forms/${index}`,
       })),
       sourcePath,
