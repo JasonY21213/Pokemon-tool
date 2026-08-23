@@ -48,6 +48,15 @@ describe('full-domain dry run', () => {
   })
 
   test('keeps all generated cross-domain references resolvable', () => {
+  test('maps only deterministic Form and Move localizations', () => {
+    assert.equal(artifacts.localization.forms.length, 1228)
+    assert.equal(artifacts.localization.forms.some(form => form.entityId === 'form:0479:heat' && form.name === '加热洛托姆'), true)
+    assert.equal(artifacts.localization.forms.some(form => form.entityId === 'form:0493:fire'), false)
+    assert.equal(artifacts.localization.moves.length, 950)
+    assert.equal(artifacts.localization.moves.some(move => move.entityId === 'move:0622' && move.name === '究极无敌大冲撞'), true)
+    assert.equal(artifacts.localization.moves.some(move => move.entityId === 'move:0920'), false)
+  })
+
     const speciesIds = new Set(artifacts.species.map(species => species.speciesId))
     const formIds = new Set(artifacts.forms.map(form => form.formId))
     assert.equal(artifacts.dexEntries.every(entry => speciesIds.has(entry.speciesId)), true)

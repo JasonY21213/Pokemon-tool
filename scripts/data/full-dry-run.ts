@@ -5,6 +5,7 @@ import { basename, join, resolve } from 'node:path'
 import { z } from 'zod'
 import { buildSmokeArtifacts } from './pipeline.ts'
 import { parseGrowthRate } from './growth-rate.ts'
+import { buildFormLocalizations, type StableFormLocalizationTarget } from './form-localization.ts'
 import { serializeJson, writeJson } from './serialization.ts'
 import {
   loadReviewDecisions,
@@ -53,7 +54,7 @@ const ZhAbilitySchema = z.object({
 const ZhMoveSchema = z.object({
   id: z.string().min(1), name_zh: z.string().min(1), name_en: z.string().min(1),
   type: z.string().min(1), category: z.string().min(1), power: z.string().min(1),
-  accuracy: z.string().min(1), pp: z.string().min(1), generation: z.number().int().positive(),
+  accuracy: z.string().min(1), pp: z.string().min(1), description: z.string().optional(), generation: z.number().int().positive(),
 }).passthrough()
 
 const RawDexRowSchema = z.object({
@@ -394,6 +395,11 @@ function buildMoves(
   const zhByEnglish = new Map<string, RawZhMove[]>()
   for (const row of zhRows) zhByEnglish.set(toId(row.name_en), [...(zhByEnglish.get(toId(row.name_en)) ?? []), row])
   const registry = new Map(source.registry.filter(entry => entry.kind === 'move').map(entry => [entry.showdownId, entry]))
+  const zhByOfficialNumber = new Map<number, RawZhMove[]>()
+  for (const row of zhRows) {
+    const officialNumber = Number(row.id)
+    if (Number.isInteger(officialNumber)) zhByOfficialNumber.set(officialNumber, [...(zhByOfficialNumber.get(officialNumber) ?? []), row])
+  }
   const parsed = Object.entries(data).map(([showdownId, value]) => ({ showdownId, raw: parseMoveRecord(value, showdownId) }))
     .filter(item => item.raw.num > 0)
   const numberCounts = new Map<number, number>()
@@ -411,13 +417,15 @@ function buildMoves(
       conflict(conflicts, 'identity', 'blocking', id, 'MOVE_ID_COLLISION', `Multiple Showdown Moves propose ${id}.`)
     }
     ids.add(id)
-    const zhMatches = zhByEnglish.get(showdownId) ?? zhByEnglish.get(toId(raw.name)) ?? []
+    const exactNumberMatches = zhByOfficialNumber.get(raw.num)
+    const englishMatches = zhByEnglish.get(showdownId) ?? zhByEnglish.get(toId(raw.name)) ?? []
+    const zhMatches = exactNumberMatches ?? englishMatches
     const zh = zhMatches.length === 1 ? zhMatches[0] : undefined
     if (!zh) {
       conflict(conflicts, 'localization', 'warning', id, zhMatches.length ? 'MOVE_ZH_AMBIGUOUS' : 'MOVE_ZH_MISSING', `${raw.name} matched ${zhMatches.length} zh-CN rows.`)
     }
     const mechanicsConflicts: string[] = []
-    if (zh) {
+    if (zh && englishMatches.length === 1 && englishMatches[0] === zh) {
       const power = mechanicsValue(zh.power)
       const pp = mechanicsValue(zh.pp)
       const accuracy = mechanicsValue(zh.accuracy)
@@ -445,7 +453,7 @@ function buildMoves(
       availability: raw.isNonstandard ?? 'current', mappingClass, dataStatus: quarantined ? 'quarantined' : 'complete', mechanicsConflictCount: mechanicsConflicts.length,
       reviewDecisionId: reviewedQuarantine?.decisionId,
     })
-    if (zh && !quarantined) localization.push({ entityId: id, name: zh.name_zh, mappingClass })
+    if (zh && !quarantined) localization.push({ entityId: id, name: zh.name_zh, ...(zh.description ? { shortDescription: zh.description } : {}), mappingClass })
     provenance.push({ entityId: id, domain: 'move', sourcePaths: ['data/moves.ts', ...(zh ? ['data/move_list.json'] : [])], reviewDecisionId: reviewedQuarantine?.decisionId })
     if (!existing) proposals.push({ entityKind: 'move', proposedProjectId: id, immutableAnchors: numbered ? { officialNumber: raw.num } : { specialToken: specialMoveToken(raw.name) }, showdownId, reason: numbered ? 'Official numbered Move discovered by full dry run.' : 'Unnumbered/special Move requires reviewed stable ID.', status: mappingClass === 'unresolved' ? 'review-required' : 'proposed' })
   }
@@ -673,10 +681,12 @@ export async function buildFullDryRun(options: { fullCachePath?: string } = {}):
   const evolutions = buildEvolutions(speciesForms.forms, showdown.pokedex, fullZh.pokemon, conflicts, provenance)
   const dexBuild = await buildDexDomain(fullCache, fullZh.dexFiles, provenance, conflicts)
   const localizationSpecies = fullZh.pokemon.map((record, index) => ({ entityId: speciesId(index + 1), name: record.value.name_zh, sourcePath: record.path }))
-  const localizationForms = []
-  for (const [index, record] of fullZh.pokemon.entries()) {
-    localizationForms.push({ entityId: `form:${(index + 1).toString().padStart(4, '0')}:base`, name: record.value.forms[0].name, mappingClass: 'automatic' })
-  }
+  const formLocalization = buildFormLocalizations(
+    speciesForms.forms as unknown as StableFormLocalizationTarget[],
+    fullZh.pokemon,
+    fullZh.abilities,
+  )
+  const localizationForms = formLocalization.entries
   const showdownManifest = await selectedShowdownManifest(source)
   const manifestFiles = [...showdownManifest, ...fullZh.manifestEntries].sort((left, right) => `${left.source}:${left.path}`.localeCompare(`${right.source}:${right.path}`, 'en'))
   const sourceManifest = {
