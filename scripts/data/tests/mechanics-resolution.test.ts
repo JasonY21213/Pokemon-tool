@@ -22,11 +22,27 @@ test('Move representation differences preserve canonical mechanics', async () =>
   assert.equal(variable?.changesCanonicalMechanics, false)
 })
 
-test('unresolved Move mechanics are never silently cleared', async () => {
+test('Round 3 resolves only the two reviewed Move conflicts without changing canonical mechanics', async () => {
   const artifacts = await artifactsPromise
   const unresolved = artifacts.moveConflicts.records.filter(item => item.proposedRootCauseClassification === 'genuine-unresolved')
-  assert.deepEqual(unresolved.map(item => `${item.moveId}:${item.field}`).sort(), ['move:0597:accuracy', 'move:0850:pp'])
-  assert.equal((artifacts.openMechanicsIssues as { total: number }).total, 2)
+  assert.deepEqual(unresolved, [])
+  assert.equal((artifacts.openMechanicsIssues as { total: number }).total, 0)
+
+  const aromaticMist = artifacts.moveConflicts.records.find(item => item.moveId === 'move:0597' && item.field === 'accuracy')
+  assert.equal(aromaticMist?.proposedRootCauseClassification, 'confirmed-representation-difference')
+  assert.deepEqual(aromaticMist?.semanticNormalizedValue, { showdown: 'always-or-formula', excel: 100, pokemonDatasetZh: 100 })
+  assert.equal(aromaticMist?.existingReviewDecision, 'review:move:aromatic-mist:accuracy-representation')
+  assert.equal(aromaticMist?.changesCanonicalMechanics, false)
+
+  const takeHeart = artifacts.moveConflicts.records.find(item => item.moveId === 'move:0850' && item.field === 'pp')
+  assert.equal(takeHeart?.proposedRootCauseClassification, 'confirmed-current-vs-legacy')
+  assert.deepEqual(takeHeart?.semanticNormalizedValue, { showdown: 15, excel: 10, pokemonDatasetZh: 10 })
+  assert.equal(takeHeart?.existingReviewDecision, 'review:move:take-heart:pp-version-difference')
+  assert.equal(takeHeart?.changesCanonicalMechanics, false)
+
+  const full = await buildFullDryRun()
+  assert.equal(full.moves.find(move => move.moveId === 'move:0597')?.accuracy, 'always')
+  assert.equal(full.moves.find(move => move.moveId === 'move:0850')?.pp, 15)
 })
 
 test('Nihil Light reviewed quarantine remains effective', async () => {
@@ -84,16 +100,28 @@ test('Slowking review decision is SHA and fingerprint applicable', async () => {
   }), 'review-required')
 })
 
+test('Round 3 Move decisions are field-specific and source-version applicable', async () => {
+  const decisions = await loadReviewDecisions()
+  for (const decisionId of [
+    'review:move:aromatic-mist:accuracy-representation',
+    'review:move:take-heart:pp-version-difference',
+  ]) {
+    const decision = decisions.find(item => item.decisionId === decisionId)
+    assert.ok(decision)
+    assert.equal(typeof decision.selector.canonicalField, 'string')
+    assert.equal(decisionApplicability(decision), 'applicable')
+  }
+})
+
 test('Move conflict accounting covers all 126 records', async () => {
   const artifacts = await artifactsPromise
   const counts = artifacts.summary.moveConflicts as { input: number; resolvedOrReclassified: number; genuineUnresolved: number; byRootCause: Record<string, number> }
   assert.equal(counts.input, 126)
-  assert.equal(counts.resolvedOrReclassified, 124)
-  assert.equal(counts.genuineUnresolved, 2)
+  assert.equal(counts.resolvedOrReclassified, 126)
+  assert.equal(counts.genuineUnresolved, 0)
   assert.deepEqual(counts.byRootCause, {
-    'confirmed-current-vs-legacy': 88,
-    'confirmed-representation-difference': 36,
-    'genuine-unresolved': 2,
+    'confirmed-current-vs-legacy': 89,
+    'confirmed-representation-difference': 37,
   })
 })
 

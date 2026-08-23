@@ -149,12 +149,24 @@ function classifyMove(
   comparison: ComparisonRecord,
   move: Record<string, unknown>,
   zh: RawZhMove | undefined,
+  decision: ReviewDecision | undefined,
 ): { classification: MoveResolutionClassification; rationale: string } {
   const field = comparison.canonicalField
   const showdown = semanticValue(field, comparison.canonicalValue, 'showdown')
   const excel = semanticValue(field, comparison.excelCachedValue, 'excel')
   const zhValue = semanticValue(field, zhMoveValue(zh, field), 'zh')
   const availability = String(move.availability)
+
+  if (decision?.status === 'accepted'
+    && decision.decision === 'keep-canonical'
+    && equalSemantic(decision.selectedValue, comparison.canonicalValue)) {
+    if (decision.classification === 'confirmed-representation-difference') {
+      return { classification: 'confirmed-representation-difference', rationale: decision.rationale }
+    }
+    if (decision.classification === 'confirmed-current-vs-legacy') {
+      return { classification: 'confirmed-current-vs-legacy', rationale: decision.rationale }
+    }
+  }
 
   if (availability === 'Past') {
     return { classification: 'confirmed-current-vs-legacy', rationale: 'The pinned Showdown record is explicitly Past; the difference is retained as historical mechanics evidence without changing the canonical candidate.' }
@@ -197,10 +209,11 @@ async function moveEvidence(
     if (!move) throw new Error(`MECHANICS_MOVE_MISSING: ${comparison.canonicalEntityId}`)
     const officialNumber = typeof move.officialNumber === 'number' ? move.officialNumber : null
     const matched = officialNumber === null ? undefined : zhByNumber.get(officialNumber)
-    const classified = classifyMove(comparison, move, matched?.row)
     const existing = decisions.find(decision => decision.domain === 'move'
       && decision.selector.entityId === comparison.canonicalEntityId
-      && decision.selector.showdownId === move.showdownId)
+      && decision.selector.showdownId === move.showdownId
+      && (decision.selector.canonicalField === undefined || decision.selector.canonicalField === comparison.canonicalField))
+    const classified = classifyMove(comparison, move, matched?.row, existing)
     records.push({
       comparisonId: comparison.comparisonId,
       moveId: String(move.moveId),
@@ -425,7 +438,7 @@ export async function buildMechanicsResolutionArtifacts(): Promise<MechanicsReso
       zygarde: { records: abilityRecords.filter(record => record.showdownId.startsWith('zygarde')).length, slotSemanticsPreserved: true, resolvedAs: 'excel-legacy-missing/wrong' },
     },
     slowking: { input: 2, resolved: 2, unresolved: 0, decisionId: slowkingDecision.decisionId },
-    reviewDecisions: { totalAccepted: decisions.filter(decision => decision.status === 'accepted').length, addedThisRound: 1 },
+    reviewDecisions: { totalAccepted: decisions.filter(decision => decision.status === 'accepted').length, addedThisRound: 2 },
     fullDomainConflicts: { before: beforeFull, after: beforeFull },
     excelCrossValidationErrors: { before: excelSeverity.error, after: excelSeverity.error },
     openMechanicsIssues: openRecords.length,

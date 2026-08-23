@@ -185,6 +185,97 @@
           "version": "aa25849772c7d6ccbf56c24943cf97dbe9c34fae3211826b39a82658ddcb49e5"
         }
       ]
+    },
+    {
+      "decisionId": "review:move:aromatic-mist:accuracy-representation",
+      "domain": "move",
+      "selector": {
+        "entityId": "move:0597",
+        "showdownId": "aromaticmist",
+        "canonicalField": "accuracy"
+      },
+      "conflictReferences": [
+        "excel-check:456d5d3ef81249ed",
+        "generated/mechanics-resolution/move-conflicts.json#move:0597:accuracy"
+      ],
+      "decision": "keep-canonical",
+      "selectedSource": "pokemon-showdown",
+      "selectedValue": "always",
+      "observedValue": {
+        "source": "excel",
+        "value": 1,
+        "locator": "招式列表!G598"
+      },
+      "classification": "confirmed-representation-difference",
+      "rationale": "The pinned Showdown accuracy true maps to the project's distinct always-hit semantic, while Excel 1 and pokemon-dataset-zh 100 are legacy numeric encodings. Main-series reference displays use a dash rather than numeric 100, so canonical always-hit mechanics remain unchanged.",
+      "evidence": [
+        "Pinned Showdown data/moves.ts#aromaticmist has num 597, accuracy true, PP 20, and target adjacentAlly.",
+        "The project maps Showdown true to AccuracySemantic kind always; percent 100 and unknown are separate schema variants.",
+        "Excel 招式列表!G598 stores 1, normalized as 100 percent, and pokemon-dataset-zh data/move_list.json#/596 stores accuracy 100.",
+        "External main-series reference corroboration reviewed for Round 3 displays Aromatic Mist accuracy as a dash percent, not numeric 100."
+      ],
+      "status": "accepted",
+      "reviewedBy": "mechanics-conflict-resolution-round-3-fixed-source-review",
+      "reReviewPolicy": "Re-review this exact accuracy field if the pinned Showdown commit, pokemon-dataset-zh commit, Excel fingerprint, or canonical AccuracySemantic policy changes.",
+      "applicableSourceVersions": [
+        {
+          "sourceId": "pokemon-showdown",
+          "version": "84d7ceb4f009928221fce7a00e711bab263c5f4e"
+        },
+        {
+          "sourceId": "pokemon-dataset-zh",
+          "version": "82ce04e611d19a12556c3955125b048b36187f52"
+        },
+        {
+          "sourceId": "excel",
+          "version": "aa25849772c7d6ccbf56c24943cf97dbe9c34fae3211826b39a82658ddcb49e5"
+        }
+      ]
+    },
+    {
+      "decisionId": "review:move:take-heart:pp-version-difference",
+      "domain": "move",
+      "selector": {
+        "entityId": "move:0850",
+        "showdownId": "takeheart",
+        "canonicalField": "pp"
+      },
+      "conflictReferences": [
+        "excel-check:c8d7e2db15765d2c",
+        "generated/mechanics-resolution/move-conflicts.json#move:0850:pp"
+      ],
+      "decision": "keep-canonical",
+      "selectedSource": "pokemon-showdown-current-generation-ix",
+      "selectedValue": 15,
+      "observedValue": {
+        "source": "excel",
+        "value": 10,
+        "locator": "招式列表!H851"
+      },
+      "classification": "confirmed-current-vs-legacy",
+      "rationale": "Take Heart has 10 PP in Pokemon Legends: Arceus and 15 PP in Generation IX Scarlet and Violet. Excel and pokemon-dataset-zh preserve the Generation VIII historical value, while the pinned Showdown record supplies the project's current canonical Generation IX value.",
+      "evidence": [
+        "Pinned Showdown data/moves.ts#takeheart has num 850, accuracy true, PP 15, and target self.",
+        "Excel 招式列表!H851 stores PP 10 and pokemon-dataset-zh data/move_list.json#/882 stores PP 10 with generation 8 metadata.",
+        "Known mechanics history distinguishes 10 PP in Pokemon Legends: Arceus from 15 PP in Generation IX Scarlet and Violet."
+      ],
+      "status": "accepted",
+      "reviewedBy": "mechanics-conflict-resolution-round-3-fixed-source-review",
+      "reReviewPolicy": "Re-review this exact PP field if the pinned Showdown commit, pokemon-dataset-zh commit, Excel fingerprint, or canonical current-version policy changes.",
+      "applicableSourceVersions": [
+        {
+          "sourceId": "pokemon-showdown",
+          "version": "84d7ceb4f009928221fce7a00e711bab263c5f4e"
+        },
+        {
+          "sourceId": "pokemon-dataset-zh",
+          "version": "82ce04e611d19a12556c3955125b048b36187f52"
+        },
+        {
+          "sourceId": "excel",
+          "version": "aa25849772c7d6ccbf56c24943cf97dbe9c34fae3211826b39a82658ddcb49e5"
+        }
+      ]
     }
   ]
 }
