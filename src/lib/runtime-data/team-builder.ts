@@ -20,7 +20,7 @@ export function removeTeamMember(members: TeamMember[], memberId: string): TeamM
   return members.filter(member => member.memberId !== memberId)
 }
 
-export function formsById(data: PokemonRuntimeData): Map<string, RuntimeForm> {
+export function formsById(data: Pick<PokemonRuntimeData, 'forms'>): Map<string, RuntimeForm> {
   return new Map(data.forms.map(form => [form.formId, form]))
 }
 

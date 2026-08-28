@@ -2,6 +2,7 @@
   import { addTeamMember, defensiveSummary, formsById, offensiveCoverage, removeTeamMember, updateMemberMoves, validateTeamMembers, type TeamMember } from '../runtime-data/team-builder'
   import { resolveEffectiveLearnsetMoveIds } from '../runtime-data/learnsets'
   import type { PokemonRuntimeData, RuntimeForm, RuntimeMove } from '../runtime-data/types'
+  import TeamAnalysis from './TeamAnalysis.svelte'
   export let data: PokemonRuntimeData
   export let selectedForm: RuntimeForm | null
   let members: TeamMember[] = []
@@ -29,5 +30,6 @@
   {#if resolvedMembers.length}<div class="team-members">{#each resolvedMembers as { member, form } (member.memberId)}<article class="team-member"><div><h3>{formDisplay(form)} <small>{form.canonicalName}</small></h3><p>属性：{form.types.map(typeName).join(' / ')}</p></div><button type="button" onclick={() => removeMember(member.memberId)}>移除成员</button><label>从该形态 Learnset 加入招式<select bind:value={selectedMoveByMember[member.memberId]}><option value="">选择招式</option>{#each movesForForm(form.formId) as move (move.moveId)}<option value={move.moveId}>{move.zhName ?? move.canonicalName} · {move.canonicalName}</option>{/each}</select></label><button type="button" disabled={!selectedMoveByMember[member.memberId] || member.moveIds.length >= 4} onclick={() => addMove(member)}>加入招式（{member.moveIds.length} / 4）</button>{#if member.moveIds.length}<ul>{#each selectedMoves(member) as move (move.moveId)}<li>{move.zhName ?? move.canonicalName} <small>{move.canonicalName}</small> <button type="button" onclick={() => removeMove(member, move.moveId)}>移除</button></li>{/each}</ul>{:else}<p>尚未选择招式；该成员不会计入下方的简单招式属性覆盖。</p>{/if}</article>{/each}</div>
     <section class="team-summary"><h3>防守属性汇总</h3><p>按成员当前 Form 的实际属性统计：弱点（&gt;1×）、中性（1×）、抗性或免疫（&lt;1×）。</p><div class="team-summary-grid">{#each defensive as entry (entry.attackingTypeId)}<span><strong>{typeName(entry.attackingTypeId)}</strong> 弱 {entry.weak}（4× {entry.fourTimesWeak} / 2× {entry.twoTimesWeak}）· 中 {entry.neutral} · 抗/免 {entry.resistOrImmune}</span>{/each}</div></section>
     <section class="team-summary"><h3>简单招式属性覆盖</h3><p>仅按已选招式属性与单一防守属性的标准相性；不考虑 STAB、特性、太晶、天气、道具或双属性组合。</p>{#if coverage.length}<div class="team-summary-grid">{#each coverage as entry (entry.defenderTypeId)}<span><strong>{typeName(entry.defenderTypeId)}</strong>：{entry.moveTypeIds.map(typeName).join('、')}</span>{/each}</div>{:else}<p>当前已选招式没有可显示的单属性克制覆盖。</p>{/if}</section>
+    <TeamAnalysis {data} {members} />
   {:else}<p class="status">加入一个当前选择的形态，开始查看队伍事实汇总。</p>{/if}
 </section>
