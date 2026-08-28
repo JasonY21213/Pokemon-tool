@@ -30,7 +30,7 @@ p {
   color: #475569;
 }
 
-header, .search, .detail, .results { margin-bottom: 1.25rem; }
+header, .search, .detail, .results, .calculator { margin-bottom: 1.25rem; }
 .search { display: grid; gap: 0.4rem; font-weight: 600; }
 input { padding: 0.7rem; border: 1px solid #94a3b8; border-radius: 0.4rem; font: inherit; }
 button { cursor: pointer; border: 1px solid #cbd5e1; border-radius: 0.4rem; background: #fff; padding: 0.55rem 0.7rem; color: inherit; font: inherit; }
@@ -47,3 +47,9 @@ ul { margin: 0; padding-left: 1.25rem; }
 li + li { margin-top: 0.45rem; }
 .status { padding: 1rem; border-radius: 0.5rem; background: #e2e8f0; }
 .error { color: #991b1b; background: #fee2e2; }
+.calculator { display: grid; gap: 0.9rem; padding: 1.25rem; border: 1px solid #cbd5e1; border-radius: 0.6rem; background: #fff; }
+.type-selects { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+.type-selects label { display: grid; gap: 0.35rem; font-weight: 600; }
+select { min-width: 10rem; padding: 0.55rem; border: 1px solid #94a3b8; border-radius: 0.4rem; background: #fff; font: inherit; }
+.matchup-groups { display: grid; gap: 0.35rem; }
+.matchup-groups p { padding: 0.5rem 0.6rem; border-radius: 0.35rem; background: #f1f5f9; }

@@ -15,6 +15,11 @@
       "path": "abilities.json",
       "recordCount": 316,
       "sha256": "626a5d07d4d4ea3fe6bb63265c476d453521b91d03f6ee9621d73517899af2e4"
+    },
+    {
+      "path": "types.json",
+      "recordCount": 18,
+      "sha256": "1a972c076ae429836b3767ee2ee8e303dbc684d1e3417212086a6ef5867a3161"
     }
   ]
 }

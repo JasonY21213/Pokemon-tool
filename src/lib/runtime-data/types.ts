@@ -40,6 +40,17 @@ export type RuntimeAbility = {
   zhDescription: string | null
 }
 
+export type RuntimeTypeEffectiveness = 0 | 0.5 | 1 | 2
+
+export type RuntimeType = {
+  typeId: string
+  canonicalName: string
+  damageTaken: Array<{
+    attackingTypeId: string
+    multiplier: RuntimeTypeEffectiveness
+  }>
+}
+
 export type RuntimeManifestFile = {
   path: string
   sha256: string
@@ -55,5 +66,6 @@ export type PokemonRuntimeData = {
   species: RuntimeSpecies[]
   forms: RuntimeForm[]
   abilities: RuntimeAbility[]
+  types: RuntimeType[]
   manifest: RuntimeManifest
 }

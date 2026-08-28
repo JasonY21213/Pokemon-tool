@@ -109,6 +109,7 @@ export interface FullDryRunArtifacts {
     files: SourceManifestEntry[]
   }
   species: Array<Record<string, unknown>>
+  types: Array<Record<string, unknown>>
   forms: Array<Record<string, unknown>>
   abilities: Array<Record<string, unknown>>
   moves: Array<Record<string, unknown>>
@@ -716,7 +717,7 @@ export async function buildFullDryRun(options: { fullCachePath?: string; skipTag
   const mappingMs = performance.now() - stage
   stage = performance.now()
   const partial = {
-    sourceManifest, species: speciesForms.species, forms: speciesForms.forms,
+    sourceManifest, types: smoke.dataset.types as Array<Record<string, unknown>>, species: speciesForms.species, forms: speciesForms.forms,
     abilities: abilityBuild.abilities, moves: moveBuild.moves, growthRates,
     appearances: smoke.dataset.appearances, appearanceCandidates, evolutions,
     dexes: dexBuild.dexes, dexEntries: dexBuild.entries, dexCandidates: dexBuild.candidates,
@@ -743,6 +744,7 @@ export async function emitFullDryRun(artifacts: FullDryRunArtifacts): Promise<{ 
   await rm(outputRoot, { recursive: true, force: true })
   await mkdir(outputRoot, { recursive: true })
   const deterministic: Array<[string, unknown]> = [
+    ['canonical-candidates/types.json', artifacts.types],
     ['canonical-candidates/species.json', artifacts.species],
     ['canonical-candidates/forms.json', artifacts.forms],
     ['canonical-candidates/abilities.json', artifacts.abilities],

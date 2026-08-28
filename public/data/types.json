@@ -1,0 +1,1406 @@
+[
+  {
+    "typeId": "type:bug",
+    "canonicalName": "Bug",
+    "damageTaken": [
+      {
+        "attackingTypeId": "type:bug",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:dark",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:dragon",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:electric",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fairy",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fighting",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:fire",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:flying",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:ghost",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:grass",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:ground",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:ice",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:normal",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:poison",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:psychic",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:rock",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:steel",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:water",
+        "multiplier": 1
+      }
+    ]
+  },
+  {
+    "typeId": "type:dark",
+    "canonicalName": "Dark",
+    "damageTaken": [
+      {
+        "attackingTypeId": "type:bug",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:dark",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:dragon",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:electric",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fairy",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:fighting",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:fire",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:flying",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ghost",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:grass",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ground",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ice",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:normal",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:poison",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:psychic",
+        "multiplier": 0
+      },
+      {
+        "attackingTypeId": "type:rock",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:steel",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:water",
+        "multiplier": 1
+      }
+    ]
+  },
+  {
+    "typeId": "type:dragon",
+    "canonicalName": "Dragon",
+    "damageTaken": [
+      {
+        "attackingTypeId": "type:bug",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:dark",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:dragon",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:electric",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:fairy",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:fighting",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fire",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:flying",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ghost",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:grass",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:ground",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ice",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:normal",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:poison",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:psychic",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:rock",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:steel",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:water",
+        "multiplier": 0.5
+      }
+    ]
+  },
+  {
+    "typeId": "type:electric",
+    "canonicalName": "Electric",
+    "damageTaken": [
+      {
+        "attackingTypeId": "type:bug",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:dark",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:dragon",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:electric",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:fairy",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fighting",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fire",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:flying",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:ghost",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:grass",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ground",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:ice",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:normal",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:poison",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:psychic",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:rock",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:steel",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:water",
+        "multiplier": 1
+      }
+    ]
+  },
+  {
+    "typeId": "type:fairy",
+    "canonicalName": "Fairy",
+    "damageTaken": [
+      {
+        "attackingTypeId": "type:bug",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:dark",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:dragon",
+        "multiplier": 0
+      },
+      {
+        "attackingTypeId": "type:electric",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fairy",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fighting",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:fire",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:flying",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ghost",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:grass",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ground",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ice",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:normal",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:poison",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:psychic",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:rock",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:steel",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:water",
+        "multiplier": 1
+      }
+    ]
+  },
+  {
+    "typeId": "type:fighting",
+    "canonicalName": "Fighting",
+    "damageTaken": [
+      {
+        "attackingTypeId": "type:bug",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:dark",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:dragon",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:electric",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fairy",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:fighting",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fire",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:flying",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:ghost",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:grass",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ground",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ice",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:normal",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:poison",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:psychic",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:rock",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:steel",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:water",
+        "multiplier": 1
+      }
+    ]
+  },
+  {
+    "typeId": "type:fire",
+    "canonicalName": "Fire",
+    "damageTaken": [
+      {
+        "attackingTypeId": "type:bug",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:dark",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:dragon",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:electric",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fairy",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:fighting",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fire",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:flying",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ghost",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:grass",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:ground",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:ice",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:normal",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:poison",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:psychic",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:rock",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:steel",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:water",
+        "multiplier": 2
+      }
+    ]
+  },
+  {
+    "typeId": "type:flying",
+    "canonicalName": "Flying",
+    "damageTaken": [
+      {
+        "attackingTypeId": "type:bug",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:dark",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:dragon",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:electric",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:fairy",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fighting",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:fire",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:flying",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ghost",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:grass",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:ground",
+        "multiplier": 0
+      },
+      {
+        "attackingTypeId": "type:ice",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:normal",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:poison",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:psychic",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:rock",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:steel",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:water",
+        "multiplier": 1
+      }
+    ]
+  },
+  {
+    "typeId": "type:ghost",
+    "canonicalName": "Ghost",
+    "damageTaken": [
+      {
+        "attackingTypeId": "type:bug",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:dark",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:dragon",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:electric",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fairy",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fighting",
+        "multiplier": 0
+      },
+      {
+        "attackingTypeId": "type:fire",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:flying",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ghost",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:grass",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ground",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ice",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:normal",
+        "multiplier": 0
+      },
+      {
+        "attackingTypeId": "type:poison",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:psychic",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:rock",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:steel",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:water",
+        "multiplier": 1
+      }
+    ]
+  },
+  {
+    "typeId": "type:grass",
+    "canonicalName": "Grass",
+    "damageTaken": [
+      {
+        "attackingTypeId": "type:bug",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:dark",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:dragon",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:electric",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:fairy",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fighting",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fire",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:flying",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:ghost",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:grass",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:ground",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:ice",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:normal",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:poison",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:psychic",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:rock",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:steel",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:water",
+        "multiplier": 0.5
+      }
+    ]
+  },
+  {
+    "typeId": "type:ground",
+    "canonicalName": "Ground",
+    "damageTaken": [
+      {
+        "attackingTypeId": "type:bug",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:dark",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:dragon",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:electric",
+        "multiplier": 0
+      },
+      {
+        "attackingTypeId": "type:fairy",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fighting",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fire",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:flying",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ghost",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:grass",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:ground",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ice",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:normal",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:poison",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:psychic",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:rock",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:steel",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:water",
+        "multiplier": 2
+      }
+    ]
+  },
+  {
+    "typeId": "type:ice",
+    "canonicalName": "Ice",
+    "damageTaken": [
+      {
+        "attackingTypeId": "type:bug",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:dark",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:dragon",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:electric",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fairy",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fighting",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:fire",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:flying",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ghost",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:grass",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ground",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ice",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:normal",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:poison",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:psychic",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:rock",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:steel",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:water",
+        "multiplier": 1
+      }
+    ]
+  },
+  {
+    "typeId": "type:normal",
+    "canonicalName": "Normal",
+    "damageTaken": [
+      {
+        "attackingTypeId": "type:bug",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:dark",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:dragon",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:electric",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fairy",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fighting",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:fire",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:flying",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ghost",
+        "multiplier": 0
+      },
+      {
+        "attackingTypeId": "type:grass",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ground",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ice",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:normal",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:poison",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:psychic",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:rock",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:steel",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:water",
+        "multiplier": 1
+      }
+    ]
+  },
+  {
+    "typeId": "type:poison",
+    "canonicalName": "Poison",
+    "damageTaken": [
+      {
+        "attackingTypeId": "type:bug",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:dark",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:dragon",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:electric",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fairy",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:fighting",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:fire",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:flying",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ghost",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:grass",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:ground",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:ice",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:normal",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:poison",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:psychic",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:rock",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:steel",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:water",
+        "multiplier": 1
+      }
+    ]
+  },
+  {
+    "typeId": "type:psychic",
+    "canonicalName": "Psychic",
+    "damageTaken": [
+      {
+        "attackingTypeId": "type:bug",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:dark",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:dragon",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:electric",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fairy",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fighting",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:fire",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:flying",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ghost",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:grass",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ground",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ice",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:normal",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:poison",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:psychic",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:rock",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:steel",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:water",
+        "multiplier": 1
+      }
+    ]
+  },
+  {
+    "typeId": "type:rock",
+    "canonicalName": "Rock",
+    "damageTaken": [
+      {
+        "attackingTypeId": "type:bug",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:dark",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:dragon",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:electric",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fairy",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fighting",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:fire",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:flying",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:ghost",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:grass",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:ground",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:ice",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:normal",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:poison",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:psychic",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:rock",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:steel",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:water",
+        "multiplier": 2
+      }
+    ]
+  },
+  {
+    "typeId": "type:steel",
+    "canonicalName": "Steel",
+    "damageTaken": [
+      {
+        "attackingTypeId": "type:bug",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:dark",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:dragon",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:electric",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fairy",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:fighting",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:fire",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:flying",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:ghost",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:grass",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:ground",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:ice",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:normal",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:poison",
+        "multiplier": 0
+      },
+      {
+        "attackingTypeId": "type:psychic",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:rock",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:steel",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:water",
+        "multiplier": 1
+      }
+    ]
+  },
+  {
+    "typeId": "type:water",
+    "canonicalName": "Water",
+    "damageTaken": [
+      {
+        "attackingTypeId": "type:bug",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:dark",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:dragon",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:electric",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:fairy",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fighting",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:fire",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:flying",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ghost",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:grass",
+        "multiplier": 2
+      },
+      {
+        "attackingTypeId": "type:ground",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:ice",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:normal",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:poison",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:psychic",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:rock",
+        "multiplier": 1
+      },
+      {
+        "attackingTypeId": "type:steel",
+        "multiplier": 0.5
+      },
+      {
+        "attackingTypeId": "type:water",
+        "multiplier": 0.5
+      }
+    ]
+  }
+]

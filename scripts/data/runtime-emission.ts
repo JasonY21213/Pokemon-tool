@@ -1,5 +1,5 @@
 import { join, resolve } from 'node:path'
-import type { RuntimeAbility, RuntimeForm, RuntimeManifest, RuntimeSpecies } from '../../src/lib/runtime-data/types.ts'
+import type { RuntimeAbility, RuntimeForm, RuntimeManifest, RuntimeSpecies, RuntimeType } from '../../src/lib/runtime-data/types.ts'
 import { buildFullDryRun, type FullDryRunArtifacts } from './full-dry-run.ts'
 import { getProjectRoot, sha256 } from './source.ts'
 import { serializeJson, writeJson } from './serialization.ts'
@@ -39,7 +39,7 @@ function tagMap(assignments: Array<{ entityId: string; tagId: string }>): Map<st
   return result
 }
 
-function assertRuntimeReferences(species: RuntimeSpecies[], forms: RuntimeForm[], abilities: RuntimeAbility[]): void {
+function assertRuntimeReferences(species: RuntimeSpecies[], forms: RuntimeForm[], abilities: RuntimeAbility[], types: RuntimeType[]): void {
   const formIds = new Set(forms.map(form => form.formId))
   const abilityIds = new Set(abilities.map(ability => ability.abilityId))
   for (const entry of species) {
@@ -49,10 +49,13 @@ function assertRuntimeReferences(species: RuntimeSpecies[], forms: RuntimeForm[]
   for (const form of forms) {
     if (!speciesIds.has(form.speciesId)) throw new Error(`RUNTIME_FORM_SPECIES_REFERENCE: ${form.formId}`)
     if (!form.abilities.every(slot => abilityIds.has(slot.abilityId))) throw new Error(`RUNTIME_FORM_ABILITY_REFERENCE: ${form.formId}`)
+    if (!form.types.every(typeId => types.some(type => type.typeId === typeId))) throw new Error(`RUNTIME_FORM_TYPE_REFERENCE: ${form.formId}`)
   }
+  const typeIds = new Set(types.map(type => type.typeId))
+  if (typeIds.size !== 18 || types.some(type => type.damageTaken.length !== 18 || !type.damageTaken.every(entry => typeIds.has(entry.attackingTypeId)))) throw new Error('RUNTIME_TYPE_REFERENCE_INTEGRITY')
 }
 
-export function buildRuntimeData(artifacts: FullDryRunArtifacts): { species: RuntimeSpecies[]; forms: RuntimeForm[]; abilities: RuntimeAbility[] } {
+export function buildRuntimeData(artifacts: FullDryRunArtifacts): { species: RuntimeSpecies[]; forms: RuntimeForm[]; abilities: RuntimeAbility[]; types: RuntimeType[] } {
   const speciesLocalization = localizationMap(artifacts.localization.species)
   const formLocalization = localizationMap(artifacts.localization.forms)
   const abilityLocalization = localizationMap(artifacts.localization.abilities)
@@ -115,8 +118,23 @@ export function buildRuntimeData(artifacts: FullDryRunArtifacts): { species: Run
       zhDescription: localized && typeof localized.shortDescription === 'string' && localized.shortDescription.length > 0 ? localized.shortDescription : null,
     }
   })
-  assertRuntimeReferences(species, forms, abilities)
-  return { species, forms, abilities }
+  const types: RuntimeType[] = artifacts.types.map(record => {
+    const rawDamageTaken = record.damageTaken
+    if (!Array.isArray(rawDamageTaken)) throw new Error('RUNTIME_TYPE_DAMAGE_TAKEN')
+    return {
+      typeId: stringValue(record, 'typeId'),
+      canonicalName: canonicalName(record),
+      damageTaken: rawDamageTaken.map(value => {
+        if (!value || typeof value !== 'object') throw new Error('RUNTIME_TYPE_DAMAGE_TAKEN')
+        const relationship = value as CanonicalRecord
+        const multiplier = relationship.multiplier
+        if (multiplier !== 0 && multiplier !== 0.5 && multiplier !== 1 && multiplier !== 2) throw new Error('RUNTIME_TYPE_MULTIPLIER')
+        return { attackingTypeId: stringValue(relationship, 'attackingTypeId'), multiplier: multiplier as RuntimeType['damageTaken'][number]['multiplier'] }
+      }),
+    }
+  })
+  assertRuntimeReferences(species, forms, abilities, types)
+  return { species, forms, abilities, types }
 }
 
 export async function emitRuntimeData(artifacts: FullDryRunArtifacts, outputRoot = resolve(getProjectRoot(), 'public', 'data')): Promise<{ outputRoot: string; manifest: RuntimeManifest }> {
@@ -125,6 +143,7 @@ export async function emitRuntimeData(artifacts: FullDryRunArtifacts, outputRoot
     ['species.json', runtime.species, runtime.species.length],
     ['forms.json', runtime.forms, runtime.forms.length],
     ['abilities.json', runtime.abilities, runtime.abilities.length],
+    ['types.json', runtime.types, runtime.types.length],
   ]
   const manifest: RuntimeManifest = {
     schemaVersion: 1,
