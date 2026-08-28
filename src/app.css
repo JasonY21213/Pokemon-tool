@@ -106,6 +106,10 @@ h4 { margin: 0; font-size: 1rem; }
 .damage-basic-inputs { display: flex; flex-wrap: wrap; gap: 0.65rem; }
 .damage-basic-inputs input { width: 5rem; }
 .damage-side td input { width: 3.75rem; }
+.battle-context-controls { display: grid; gap: 0.65rem; padding: 0.9rem; border-radius: 0.5rem; background: #f8fafc; }
+.battle-context-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr)); gap: 0.65rem; align-items: end; }
+.battle-context-grid label:not(.burn-toggle) { display: grid; gap: 0.3rem; font-weight: 600; }
+.burn-toggle { display: flex; align-items: center; gap: 0.45rem; min-height: 2.5rem; }
 .damage-move-picker, .damage-result { display: grid; gap: 0.75rem; }
 .learnset-toggle { display: flex; align-items: center; gap: 0.45rem; }
 .damage-move-results { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: 0.4rem; max-height: 18rem; overflow-y: auto; }

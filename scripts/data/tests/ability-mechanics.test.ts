@@ -20,7 +20,7 @@ async function core(overrides: Partial<Parameters<typeof calculateCoreDamage>[0]
   return calculateCoreDamage({
     level: 50, attack: 100, defense: 100, basePower: 50,
     moveTypeId: 'type:fire', attackerTypeIds: ['type:normal'], defenderTypeIds: ['type:normal'],
-    types: runtime.types, ...overrides,
+    types: runtime.types, moveCategory: 'special', ...overrides,
   })
 }
 

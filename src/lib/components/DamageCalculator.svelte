@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { calculateMoveDamage, type MoveDamageResult } from '../runtime-data/damage-calculator'
+  import { calculateMoveDamage, type AppliedBattleContextModifier, type MoveDamageResult } from '../runtime-data/damage-calculator'
+  import type { BattleContext, BattleStatStage, BattleWeather } from '../runtime-data/battle-context'
   import { resolveEffectiveLearnsetMoveIds } from '../runtime-data/learnsets'
   import { calculateStats, totalEvs } from '../runtime-data/stat-calculator'
   import { selectAbilityForForm } from '../runtime-data/ability-mechanics'
@@ -11,6 +12,7 @@
   const statLabels: Record<(typeof statIds)[number], string> = { hp: 'HP', atk: '攻击', def: '防御', spa: '特攻', spd: '特防', spe: '速度' }
   const all31 = (): RuntimeStatBlock => ({ hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 })
   const all0 = (): RuntimeStatBlock => ({ hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 })
+  const stageOptions: BattleStatStage[] = [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6]
 
   let attackerSpeciesId = 'species:0006'
   let attackerFormId = 'form:0006:base'
@@ -29,6 +31,12 @@
   let moveQuery = ''
   let learnsetOnly = false
   let selectedMoveId = 'move:0053'
+  let attackerAtkStage: BattleStatStage = 0
+  let attackerSpaStage: BattleStatStage = 0
+  let defenderDefStage: BattleStatStage = 0
+  let defenderSpdStage: BattleStatStage = 0
+  let attackerBurned = false
+  let weather: BattleWeather = 'none'
 
   function formsFor(species: RuntimeSpecies | undefined): RuntimeForm[] {
     if (!species) return []
@@ -109,9 +117,19 @@
     return move.category === 'physical' ? '物理' : move.category === 'special' ? '特殊' : '变化'
   }
 
-  function damageOutcome(move: RuntimeMove | undefined, attackerForm: RuntimeForm | undefined, defenderForm: RuntimeForm | undefined, attackerStats: RuntimeStatBlock | null, defenderStats: RuntimeStatBlock | null, attackerAbility: RuntimeAbility | null, defenderAbility: RuntimeAbility | null): MoveDamageResult | null {
+  function stageLabel(stage: BattleStatStage): string {
+    return stage > 0 ? `+${stage}` : String(stage)
+  }
+
+  function battleContextModifierLabel(modifier: AppliedBattleContextModifier): string {
+    if (modifier.kind === 'stat-stage') return `${modifier.stat.toUpperCase()} ${stageLabel(modifier.stage)}：${modifier.before} → ${modifier.after}`
+    if (modifier.kind === 'weather') return `${modifier.weather === 'sun' ? '日照' : '下雨'} ${modifier.multiplier}×`
+    return `灼伤物理伤害 ${modifier.multiplier}×`
+  }
+
+  function damageOutcome(move: RuntimeMove | undefined, attackerForm: RuntimeForm | undefined, defenderForm: RuntimeForm | undefined, attackerStats: RuntimeStatBlock | null, defenderStats: RuntimeStatBlock | null, attackerAbility: RuntimeAbility | null, defenderAbility: RuntimeAbility | null, battleContext: BattleContext): MoveDamageResult | null {
     if (!move || !attackerForm || !defenderForm || !attackerStats || !defenderStats) return null
-    return calculateMoveDamage({ level: attackerLevel, move, attackerStats, defenderStats, attackerTypeIds: attackerForm.types, defenderTypeIds: defenderForm.types, types: data.types, attackerAbility, defenderAbility })
+    return calculateMoveDamage({ level: attackerLevel, move, attackerStats, defenderStats, attackerTypeIds: attackerForm.types, defenderTypeIds: defenderForm.types, types: data.types, attackerAbility, defenderAbility, battleContext })
   }
 
   $: attackerSpecies = data.species.find(candidate => candidate.speciesId === attackerSpeciesId)
@@ -131,12 +149,13 @@
   $: filteredMoves = data.moves.filter(move => (!learnsetOnly || knownMoveIds.has(move.moveId))
     && (!normalizedMoveQuery || (move.zhName?.includes(moveQuery.trim()) ?? false) || move.canonicalName.toLocaleLowerCase().includes(normalizedMoveQuery)))
   $: selectedMove = data.moves.find(move => move.moveId === selectedMoveId)
-  $: damageResult = damageOutcome(selectedMove, attackerForm, defenderForm, attackerStatResult.stats, defenderStatResult.stats, attackerAbility, defenderAbility)
+  $: battleContext = { weather, attackerBurned, attackerStatStages: { atk: attackerAtkStage, spa: attackerSpaStage }, defenderStatStages: { def: defenderDefStage, spd: defenderSpdStage } } satisfies BattleContext
+  $: damageResult = damageOutcome(selectedMove, attackerForm, defenderForm, attackerStatResult.stats, defenderStatResult.stats, attackerAbility, defenderAbility, battleContext)
 </script>
 
 <section class="damage-calculator">
   <h2>核心伤害计算器</h2>
-  <p>第九世代普通单目标伤害范围，假设招式成功命中。默认双方 Lv.50、IV 31、EV 0、中性性格；不包含道具、特性、天气、场地、能力阶级、太晶化或要害。</p>
+  <p>第九世代普通单目标伤害范围，假设招式成功命中。支持已审查特性、攻防能力阶级、攻击方灼伤，以及普通日照/下雨的火水伤害修正；不包含道具、场地、太晶化或要害。</p>
 
   <div class="damage-sides">
     <section class="damage-side">
@@ -196,6 +215,19 @@
     </section>
   </div>
 
+  <section class="battle-context-controls">
+    <h3>战斗状态</h3>
+    <div class="battle-context-grid">
+      <label>攻击阶级<select aria-label="攻击阶级" bind:value={attackerAtkStage}>{#each stageOptions as stage}<option value={stage}>{stageLabel(stage)}</option>{/each}</select></label>
+      <label>特攻阶级<select aria-label="特攻阶级" bind:value={attackerSpaStage}>{#each stageOptions as stage}<option value={stage}>{stageLabel(stage)}</option>{/each}</select></label>
+      <label>防御阶级<select aria-label="防御阶级" bind:value={defenderDefStage}>{#each stageOptions as stage}<option value={stage}>{stageLabel(stage)}</option>{/each}</select></label>
+      <label>特防阶级<select aria-label="特防阶级" bind:value={defenderSpdStage}>{#each stageOptions as stage}<option value={stage}>{stageLabel(stage)}</option>{/each}</select></label>
+      <label>天气<select aria-label="天气" bind:value={weather}><option value="none">无</option><option value="sun">日照</option><option value="rain">下雨</option></select></label>
+      <label class="burn-toggle"><input type="checkbox" bind:checked={attackerBurned} /> 攻击方灼伤</label>
+    </div>
+    <p>灼伤只降低普通物理招式伤害；反射壁、光墙及其他天气未纳入。特殊招式或特性交互无法可靠处理时会明确停止计算。</p>
+  </section>
+
   <section class="damage-move-picker">
     <h3>招式</h3>
     <label class="search"><span>按中文名或英文名筛选</span><input bind:value={moveQuery} placeholder="例如：喷射火焰、Flamethrower、Body Press" /></label>
@@ -220,12 +252,13 @@
           <p><strong>{((damageResult.minDamage / defenderStatResult.stats.hp) * 100).toFixed(1)}%–{((damageResult.maxDamage / defenderStatResult.stats.hp) * 100).toFixed(1)}%</strong>（防守方 HP {defenderStatResult.stats.hp}）</p>
         </div>
         <div class="damage-modifiers">
-          <span>{damageResult.attackingStat.toUpperCase()} {damageResult.attack}</span>
-          <span>{damageResult.defendingStat.toUpperCase()} {damageResult.defense}</span>
+          <span>{damageResult.attackingStat.toUpperCase()} {damageResult.attack}{damageResult.effectiveAttack !== damageResult.attack ? ` → ${damageResult.effectiveAttack}` : ''}</span>
+          <span>{damageResult.defendingStat.toUpperCase()} {damageResult.defense}{damageResult.effectiveDefense !== damageResult.defense ? ` → ${damageResult.effectiveDefense}` : ''}</span>
           <span>STAB {damageResult.stabMultiplier}×</span>
           <span>原始属性 {damageResult.typeMultiplier}×</span>
           {#if damageResult.abilityAdjustedTypeMultiplier !== damageResult.typeMultiplier}<span>特性后 {damageResult.abilityAdjustedTypeMultiplier}×</span>{/if}
         </div>
+        {#if damageResult.appliedBattleContextModifiers.length}<p class="status">战斗状态：{damageResult.appliedBattleContextModifiers.map(battleContextModifierLabel).join('、')}</p>{/if}
         {#if damageResult.appliedAbilityEffects.length}<p class="status">已应用：{damageResult.appliedAbilityEffects.map(item => `${data.abilities.find(ability => ability.abilityId === item.abilityId)?.zhName ?? item.abilityId}（${abilityEffectLabel(item.effect)}）`).join('、')}</p>{/if}
         {#if damageResult.unmodeledAbilityIds.length}<p class="status">已选择但未建模：{damageResult.unmodeledAbilityIds.map(id => data.abilities.find(ability => ability.abilityId === id)?.zhName ?? id).join('、')}；结果仅使用核心伤害机制。</p>{/if}
       {:else if damageResult?.status === 'non-damaging'}
@@ -234,6 +267,8 @@
         <p class="status">暂不支持：{unsupportedLabels[damageResult.reason]}</p>
       {:else if damageResult?.status === 'incomplete'}
         <p class="status">招式资料不足，无法可靠计算。</p>
+      {:else if damageResult?.status === 'unsupported-context'}
+        <p class="status">当前组合暂不计算：{damageResult.reason === 'burn-with-guts' ? '灼伤与“毅力”的能力修正及灼伤豁免尚未建模。' : '“水蒸气”在日照下具有特殊增伤规则，不能套用普通水属性减伤。'}</p>
       {:else}
         <p class="status">请先修正双方配置。</p>
       {/if}

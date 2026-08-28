@@ -1,5 +1,6 @@
 import { calculateDefensiveMatchup, type DefensiveMatchup } from './type-matchup.ts'
 import { adjustDefensiveMultiplier, type AbilityAdjustedMultiplier, type AppliedAbilityEffect } from './ability-mechanics.ts'
+import { applyStatStage, DEFAULT_BATTLE_CONTEXT, validateBattleContext, type BattleContext, type BattleStatStage, type BattleWeather } from './battle-context.ts'
 import type { RuntimeAbility, RuntimeMove, RuntimeMoveDamageUnsupportedReason, RuntimeStatBlock, RuntimeType } from './types.js'
 
 export type DamageCoreInput = {
@@ -13,7 +14,14 @@ export type DamageCoreInput = {
   types: RuntimeType[]
   attackerAbility?: RuntimeAbility | null
   defenderAbility?: RuntimeAbility | null
+  moveCategory: 'physical' | 'special'
+  battleContext?: BattleContext
 }
+
+export type AppliedBattleContextModifier =
+  | { kind: 'stat-stage'; stat: 'atk' | 'def' | 'spa' | 'spd'; stage: BattleStatStage; before: number; after: number }
+  | { kind: 'weather'; weather: Exclude<BattleWeather, 'none'>; multiplier: 0.5 | 1.5 }
+  | { kind: 'burn'; multiplier: 0.5 }
 
 export type DamageCoreResult = {
   minDamage: number
@@ -25,6 +33,9 @@ export type DamageCoreResult = {
   modifiers: Array<'random-85-to-100' | 'stab' | 'type-effectiveness'>
   appliedAbilityEffects: AppliedAbilityEffect[]
   unmodeledAbilityIds: string[]
+  effectiveAttack: number
+  effectiveDefense: number
+  appliedBattleContextModifiers: AppliedBattleContextModifier[]
 }
 
 export type MoveDamageInput = {
@@ -37,6 +48,7 @@ export type MoveDamageInput = {
   types: RuntimeType[]
   attackerAbility?: RuntimeAbility | null
   defenderAbility?: RuntimeAbility | null
+  battleContext?: BattleContext
 }
 
 export type MoveDamageResult =
@@ -44,6 +56,7 @@ export type MoveDamageResult =
   | { status: 'non-damaging' }
   | { status: 'unsupported'; reason: RuntimeMoveDamageUnsupportedReason }
   | { status: 'incomplete'; reason: 'unknown-or-incomplete-mechanics' }
+  | { status: 'unsupported-context'; reason: 'burn-with-guts' | 'sun-with-hydro-steam' }
 
 function assertInteger(value: number, minimum: number, maximum: number, label: string): void {
   if (!Number.isInteger(value) || value < minimum || value > maximum) throw new Error(`DAMAGE_CALCULATOR_INVALID_${label}`)
@@ -64,11 +77,21 @@ function applyTypeMultiplier(value: number, multiplier: DefensiveMatchup['multip
   return Math.floor(Math.floor(value / 2) / 2)
 }
 
+function weatherMultiplier(weather: BattleWeather, moveTypeId: string): 0.5 | 1 | 1.5 {
+  if (weather === 'sun' && moveTypeId === 'type:fire') return 1.5
+  if (weather === 'sun' && moveTypeId === 'type:water') return 0.5
+  if (weather === 'rain' && moveTypeId === 'type:water') return 1.5
+  if (weather === 'rain' && moveTypeId === 'type:fire') return 0.5
+  return 1
+}
+
 export function calculateCoreDamage(input: DamageCoreInput): DamageCoreResult {
   assertInteger(input.level, 1, 100, 'LEVEL')
   assertInteger(input.attack, 1, 9999, 'ATTACK')
   assertInteger(input.defense, 1, 9999, 'DEFENSE')
   assertInteger(input.basePower, 1, 9999, 'BASE_POWER')
+  const context = input.battleContext ?? DEFAULT_BATTLE_CONTEXT
+  validateBattleContext(context)
   if (input.attackerTypeIds.length < 1 || input.attackerTypeIds.length > 2 || new Set(input.attackerTypeIds).size !== input.attackerTypeIds.length) throw new Error('DAMAGE_CALCULATOR_INVALID_ATTACKER_TYPES')
   if (input.defenderTypeIds.length < 1 || input.defenderTypeIds.length > 2 || new Set(input.defenderTypeIds).size !== input.defenderTypeIds.length) throw new Error('DAMAGE_CALCULATOR_INVALID_DEFENDER_TYPES')
 
@@ -89,19 +112,35 @@ export function calculateCoreDamage(input: DamageCoreInput): DamageCoreResult {
     .filter((ability): ability is RuntimeAbility => ability?.mechanics.status === 'unsupported')
     .map(ability => ability.abilityId)
 
+  const attackingStat: 'atk' | 'spa' = input.moveCategory === 'physical' ? 'atk' : 'spa'
+  const defendingStat: 'def' | 'spd' = input.moveCategory === 'physical' ? 'def' : 'spd'
+  const attackStage = context.attackerStatStages[attackingStat]
+  const defenseStage = context.defenderStatStages[defendingStat]
+  const stagedAttack = applyStatStage(input.attack, attackStage)
+  const effectiveDefense = applyStatStage(input.defense, defenseStage)
+  const appliedBattleContextModifiers: AppliedBattleContextModifier[] = [
+    ...(attackStage !== 0 ? [{ kind: 'stat-stage' as const, stat: attackingStat, stage: attackStage, before: input.attack, after: stagedAttack }] : []),
+    ...(defenseStage !== 0 ? [{ kind: 'stat-stage' as const, stat: defendingStat, stage: defenseStage, before: input.defense, after: effectiveDefense }] : []),
+  ]
   const levelFactor = Math.floor((2 * input.level) / 5) + 2
   const incomingAttackEffect = defensiveAdjustment.appliedEffects.find(item => item.effect.kind === 'incoming-type-attack-multiplier')?.effect
-  const modifiedAttack = incomingAttackEffect?.kind === 'incoming-type-attack-multiplier'
-    ? applyFixedPointModifier(input.attack, 1, 2)
-    : input.attack
-  const dividedByDefense = Math.floor((levelFactor * input.basePower * modifiedAttack) / input.defense)
+  const effectiveAttack = incomingAttackEffect?.kind === 'incoming-type-attack-multiplier'
+    ? applyFixedPointModifier(stagedAttack, 1, 2)
+    : stagedAttack
+  const dividedByDefense = Math.floor((levelFactor * input.basePower * effectiveAttack) / effectiveDefense)
   const baseDamage = Math.floor(dividedByDefense / 50) + 2
+  const weather = weatherMultiplier(context.weather, input.moveTypeId)
+  if (weather !== 1) appliedBattleContextModifiers.push({ kind: 'weather', weather: context.weather as Exclude<BattleWeather, 'none'>, multiplier: weather })
+  const burnApplies = context.attackerBurned && input.moveCategory === 'physical'
+  if (burnApplies) appliedBattleContextModifiers.push({ kind: 'burn', multiplier: 0.5 })
   const rolls = Array.from({ length: 16 }, (_, index) => index + 85).map(randomRoll => {
     if (defensiveAdjustment.adjustedMultiplier === 0) return 0
-    let damage = Math.floor((baseDamage * randomRoll) / 100)
+    let damage = weather === 1 ? baseDamage : applyFixedPointModifier(baseDamage, weather === 1.5 ? 3 : 1, 2)
+    damage = Math.floor((damage * randomRoll) / 100)
     if (stabMultiplier === 1.5) damage = applyFixedPointModifier(damage, 3, 2)
     if (stabMultiplier === 2) damage = applyFixedPointModifier(damage, 2, 1)
     damage = applyTypeMultiplier(damage, typeMultiplier)
+    if (burnApplies) damage = applyFixedPointModifier(damage, 1, 2)
     if (defensiveAdjustment.appliedEffects.some(item => item.effect.kind === 'super-effective-damage-multiplier')) damage = applyFixedPointModifier(damage, 3, 4)
     return Math.max(1, damage)
   })
@@ -115,6 +154,9 @@ export function calculateCoreDamage(input: DamageCoreInput): DamageCoreResult {
     modifiers: ['random-85-to-100', ...(stabMultiplier > 1 ? ['stab' as const] : []), 'type-effectiveness'],
     appliedAbilityEffects,
     unmodeledAbilityIds,
+    effectiveAttack,
+    effectiveDefense,
+    appliedBattleContextModifiers,
   }
 }
 
@@ -122,6 +164,10 @@ export function calculateMoveDamage(input: MoveDamageInput): MoveDamageResult {
   if (input.move.damageSupport.status !== 'supported') return input.move.damageSupport
   if (input.move.category === 'status') return { status: 'non-damaging' }
   if (input.move.power.kind !== 'numeric') return { status: 'incomplete', reason: 'unknown-or-incomplete-mechanics' }
+  const context = input.battleContext ?? DEFAULT_BATTLE_CONTEXT
+  validateBattleContext(context)
+  if (context.attackerBurned && input.attackerAbility?.abilityId === 'ability:0062') return { status: 'unsupported-context', reason: 'burn-with-guts' }
+  if (context.weather === 'sun' && input.move.moveId === 'move:0876') return { status: 'unsupported-context', reason: 'sun-with-hydro-steam' }
   const physical = input.move.category === 'physical'
   const attackingStat = physical ? 'atk' : 'spa'
   const defendingStat = physical ? 'def' : 'spd'
@@ -140,6 +186,8 @@ export function calculateMoveDamage(input: MoveDamageInput): MoveDamageResult {
       types: input.types,
       attackerAbility: input.attackerAbility,
       defenderAbility: input.defenderAbility,
+      moveCategory: input.move.category,
+      battleContext: context,
     }),
   }
 }
