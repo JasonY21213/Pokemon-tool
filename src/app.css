@@ -80,3 +80,19 @@ h4 { margin: 0; font-size: 1rem; }
 .move-detail { display: grid; gap: 0.75rem; padding: 0.9rem; border-radius: 0.4rem; background: #f1f5f9; }
 .move-mechanics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .move-mechanics span { padding: 0.45rem 0.6rem; border-radius: 0.35rem; background: #fff; }
+.damage-calculator { display: grid; gap: 1rem; margin: 1.25rem 0; padding: 1.25rem; border: 1px solid #cbd5e1; border-radius: 0.6rem; background: #fff; }
+.damage-sides { display: grid; grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); gap: 1rem; }
+.damage-side { display: grid; align-content: start; gap: 0.65rem; padding: 0.9rem; border-radius: 0.5rem; background: #f8fafc; }
+.damage-side > label, .damage-basic-inputs label { display: grid; gap: 0.3rem; font-weight: 600; }
+.damage-basic-inputs { display: flex; flex-wrap: wrap; gap: 0.65rem; }
+.damage-basic-inputs input { width: 5rem; }
+.damage-side td input { width: 3.75rem; }
+.damage-move-picker, .damage-result { display: grid; gap: 0.75rem; }
+.learnset-toggle { display: flex; align-items: center; gap: 0.45rem; }
+.damage-move-results { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: 0.4rem; max-height: 18rem; overflow-y: auto; }
+.damage-move-results button { display: grid; gap: 0.15rem; text-align: left; }
+.damage-move-results span { color: #64748b; font-size: 0.8rem; }
+.damage-result { padding: 0.9rem; border-radius: 0.5rem; background: #f1f5f9; }
+.damage-summary { display: flex; flex-wrap: wrap; gap: 1rem; }
+.damage-modifiers { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.damage-modifiers span { padding: 0.45rem 0.6rem; border-radius: 0.35rem; background: #fff; }

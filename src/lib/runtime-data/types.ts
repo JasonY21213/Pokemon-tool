@@ -94,7 +94,31 @@ export type RuntimeMove = {
   accuracy: RuntimeAccuracy
   pp: RuntimeNumericValue
   priority: number
+  damageSupport: RuntimeMoveDamageSupport
 }
+
+export type RuntimeMoveDamageUnsupportedReason =
+  | 'non-numeric-base-power'
+  | 'variable-base-power'
+  | 'fixed-or-counter-damage'
+  | 'ohko'
+  | 'multi-hit'
+  | 'spread-target'
+  | 'max-or-z-move'
+  | 'nonstandard-stat-selection'
+  | 'nonstandard-type-effectiveness'
+  | 'dynamic-move-type'
+  | 'dynamic-move-mechanics'
+  | 'forced-critical-hit'
+  | 'damage-cap'
+  | 'conditional-immunity'
+  | 'conditional-hit-mechanics'
+
+export type RuntimeMoveDamageSupport =
+  | { status: 'supported' }
+  | { status: 'non-damaging' }
+  | { status: 'unsupported'; reason: RuntimeMoveDamageUnsupportedReason }
+  | { status: 'incomplete'; reason: 'unknown-or-incomplete-mechanics' }
 
 export type RuntimeEvolution = {
   evolutionId: string

@@ -110,6 +110,7 @@ export function buildRuntimeData(artifacts: FullDryRunArtifacts): { species: Run
   const formLocalization = localizationMap(artifacts.localization.forms)
   const abilityLocalization = localizationMap(artifacts.localization.abilities)
   const moveLocalization = localizationMap(artifacts.localization.moves)
+  const damageSupportByMove = new Map(artifacts.damageSupport.map(record => [record.moveId, record.support]))
   const tagsByEntity = tagMap(artifacts.tags.assignments)
   const growthBySpecies = new Map(artifacts.growthRates.map(record => [stringValue(record, 'entityId'), growthResolution({ id: record.growthRateId, status: record.status })]))
   const growthOverrideByForm = new Map(artifacts.formGrowthRateOverrides.map(record => [stringValue(record, 'formId'), growthResolution(record.growthRateOverride)]))
@@ -218,6 +219,7 @@ export function buildRuntimeData(artifacts: FullDryRunArtifacts): { species: Run
         accuracy: accuracyValue(record.accuracy),
         pp: numericValue(record.pp),
         priority: Number.isInteger(record.priority) ? Number(record.priority) : (() => { throw new Error(`RUNTIME_MOVE_PRIORITY: ${moveId}`) })(),
+        damageSupport: damageSupportByMove.get(moveId) ?? (() => { throw new Error(`RUNTIME_MOVE_DAMAGE_SUPPORT: ${moveId}`) })(),
       }
     })
     .sort((left, right) => left.moveId.localeCompare(right.moveId, 'en'))

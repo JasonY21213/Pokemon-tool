@@ -14,6 +14,7 @@ test('runtime Moves retain localized mechanics and exclude the Nihil Light quara
     moveId: 'move:0001', canonicalName: 'Pound', zhName: '拍击',
     zhDescription: '使用长长的尾巴或手等拍打对手进行攻击。', typeId: 'type:normal', category: 'physical',
     power: { kind: 'numeric', value: 40 }, accuracy: { kind: 'percent', value: 100 }, pp: { kind: 'numeric', value: 35 }, priority: 0,
+    damageSupport: { status: 'supported' },
   })
   assert.deepEqual(swordsDance?.power, { kind: 'not-applicable' })
   assert.deepEqual(swordsDance?.accuracy, { kind: 'always' })

@@ -8,6 +8,7 @@ import { parseGrowthRate } from './growth-rate.ts'
 import { buildFormLocalizations, type StableFormLocalizationTarget } from './form-localization.ts'
 import { buildTagArtifacts, emptyTagArtifacts, loadCuratedTags, type TagArtifacts } from './tags.ts'
 import { buildLearnsetArtifacts, type LearnsetArtifacts } from './learnsets.ts'
+import { buildDamageSupportArtifacts, type DamageSupportArtifacts } from './damage-support.ts'
 import { serializeJson, writeJson } from './serialization.ts'
 import {
   loadReviewDecisions,
@@ -120,6 +121,8 @@ export interface FullDryRunArtifacts {
   learnsetUnresolved: LearnsetArtifacts['unresolved']
   learnsetQuarantined: LearnsetArtifacts['quarantined']
   learnsetReport: LearnsetArtifacts['report']
+  damageSupport: DamageSupportArtifacts['records']
+  damageSupportReport: DamageSupportArtifacts['report']
   growthRates: Array<Record<string, unknown>>
   formGrowthRateOverrides: Array<Record<string, unknown>>
   appearances: unknown[]
@@ -673,6 +676,7 @@ function summaryFor(artifacts: Omit<FullDryRunArtifacts, 'summary' | 'performanc
       byTag: Object.fromEntries(artifacts.tags.definitions.map(definition => [definition.tagId, artifacts.tags.assignments.filter(item => item.tagId === definition.tagId).length])),
     },
     learnsets: artifacts.learnsetReport,
+    damageSupport: artifacts.damageSupportReport,
     provenanceCount: artifacts.provenance.length,
     conflicts: { bySeverity, byDomain, total: artifacts.conflicts.length },
     registryProposals: Object.fromEntries(['species', 'form', 'ability', 'move'].map(kind => [kind, artifacts.registryProposals.filter(item => item.entityKind === kind).length])),
@@ -699,6 +703,7 @@ export async function buildFullDryRun(options: { fullCachePath?: string; skipTag
   const speciesForms = buildSpeciesAndForms(showdown.pokedex, fullZh.pokemon, source, proposals, conflicts, provenance)
   const abilityBuild = buildAbilities(showdown.abilities, fullZh.abilities, source, proposals, conflicts, provenance, reviewDecisions)
   const moveBuild = buildMoves(showdown.moves, fullZh.moves, source, proposals, conflicts, provenance, reviewDecisions)
+  const damageSupportBuild = buildDamageSupportArtifacts(moveBuild.moves.filter(move => move.dataStatus === 'complete'), showdown.moves)
   const learnsetBuild = buildLearnsetArtifacts({
     forms: speciesForms.forms,
     moves: moveBuild.moves,
@@ -747,6 +752,7 @@ export async function buildFullDryRun(options: { fullCachePath?: string; skipTag
     abilities: abilityBuild.abilities, moves: moveBuild.moves,
     learnsets: learnsetBuild.entries, learnsetInheritance: learnsetBuild.inheritance,
     learnsetUnresolved: learnsetBuild.unresolved, learnsetQuarantined: learnsetBuild.quarantined, learnsetReport: learnsetBuild.report,
+    damageSupport: damageSupportBuild.records, damageSupportReport: damageSupportBuild.report,
     growthRates, formGrowthRateOverrides: smoke.dataset.forms.filter(form => form.growthRateOverride !== null).map(form => ({ formId: form.formId, growthRateOverride: form.growthRateOverride })),
     appearances: smoke.dataset.appearances, appearanceCandidates, evolutions,
     dexes: dexBuild.dexes, dexEntries: dexBuild.entries, dexCandidates: dexBuild.candidates,
@@ -781,6 +787,7 @@ export async function emitFullDryRun(artifacts: FullDryRunArtifacts): Promise<{ 
     ['canonical-candidates/moves.json', artifacts.moves],
     ['canonical-candidates/learnsets.json', artifacts.learnsets],
     ['canonical-candidates/learnset-inheritance.json', artifacts.learnsetInheritance],
+    ['canonical-candidates/damage-support.json', artifacts.damageSupport],
     ['canonical-candidates/growth-rates.json', artifacts.growthRates],
     ['canonical-candidates/form-growth-rate-overrides.json', artifacts.formGrowthRateOverrides],
     ['canonical-candidates/appearances.json', artifacts.appearances],
@@ -801,6 +808,7 @@ export async function emitFullDryRun(artifacts: FullDryRunArtifacts): Promise<{ 
     ['reports/learnsets.json', artifacts.learnsetReport],
     ['reports/learnset-unresolved.json', artifacts.learnsetUnresolved],
     ['reports/learnset-quarantined.json', artifacts.learnsetQuarantined],
+    ['reports/damage-support.json', artifacts.damageSupportReport],
     ['id-registry-proposals.json', artifacts.registryProposals],
     ['reports/registry-diff.json', {
       addProposalCount: artifacts.registryProposals.length,

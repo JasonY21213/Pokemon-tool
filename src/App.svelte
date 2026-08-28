@@ -6,6 +6,7 @@
   import { calculateStats, totalEvs } from './lib/runtime-data/stat-calculator'
   import { expProgress, levelToTotalExp, resolveEffectiveGrowthRate } from './lib/runtime-data/experience-calculator'
   import { resolveEffectiveLearnsetMoveIds } from './lib/runtime-data/learnsets'
+  import DamageCalculator from './lib/components/DamageCalculator.svelte'
 
   let data: PokemonRuntimeData | null = null
   let error = ''
@@ -375,6 +376,8 @@
         {/each}
       </div>
     </section>
+
+    <DamageCalculator {data} />
 
     <section class="move-browser">
       <h2>招式查询</h2>
