@@ -12,13 +12,12 @@ body {
 
 #app {
   min-height: 100vh;
-  display: grid;
-  place-items: center;
 }
 
 main {
-  padding: 2rem;
-  text-align: center;
+  width: min(52rem, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 3rem 0;
 }
 
 h1 {
@@ -30,3 +29,21 @@ p {
   margin: 0;
   color: #475569;
 }
+
+header, .search, .detail, .results { margin-bottom: 1.25rem; }
+.search { display: grid; gap: 0.4rem; font-weight: 600; }
+input { padding: 0.7rem; border: 1px solid #94a3b8; border-radius: 0.4rem; font: inherit; }
+button { cursor: pointer; border: 1px solid #cbd5e1; border-radius: 0.4rem; background: #fff; padding: 0.55rem 0.7rem; color: inherit; font: inherit; }
+button:hover, button.active { border-color: #2563eb; background: #eff6ff; }
+.results { display: grid; gap: 0.4rem; }
+.results button { text-align: left; }
+.results span, .dex { color: #64748b; font-variant-numeric: tabular-nums; }
+small { color: #64748b; font-weight: 400; }
+.detail { display: grid; gap: 1rem; padding: 1.25rem; border: 1px solid #cbd5e1; border-radius: 0.6rem; background: #fff; }
+h2, h3 { margin: 0; }
+.forms, .stats { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.stats span { padding: 0.45rem 0.6rem; border-radius: 0.35rem; background: #f1f5f9; }
+ul { margin: 0; padding-left: 1.25rem; }
+li + li { margin-top: 0.45rem; }
+.status { padding: 1rem; border-radius: 0.5rem; background: #e2e8f0; }
+.error { color: #991b1b; background: #fee2e2; }

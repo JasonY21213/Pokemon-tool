@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "files": [
+    {
+      "path": "species.json",
+      "recordCount": 1025,
+      "sha256": "42fd71dd05ee28febe2479f75c8056a71f4b328acec0f5eb1483ee7bf975d19f"
+    },
+    {
+      "path": "forms.json",
+      "recordCount": 1380,
+      "sha256": "b8c8941fc343815f3aaa2cb220521286686a9c6e9e8af8d454321c63f7443f0a"
+    },
+    {
+      "path": "abilities.json",
+      "recordCount": 316,
+      "sha256": "626a5d07d4d4ea3fe6bb63265c476d453521b91d03f6ee9621d73517899af2e4"
+    }
+  ]
+}
