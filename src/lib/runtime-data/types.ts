@@ -40,7 +40,18 @@ export type RuntimeAbility = {
   canonicalName: string
   zhName: string | null
   zhDescription: string | null
+  mechanics: RuntimeAbilityMechanics
 }
+
+export type RuntimeAbilityMechanicsEffect =
+  | { kind: 'incoming-type-immunity'; typeId: string }
+  | { kind: 'incoming-type-attack-multiplier'; typeIds: string[]; multiplier: 0.5 }
+  | { kind: 'super-effective-damage-multiplier'; multiplier: 0.75 }
+  | { kind: 'stab-multiplier'; multiplier: 2 }
+
+export type RuntimeAbilityMechanics =
+  | { status: 'supported'; effects: RuntimeAbilityMechanicsEffect[] }
+  | { status: 'unsupported' }
 
 export type RuntimeTypeEffectiveness = 0 | 0.5 | 1 | 2
 

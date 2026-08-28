@@ -2,7 +2,8 @@
   import { calculateMoveDamage, type MoveDamageResult } from '../runtime-data/damage-calculator'
   import { resolveEffectiveLearnsetMoveIds } from '../runtime-data/learnsets'
   import { calculateStats, totalEvs } from '../runtime-data/stat-calculator'
-  import type { PokemonRuntimeData, RuntimeForm, RuntimeMove, RuntimeMoveDamageUnsupportedReason, RuntimeSpecies, RuntimeStatBlock } from '../runtime-data/types'
+  import { selectAbilityForForm } from '../runtime-data/ability-mechanics'
+  import type { PokemonRuntimeData, RuntimeAbility, RuntimeAbilityMechanicsEffect, RuntimeForm, RuntimeMove, RuntimeMoveDamageUnsupportedReason, RuntimeSpecies, RuntimeStatBlock } from '../runtime-data/types'
 
   export let data: PokemonRuntimeData
 
@@ -15,12 +16,14 @@
   let attackerFormId = 'form:0006:base'
   let attackerLevel = 50
   let attackerNatureId = 'nature:hardy'
+  let attackerAbilityId: string | null = null
   let attackerIvs = all31()
   let attackerEvs = all0()
   let defenderSpeciesId = 'species:0035'
   let defenderFormId = 'form:0035:base'
   let defenderLevel = 50
   let defenderNatureId = 'nature:hardy'
+  let defenderAbilityId: string | null = null
   let defenderIvs = all31()
   let defenderEvs = all0()
   let moveQuery = ''
@@ -38,11 +41,24 @@
   function resetAttackerForm(): void {
     const species = data.species.find(candidate => candidate.speciesId === attackerSpeciesId)
     attackerFormId = species?.defaultFormId ?? ''
+    attackerAbilityId = null
   }
 
   function resetDefenderForm(): void {
     const species = data.species.find(candidate => candidate.speciesId === defenderSpeciesId)
     defenderFormId = species?.defaultFormId ?? ''
+    defenderAbilityId = null
+  }
+
+  function abilitiesFor(form: RuntimeForm | undefined): Array<{ slot: RuntimeForm['abilities'][number]['slot']; ability: RuntimeAbility }> {
+    return form ? form.abilities.flatMap(slot => { const ability = data.abilities.find(candidate => candidate.abilityId === slot.abilityId); return ability ? [{ slot: slot.slot, ability }] : [] }) : []
+  }
+
+  function abilityEffectLabel(effect: RuntimeAbilityMechanicsEffect): string {
+    if (effect.kind === 'incoming-type-immunity') return `${typeName(effect.typeId)} 伤害免疫`
+    if (effect.kind === 'incoming-type-attack-multiplier') return `${effect.typeIds.map(typeName).join('/')} 攻击能力修正 ${effect.multiplier}×`
+    if (effect.kind === 'super-effective-damage-multiplier') return `效果绝佳伤害 ${effect.multiplier}×`
+    return `STAB ${effect.multiplier}×`
   }
 
   function displayForm(form: RuntimeForm, species: RuntimeSpecies | undefined): string {
@@ -93,9 +109,9 @@
     return move.category === 'physical' ? '物理' : move.category === 'special' ? '特殊' : '变化'
   }
 
-  function damageOutcome(move: RuntimeMove | undefined, attackerForm: RuntimeForm | undefined, defenderForm: RuntimeForm | undefined, attackerStats: RuntimeStatBlock | null, defenderStats: RuntimeStatBlock | null): MoveDamageResult | null {
+  function damageOutcome(move: RuntimeMove | undefined, attackerForm: RuntimeForm | undefined, defenderForm: RuntimeForm | undefined, attackerStats: RuntimeStatBlock | null, defenderStats: RuntimeStatBlock | null, attackerAbility: RuntimeAbility | null, defenderAbility: RuntimeAbility | null): MoveDamageResult | null {
     if (!move || !attackerForm || !defenderForm || !attackerStats || !defenderStats) return null
-    return calculateMoveDamage({ level: attackerLevel, move, attackerStats, defenderStats, attackerTypeIds: attackerForm.types, defenderTypeIds: defenderForm.types, types: data.types })
+    return calculateMoveDamage({ level: attackerLevel, move, attackerStats, defenderStats, attackerTypeIds: attackerForm.types, defenderTypeIds: defenderForm.types, types: data.types, attackerAbility, defenderAbility })
   }
 
   $: attackerSpecies = data.species.find(candidate => candidate.speciesId === attackerSpeciesId)
@@ -104,6 +120,10 @@
   $: defenderForms = formsFor(defenderSpecies)
   $: attackerForm = data.forms.find(candidate => candidate.formId === attackerFormId)
   $: defenderForm = data.forms.find(candidate => candidate.formId === defenderFormId)
+  $: attackerAbilityOptions = abilitiesFor(attackerForm)
+  $: defenderAbilityOptions = abilitiesFor(defenderForm)
+  $: attackerAbility = attackerForm ? selectAbilityForForm(attackerForm, data.abilities, attackerAbilityId) : null
+  $: defenderAbility = defenderForm ? selectAbilityForForm(defenderForm, data.abilities, defenderAbilityId) : null
   $: attackerStatResult = sideStats(attackerSpecies, attackerForm, attackerLevel, attackerNatureId, attackerIvs, attackerEvs)
   $: defenderStatResult = sideStats(defenderSpecies, defenderForm, defenderLevel, defenderNatureId, defenderIvs, defenderEvs)
   $: knownMoveIds = attackerForm ? new Set(resolveEffectiveLearnsetMoveIds(data.learnsets, attackerForm.formId)) : new Set<string>()
@@ -111,7 +131,7 @@
   $: filteredMoves = data.moves.filter(move => (!learnsetOnly || knownMoveIds.has(move.moveId))
     && (!normalizedMoveQuery || (move.zhName?.includes(moveQuery.trim()) ?? false) || move.canonicalName.toLocaleLowerCase().includes(normalizedMoveQuery)))
   $: selectedMove = data.moves.find(move => move.moveId === selectedMoveId)
-  $: damageResult = damageOutcome(selectedMove, attackerForm, defenderForm, attackerStatResult.stats, defenderStatResult.stats)
+  $: damageResult = damageOutcome(selectedMove, attackerForm, defenderForm, attackerStatResult.stats, defenderStatResult.stats, attackerAbility, defenderAbility)
 </script>
 
 <section class="damage-calculator">
@@ -129,10 +149,11 @@
         </select>
       </label>
       <label>形态
-        <select bind:value={attackerFormId}>
+        <select bind:value={attackerFormId} onchange={() => attackerAbilityId = null}>
           {#each attackerForms as form (form.formId)}<option value={form.formId}>{displayForm(form, attackerSpecies)}</option>{/each}
         </select>
       </label>
+      <label>特性效果<select aria-label="攻击方特性效果" bind:value={attackerAbilityId}><option value={null}>不启用</option>{#each attackerAbilityOptions as { slot, ability } (ability.abilityId)}<option value={ability.abilityId}>{slot} · {ability.zhName ?? ability.canonicalName}（{ability.mechanics.status === 'supported' ? '支持' : '未建模'}）</option>{/each}</select></label>
       <div class="damage-basic-inputs">
         <label>等级 <input aria-label="攻击方等级" type="number" min="1" max="100" step="1" bind:value={attackerLevel} /></label>
         <label>性格
@@ -156,10 +177,11 @@
         </select>
       </label>
       <label>形态
-        <select bind:value={defenderFormId}>
+        <select bind:value={defenderFormId} onchange={() => defenderAbilityId = null}>
           {#each defenderForms as form (form.formId)}<option value={form.formId}>{displayForm(form, defenderSpecies)}</option>{/each}
         </select>
       </label>
+      <label>特性效果<select aria-label="防守方特性效果" bind:value={defenderAbilityId}><option value={null}>不启用</option>{#each defenderAbilityOptions as { slot, ability } (ability.abilityId)}<option value={ability.abilityId}>{slot} · {ability.zhName ?? ability.canonicalName}（{ability.mechanics.status === 'supported' ? '支持' : '未建模'}）</option>{/each}</select></label>
       <div class="damage-basic-inputs">
         <label>等级 <input aria-label="防守方等级" type="number" min="1" max="100" step="1" bind:value={defenderLevel} /></label>
         <label>性格
@@ -201,8 +223,11 @@
           <span>{damageResult.attackingStat.toUpperCase()} {damageResult.attack}</span>
           <span>{damageResult.defendingStat.toUpperCase()} {damageResult.defense}</span>
           <span>STAB {damageResult.stabMultiplier}×</span>
-          <span>属性 {damageResult.typeMultiplier}×</span>
+          <span>原始属性 {damageResult.typeMultiplier}×</span>
+          {#if damageResult.abilityAdjustedTypeMultiplier !== damageResult.typeMultiplier}<span>特性后 {damageResult.abilityAdjustedTypeMultiplier}×</span>{/if}
         </div>
+        {#if damageResult.appliedAbilityEffects.length}<p class="status">已应用：{damageResult.appliedAbilityEffects.map(item => `${data.abilities.find(ability => ability.abilityId === item.abilityId)?.zhName ?? item.abilityId}（${abilityEffectLabel(item.effect)}）`).join('、')}</p>{/if}
+        {#if damageResult.unmodeledAbilityIds.length}<p class="status">已选择但未建模：{damageResult.unmodeledAbilityIds.map(id => data.abilities.find(ability => ability.abilityId === id)?.zhName ?? id).join('、')}；结果仅使用核心伤害机制。</p>{/if}
       {:else if damageResult?.status === 'non-damaging'}
         <p class="status">这是变化招式，不使用普通伤害公式。</p>
       {:else if damageResult?.status === 'unsupported'}

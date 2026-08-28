@@ -1,5 +1,6 @@
 import { calculateDefensiveMatchup } from './type-matchup.ts'
-import type { RuntimeForm, RuntimeMove, RuntimeType } from './types.js'
+import { adjustDefensiveMultiplier } from './ability-mechanics.ts'
+import type { RuntimeAbility, RuntimeForm, RuntimeMove, RuntimeType } from './types.js'
 import type { TeamMember } from './team-builder.ts'
 
 export type DefensiveContributor = { memberId: string; formId: string; multiplier: 0 | 0.25 | 0.5 | 1 | 2 | 4 }
@@ -16,6 +17,8 @@ export type DefensiveAnalysis = {
 }
 export type OffensiveContributor = { memberId: string; formId: string; moveId: string; moveTypeId: string }
 export type OffensiveAnalysis = { available: boolean; covered: Array<{ defenderTypeId: string; contributors: OffensiveContributor[] }>; gaps: string[] }
+export type AbilityDefensiveContributor = { memberId: string; formId: string; abilityId: string; rawMultiplier: DefensiveContributor['multiplier']; adjustedMultiplier: number }
+export type AbilityDefensiveAnalysis = { attackingTypeId: string; contributors: AbilityDefensiveContributor[] }
 
 function orderedTypes(types: RuntimeType[]): RuntimeType[] { return [...types].sort((left, right) => left.typeId.localeCompare(right.typeId, 'en')) }
 
@@ -46,6 +49,24 @@ export function analyzeDefensiveTypes(members: TeamMember[], formsById: Map<stri
 
 export function repeatedWeaknesses(analysis: DefensiveAnalysis[]): DefensiveAnalysis[] { return analysis.filter(item => item.weak >= 2) }
 export function defensiveGaps(analysis: DefensiveAnalysis[]): DefensiveAnalysis[] { return analysis.filter(item => item.weak > 0 && !item.hasResistanceOrImmunity) }
+
+export function analyzeAbilityAdjustedDefenses(members: TeamMember[], formsById: Map<string, RuntimeForm>, abilities: RuntimeAbility[], types: RuntimeType[]): AbilityDefensiveAnalysis[] {
+  const abilitiesById = new Map(abilities.map(ability => [ability.abilityId, ability]))
+  return orderedTypes(types).map(attacking => ({
+    attackingTypeId: attacking.typeId,
+    contributors: members.flatMap(member => {
+      if (member.abilityId === null) return []
+      const form = formsById.get(member.formId)
+      if (!form || !form.abilities.some(slot => slot.abilityId === member.abilityId)) throw new Error(`TEAM_ANALYSIS_ABILITY_NOT_AVAILABLE: ${member.memberId}`)
+      const ability = abilitiesById.get(member.abilityId)
+      if (!ability) throw new Error(`TEAM_ANALYSIS_ABILITY_MISSING: ${member.abilityId}`)
+      const raw = calculateDefensiveMatchup(types, form.types[0], form.types[1]).find(entry => entry.attackingTypeId === attacking.typeId)
+      if (!raw) throw new Error(`TEAM_ANALYSIS_TYPE_MISSING: ${attacking.typeId}`)
+      const adjusted = adjustDefensiveMultiplier(raw, ability)
+      return adjusted.appliedEffects.length ? [{ memberId: member.memberId, formId: member.formId, abilityId: ability.abilityId, rawMultiplier: raw.multiplier, adjustedMultiplier: adjusted.adjustedMultiplier }] : []
+    }),
+  })).filter(entry => entry.contributors.length > 0)
+}
 
 export function analyzeOffensiveCoverage(members: TeamMember[], moves: RuntimeMove[], types: RuntimeType[]): OffensiveAnalysis {
   const movesById = new Map(moves.map(move => [move.moveId, move]))

@@ -1,5 +1,6 @@
 import { calculateDefensiveMatchup, type DefensiveMatchup } from './type-matchup.ts'
-import type { RuntimeMove, RuntimeMoveDamageUnsupportedReason, RuntimeStatBlock, RuntimeType } from './types.js'
+import { adjustDefensiveMultiplier, type AbilityAdjustedMultiplier, type AppliedAbilityEffect } from './ability-mechanics.ts'
+import type { RuntimeAbility, RuntimeMove, RuntimeMoveDamageUnsupportedReason, RuntimeStatBlock, RuntimeType } from './types.js'
 
 export type DamageCoreInput = {
   level: number
@@ -10,6 +11,8 @@ export type DamageCoreInput = {
   attackerTypeIds: string[]
   defenderTypeIds: string[]
   types: RuntimeType[]
+  attackerAbility?: RuntimeAbility | null
+  defenderAbility?: RuntimeAbility | null
 }
 
 export type DamageCoreResult = {
@@ -17,8 +20,11 @@ export type DamageCoreResult = {
   maxDamage: number
   rolls: number[]
   typeMultiplier: DefensiveMatchup['multiplier']
-  stabMultiplier: 1 | 1.5
+  abilityAdjustedTypeMultiplier: AbilityAdjustedMultiplier
+  stabMultiplier: 1 | 1.5 | 2
   modifiers: Array<'random-85-to-100' | 'stab' | 'type-effectiveness'>
+  appliedAbilityEffects: AppliedAbilityEffect[]
+  unmodeledAbilityIds: string[]
 }
 
 export type MoveDamageInput = {
@@ -29,6 +35,8 @@ export type MoveDamageInput = {
   attackerTypeIds: string[]
   defenderTypeIds: string[]
   types: RuntimeType[]
+  attackerAbility?: RuntimeAbility | null
+  defenderAbility?: RuntimeAbility | null
 }
 
 export type MoveDamageResult =
@@ -67,16 +75,34 @@ export function calculateCoreDamage(input: DamageCoreInput): DamageCoreResult {
   const matchup = calculateDefensiveMatchup(input.types, input.defenderTypeIds[0], input.defenderTypeIds[1])
   const typeMultiplier = matchup.find(entry => entry.attackingTypeId === input.moveTypeId)?.multiplier
   if (typeMultiplier === undefined) throw new Error(`DAMAGE_CALCULATOR_UNKNOWN_MOVE_TYPE: ${input.moveTypeId}`)
-  const stabMultiplier: 1 | 1.5 = input.attackerTypeIds.includes(input.moveTypeId) ? 1.5 : 1
+  const defensiveAdjustment = adjustDefensiveMultiplier({ attackingTypeId: input.moveTypeId, multiplier: typeMultiplier }, input.defenderAbility ?? null)
+  const hasStab = input.attackerTypeIds.includes(input.moveTypeId)
+  const stabEffect = input.attackerAbility?.mechanics.status === 'supported'
+    ? input.attackerAbility.mechanics.effects.find(effect => effect.kind === 'stab-multiplier')
+    : undefined
+  const stabMultiplier: 1 | 1.5 | 2 = hasStab ? stabEffect?.kind === 'stab-multiplier' ? stabEffect.multiplier : 1.5 : 1
+  const appliedAbilityEffects: AppliedAbilityEffect[] = [
+    ...(hasStab && stabEffect ? [{ abilityId: input.attackerAbility!.abilityId, effect: stabEffect }] : []),
+    ...defensiveAdjustment.appliedEffects,
+  ]
+  const unmodeledAbilityIds = [input.attackerAbility, input.defenderAbility]
+    .filter((ability): ability is RuntimeAbility => ability?.mechanics.status === 'unsupported')
+    .map(ability => ability.abilityId)
 
   const levelFactor = Math.floor((2 * input.level) / 5) + 2
-  const dividedByDefense = Math.floor((levelFactor * input.basePower * input.attack) / input.defense)
+  const incomingAttackEffect = defensiveAdjustment.appliedEffects.find(item => item.effect.kind === 'incoming-type-attack-multiplier')?.effect
+  const modifiedAttack = incomingAttackEffect?.kind === 'incoming-type-attack-multiplier'
+    ? applyFixedPointModifier(input.attack, 1, 2)
+    : input.attack
+  const dividedByDefense = Math.floor((levelFactor * input.basePower * modifiedAttack) / input.defense)
   const baseDamage = Math.floor(dividedByDefense / 50) + 2
   const rolls = Array.from({ length: 16 }, (_, index) => index + 85).map(randomRoll => {
-    if (typeMultiplier === 0) return 0
+    if (defensiveAdjustment.adjustedMultiplier === 0) return 0
     let damage = Math.floor((baseDamage * randomRoll) / 100)
     if (stabMultiplier === 1.5) damage = applyFixedPointModifier(damage, 3, 2)
+    if (stabMultiplier === 2) damage = applyFixedPointModifier(damage, 2, 1)
     damage = applyTypeMultiplier(damage, typeMultiplier)
+    if (defensiveAdjustment.appliedEffects.some(item => item.effect.kind === 'super-effective-damage-multiplier')) damage = applyFixedPointModifier(damage, 3, 4)
     return Math.max(1, damage)
   })
   return {
@@ -84,8 +110,11 @@ export function calculateCoreDamage(input: DamageCoreInput): DamageCoreResult {
     maxDamage: Math.max(...rolls),
     rolls,
     typeMultiplier,
+    abilityAdjustedTypeMultiplier: defensiveAdjustment.adjustedMultiplier,
     stabMultiplier,
-    modifiers: ['random-85-to-100', ...(stabMultiplier === 1.5 ? ['stab' as const] : []), 'type-effectiveness'],
+    modifiers: ['random-85-to-100', ...(stabMultiplier > 1 ? ['stab' as const] : []), 'type-effectiveness'],
+    appliedAbilityEffects,
+    unmodeledAbilityIds,
   }
 }
 
@@ -109,6 +138,8 @@ export function calculateMoveDamage(input: MoveDamageInput): MoveDamageResult {
       attackerTypeIds: input.attackerTypeIds,
       defenderTypeIds: input.defenderTypeIds,
       types: input.types,
+      attackerAbility: input.attackerAbility,
+      defenderAbility: input.defenderAbility,
     }),
   }
 }

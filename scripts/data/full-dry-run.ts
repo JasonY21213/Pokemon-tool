@@ -9,6 +9,7 @@ import { buildFormLocalizations, type StableFormLocalizationTarget } from './for
 import { buildTagArtifacts, emptyTagArtifacts, loadCuratedTags, type TagArtifacts } from './tags.ts'
 import { buildLearnsetArtifacts, type LearnsetArtifacts } from './learnsets.ts'
 import { buildDamageSupportArtifacts, type DamageSupportArtifacts } from './damage-support.ts'
+import { buildAbilityMechanicsArtifacts, type AbilityMechanicsRecord, type AbilityMechanicsReport } from './ability-mechanics.ts'
 import { serializeJson, writeJson } from './serialization.ts'
 import {
   loadReviewDecisions,
@@ -115,6 +116,8 @@ export interface FullDryRunArtifacts {
   natures: Array<Record<string, unknown>>
   forms: Array<Record<string, unknown>>
   abilities: Array<Record<string, unknown>>
+  abilityMechanics: AbilityMechanicsRecord[]
+  abilityMechanicsReport: AbilityMechanicsReport
   moves: Array<Record<string, unknown>>
   learnsets: LearnsetArtifacts['entries']
   learnsetInheritance: LearnsetArtifacts['inheritance']
@@ -656,6 +659,7 @@ function summaryFor(artifacts: Omit<FullDryRunArtifacts, 'summary' | 'performanc
     species: { expected: 1025, matched: artifacts.species.filter(item => item.dataStatus === 'complete').length, unresolved: artifacts.species.filter(item => item.dataStatus === 'unresolved').length, extraExcluded: artifacts.extraShowdownRecords.length },
     forms: { total: artifacts.forms.length, ...mappingDistribution(artifacts.forms as Array<{ mappingClass: MappingClass }>), excludedCosmetic: artifacts.extraShowdownRecords.filter(item => item.reason === 'cosmetic-form-routed-to-appearance').length, excludedNonofficial: artifacts.extraShowdownRecords.filter(item => item.reason === 'outside-official-national-scope').length },
     abilities: { total: artifacts.abilities.length, ...mappingDistribution(artifacts.abilities as Array<{ mappingClass: MappingClass }>), officialNumberCollisionGroups: [...abilityNumberCounts.values()].filter(count => count > 1).length, localizationComplete: artifacts.localization.abilities.length, localizationMissing: artifacts.abilities.length - artifacts.localization.abilities.length },
+    abilityMechanics: artifacts.abilityMechanicsReport,
     moves: { total: artifacts.moves.length, stable: artifacts.moves.filter(item => item.dataStatus === 'complete').length, quarantined: artifacts.moves.filter(item => item.dataStatus === 'quarantined').length, future: artifacts.moves.filter(item => item.availability === 'Future').length, past: artifacts.moves.filter(item => item.availability === 'Past').length, officialNumbered: artifacts.moves.filter(item => item.officialNumber !== null).length, unnumberedSpecial: artifacts.moves.filter(item => item.officialNumber === null).length, ...mappingDistribution(artifacts.moves as Array<{ mappingClass: MappingClass }>), mechanicsConflicts: artifacts.conflicts.filter(item => item.domain === 'mechanics').length, localizationMissing: artifacts.moves.length - artifacts.localization.moves.length },
     growthRate: { resolved: artifacts.growthRates.filter(item => item.status === 'resolved').length, unresolved: artifacts.growthRates.filter(item => item.status === 'unresolved').length, overrides: growthOverrides, sourceInternalInconsistencies: artifacts.conflicts.filter(item => item.domain === 'growth' && item.severity === 'error').length, unknownRawValues: [...new Set(artifacts.growthRates.filter(item => item.status === 'unresolved').map(item => String(item.rawValue)))].sort() },
     appearance: { generated: artifacts.appearances.length, candidateDiscoveries: artifacts.appearanceCandidates.length, discoveryDistribution: Object.fromEntries(['likely-appearance', 'likely-form', 'ambiguous', 'ignored-image-only'].map(classification => [classification, artifacts.appearanceCandidates.filter(item => item.classification === classification).length])) },
@@ -702,6 +706,7 @@ export async function buildFullDryRun(options: { fullCachePath?: string; skipTag
   const provenance: Array<Record<string, unknown>> = []
   const speciesForms = buildSpeciesAndForms(showdown.pokedex, fullZh.pokemon, source, proposals, conflicts, provenance)
   const abilityBuild = buildAbilities(showdown.abilities, fullZh.abilities, source, proposals, conflicts, provenance, reviewDecisions)
+  const abilityMechanicsBuild = buildAbilityMechanicsArtifacts(abilityBuild.abilities, showdown.abilities)
   const moveBuild = buildMoves(showdown.moves, fullZh.moves, source, proposals, conflicts, provenance, reviewDecisions)
   const damageSupportBuild = buildDamageSupportArtifacts(moveBuild.moves.filter(move => move.dataStatus === 'complete'), showdown.moves)
   const learnsetBuild = buildLearnsetArtifacts({
@@ -749,7 +754,7 @@ export async function buildFullDryRun(options: { fullCachePath?: string; skipTag
   stage = performance.now()
   const partial = {
     sourceManifest, types: smoke.dataset.types as unknown as Array<Record<string, unknown>>, natures: smoke.dataset.natures as unknown as Array<Record<string, unknown>>, species: speciesForms.species, forms: speciesForms.forms,
-    abilities: abilityBuild.abilities, moves: moveBuild.moves,
+    abilities: abilityBuild.abilities, abilityMechanics: abilityMechanicsBuild.records, abilityMechanicsReport: abilityMechanicsBuild.report, moves: moveBuild.moves,
     learnsets: learnsetBuild.entries, learnsetInheritance: learnsetBuild.inheritance,
     learnsetUnresolved: learnsetBuild.unresolved, learnsetQuarantined: learnsetBuild.quarantined, learnsetReport: learnsetBuild.report,
     damageSupport: damageSupportBuild.records, damageSupportReport: damageSupportBuild.report,
@@ -784,6 +789,7 @@ export async function emitFullDryRun(artifacts: FullDryRunArtifacts): Promise<{ 
     ['canonical-candidates/species.json', artifacts.species],
     ['canonical-candidates/forms.json', artifacts.forms],
     ['canonical-candidates/abilities.json', artifacts.abilities],
+    ['canonical-candidates/ability-mechanics.json', artifacts.abilityMechanics],
     ['canonical-candidates/moves.json', artifacts.moves],
     ['canonical-candidates/learnsets.json', artifacts.learnsets],
     ['canonical-candidates/learnset-inheritance.json', artifacts.learnsetInheritance],
@@ -809,6 +815,7 @@ export async function emitFullDryRun(artifacts: FullDryRunArtifacts): Promise<{ 
     ['reports/learnset-unresolved.json', artifacts.learnsetUnresolved],
     ['reports/learnset-quarantined.json', artifacts.learnsetQuarantined],
     ['reports/damage-support.json', artifacts.damageSupportReport],
+    ['reports/ability-mechanics.json', artifacts.abilityMechanicsReport],
     ['id-registry-proposals.json', artifacts.registryProposals],
     ['reports/registry-diff.json', {
       addProposalCount: artifacts.registryProposals.length,

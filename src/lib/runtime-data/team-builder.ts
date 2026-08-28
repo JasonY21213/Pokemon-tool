@@ -2,13 +2,22 @@ import { resolveEffectiveLearnsetMoveIds } from './learnsets.ts'
 import { calculateDefensiveMatchup } from './type-matchup.ts'
 import type { PokemonRuntimeData, RuntimeForm, RuntimeMove, RuntimeType } from './types.js'
 
-export type TeamMember = { memberId: string; formId: string; moveIds: string[] }
+export type TeamMember = { memberId: string; formId: string; abilityId: string | null; moveIds: string[] }
 export type DefensiveTypeSummary = { attackingTypeId: string; weak: number; fourTimesWeak: number; twoTimesWeak: number; neutral: number; resistOrImmune: number }
 export type OffensiveTypeCoverage = { defenderTypeId: string; moveTypeIds: string[] }
 
 export function addTeamMember(members: TeamMember[], member: TeamMember, formIds: Set<string>): TeamMember[] {
   if (!formIds.has(member.formId) || members.length >= 6) return members
-  return [...members, { ...member, moveIds: [] }]
+  return [...members, { ...member, abilityId: null, moveIds: [] }]
+}
+
+export function updateMemberAbility(member: TeamMember, abilityId: string | null, form: RuntimeForm): TeamMember {
+  if (abilityId !== null && !form.abilities.some(slot => slot.abilityId === abilityId)) throw new Error(`TEAM_MEMBER_ABILITY_NOT_AVAILABLE: ${member.memberId}:${abilityId}`)
+  return { ...member, abilityId }
+}
+
+export function updateMemberForm(member: TeamMember, form: RuntimeForm): TeamMember {
+  return { ...member, formId: form.formId, abilityId: member.abilityId !== null && form.abilities.some(slot => slot.abilityId === member.abilityId) ? member.abilityId : null, moveIds: [] }
 }
 
 export function updateMemberMoves(member: TeamMember, moveIds: string[], allowedMoveIds: Set<string>): TeamMember {
@@ -30,7 +39,7 @@ export function validateTeamMembers(data: PokemonRuntimeData, members: TeamMembe
   const moveIds = new Set(data.moves.map(move => move.moveId))
   for (const member of members) {
     const form = formMap.get(member.formId)
-    if (!form || member.moveIds.length > 4 || new Set(member.moveIds).size !== member.moveIds.length || member.moveIds.some(id => !moveIds.has(id))) throw new Error(`TEAM_MEMBER_INVALID: ${member.memberId}`)
+    if (!form || member.moveIds.length > 4 || new Set(member.moveIds).size !== member.moveIds.length || member.moveIds.some(id => !moveIds.has(id)) || (member.abilityId !== null && !form.abilities.some(slot => slot.abilityId === member.abilityId))) throw new Error(`TEAM_MEMBER_INVALID: ${member.memberId}`)
     const allowed = new Set(resolveEffectiveLearnsetMoveIds(data.learnsets, form.formId))
     if (member.moveIds.some(id => !allowed.has(id))) throw new Error(`TEAM_MEMBER_MOVE_NOT_IN_LEARNSET: ${member.memberId}`)
   }

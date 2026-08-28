@@ -92,6 +92,15 @@ function assertRuntimeReferences(species: RuntimeSpecies[], forms: RuntimeForm[]
     if (!form.types.every(typeId => types.some(type => type.typeId === typeId))) throw new Error(`RUNTIME_FORM_TYPE_REFERENCE: ${form.formId}`)
   }
   const typeIds = new Set(types.map(type => type.typeId))
+  if (new Set(abilities.map(ability => ability.abilityId)).size !== abilities.length) throw new Error('RUNTIME_ABILITY_ID_UNIQUENESS')
+  for (const ability of abilities) {
+    if (ability.mechanics.status !== 'supported') continue
+    if (ability.mechanics.effects.length === 0) throw new Error(`RUNTIME_ABILITY_EMPTY_MECHANICS: ${ability.abilityId}`)
+    for (const effect of ability.mechanics.effects) {
+      if (effect.kind === 'incoming-type-immunity' && !typeIds.has(effect.typeId)) throw new Error(`RUNTIME_ABILITY_TYPE_REFERENCE: ${ability.abilityId}`)
+      if (effect.kind === 'incoming-type-attack-multiplier' && (effect.typeIds.length === 0 || !effect.typeIds.every(typeId => typeIds.has(typeId)))) throw new Error(`RUNTIME_ABILITY_TYPE_REFERENCE: ${ability.abilityId}`)
+    }
+  }
   if (typeIds.size !== 18 || types.some(type => type.damageTaken.length !== 18 || !type.damageTaken.every(entry => typeIds.has(entry.attackingTypeId)))) throw new Error('RUNTIME_TYPE_REFERENCE_INTEGRITY')
   if (natures.length !== 25 || new Set(natures.map(nature => nature.natureId)).size !== 25 || natures.some(nature => nature.neutral ? nature.plusStat !== null || nature.minusStat !== null : nature.plusStat === null || nature.minusStat === null || nature.plusStat === nature.minusStat)) throw new Error('RUNTIME_NATURE_REFERENCE_INTEGRITY')
   const growthIds = new Set(growthRates.map(rate => rate.growthRateId))
@@ -111,6 +120,7 @@ export function buildRuntimeData(artifacts: FullDryRunArtifacts): { species: Run
   const abilityLocalization = localizationMap(artifacts.localization.abilities)
   const moveLocalization = localizationMap(artifacts.localization.moves)
   const damageSupportByMove = new Map(artifacts.damageSupport.map(record => [record.moveId, record.support]))
+  const mechanicsByAbility = new Map(artifacts.abilityMechanics.map(record => [record.abilityId, record.mechanics]))
   const tagsByEntity = tagMap(artifacts.tags.assignments)
   const growthBySpecies = new Map(artifacts.growthRates.map(record => [stringValue(record, 'entityId'), growthResolution({ id: record.growthRateId, status: record.status })]))
   const growthOverrideByForm = new Map(artifacts.formGrowthRateOverrides.map(record => [stringValue(record, 'formId'), growthResolution(record.growthRateOverride)]))
@@ -172,6 +182,7 @@ export function buildRuntimeData(artifacts: FullDryRunArtifacts): { species: Run
       canonicalName: canonicalName(record),
       zhName: localized ? stringValue(localized, 'name') : null,
       zhDescription: localized && typeof localized.shortDescription === 'string' && localized.shortDescription.length > 0 ? localized.shortDescription : null,
+      mechanics: mechanicsByAbility.get(abilityId) ?? (() => { throw new Error(`RUNTIME_ABILITY_MECHANICS: ${abilityId}`) })(),
     }
   })
   const types: RuntimeType[] = artifacts.types.map(record => {
