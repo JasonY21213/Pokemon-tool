@@ -1,8 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { loadPokemonRuntimeData } from './lib/runtime-data/loader'
-  import type { PokemonRuntimeData, RuntimeAbility, RuntimeForm, RuntimeSpecies } from './lib/runtime-data/types'
+  import type { PokemonRuntimeData, RuntimeAbility, RuntimeForm, RuntimeSpecies, RuntimeStatBlock } from './lib/runtime-data/types'
   import { calculateDefensiveMatchup, groupDefensiveMatchup } from './lib/runtime-data/type-matchup'
+  import { calculateStats, totalEvs } from './lib/runtime-data/stat-calculator'
 
   let data: PokemonRuntimeData | null = null
   let error = ''
@@ -11,6 +12,15 @@
   let selectedForm: RuntimeForm | null = null
   let calculatorPrimaryTypeId = 'type:normal'
   let calculatorSecondaryTypeId = ''
+  let statLevel = 50
+  let statNatureId = 'nature:hardy'
+  let statIvs: RuntimeStatBlock = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 }
+  let statEvs: RuntimeStatBlock = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 }
+
+  const statLabels: Record<keyof RuntimeStatBlock, string> = {
+    hp: 'HP', atk: 'Attack', def: 'Defense', spa: 'Special Attack', spd: 'Special Defense', spe: 'Speed',
+  }
+  const statIds = Object.keys(statLabels) as Array<keyof RuntimeStatBlock>
 
   onMount(async () => {
     try {
@@ -49,6 +59,24 @@
     return data ? groupDefensiveMatchup(calculateDefensiveMatchup(data.types, primaryTypeId, secondaryTypeId)) : []
   }
 
+  function statCalculation(runtime: PokemonRuntimeData | null, species: RuntimeSpecies | null, form: RuntimeForm | null, level: number, ivs: RuntimeStatBlock, evs: RuntimeStatBlock, natureId: string): { stats: RuntimeStatBlock | null; error: string | null } {
+    const nature = runtime?.natures.find(candidate => candidate.natureId === natureId)
+    if (!species || !form || !nature) return { stats: null, error: null }
+    try {
+      return { stats: calculateStats({ speciesId: species.speciesId, baseStats: form.baseStats, level, ivs, evs, nature }), error: null }
+    } catch (cause) {
+      return { stats: null, error: cause instanceof Error && cause.message === 'STAT_CALCULATOR_EV_TOTAL_EXCEEDED' ? '努力值总和不能超过 510。' : '等级、个体值和努力值必须为允许范围内的整数。' }
+    }
+  }
+
+  function setAllIvs(): void {
+    statIvs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 }
+  }
+
+  function clearEvs(): void {
+    statEvs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 }
+  }
+
   $: normalizedQuery = query.trim().toLocaleLowerCase()
   $: results = data && normalizedQuery
     ? data.species.filter(species => species.zhName.includes(query.trim())
@@ -62,6 +90,8 @@
   $: abilities = resolveAbilities(data, selectedForm)
   $: selectedFormMatchup = selectedForm ? matchupGroups(selectedForm.types[0], selectedForm.types[1]) : []
   $: calculatorMatchup = calculatorPrimaryTypeId ? matchupGroups(calculatorPrimaryTypeId, calculatorSecondaryTypeId || undefined) : []
+  $: statResult = statCalculation(data, selectedSpecies, selectedForm, statLevel, statIvs, statEvs, statNatureId)
+  $: evTotal = totalEvs(statEvs)
 </script>
 
 <main>
@@ -91,6 +121,44 @@
           {/each}
         {:else}
           <p>没有找到匹配的宝可梦。</p>
+        {/if}
+      </section>
+
+      <section class="stat-calculator">
+        <h2>种族值计算器</h2>
+        <p>使用当前所选形态的种族值。努力值单项最多 252，总和最多 510。</p>
+        <div class="stat-controls">
+          <label>等级 <input type="number" min="1" max="100" step="1" bind:value={statLevel} /></label>
+          <label>性格
+            <select bind:value={statNatureId}>
+              {#each data.natures as nature (nature.natureId)}
+                <option value={nature.natureId}>{nature.canonicalName}{nature.neutral ? '（中性）' : `（+${statLabels[nature.plusStat!]} / -${statLabels[nature.minusStat!]}）`}</option>
+              {/each}
+            </select>
+          </label>
+          <button type="button" onclick={setAllIvs}>全部 IV 设为 31</button>
+          <button type="button" onclick={clearEvs}>清空 EV</button>
+        </div>
+        <p class:ev-over={evTotal > 510} class="ev-total">当前 EV 总和：{evTotal} / 510</p>
+        {#if statResult.error}
+          <p class="status error" role="alert">{statResult.error}</p>
+        {:else if statResult.stats}
+          <div class="stat-table-wrap">
+            <table>
+              <thead><tr><th>属性</th><th>Base</th><th>IV</th><th>EV</th><th>结果</th></tr></thead>
+              <tbody>
+                {#each statIds as stat}
+                  <tr>
+                    <th scope="row">{statLabels[stat]}</th>
+                    <td>{selectedForm ? selectedForm.baseStats[stat] : '—'}</td>
+                    <td><input aria-label={`${statLabels[stat]} IV`} type="number" min="0" max="31" step="1" bind:value={statIvs[stat]} /></td>
+                    <td><input aria-label={`${statLabels[stat]} EV`} type="number" min="0" max="252" step="1" bind:value={statEvs[stat]} /></td>
+                    <td><strong>{statResult.stats[stat]}</strong></td>
+                  </tr>
+                {/each}
+              </tbody>
+            </table>
+          </div>
         {/if}
       </section>
     {/if}

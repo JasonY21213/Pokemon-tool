@@ -51,6 +51,14 @@ export type RuntimeType = {
   }>
 }
 
+export type RuntimeNature = {
+  natureId: string
+  canonicalName: string
+  plusStat: 'atk' | 'def' | 'spa' | 'spd' | 'spe' | null
+  minusStat: 'atk' | 'def' | 'spa' | 'spd' | 'spe' | null
+  neutral: boolean
+}
+
 export type RuntimeManifestFile = {
   path: string
   sha256: string
@@ -67,5 +75,6 @@ export type PokemonRuntimeData = {
   forms: RuntimeForm[]
   abilities: RuntimeAbility[]
   types: RuntimeType[]
+  natures: RuntimeNature[]
   manifest: RuntimeManifest
 }

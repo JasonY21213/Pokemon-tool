@@ -20,6 +20,11 @@
       "path": "types.json",
       "recordCount": 18,
       "sha256": "1a972c076ae429836b3767ee2ee8e303dbc684d1e3417212086a6ef5867a3161"
+    },
+    {
+      "path": "natures.json",
+      "recordCount": 25,
+      "sha256": "e37ffe9eadfbe1c1f8d3f72e8f4319854f18efb2ddc0f06f98982febe1de489d"
     }
   ]
 }

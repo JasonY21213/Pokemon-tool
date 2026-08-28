@@ -1,5 +1,5 @@
 import { join, resolve } from 'node:path'
-import type { RuntimeAbility, RuntimeForm, RuntimeManifest, RuntimeSpecies, RuntimeType } from '../../src/lib/runtime-data/types.ts'
+import type { RuntimeAbility, RuntimeForm, RuntimeManifest, RuntimeNature, RuntimeSpecies, RuntimeType } from '../../src/lib/runtime-data/types.ts'
 import { buildFullDryRun, type FullDryRunArtifacts } from './full-dry-run.ts'
 import { getProjectRoot, sha256 } from './source.ts'
 import { serializeJson, writeJson } from './serialization.ts'
@@ -39,7 +39,7 @@ function tagMap(assignments: Array<{ entityId: string; tagId: string }>): Map<st
   return result
 }
 
-function assertRuntimeReferences(species: RuntimeSpecies[], forms: RuntimeForm[], abilities: RuntimeAbility[], types: RuntimeType[]): void {
+function assertRuntimeReferences(species: RuntimeSpecies[], forms: RuntimeForm[], abilities: RuntimeAbility[], types: RuntimeType[], natures: RuntimeNature[]): void {
   const formIds = new Set(forms.map(form => form.formId))
   const abilityIds = new Set(abilities.map(ability => ability.abilityId))
   for (const entry of species) {
@@ -53,9 +53,10 @@ function assertRuntimeReferences(species: RuntimeSpecies[], forms: RuntimeForm[]
   }
   const typeIds = new Set(types.map(type => type.typeId))
   if (typeIds.size !== 18 || types.some(type => type.damageTaken.length !== 18 || !type.damageTaken.every(entry => typeIds.has(entry.attackingTypeId)))) throw new Error('RUNTIME_TYPE_REFERENCE_INTEGRITY')
+  if (natures.length !== 25 || new Set(natures.map(nature => nature.natureId)).size !== 25 || natures.some(nature => nature.neutral ? nature.plusStat !== null || nature.minusStat !== null : nature.plusStat === null || nature.minusStat === null || nature.plusStat === nature.minusStat)) throw new Error('RUNTIME_NATURE_REFERENCE_INTEGRITY')
 }
 
-export function buildRuntimeData(artifacts: FullDryRunArtifacts): { species: RuntimeSpecies[]; forms: RuntimeForm[]; abilities: RuntimeAbility[]; types: RuntimeType[] } {
+export function buildRuntimeData(artifacts: FullDryRunArtifacts): { species: RuntimeSpecies[]; forms: RuntimeForm[]; abilities: RuntimeAbility[]; types: RuntimeType[]; natures: RuntimeNature[] } {
   const speciesLocalization = localizationMap(artifacts.localization.species)
   const formLocalization = localizationMap(artifacts.localization.forms)
   const abilityLocalization = localizationMap(artifacts.localization.abilities)
@@ -133,8 +134,14 @@ export function buildRuntimeData(artifacts: FullDryRunArtifacts): { species: Run
       }),
     }
   })
-  assertRuntimeReferences(species, forms, abilities, types)
-  return { species, forms, abilities, types }
+  const natures: RuntimeNature[] = artifacts.natures.map(record => {
+    const plusStat = record.plusStat
+    const minusStat = record.minusStat
+    const stat = (value: unknown): RuntimeNature['plusStat'] => value === null ? null : value === 'atk' || value === 'def' || value === 'spa' || value === 'spd' || value === 'spe' ? value : (() => { throw new Error('RUNTIME_NATURE_STAT') })()
+    return { natureId: stringValue(record, 'natureId'), canonicalName: canonicalName(record), plusStat: stat(plusStat), minusStat: stat(minusStat), neutral: record.neutral === true }
+  })
+  assertRuntimeReferences(species, forms, abilities, types, natures)
+  return { species, forms, abilities, types, natures }
 }
 
 export async function emitRuntimeData(artifacts: FullDryRunArtifacts, outputRoot = resolve(getProjectRoot(), 'public', 'data')): Promise<{ outputRoot: string; manifest: RuntimeManifest }> {
@@ -144,6 +151,7 @@ export async function emitRuntimeData(artifacts: FullDryRunArtifacts, outputRoot
     ['forms.json', runtime.forms, runtime.forms.length],
     ['abilities.json', runtime.abilities, runtime.abilities.length],
     ['types.json', runtime.types, runtime.types.length],
+    ['natures.json', runtime.natures, runtime.natures.length],
   ]
   const manifest: RuntimeManifest = {
     schemaVersion: 1,

@@ -14,6 +14,7 @@ test('runtime projection preserves stable Species, Form, Ability, and tag refere
   assert.equal(runtime.forms.length, 1380)
   assert.equal(runtime.abilities.length, 316)
   assert.equal(runtime.types.length, 18)
+  assert.equal(runtime.natures.length, 25)
   const charizard = runtime.species.find(species => species.speciesId === 'species:0006')
   assert.deepEqual(charizard?.formIds, ['form:0006:base', 'form:0006:gmax', 'form:0006:mega-x', 'form:0006:mega-y'])
   assert.equal(runtime.forms.find(form => form.formId === 'form:0006:mega-x')?.tagIds.includes('tag:mega'), true)
@@ -35,9 +36,9 @@ test('runtime public/data emission is deterministic byte-for-byte', async () => 
     const artifacts = await artifactsPromise
     const outputRoot = join(temporaryRoot, 'public', 'data')
     await emitRuntimeData(artifacts, outputRoot)
-    const first = await Promise.all(['species.json', 'forms.json', 'abilities.json', 'types.json', 'manifest.json'].map(file => readFile(join(temporaryRoot, 'public', 'data', file))))
+    const first = await Promise.all(['species.json', 'forms.json', 'abilities.json', 'types.json', 'natures.json', 'manifest.json'].map(file => readFile(join(temporaryRoot, 'public', 'data', file))))
     await emitRuntimeData(artifacts, outputRoot)
-    const second = await Promise.all(['species.json', 'forms.json', 'abilities.json', 'types.json', 'manifest.json'].map(file => readFile(join(temporaryRoot, 'public', 'data', file))))
+    const second = await Promise.all(['species.json', 'forms.json', 'abilities.json', 'types.json', 'natures.json', 'manifest.json'].map(file => readFile(join(temporaryRoot, 'public', 'data', file))))
     assert.deepEqual(second, first)
   } finally {
     await rm(temporaryRoot, { recursive: true, force: true })

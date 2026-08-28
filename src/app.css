@@ -30,7 +30,7 @@ p {
   color: #475569;
 }
 
-header, .search, .detail, .results, .calculator { margin-bottom: 1.25rem; }
+header, .search, .detail, .results, .calculator, .stat-calculator { margin-bottom: 1.25rem; }
 .search { display: grid; gap: 0.4rem; font-weight: 600; }
 input { padding: 0.7rem; border: 1px solid #94a3b8; border-radius: 0.4rem; font: inherit; }
 button { cursor: pointer; border: 1px solid #cbd5e1; border-radius: 0.4rem; background: #fff; padding: 0.55rem 0.7rem; color: inherit; font: inherit; }
@@ -53,3 +53,13 @@ li + li { margin-top: 0.45rem; }
 select { min-width: 10rem; padding: 0.55rem; border: 1px solid #94a3b8; border-radius: 0.4rem; background: #fff; font: inherit; }
 .matchup-groups { display: grid; gap: 0.35rem; }
 .matchup-groups p { padding: 0.5rem 0.6rem; border-radius: 0.35rem; background: #f1f5f9; }
+.stat-calculator { display: grid; gap: 0.9rem; padding: 1.25rem; border: 1px solid #cbd5e1; border-radius: 0.6rem; background: #fff; }
+.stat-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 0.75rem; }
+.stat-controls label { display: grid; gap: 0.35rem; font-weight: 600; }
+.stat-controls input { width: 5rem; }
+.ev-total { font-variant-numeric: tabular-nums; }
+.ev-over { color: #b91c1c; font-weight: 700; }
+.stat-table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; text-align: left; }
+th, td { padding: 0.5rem; border-bottom: 1px solid #e2e8f0; }
+td input { width: 4.5rem; padding: 0.4rem; }

@@ -1,0 +1,177 @@
+[
+  {
+    "natureId": "nature:adamant",
+    "canonicalName": "Adamant",
+    "plusStat": "atk",
+    "minusStat": "spa",
+    "neutral": false
+  },
+  {
+    "natureId": "nature:bashful",
+    "canonicalName": "Bashful",
+    "plusStat": null,
+    "minusStat": null,
+    "neutral": true
+  },
+  {
+    "natureId": "nature:bold",
+    "canonicalName": "Bold",
+    "plusStat": "def",
+    "minusStat": "atk",
+    "neutral": false
+  },
+  {
+    "natureId": "nature:brave",
+    "canonicalName": "Brave",
+    "plusStat": "atk",
+    "minusStat": "spe",
+    "neutral": false
+  },
+  {
+    "natureId": "nature:calm",
+    "canonicalName": "Calm",
+    "plusStat": "spd",
+    "minusStat": "atk",
+    "neutral": false
+  },
+  {
+    "natureId": "nature:careful",
+    "canonicalName": "Careful",
+    "plusStat": "spd",
+    "minusStat": "spa",
+    "neutral": false
+  },
+  {
+    "natureId": "nature:docile",
+    "canonicalName": "Docile",
+    "plusStat": null,
+    "minusStat": null,
+    "neutral": true
+  },
+  {
+    "natureId": "nature:gentle",
+    "canonicalName": "Gentle",
+    "plusStat": "spd",
+    "minusStat": "def",
+    "neutral": false
+  },
+  {
+    "natureId": "nature:hardy",
+    "canonicalName": "Hardy",
+    "plusStat": null,
+    "minusStat": null,
+    "neutral": true
+  },
+  {
+    "natureId": "nature:hasty",
+    "canonicalName": "Hasty",
+    "plusStat": "spe",
+    "minusStat": "def",
+    "neutral": false
+  },
+  {
+    "natureId": "nature:impish",
+    "canonicalName": "Impish",
+    "plusStat": "def",
+    "minusStat": "spa",
+    "neutral": false
+  },
+  {
+    "natureId": "nature:jolly",
+    "canonicalName": "Jolly",
+    "plusStat": "spe",
+    "minusStat": "spa",
+    "neutral": false
+  },
+  {
+    "natureId": "nature:lax",
+    "canonicalName": "Lax",
+    "plusStat": "def",
+    "minusStat": "spd",
+    "neutral": false
+  },
+  {
+    "natureId": "nature:lonely",
+    "canonicalName": "Lonely",
+    "plusStat": "atk",
+    "minusStat": "def",
+    "neutral": false
+  },
+  {
+    "natureId": "nature:mild",
+    "canonicalName": "Mild",
+    "plusStat": "spa",
+    "minusStat": "def",
+    "neutral": false
+  },
+  {
+    "natureId": "nature:modest",
+    "canonicalName": "Modest",
+    "plusStat": "spa",
+    "minusStat": "atk",
+    "neutral": false
+  },
+  {
+    "natureId": "nature:naive",
+    "canonicalName": "Naive",
+    "plusStat": "spe",
+    "minusStat": "spd",
+    "neutral": false
+  },
+  {
+    "natureId": "nature:naughty",
+    "canonicalName": "Naughty",
+    "plusStat": "atk",
+    "minusStat": "spd",
+    "neutral": false
+  },
+  {
+    "natureId": "nature:quiet",
+    "canonicalName": "Quiet",
+    "plusStat": "spa",
+    "minusStat": "spe",
+    "neutral": false
+  },
+  {
+    "natureId": "nature:quirky",
+    "canonicalName": "Quirky",
+    "plusStat": null,
+    "minusStat": null,
+    "neutral": true
+  },
+  {
+    "natureId": "nature:rash",
+    "canonicalName": "Rash",
+    "plusStat": "spa",
+    "minusStat": "spd",
+    "neutral": false
+  },
+  {
+    "natureId": "nature:relaxed",
+    "canonicalName": "Relaxed",
+    "plusStat": "def",
+    "minusStat": "spe",
+    "neutral": false
+  },
+  {
+    "natureId": "nature:sassy",
+    "canonicalName": "Sassy",
+    "plusStat": "spd",
+    "minusStat": "spe",
+    "neutral": false
+  },
+  {
+    "natureId": "nature:serious",
+    "canonicalName": "Serious",
+    "plusStat": null,
+    "minusStat": null,
+    "neutral": true
+  },
+  {
+    "natureId": "nature:timid",
+    "canonicalName": "Timid",
+    "plusStat": "spe",
+    "minusStat": "atk",
+    "neutral": false
+  }
+]
