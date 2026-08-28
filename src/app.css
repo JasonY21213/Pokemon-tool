@@ -74,6 +74,13 @@ td input { width: 4.5rem; padding: 0.4rem; }
 .learnset-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 0.5rem; max-height: 24rem; overflow-y: auto; }
 .learnset-list article { display: grid; gap: 0.15rem; padding: 0.65rem; border-radius: 0.35rem; background: #f1f5f9; }
 .learnset-list span { color: #475569; font-size: 0.875rem; }
+.learnset-filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: 0.65rem; }
+.learnset-filters label { display: grid; gap: 0.3rem; font-weight: 600; }
+.explorer-list { max-height: 30rem; }
+.explorer-list article button:first-child { padding: 0; border: 0; background: transparent; text-align: left; }
+.explorer-list article button:last-child { justify-self: start; margin-top: 0.25rem; }
+.moveset-summary { display: grid; gap: 0.65rem; padding: 0.85rem; border-radius: 0.4rem; background: #f1f5f9; }
+.moveset-summary li button { margin-left: 0.5rem; padding: 0.2rem 0.45rem; }
 h4 { margin: 0; font-size: 1rem; }
 .move-browser { display: grid; gap: 0.9rem; margin-top: 1.25rem; padding: 1.25rem; border: 1px solid #cbd5e1; border-radius: 0.6rem; background: #fff; }
 .move-results { display: grid; gap: 0.4rem; }
