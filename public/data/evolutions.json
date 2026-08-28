@@ -1,0 +1,5292 @@
+[
+  {
+    "evolutionId": "evolution:abra:kadabra:16",
+    "sourceFormId": "form:0063:base",
+    "targetFormId": "form:0064:base",
+    "method": null,
+    "level": 16,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:aipom:ambipom:levelmove",
+    "sourceFormId": "form:0190:base",
+    "targetFormId": "form:0424:base",
+    "method": "levelMove",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:amaura:aurorus:at-night-39",
+    "sourceFormId": "form:0698:base",
+    "targetFormId": "form:0699:base",
+    "method": null,
+    "level": 39,
+    "item": null,
+    "rawCondition": "at night",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:anorith:armaldo:40",
+    "sourceFormId": "form:0347:base",
+    "targetFormId": "form:0348:base",
+    "method": null,
+    "level": 40,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:applin:appletun:useitem-sweet-apple",
+    "sourceFormId": "form:0840:base",
+    "targetFormId": "form:0842:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Sweet Apple",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:applin:dipplin:useitem-syrupy-apple",
+    "sourceFormId": "form:0840:base",
+    "targetFormId": "form:1011:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Syrupy Apple",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:applin:flapple:useitem-tart-apple",
+    "sourceFormId": "form:0840:base",
+    "targetFormId": "form:0841:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Tart Apple",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:archen:archeops:37",
+    "sourceFormId": "form:0566:base",
+    "targetFormId": "form:0567:base",
+    "method": null,
+    "level": 37,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:arctibax:baxcalibur:54",
+    "sourceFormId": "form:0997:base",
+    "targetFormId": "form:0998:base",
+    "method": null,
+    "level": 54,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:aron:lairon:32",
+    "sourceFormId": "form:0304:base",
+    "targetFormId": "form:0305:base",
+    "method": null,
+    "level": 32,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:arrokuda:barraskewda:26",
+    "sourceFormId": "form:0846:base",
+    "targetFormId": "form:0847:base",
+    "method": null,
+    "level": 26,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:axew:fraxure:38",
+    "sourceFormId": "form:0610:base",
+    "targetFormId": "form:0611:base",
+    "method": null,
+    "level": 38,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:azurill:marill:levelfriendship",
+    "sourceFormId": "form:0298:base",
+    "targetFormId": "form:0183:base",
+    "method": "levelFriendship",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:bagon:shelgon:30",
+    "sourceFormId": "form:0371:base",
+    "targetFormId": "form:0372:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:baltoy:claydol:36",
+    "sourceFormId": "form:0343:base",
+    "targetFormId": "form:0344:base",
+    "method": null,
+    "level": 36,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:barboach:whiscash:30",
+    "sourceFormId": "form:0339:base",
+    "targetFormId": "form:0340:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:basculinwhitestriped:basculegion:other-receive-294-recoil-without-fainting",
+    "sourceFormId": "form:0550:white-striped",
+    "targetFormId": "form:0902:base",
+    "method": "other",
+    "level": null,
+    "item": null,
+    "rawCondition": "Receive 294+ recoil without fainting",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:basculinwhitestriped:basculegionf:other-receive-294-recoil-without-fainting",
+    "sourceFormId": "form:0550:white-striped",
+    "targetFormId": "form:0902:f",
+    "method": "other",
+    "level": null,
+    "item": null,
+    "rawCondition": "Receive 294+ recoil without fainting",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:bayleef:meganium:32",
+    "sourceFormId": "form:0153:base",
+    "targetFormId": "form:0154:base",
+    "method": null,
+    "level": 32,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:beldum:metang:20",
+    "sourceFormId": "form:0374:base",
+    "targetFormId": "form:0375:base",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:bellsprout:weepinbell:21",
+    "sourceFormId": "form:0069:base",
+    "targetFormId": "form:0070:base",
+    "method": null,
+    "level": 21,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:bergmite:avalugg:37",
+    "sourceFormId": "form:0712:base",
+    "targetFormId": "form:0713:base",
+    "method": null,
+    "level": 37,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:bergmite:avalugghisui:37",
+    "sourceFormId": "form:0712:base",
+    "targetFormId": "form:0713:hisui",
+    "method": null,
+    "level": 37,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:bidoof:bibarel:15",
+    "sourceFormId": "form:0399:base",
+    "targetFormId": "form:0400:base",
+    "method": null,
+    "level": 15,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:binacle:barbaracle:39",
+    "sourceFormId": "form:0688:base",
+    "targetFormId": "form:0689:base",
+    "method": null,
+    "level": 39,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:bisharp:kingambit:other-defeat-3-bisharp-leading-pawniard-and-level-up",
+    "sourceFormId": "form:0625:base",
+    "targetFormId": "form:0983:base",
+    "method": "other",
+    "level": null,
+    "item": null,
+    "rawCondition": "Defeat 3 Bisharp leading Pawniard and level-up",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:blipbug:dottler:10",
+    "sourceFormId": "form:0824:base",
+    "targetFormId": "form:0825:base",
+    "method": null,
+    "level": 10,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:blitzle:zebstrika:27",
+    "sourceFormId": "form:0522:base",
+    "targetFormId": "form:0523:base",
+    "method": null,
+    "level": 27,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:boldore:gigalith:trade",
+    "sourceFormId": "form:0525:base",
+    "targetFormId": "form:0526:base",
+    "method": "trade",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:bonsly:sudowoodo:levelmove",
+    "sourceFormId": "form:0438:base",
+    "targetFormId": "form:0185:base",
+    "method": "levelMove",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:bounsweet:steenee:18",
+    "sourceFormId": "form:0761:base",
+    "targetFormId": "form:0762:base",
+    "method": null,
+    "level": 18,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:braixen:delphox:36",
+    "sourceFormId": "form:0654:base",
+    "targetFormId": "form:0655:base",
+    "method": null,
+    "level": 36,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:bramblin:brambleghast:other-walk-1000-steps-in-let-s-go",
+    "sourceFormId": "form:0946:base",
+    "targetFormId": "form:0947:base",
+    "method": "other",
+    "level": null,
+    "item": null,
+    "rawCondition": "Walk 1000 steps in Let's Go",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:brionne:primarina:34",
+    "sourceFormId": "form:0729:base",
+    "targetFormId": "form:0730:base",
+    "method": null,
+    "level": 34,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:bronzor:bronzong:33",
+    "sourceFormId": "form:0436:base",
+    "targetFormId": "form:0437:base",
+    "method": null,
+    "level": 33,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:budew:roselia:levelfriendship-during-the-day",
+    "sourceFormId": "form:0406:base",
+    "targetFormId": "form:0315:base",
+    "method": "levelFriendship",
+    "level": null,
+    "item": null,
+    "rawCondition": "during the day",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:buizel:floatzel:26",
+    "sourceFormId": "form:0418:base",
+    "targetFormId": "form:0419:base",
+    "method": null,
+    "level": 26,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:bulbasaur:ivysaur:16",
+    "sourceFormId": "form:0001:base",
+    "targetFormId": "form:0002:base",
+    "method": null,
+    "level": 16,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:buneary:lopunny:levelfriendship",
+    "sourceFormId": "form:0427:base",
+    "targetFormId": "form:0428:base",
+    "method": "levelFriendship",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:bunnelby:diggersby:20",
+    "sourceFormId": "form:0659:base",
+    "targetFormId": "form:0660:base",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:burmy:mothim:20",
+    "sourceFormId": "form:0412:base",
+    "targetFormId": "form:0414:base",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:burmy:wormadam:20",
+    "sourceFormId": "form:0412:base",
+    "targetFormId": "form:0413:base",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:burmy:wormadamsandy:20",
+    "sourceFormId": "form:0412:base",
+    "targetFormId": "form:0413:sandy",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:burmy:wormadamtrash:20",
+    "sourceFormId": "form:0412:base",
+    "targetFormId": "form:0413:trash",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:cacnea:cacturne:32",
+    "sourceFormId": "form:0331:base",
+    "targetFormId": "form:0332:base",
+    "method": null,
+    "level": 32,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:capsakid:scovillain:useitem-fire-stone",
+    "sourceFormId": "form:0951:base",
+    "targetFormId": "form:0952:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Fire Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:carkol:coalossal:34",
+    "sourceFormId": "form:0838:base",
+    "targetFormId": "form:0839:base",
+    "method": null,
+    "level": 34,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:carvanha:sharpedo:30",
+    "sourceFormId": "form:0318:base",
+    "targetFormId": "form:0319:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:cascoon:dustox:10",
+    "sourceFormId": "form:0268:base",
+    "targetFormId": "form:0269:base",
+    "method": null,
+    "level": 10,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:caterpie:metapod:7",
+    "sourceFormId": "form:0010:base",
+    "targetFormId": "form:0011:base",
+    "method": null,
+    "level": 7,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:cetoddle:cetitan:useitem-ice-stone",
+    "sourceFormId": "form:0974:base",
+    "targetFormId": "form:0975:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Ice Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:chansey:blissey:levelfriendship",
+    "sourceFormId": "form:0113:base",
+    "targetFormId": "form:0242:base",
+    "method": "levelFriendship",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:charcadet:armarouge:useitem-auspicious-armor",
+    "sourceFormId": "form:0935:base",
+    "targetFormId": "form:0936:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Auspicious Armor",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:charcadet:ceruledge:useitem-malicious-armor",
+    "sourceFormId": "form:0935:base",
+    "targetFormId": "form:0937:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Malicious Armor",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:charjabug:vikavolt:useitem-thunder-stone",
+    "sourceFormId": "form:0737:base",
+    "targetFormId": "form:0738:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Thunder Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:charmander:charmeleon:16",
+    "sourceFormId": "form:0004:base",
+    "targetFormId": "form:0005:base",
+    "method": null,
+    "level": 16,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:charmeleon:charizard:36",
+    "sourceFormId": "form:0005:base",
+    "targetFormId": "form:0006:base",
+    "method": null,
+    "level": 36,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:cherubi:cherrim:25",
+    "sourceFormId": "form:0420:base",
+    "targetFormId": "form:0421:base",
+    "method": null,
+    "level": 25,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:chespin:quilladin:16",
+    "sourceFormId": "form:0650:base",
+    "targetFormId": "form:0651:base",
+    "method": null,
+    "level": 16,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:chewtle:drednaw:22",
+    "sourceFormId": "form:0833:base",
+    "targetFormId": "form:0834:base",
+    "method": null,
+    "level": 22,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:chikorita:bayleef:16",
+    "sourceFormId": "form:0152:base",
+    "targetFormId": "form:0153:base",
+    "method": null,
+    "level": 16,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:chimchar:monferno:14",
+    "sourceFormId": "form:0390:base",
+    "targetFormId": "form:0391:base",
+    "method": null,
+    "level": 14,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:chinchou:lanturn:27",
+    "sourceFormId": "form:0170:base",
+    "targetFormId": "form:0171:base",
+    "method": null,
+    "level": 27,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:chingling:chimecho:levelfriendship-at-night",
+    "sourceFormId": "form:0433:base",
+    "targetFormId": "form:0358:base",
+    "method": "levelFriendship",
+    "level": null,
+    "item": null,
+    "rawCondition": "at night",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:clamperl:gorebyss:trade-deep-sea-scale",
+    "sourceFormId": "form:0366:base",
+    "targetFormId": "form:0368:base",
+    "method": "trade",
+    "level": null,
+    "item": "Deep Sea Scale",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:clamperl:huntail:trade-deep-sea-tooth",
+    "sourceFormId": "form:0366:base",
+    "targetFormId": "form:0367:base",
+    "method": "trade",
+    "level": null,
+    "item": "Deep Sea Tooth",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:clauncher:clawitzer:37",
+    "sourceFormId": "form:0692:base",
+    "targetFormId": "form:0693:base",
+    "method": null,
+    "level": 37,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:clefairy:clefable:useitem-moon-stone",
+    "sourceFormId": "form:0035:base",
+    "targetFormId": "form:0036:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Moon Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:cleffa:clefairy:levelfriendship",
+    "sourceFormId": "form:0173:base",
+    "targetFormId": "form:0035:base",
+    "method": "levelFriendship",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:clobbopus:grapploct:levelmove",
+    "sourceFormId": "form:0852:base",
+    "targetFormId": "form:0853:base",
+    "method": "levelMove",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:combee:vespiquen:21",
+    "sourceFormId": "form:0415:base",
+    "targetFormId": "form:0416:base",
+    "method": null,
+    "level": 21,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:combusken:blaziken:36",
+    "sourceFormId": "form:0256:base",
+    "targetFormId": "form:0257:base",
+    "method": null,
+    "level": 36,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:corphish:crawdaunt:30",
+    "sourceFormId": "form:0341:base",
+    "targetFormId": "form:0342:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:corsolagalar:cursola:38",
+    "sourceFormId": "form:0222:galar",
+    "targetFormId": "form:0864:base",
+    "method": null,
+    "level": 38,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:corvisquire:corviknight:38",
+    "sourceFormId": "form:0822:base",
+    "targetFormId": "form:0823:base",
+    "method": null,
+    "level": 38,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:cosmoem:lunala:53",
+    "sourceFormId": "form:0790:base",
+    "targetFormId": "form:0792:base",
+    "method": null,
+    "level": 53,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:cosmoem:solgaleo:53",
+    "sourceFormId": "form:0790:base",
+    "targetFormId": "form:0791:base",
+    "method": null,
+    "level": 53,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:cosmog:cosmoem:43",
+    "sourceFormId": "form:0789:base",
+    "targetFormId": "form:0790:base",
+    "method": null,
+    "level": 43,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:cottonee:whimsicott:useitem-sun-stone",
+    "sourceFormId": "form:0546:base",
+    "targetFormId": "form:0547:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Sun Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:crabrawler:crabominable:useitem-ice-stone",
+    "sourceFormId": "form:0739:base",
+    "targetFormId": "form:0740:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Ice Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:cranidos:rampardos:30",
+    "sourceFormId": "form:0408:base",
+    "targetFormId": "form:0409:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:croagunk:toxicroak:37",
+    "sourceFormId": "form:0453:base",
+    "targetFormId": "form:0454:base",
+    "method": null,
+    "level": 37,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:crocalor:skeledirge:36",
+    "sourceFormId": "form:0910:base",
+    "targetFormId": "form:0911:base",
+    "method": null,
+    "level": 36,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:croconaw:feraligatr:30",
+    "sourceFormId": "form:0159:base",
+    "targetFormId": "form:0160:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:cubchoo:beartic:37",
+    "sourceFormId": "form:0613:base",
+    "targetFormId": "form:0614:base",
+    "method": null,
+    "level": 37,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:cubone:marowak:28",
+    "sourceFormId": "form:0104:base",
+    "targetFormId": "form:0105:base",
+    "method": null,
+    "level": 28,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:cubone:marowakalola:at-night-28",
+    "sourceFormId": "form:0104:base",
+    "targetFormId": "form:0105:alola",
+    "method": null,
+    "level": 28,
+    "item": null,
+    "rawCondition": "at night",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:cufant:copperajah:34",
+    "sourceFormId": "form:0878:base",
+    "targetFormId": "form:0879:base",
+    "method": null,
+    "level": 34,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:cutiefly:ribombee:25",
+    "sourceFormId": "form:0742:base",
+    "targetFormId": "form:0743:base",
+    "method": null,
+    "level": 25,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:cyndaquil:quilava:14",
+    "sourceFormId": "form:0155:base",
+    "targetFormId": "form:0156:base",
+    "method": null,
+    "level": 14,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:dartrix:decidueye:34",
+    "sourceFormId": "form:0723:base",
+    "targetFormId": "form:0724:base",
+    "method": null,
+    "level": 34,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:dartrix:decidueyehisui:36",
+    "sourceFormId": "form:0723:base",
+    "targetFormId": "form:0724:hisui",
+    "method": null,
+    "level": 36,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:darumaka:darmanitan:35",
+    "sourceFormId": "form:0554:base",
+    "targetFormId": "form:0555:base",
+    "method": null,
+    "level": 35,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:darumakagalar:darmanitangalar:useitem-ice-stone",
+    "sourceFormId": "form:0554:galar",
+    "targetFormId": "form:0555:galar",
+    "method": "useItem",
+    "level": null,
+    "item": "Ice Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:deerling:sawsbuck:34",
+    "sourceFormId": "form:0585:base",
+    "targetFormId": "form:0586:base",
+    "method": null,
+    "level": 34,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:deino:zweilous:50",
+    "sourceFormId": "form:0633:base",
+    "targetFormId": "form:0634:base",
+    "method": null,
+    "level": 50,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:dewott:samurott:36",
+    "sourceFormId": "form:0502:base",
+    "targetFormId": "form:0503:base",
+    "method": null,
+    "level": 36,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:dewott:samurotthisui:36",
+    "sourceFormId": "form:0502:base",
+    "targetFormId": "form:0503:hisui",
+    "method": null,
+    "level": 36,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:dewpider:araquanid:22",
+    "sourceFormId": "form:0751:base",
+    "targetFormId": "form:0752:base",
+    "method": null,
+    "level": 22,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:diglett:dugtrio:26",
+    "sourceFormId": "form:0050:base",
+    "targetFormId": "form:0051:base",
+    "method": null,
+    "level": 26,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:diglettalola:dugtrioalola:26",
+    "sourceFormId": "form:0050:alola",
+    "targetFormId": "form:0051:alola",
+    "method": null,
+    "level": 26,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:dipplin:hydrapple:levelmove",
+    "sourceFormId": "form:1011:base",
+    "targetFormId": "form:1019:base",
+    "method": "levelMove",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:doduo:dodrio:31",
+    "sourceFormId": "form:0084:base",
+    "targetFormId": "form:0085:base",
+    "method": null,
+    "level": 31,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:dolliv:arboliva:35",
+    "sourceFormId": "form:0929:base",
+    "targetFormId": "form:0930:base",
+    "method": null,
+    "level": 35,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:dottler:orbeetle:30",
+    "sourceFormId": "form:0825:base",
+    "targetFormId": "form:0826:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:doublade:aegislash:useitem-dusk-stone",
+    "sourceFormId": "form:0680:base",
+    "targetFormId": "form:0681:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Dusk Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:dragonair:dragonite:55",
+    "sourceFormId": "form:0148:base",
+    "targetFormId": "form:0149:base",
+    "method": null,
+    "level": 55,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:drakloak:dragapult:60",
+    "sourceFormId": "form:0886:base",
+    "targetFormId": "form:0887:base",
+    "method": null,
+    "level": 60,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:dratini:dragonair:30",
+    "sourceFormId": "form:0147:base",
+    "targetFormId": "form:0148:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:dreepy:drakloak:50",
+    "sourceFormId": "form:0885:base",
+    "targetFormId": "form:0886:base",
+    "method": null,
+    "level": 50,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:drifloon:drifblim:28",
+    "sourceFormId": "form:0425:base",
+    "targetFormId": "form:0426:base",
+    "method": null,
+    "level": 28,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:drilbur:excadrill:31",
+    "sourceFormId": "form:0529:base",
+    "targetFormId": "form:0530:base",
+    "method": null,
+    "level": 31,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:drizzile:inteleon:35",
+    "sourceFormId": "form:0817:base",
+    "targetFormId": "form:0818:base",
+    "method": null,
+    "level": 35,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:drowzee:hypno:26",
+    "sourceFormId": "form:0096:base",
+    "targetFormId": "form:0097:base",
+    "method": null,
+    "level": 26,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:ducklett:swanna:35",
+    "sourceFormId": "form:0580:base",
+    "targetFormId": "form:0581:base",
+    "method": null,
+    "level": 35,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:dunsparce:dudunsparce:levelmove",
+    "sourceFormId": "form:0206:base",
+    "targetFormId": "form:0982:base",
+    "method": "levelMove",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:dunsparce:dudunsparcethreesegment:levelmove",
+    "sourceFormId": "form:0206:base",
+    "targetFormId": "form:0982:three-segment",
+    "method": "levelMove",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:duosion:reuniclus:41",
+    "sourceFormId": "form:0578:base",
+    "targetFormId": "form:0579:base",
+    "method": null,
+    "level": 41,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:duraludon:archaludon:useitem-metal-alloy",
+    "sourceFormId": "form:0884:base",
+    "targetFormId": "form:1018:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Metal Alloy",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:dusclops:dusknoir:trade-reaper-cloth",
+    "sourceFormId": "form:0356:base",
+    "targetFormId": "form:0477:base",
+    "method": "trade",
+    "level": null,
+    "item": "Reaper Cloth",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:duskull:dusclops:37",
+    "sourceFormId": "form:0355:base",
+    "targetFormId": "form:0356:base",
+    "method": null,
+    "level": 37,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:dwebble:crustle:34",
+    "sourceFormId": "form:0557:base",
+    "targetFormId": "form:0558:base",
+    "method": null,
+    "level": 34,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:eelektrik:eelektross:useitem-thunder-stone",
+    "sourceFormId": "form:0603:base",
+    "targetFormId": "form:0604:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Thunder Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:eevee:espeon:levelfriendship-during-the-day",
+    "sourceFormId": "form:0133:base",
+    "targetFormId": "form:0196:base",
+    "method": "levelFriendship",
+    "level": null,
+    "item": null,
+    "rawCondition": "during the day",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:eevee:flareon:useitem-fire-stone",
+    "sourceFormId": "form:0133:base",
+    "targetFormId": "form:0136:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Fire Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:eevee:glaceon:useitem-ice-stone",
+    "sourceFormId": "form:0133:base",
+    "targetFormId": "form:0471:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Ice Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:eevee:jolteon:useitem-thunder-stone",
+    "sourceFormId": "form:0133:base",
+    "targetFormId": "form:0135:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Thunder Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:eevee:leafeon:useitem-leaf-stone",
+    "sourceFormId": "form:0133:base",
+    "targetFormId": "form:0470:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Leaf Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:eevee:sylveon:levelextra-with-a-fairy-type-move-and-two-levels-of-affection",
+    "sourceFormId": "form:0133:base",
+    "targetFormId": "form:0700:base",
+    "method": "levelExtra",
+    "level": null,
+    "item": null,
+    "rawCondition": "with a Fairy-type move and two levels of Affection",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:eevee:umbreon:levelfriendship-at-night",
+    "sourceFormId": "form:0133:base",
+    "targetFormId": "form:0197:base",
+    "method": "levelFriendship",
+    "level": null,
+    "item": null,
+    "rawCondition": "at night",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:eevee:vaporeon:useitem-water-stone",
+    "sourceFormId": "form:0133:base",
+    "targetFormId": "form:0134:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Water Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:ekans:arbok:22",
+    "sourceFormId": "form:0023:base",
+    "targetFormId": "form:0024:base",
+    "method": null,
+    "level": 22,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:electabuzz:electivire:trade-electirizer",
+    "sourceFormId": "form:0125:base",
+    "targetFormId": "form:0466:base",
+    "method": "trade",
+    "level": null,
+    "item": "Electirizer",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:electrike:manectric:26",
+    "sourceFormId": "form:0309:base",
+    "targetFormId": "form:0310:base",
+    "method": null,
+    "level": 26,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:elekid:electabuzz:30",
+    "sourceFormId": "form:0239:base",
+    "targetFormId": "form:0125:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:elgyem:beheeyem:42",
+    "sourceFormId": "form:0605:base",
+    "targetFormId": "form:0606:base",
+    "method": null,
+    "level": 42,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:espurr:meowstic:25",
+    "sourceFormId": "form:0677:base",
+    "targetFormId": "form:0678:base",
+    "method": null,
+    "level": 25,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:espurr:meowsticf:25",
+    "sourceFormId": "form:0677:base",
+    "targetFormId": "form:0678:female",
+    "method": null,
+    "level": 25,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:exeggcute:exeggutor:useitem-leaf-stone",
+    "sourceFormId": "form:0102:base",
+    "targetFormId": "form:0103:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Leaf Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:exeggcute:exeggutoralola:useitem-leaf-stone",
+    "sourceFormId": "form:0102:base",
+    "targetFormId": "form:0103:alola",
+    "method": "useItem",
+    "level": null,
+    "item": "Leaf Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:farfetchdgalar:sirfetchd:other-land-3-critical-hits-in-1-battle",
+    "sourceFormId": "form:0083:galar",
+    "targetFormId": "form:0865:base",
+    "method": "other",
+    "level": null,
+    "item": null,
+    "rawCondition": "Land 3 critical hits in 1 battle",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:feebas:milotic:trade-prism-scale",
+    "sourceFormId": "form:0349:base",
+    "targetFormId": "form:0350:base",
+    "method": "trade",
+    "level": null,
+    "item": "Prism Scale",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:fennekin:braixen:16",
+    "sourceFormId": "form:0653:base",
+    "targetFormId": "form:0654:base",
+    "method": null,
+    "level": 16,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:ferroseed:ferrothorn:40",
+    "sourceFormId": "form:0597:base",
+    "targetFormId": "form:0598:base",
+    "method": null,
+    "level": 40,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:fidough:dachsbun:26",
+    "sourceFormId": "form:0926:base",
+    "targetFormId": "form:0927:base",
+    "method": null,
+    "level": 26,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:finizen:palafin:38",
+    "sourceFormId": "form:0963:base",
+    "targetFormId": "form:0964:base",
+    "method": null,
+    "level": 38,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:finneon:lumineon:31",
+    "sourceFormId": "form:0456:base",
+    "targetFormId": "form:0457:base",
+    "method": null,
+    "level": 31,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:flaaffy:ampharos:30",
+    "sourceFormId": "form:0180:base",
+    "targetFormId": "form:0181:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:flabebe:floette:19",
+    "sourceFormId": "form:0669:base",
+    "targetFormId": "form:0670:base",
+    "method": null,
+    "level": 19,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:fletchinder:talonflame:35",
+    "sourceFormId": "form:0662:base",
+    "targetFormId": "form:0663:base",
+    "method": null,
+    "level": 35,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:fletchling:fletchinder:17",
+    "sourceFormId": "form:0661:base",
+    "targetFormId": "form:0662:base",
+    "method": null,
+    "level": 17,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:flittle:espathra:35",
+    "sourceFormId": "form:0955:base",
+    "targetFormId": "form:0956:base",
+    "method": null,
+    "level": 35,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:floette:florges:useitem-shiny-stone",
+    "sourceFormId": "form:0670:base",
+    "targetFormId": "form:0671:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Shiny Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:floragato:meowscarada:36",
+    "sourceFormId": "form:0907:base",
+    "targetFormId": "form:0908:base",
+    "method": null,
+    "level": 36,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:fomantis:lurantis:during-the-day-34",
+    "sourceFormId": "form:0753:base",
+    "targetFormId": "form:0754:base",
+    "method": null,
+    "level": 34,
+    "item": null,
+    "rawCondition": "during the day",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:foongus:amoonguss:39",
+    "sourceFormId": "form:0590:base",
+    "targetFormId": "form:0591:base",
+    "method": null,
+    "level": 39,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:fraxure:haxorus:48",
+    "sourceFormId": "form:0611:base",
+    "targetFormId": "form:0612:base",
+    "method": null,
+    "level": 48,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:frigibax:arctibax:35",
+    "sourceFormId": "form:0996:base",
+    "targetFormId": "form:0997:base",
+    "method": null,
+    "level": 35,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:frillish:jellicent:40",
+    "sourceFormId": "form:0592:base",
+    "targetFormId": "form:0593:base",
+    "method": null,
+    "level": 40,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:froakie:frogadier:16",
+    "sourceFormId": "form:0656:base",
+    "targetFormId": "form:0657:base",
+    "method": null,
+    "level": 16,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:frogadier:greninja:36",
+    "sourceFormId": "form:0657:base",
+    "targetFormId": "form:0658:base",
+    "method": null,
+    "level": 36,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:fuecoco:crocalor:16",
+    "sourceFormId": "form:0909:base",
+    "targetFormId": "form:0910:base",
+    "method": null,
+    "level": 16,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:gabite:garchomp:48",
+    "sourceFormId": "form:0444:base",
+    "targetFormId": "form:0445:base",
+    "method": null,
+    "level": 48,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:gastly:haunter:25",
+    "sourceFormId": "form:0092:base",
+    "targetFormId": "form:0093:base",
+    "method": null,
+    "level": 25,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:geodude:graveler:25",
+    "sourceFormId": "form:0074:base",
+    "targetFormId": "form:0075:base",
+    "method": null,
+    "level": 25,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:geodudealola:graveleralola:25",
+    "sourceFormId": "form:0074:alola",
+    "targetFormId": "form:0075:alola",
+    "method": null,
+    "level": 25,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:gible:gabite:24",
+    "sourceFormId": "form:0443:base",
+    "targetFormId": "form:0444:base",
+    "method": null,
+    "level": 24,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:gimmighoul:gholdengo:other-level-up-with-999-coins-in-the-bag",
+    "sourceFormId": "form:0999:base",
+    "targetFormId": "form:1000:base",
+    "method": "other",
+    "level": null,
+    "item": null,
+    "rawCondition": "Level up with 999 Coins in the bag",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:girafarig:farigiraf:levelmove",
+    "sourceFormId": "form:0203:base",
+    "targetFormId": "form:0981:base",
+    "method": "levelMove",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:glameow:purugly:38",
+    "sourceFormId": "form:0431:base",
+    "targetFormId": "form:0432:base",
+    "method": null,
+    "level": 38,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:gligar:gliscor:levelhold-razor-fang-at-night",
+    "sourceFormId": "form:0207:base",
+    "targetFormId": "form:0472:base",
+    "method": "levelHold",
+    "level": null,
+    "item": "Razor Fang",
+    "rawCondition": "at night",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:glimmet:glimmora:35",
+    "sourceFormId": "form:0969:base",
+    "targetFormId": "form:0970:base",
+    "method": null,
+    "level": 35,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:gloom:bellossom:useitem-sun-stone",
+    "sourceFormId": "form:0044:base",
+    "targetFormId": "form:0182:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Sun Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:gloom:vileplume:useitem-leaf-stone",
+    "sourceFormId": "form:0044:base",
+    "targetFormId": "form:0045:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Leaf Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:golbat:crobat:levelfriendship",
+    "sourceFormId": "form:0042:base",
+    "targetFormId": "form:0169:base",
+    "method": "levelFriendship",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:goldeen:seaking:33",
+    "sourceFormId": "form:0118:base",
+    "targetFormId": "form:0119:base",
+    "method": null,
+    "level": 33,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:golett:golurk:43",
+    "sourceFormId": "form:0622:base",
+    "targetFormId": "form:0623:base",
+    "method": null,
+    "level": 43,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:goomy:sliggoo:40",
+    "sourceFormId": "form:0704:base",
+    "targetFormId": "form:0705:base",
+    "method": null,
+    "level": 40,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:goomy:sliggoohisui:40",
+    "sourceFormId": "form:0704:base",
+    "targetFormId": "form:0705:hisui",
+    "method": null,
+    "level": 40,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:gossifleur:eldegoss:20",
+    "sourceFormId": "form:0829:base",
+    "targetFormId": "form:0830:base",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:gothita:gothorita:32",
+    "sourceFormId": "form:0574:base",
+    "targetFormId": "form:0575:base",
+    "method": null,
+    "level": 32,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:gothorita:gothitelle:41",
+    "sourceFormId": "form:0575:base",
+    "targetFormId": "form:0576:base",
+    "method": null,
+    "level": 41,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:graveler:golem:trade",
+    "sourceFormId": "form:0075:base",
+    "targetFormId": "form:0076:base",
+    "method": "trade",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:graveleralola:golemalola:trade",
+    "sourceFormId": "form:0075:alola",
+    "targetFormId": "form:0076:alola",
+    "method": "trade",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:greavard:houndstone:at-night-30",
+    "sourceFormId": "form:0971:base",
+    "targetFormId": "form:0972:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": "at night",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:grimer:muk:38",
+    "sourceFormId": "form:0088:base",
+    "targetFormId": "form:0089:base",
+    "method": null,
+    "level": 38,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:grimeralola:mukalola:38",
+    "sourceFormId": "form:0088:alola",
+    "targetFormId": "form:0089:alola",
+    "method": null,
+    "level": 38,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:grookey:thwackey:16",
+    "sourceFormId": "form:0810:base",
+    "targetFormId": "form:0811:base",
+    "method": null,
+    "level": 16,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:grotle:torterra:32",
+    "sourceFormId": "form:0388:base",
+    "targetFormId": "form:0389:base",
+    "method": null,
+    "level": 32,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:grovyle:sceptile:36",
+    "sourceFormId": "form:0253:base",
+    "targetFormId": "form:0254:base",
+    "method": null,
+    "level": 36,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:growlithe:arcanine:useitem-fire-stone",
+    "sourceFormId": "form:0058:base",
+    "targetFormId": "form:0059:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Fire Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:growlithehisui:arcaninehisui:useitem-fire-stone",
+    "sourceFormId": "form:0058:hisui",
+    "targetFormId": "form:0059:hisui",
+    "method": "useItem",
+    "level": null,
+    "item": "Fire Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:grubbin:charjabug:20",
+    "sourceFormId": "form:0736:base",
+    "targetFormId": "form:0737:base",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:gulpin:swalot:26",
+    "sourceFormId": "form:0316:base",
+    "targetFormId": "form:0317:base",
+    "method": null,
+    "level": 26,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:gurdurr:conkeldurr:trade",
+    "sourceFormId": "form:0533:base",
+    "targetFormId": "form:0534:base",
+    "method": "trade",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:hakamoo:kommoo:45",
+    "sourceFormId": "form:0783:base",
+    "targetFormId": "form:0784:base",
+    "method": null,
+    "level": 45,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:happiny:chansey:levelhold-oval-stone-during-the-day",
+    "sourceFormId": "form:0440:base",
+    "targetFormId": "form:0113:base",
+    "method": "levelHold",
+    "level": null,
+    "item": "Oval Stone",
+    "rawCondition": "during the day",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:hatenna:hattrem:32",
+    "sourceFormId": "form:0856:base",
+    "targetFormId": "form:0857:base",
+    "method": null,
+    "level": 32,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:hattrem:hatterene:42",
+    "sourceFormId": "form:0857:base",
+    "targetFormId": "form:0858:base",
+    "method": null,
+    "level": 42,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:haunter:gengar:trade",
+    "sourceFormId": "form:0093:base",
+    "targetFormId": "form:0094:base",
+    "method": "trade",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:helioptile:heliolisk:useitem-sun-stone",
+    "sourceFormId": "form:0694:base",
+    "targetFormId": "form:0695:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Sun Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:herdier:stoutland:32",
+    "sourceFormId": "form:0507:base",
+    "targetFormId": "form:0508:base",
+    "method": null,
+    "level": 32,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:hippopotas:hippowdon:34",
+    "sourceFormId": "form:0449:base",
+    "targetFormId": "form:0450:base",
+    "method": null,
+    "level": 34,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:honedge:doublade:35",
+    "sourceFormId": "form:0679:base",
+    "targetFormId": "form:0680:base",
+    "method": null,
+    "level": 35,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:hoothoot:noctowl:20",
+    "sourceFormId": "form:0163:base",
+    "targetFormId": "form:0164:base",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:hoppip:skiploom:18",
+    "sourceFormId": "form:0187:base",
+    "targetFormId": "form:0188:base",
+    "method": null,
+    "level": 18,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:horsea:seadra:32",
+    "sourceFormId": "form:0116:base",
+    "targetFormId": "form:0117:base",
+    "method": null,
+    "level": 32,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:houndour:houndoom:24",
+    "sourceFormId": "form:0228:base",
+    "targetFormId": "form:0229:base",
+    "method": null,
+    "level": 24,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:igglybuff:jigglypuff:levelfriendship",
+    "sourceFormId": "form:0174:base",
+    "targetFormId": "form:0039:base",
+    "method": "levelFriendship",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:impidimp:morgrem:32",
+    "sourceFormId": "form:0859:base",
+    "targetFormId": "form:0860:base",
+    "method": null,
+    "level": 32,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:inkay:malamar:with-the-console-turned-upside-down-30",
+    "sourceFormId": "form:0686:base",
+    "targetFormId": "form:0687:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": "with the console turned upside-down",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:ivysaur:venusaur:32",
+    "sourceFormId": "form:0002:base",
+    "targetFormId": "form:0003:base",
+    "method": null,
+    "level": 32,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:jangmoo:hakamoo:35",
+    "sourceFormId": "form:0782:base",
+    "targetFormId": "form:0783:base",
+    "method": null,
+    "level": 35,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:jigglypuff:wigglytuff:useitem-moon-stone",
+    "sourceFormId": "form:0039:base",
+    "targetFormId": "form:0040:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Moon Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:joltik:galvantula:36",
+    "sourceFormId": "form:0595:base",
+    "targetFormId": "form:0596:base",
+    "method": null,
+    "level": 36,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:kabuto:kabutops:40",
+    "sourceFormId": "form:0140:base",
+    "targetFormId": "form:0141:base",
+    "method": null,
+    "level": 40,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:kadabra:alakazam:trade",
+    "sourceFormId": "form:0064:base",
+    "targetFormId": "form:0065:base",
+    "method": "trade",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:kakuna:beedrill:10",
+    "sourceFormId": "form:0014:base",
+    "targetFormId": "form:0015:base",
+    "method": null,
+    "level": 10,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:karrablast:escavalier:trade-with-a-shelmet",
+    "sourceFormId": "form:0588:base",
+    "targetFormId": "form:0589:base",
+    "method": "trade",
+    "level": null,
+    "item": null,
+    "rawCondition": "with a Shelmet",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:kirlia:gallade:useitem-dawn-stone",
+    "sourceFormId": "form:0281:base",
+    "targetFormId": "form:0475:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Dawn Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:kirlia:gardevoir:30",
+    "sourceFormId": "form:0281:base",
+    "targetFormId": "form:0282:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:klang:klinklang:49",
+    "sourceFormId": "form:0600:base",
+    "targetFormId": "form:0601:base",
+    "method": null,
+    "level": 49,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:klink:klang:38",
+    "sourceFormId": "form:0599:base",
+    "targetFormId": "form:0600:base",
+    "method": null,
+    "level": 38,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:koffing:weezing:35",
+    "sourceFormId": "form:0109:base",
+    "targetFormId": "form:0110:base",
+    "method": null,
+    "level": 35,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:koffing:weezinggalar:35",
+    "sourceFormId": "form:0109:base",
+    "targetFormId": "form:0110:galar",
+    "method": null,
+    "level": 35,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:krabby:kingler:28",
+    "sourceFormId": "form:0098:base",
+    "targetFormId": "form:0099:base",
+    "method": null,
+    "level": 28,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:kricketot:kricketune:10",
+    "sourceFormId": "form:0401:base",
+    "targetFormId": "form:0402:base",
+    "method": null,
+    "level": 10,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:krokorok:krookodile:40",
+    "sourceFormId": "form:0552:base",
+    "targetFormId": "form:0553:base",
+    "method": null,
+    "level": 40,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:kubfu:urshifu:other-defeat-the-single-strike-tower",
+    "sourceFormId": "form:0891:base",
+    "targetFormId": "form:0892:base",
+    "method": "other",
+    "level": null,
+    "item": null,
+    "rawCondition": "Defeat the Single Strike Tower",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:kubfu:urshifurapidstrike:other-defeat-the-rapid-strike-tower",
+    "sourceFormId": "form:0891:base",
+    "targetFormId": "form:0892:rapid-strike",
+    "method": "other",
+    "level": null,
+    "item": null,
+    "rawCondition": "Defeat the Rapid Strike Tower",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:lairon:aggron:42",
+    "sourceFormId": "form:0305:base",
+    "targetFormId": "form:0306:base",
+    "method": null,
+    "level": 42,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:lampent:chandelure:useitem-dusk-stone",
+    "sourceFormId": "form:0608:base",
+    "targetFormId": "form:0609:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Dusk Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:larvesta:volcarona:59",
+    "sourceFormId": "form:0636:base",
+    "targetFormId": "form:0637:base",
+    "method": null,
+    "level": 59,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:larvitar:pupitar:30",
+    "sourceFormId": "form:0246:base",
+    "targetFormId": "form:0247:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:lechonk:oinkologne:18",
+    "sourceFormId": "form:0915:base",
+    "targetFormId": "form:0916:base",
+    "method": null,
+    "level": 18,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:lechonk:oinkolognef:18",
+    "sourceFormId": "form:0915:base",
+    "targetFormId": "form:0916:f",
+    "method": null,
+    "level": 18,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:ledyba:ledian:18",
+    "sourceFormId": "form:0165:base",
+    "targetFormId": "form:0166:base",
+    "method": null,
+    "level": 18,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:lickitung:lickilicky:levelmove",
+    "sourceFormId": "form:0108:base",
+    "targetFormId": "form:0463:base",
+    "method": "levelMove",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:lileep:cradily:40",
+    "sourceFormId": "form:0345:base",
+    "targetFormId": "form:0346:base",
+    "method": null,
+    "level": 40,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:lillipup:herdier:16",
+    "sourceFormId": "form:0506:base",
+    "targetFormId": "form:0507:base",
+    "method": null,
+    "level": 16,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:linoonegalar:obstagoon:at-night-35",
+    "sourceFormId": "form:0264:galar",
+    "targetFormId": "form:0862:base",
+    "method": null,
+    "level": 35,
+    "item": null,
+    "rawCondition": "at night",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:litleo:pyroar:35",
+    "sourceFormId": "form:0667:base",
+    "targetFormId": "form:0668:base",
+    "method": null,
+    "level": 35,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:litten:torracat:17",
+    "sourceFormId": "form:0725:base",
+    "targetFormId": "form:0726:base",
+    "method": null,
+    "level": 17,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:litwick:lampent:41",
+    "sourceFormId": "form:0607:base",
+    "targetFormId": "form:0608:base",
+    "method": null,
+    "level": 41,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:lombre:ludicolo:useitem-water-stone",
+    "sourceFormId": "form:0271:base",
+    "targetFormId": "form:0272:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Water Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:lotad:lombre:14",
+    "sourceFormId": "form:0270:base",
+    "targetFormId": "form:0271:base",
+    "method": null,
+    "level": 14,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:loudred:exploud:40",
+    "sourceFormId": "form:0294:base",
+    "targetFormId": "form:0295:base",
+    "method": null,
+    "level": 40,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:luxio:luxray:30",
+    "sourceFormId": "form:0404:base",
+    "targetFormId": "form:0405:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:machoke:machamp:trade",
+    "sourceFormId": "form:0067:base",
+    "targetFormId": "form:0068:base",
+    "method": "trade",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:machop:machoke:28",
+    "sourceFormId": "form:0066:base",
+    "targetFormId": "form:0067:base",
+    "method": null,
+    "level": 28,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:magby:magmar:30",
+    "sourceFormId": "form:0240:base",
+    "targetFormId": "form:0126:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:magikarp:gyarados:20",
+    "sourceFormId": "form:0129:base",
+    "targetFormId": "form:0130:base",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:magmar:magmortar:trade-magmarizer",
+    "sourceFormId": "form:0126:base",
+    "targetFormId": "form:0467:base",
+    "method": "trade",
+    "level": null,
+    "item": "Magmarizer",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:magnemite:magneton:30",
+    "sourceFormId": "form:0081:base",
+    "targetFormId": "form:0082:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:magneton:magnezone:useitem-thunder-stone",
+    "sourceFormId": "form:0082:base",
+    "targetFormId": "form:0462:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Thunder Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:makuhita:hariyama:24",
+    "sourceFormId": "form:0296:base",
+    "targetFormId": "form:0297:base",
+    "method": null,
+    "level": 24,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:mankey:primeape:28",
+    "sourceFormId": "form:0056:base",
+    "targetFormId": "form:0057:base",
+    "method": null,
+    "level": 28,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:mantyke:mantine:levelextra-with-a-remoraid-in-party",
+    "sourceFormId": "form:0458:base",
+    "targetFormId": "form:0226:base",
+    "method": "levelExtra",
+    "level": null,
+    "item": null,
+    "rawCondition": "with a Remoraid in party",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:mareanie:toxapex:38",
+    "sourceFormId": "form:0747:base",
+    "targetFormId": "form:0748:base",
+    "method": null,
+    "level": 38,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:mareep:flaaffy:15",
+    "sourceFormId": "form:0179:base",
+    "targetFormId": "form:0180:base",
+    "method": null,
+    "level": 15,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:marill:azumarill:18",
+    "sourceFormId": "form:0183:base",
+    "targetFormId": "form:0184:base",
+    "method": null,
+    "level": 18,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:marshtomp:swampert:36",
+    "sourceFormId": "form:0259:base",
+    "targetFormId": "form:0260:base",
+    "method": null,
+    "level": 36,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:maschiff:mabosstiff:30",
+    "sourceFormId": "form:0942:base",
+    "targetFormId": "form:0943:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:meditite:medicham:37",
+    "sourceFormId": "form:0307:base",
+    "targetFormId": "form:0308:base",
+    "method": null,
+    "level": 37,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:meowth:persian:28",
+    "sourceFormId": "form:0052:base",
+    "targetFormId": "form:0053:base",
+    "method": null,
+    "level": 28,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:meowthalola:persianalola:levelfriendship",
+    "sourceFormId": "form:0052:alola",
+    "targetFormId": "form:0053:alola",
+    "method": "levelFriendship",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:meowthgalar:perrserker:28",
+    "sourceFormId": "form:0052:galar",
+    "targetFormId": "form:0863:base",
+    "method": null,
+    "level": 28,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:metang:metagross:45",
+    "sourceFormId": "form:0375:base",
+    "targetFormId": "form:0376:base",
+    "method": null,
+    "level": 45,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:metapod:butterfree:10",
+    "sourceFormId": "form:0011:base",
+    "targetFormId": "form:0012:base",
+    "method": null,
+    "level": 10,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:mienfoo:mienshao:50",
+    "sourceFormId": "form:0619:base",
+    "targetFormId": "form:0620:base",
+    "method": null,
+    "level": 50,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:milcery:alcremie:other-spin-while-holding-a-sweet",
+    "sourceFormId": "form:0868:base",
+    "targetFormId": "form:0869:base",
+    "method": "other",
+    "level": null,
+    "item": null,
+    "rawCondition": "spin while holding a Sweet",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:mimejr:mrmime:levelmove",
+    "sourceFormId": "form:0439:base",
+    "targetFormId": "form:0122:base",
+    "method": "levelMove",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:mimejr:mrmimegalar:levelmove",
+    "sourceFormId": "form:0439:base",
+    "targetFormId": "form:0122:galar",
+    "method": "levelMove",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:minccino:cinccino:useitem-shiny-stone",
+    "sourceFormId": "form:0572:base",
+    "targetFormId": "form:0573:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Shiny Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:misdreavus:mismagius:useitem-dusk-stone",
+    "sourceFormId": "form:0200:base",
+    "targetFormId": "form:0429:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Dusk Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:monferno:infernape:36",
+    "sourceFormId": "form:0391:base",
+    "targetFormId": "form:0392:base",
+    "method": null,
+    "level": 36,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:morelull:shiinotic:24",
+    "sourceFormId": "form:0755:base",
+    "targetFormId": "form:0756:base",
+    "method": null,
+    "level": 24,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:morgrem:grimmsnarl:42",
+    "sourceFormId": "form:0860:base",
+    "targetFormId": "form:0861:base",
+    "method": null,
+    "level": 42,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:mrmimegalar:mrrime:42",
+    "sourceFormId": "form:0122:galar",
+    "targetFormId": "form:0866:base",
+    "method": null,
+    "level": 42,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:mudbray:mudsdale:30",
+    "sourceFormId": "form:0749:base",
+    "targetFormId": "form:0750:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:mudkip:marshtomp:16",
+    "sourceFormId": "form:0258:base",
+    "targetFormId": "form:0259:base",
+    "method": null,
+    "level": 16,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:munchlax:snorlax:levelfriendship",
+    "sourceFormId": "form:0446:base",
+    "targetFormId": "form:0143:base",
+    "method": "levelFriendship",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:munna:musharna:useitem-moon-stone",
+    "sourceFormId": "form:0517:base",
+    "targetFormId": "form:0518:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Moon Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:murkrow:honchkrow:useitem-dusk-stone",
+    "sourceFormId": "form:0198:base",
+    "targetFormId": "form:0430:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Dusk Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:nacli:naclstack:24",
+    "sourceFormId": "form:0932:base",
+    "targetFormId": "form:0933:base",
+    "method": null,
+    "level": 24,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:naclstack:garganacl:38",
+    "sourceFormId": "form:0933:base",
+    "targetFormId": "form:0934:base",
+    "method": null,
+    "level": 38,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:natu:xatu:25",
+    "sourceFormId": "form:0177:base",
+    "targetFormId": "form:0178:base",
+    "method": null,
+    "level": 25,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:nickit:thievul:18",
+    "sourceFormId": "form:0827:base",
+    "targetFormId": "form:0828:base",
+    "method": null,
+    "level": 18,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:nidoranf:nidorina:16",
+    "sourceFormId": "form:0029:base",
+    "targetFormId": "form:0030:base",
+    "method": null,
+    "level": 16,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:nidoranm:nidorino:16",
+    "sourceFormId": "form:0032:base",
+    "targetFormId": "form:0033:base",
+    "method": null,
+    "level": 16,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:nidorina:nidoqueen:useitem-moon-stone",
+    "sourceFormId": "form:0030:base",
+    "targetFormId": "form:0031:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Moon Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:nidorino:nidoking:useitem-moon-stone",
+    "sourceFormId": "form:0033:base",
+    "targetFormId": "form:0034:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Moon Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:nincada:ninjask:20",
+    "sourceFormId": "form:0290:base",
+    "targetFormId": "form:0291:base",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:nincada:shedinja:20",
+    "sourceFormId": "form:0290:base",
+    "targetFormId": "form:0292:base",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:noibat:noivern:48",
+    "sourceFormId": "form:0714:base",
+    "targetFormId": "form:0715:base",
+    "method": null,
+    "level": 48,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:nosepass:probopass:levelextra-near-a-special-magnetic-field",
+    "sourceFormId": "form:0299:base",
+    "targetFormId": "form:0476:base",
+    "method": "levelExtra",
+    "level": null,
+    "item": null,
+    "rawCondition": "near a special magnetic field",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:numel:camerupt:33",
+    "sourceFormId": "form:0322:base",
+    "targetFormId": "form:0323:base",
+    "method": null,
+    "level": 33,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:nuzleaf:shiftry:useitem-leaf-stone",
+    "sourceFormId": "form:0274:base",
+    "targetFormId": "form:0275:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Leaf Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:nymble:lokix:24",
+    "sourceFormId": "form:0919:base",
+    "targetFormId": "form:0920:base",
+    "method": null,
+    "level": 24,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:oddish:gloom:21",
+    "sourceFormId": "form:0043:base",
+    "targetFormId": "form:0044:base",
+    "method": null,
+    "level": 21,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:omanyte:omastar:40",
+    "sourceFormId": "form:0138:base",
+    "targetFormId": "form:0139:base",
+    "method": null,
+    "level": 40,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:onix:steelix:trade-metal-coat",
+    "sourceFormId": "form:0095:base",
+    "targetFormId": "form:0208:base",
+    "method": "trade",
+    "level": null,
+    "item": "Metal Coat",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:oshawott:dewott:17",
+    "sourceFormId": "form:0501:base",
+    "targetFormId": "form:0502:base",
+    "method": null,
+    "level": 17,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:palpitoad:seismitoad:36",
+    "sourceFormId": "form:0536:base",
+    "targetFormId": "form:0537:base",
+    "method": null,
+    "level": 36,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:pancham:pangoro:with-a-dark-type-in-the-party-32",
+    "sourceFormId": "form:0674:base",
+    "targetFormId": "form:0675:base",
+    "method": null,
+    "level": 32,
+    "item": null,
+    "rawCondition": "with a Dark-type in the party",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:panpour:simipour:useitem-water-stone",
+    "sourceFormId": "form:0515:base",
+    "targetFormId": "form:0516:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Water Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:pansage:simisage:useitem-leaf-stone",
+    "sourceFormId": "form:0511:base",
+    "targetFormId": "form:0512:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Leaf Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:pansear:simisear:useitem-fire-stone",
+    "sourceFormId": "form:0513:base",
+    "targetFormId": "form:0514:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Fire Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:paras:parasect:24",
+    "sourceFormId": "form:0046:base",
+    "targetFormId": "form:0047:base",
+    "method": null,
+    "level": 24,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:patrat:watchog:20",
+    "sourceFormId": "form:0504:base",
+    "targetFormId": "form:0505:base",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:pawmi:pawmo:18",
+    "sourceFormId": "form:0921:base",
+    "targetFormId": "form:0922:base",
+    "method": null,
+    "level": 18,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:pawmo:pawmot:other-walk-1000-steps-in-let-s-go",
+    "sourceFormId": "form:0922:base",
+    "targetFormId": "form:0923:base",
+    "method": "other",
+    "level": null,
+    "item": null,
+    "rawCondition": "walk 1000 steps in Let's Go",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:pawniard:bisharp:52",
+    "sourceFormId": "form:0624:base",
+    "targetFormId": "form:0625:base",
+    "method": null,
+    "level": 52,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:petilil:lilligant:useitem-sun-stone",
+    "sourceFormId": "form:0548:base",
+    "targetFormId": "form:0549:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Sun Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:petilil:lilliganthisui:useitem-sun-stone",
+    "sourceFormId": "form:0548:base",
+    "targetFormId": "form:0549:hisui",
+    "method": "useItem",
+    "level": null,
+    "item": "Sun Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:phanpy:donphan:25",
+    "sourceFormId": "form:0231:base",
+    "targetFormId": "form:0232:base",
+    "method": null,
+    "level": 25,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:phantump:trevenant:trade",
+    "sourceFormId": "form:0708:base",
+    "targetFormId": "form:0709:base",
+    "method": "trade",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:pichu:pikachu:levelfriendship",
+    "sourceFormId": "form:0172:base",
+    "targetFormId": "form:0025:base",
+    "method": "levelFriendship",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:pidgeotto:pidgeot:36",
+    "sourceFormId": "form:0017:base",
+    "targetFormId": "form:0018:base",
+    "method": null,
+    "level": 36,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:pidgey:pidgeotto:18",
+    "sourceFormId": "form:0016:base",
+    "targetFormId": "form:0017:base",
+    "method": null,
+    "level": 18,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:pidove:tranquill:21",
+    "sourceFormId": "form:0519:base",
+    "targetFormId": "form:0520:base",
+    "method": null,
+    "level": 21,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:pignite:emboar:36",
+    "sourceFormId": "form:0499:base",
+    "targetFormId": "form:0500:base",
+    "method": null,
+    "level": 36,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:pikachu:raichu:useitem-thunder-stone",
+    "sourceFormId": "form:0025:base",
+    "targetFormId": "form:0026:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Thunder Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:pikachu:raichualola:useitem-thunder-stone",
+    "sourceFormId": "form:0025:base",
+    "targetFormId": "form:0026:alola",
+    "method": "useItem",
+    "level": null,
+    "item": "Thunder Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:pikipek:trumbeak:14",
+    "sourceFormId": "form:0731:base",
+    "targetFormId": "form:0732:base",
+    "method": null,
+    "level": 14,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:piloswine:mamoswine:levelmove",
+    "sourceFormId": "form:0221:base",
+    "targetFormId": "form:0473:base",
+    "method": "levelMove",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:pineco:forretress:31",
+    "sourceFormId": "form:0204:base",
+    "targetFormId": "form:0205:base",
+    "method": null,
+    "level": 31,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:piplup:prinplup:16",
+    "sourceFormId": "form:0393:base",
+    "targetFormId": "form:0394:base",
+    "method": null,
+    "level": 16,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:poipole:naganadel:levelmove",
+    "sourceFormId": "form:0803:base",
+    "targetFormId": "form:0804:base",
+    "method": "levelMove",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:poliwag:poliwhirl:25",
+    "sourceFormId": "form:0060:base",
+    "targetFormId": "form:0061:base",
+    "method": null,
+    "level": 25,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:poliwhirl:politoed:trade-king-s-rock",
+    "sourceFormId": "form:0061:base",
+    "targetFormId": "form:0186:base",
+    "method": "trade",
+    "level": null,
+    "item": "King's Rock",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:poliwhirl:poliwrath:useitem-water-stone",
+    "sourceFormId": "form:0061:base",
+    "targetFormId": "form:0062:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Water Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:poltchageist:sinistcha:useitem-unremarkable-teacup",
+    "sourceFormId": "form:1012:base",
+    "targetFormId": "form:1013:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Unremarkable Teacup",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:poltchageistartisan:sinistchamasterpiece:useitem-masterpiece-teacup",
+    "sourceFormId": "form:1012:artisan",
+    "targetFormId": "form:1013:masterpiece",
+    "method": "useItem",
+    "level": null,
+    "item": "Masterpiece Teacup",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:ponyta:rapidash:40",
+    "sourceFormId": "form:0077:base",
+    "targetFormId": "form:0078:base",
+    "method": null,
+    "level": 40,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:ponytagalar:rapidashgalar:40",
+    "sourceFormId": "form:0077:galar",
+    "targetFormId": "form:0078:galar",
+    "method": null,
+    "level": 40,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:poochyena:mightyena:18",
+    "sourceFormId": "form:0261:base",
+    "targetFormId": "form:0262:base",
+    "method": null,
+    "level": 18,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:popplio:brionne:17",
+    "sourceFormId": "form:0728:base",
+    "targetFormId": "form:0729:base",
+    "method": null,
+    "level": 17,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:porygon:porygon2:trade-up-grade",
+    "sourceFormId": "form:0137:base",
+    "targetFormId": "form:0233:base",
+    "method": "trade",
+    "level": null,
+    "item": "Up-Grade",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:porygon2:porygonz:trade-dubious-disc",
+    "sourceFormId": "form:0233:base",
+    "targetFormId": "form:0474:base",
+    "method": "trade",
+    "level": null,
+    "item": "Dubious Disc",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:primeape:annihilape:other-use-rage-fist-20-times-and-level-up",
+    "sourceFormId": "form:0057:base",
+    "targetFormId": "form:0979:base",
+    "method": "other",
+    "level": null,
+    "item": null,
+    "rawCondition": "Use Rage Fist 20 times and level-up",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:prinplup:empoleon:36",
+    "sourceFormId": "form:0394:base",
+    "targetFormId": "form:0395:base",
+    "method": null,
+    "level": 36,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:psyduck:golduck:33",
+    "sourceFormId": "form:0054:base",
+    "targetFormId": "form:0055:base",
+    "method": null,
+    "level": 33,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:pumpkaboo:gourgeist:trade",
+    "sourceFormId": "form:0710:base",
+    "targetFormId": "form:0711:base",
+    "method": "trade",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:pumpkaboolarge:gourgeistlarge:trade",
+    "sourceFormId": "form:0710:large",
+    "targetFormId": "form:0711:large",
+    "method": "trade",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:pumpkaboosmall:gourgeistsmall:trade",
+    "sourceFormId": "form:0710:small",
+    "targetFormId": "form:0711:small",
+    "method": "trade",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:pumpkaboosuper:gourgeistsuper:trade",
+    "sourceFormId": "form:0710:super",
+    "targetFormId": "form:0711:super",
+    "method": "trade",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:pupitar:tyranitar:55",
+    "sourceFormId": "form:0247:base",
+    "targetFormId": "form:0248:base",
+    "method": null,
+    "level": 55,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:purrloin:liepard:20",
+    "sourceFormId": "form:0509:base",
+    "targetFormId": "form:0510:base",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:quaxly:quaxwell:16",
+    "sourceFormId": "form:0912:base",
+    "targetFormId": "form:0913:base",
+    "method": null,
+    "level": 16,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:quaxwell:quaquaval:36",
+    "sourceFormId": "form:0913:base",
+    "targetFormId": "form:0914:base",
+    "method": null,
+    "level": 36,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:quilava:typhlosion:36",
+    "sourceFormId": "form:0156:base",
+    "targetFormId": "form:0157:base",
+    "method": null,
+    "level": 36,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:quilava:typhlosionhisui:36",
+    "sourceFormId": "form:0156:base",
+    "targetFormId": "form:0157:hisui",
+    "method": null,
+    "level": 36,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:quilladin:chesnaught:36",
+    "sourceFormId": "form:0651:base",
+    "targetFormId": "form:0652:base",
+    "method": null,
+    "level": 36,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:qwilfishhisui:overqwil:other-use-strong-style-barb-barrage-20-times",
+    "sourceFormId": "form:0211:hisui",
+    "targetFormId": "form:0904:base",
+    "method": "other",
+    "level": null,
+    "item": null,
+    "rawCondition": "Use Strong style Barb Barrage 20 times",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:raboot:cinderace:35",
+    "sourceFormId": "form:0814:base",
+    "targetFormId": "form:0815:base",
+    "method": null,
+    "level": 35,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:ralts:kirlia:20",
+    "sourceFormId": "form:0280:base",
+    "targetFormId": "form:0281:base",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:rattata:raticate:20",
+    "sourceFormId": "form:0019:base",
+    "targetFormId": "form:0020:base",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:rattataalola:raticatealola:at-night-20",
+    "sourceFormId": "form:0019:alola",
+    "targetFormId": "form:0020:alola",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": "at night",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:rellor:rabsca:other-walk-1000-steps-in-let-s-go",
+    "sourceFormId": "form:0953:base",
+    "targetFormId": "form:0954:base",
+    "method": "other",
+    "level": null,
+    "item": null,
+    "rawCondition": "walk 1000 steps in Let's Go",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:remoraid:octillery:25",
+    "sourceFormId": "form:0223:base",
+    "targetFormId": "form:0224:base",
+    "method": null,
+    "level": 25,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:rhydon:rhyperior:trade-protector",
+    "sourceFormId": "form:0112:base",
+    "targetFormId": "form:0464:base",
+    "method": "trade",
+    "level": null,
+    "item": "Protector",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:rhyhorn:rhydon:42",
+    "sourceFormId": "form:0111:base",
+    "targetFormId": "form:0112:base",
+    "method": null,
+    "level": 42,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:riolu:lucario:levelfriendship-during-the-day",
+    "sourceFormId": "form:0447:base",
+    "targetFormId": "form:0448:base",
+    "method": "levelFriendship",
+    "level": null,
+    "item": null,
+    "rawCondition": "during the day",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:rockruff:lycanroc:during-the-day-25",
+    "sourceFormId": "form:0744:base",
+    "targetFormId": "form:0745:base",
+    "method": null,
+    "level": 25,
+    "item": null,
+    "rawCondition": "during the day",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:rockruff:lycanrocmidnight:at-night-25",
+    "sourceFormId": "form:0744:base",
+    "targetFormId": "form:0745:midnight",
+    "method": null,
+    "level": 25,
+    "item": null,
+    "rawCondition": "at night",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:rockruffdusk:lycanrocdusk:from-a-special-rockruff-during-the-evening-25",
+    "sourceFormId": "form:0744:dusk",
+    "targetFormId": "form:0745:dusk",
+    "method": null,
+    "level": 25,
+    "item": null,
+    "rawCondition": "from a special Rockruff during the evening",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:roggenrola:boldore:25",
+    "sourceFormId": "form:0524:base",
+    "targetFormId": "form:0525:base",
+    "method": null,
+    "level": 25,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:rolycoly:carkol:18",
+    "sourceFormId": "form:0837:base",
+    "targetFormId": "form:0838:base",
+    "method": null,
+    "level": 18,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:rookidee:corvisquire:18",
+    "sourceFormId": "form:0821:base",
+    "targetFormId": "form:0822:base",
+    "method": null,
+    "level": 18,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:roselia:roserade:useitem-shiny-stone",
+    "sourceFormId": "form:0315:base",
+    "targetFormId": "form:0407:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Shiny Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:rowlet:dartrix:17",
+    "sourceFormId": "form:0722:base",
+    "targetFormId": "form:0723:base",
+    "method": null,
+    "level": 17,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:rufflet:braviary:54",
+    "sourceFormId": "form:0627:base",
+    "targetFormId": "form:0628:base",
+    "method": null,
+    "level": 54,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:rufflet:braviaryhisui:54",
+    "sourceFormId": "form:0627:base",
+    "targetFormId": "form:0628:hisui",
+    "method": null,
+    "level": 54,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:salandit:salazzle:33",
+    "sourceFormId": "form:0757:base",
+    "targetFormId": "form:0758:base",
+    "method": null,
+    "level": 33,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:sandile:krokorok:29",
+    "sourceFormId": "form:0551:base",
+    "targetFormId": "form:0552:base",
+    "method": null,
+    "level": 29,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:sandshrew:sandslash:22",
+    "sourceFormId": "form:0027:base",
+    "targetFormId": "form:0028:base",
+    "method": null,
+    "level": 22,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:sandshrewalola:sandslashalola:useitem-ice-stone",
+    "sourceFormId": "form:0027:alola",
+    "targetFormId": "form:0028:alola",
+    "method": "useItem",
+    "level": null,
+    "item": "Ice Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:sandygast:palossand:42",
+    "sourceFormId": "form:0769:base",
+    "targetFormId": "form:0770:base",
+    "method": null,
+    "level": 42,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:scatterbug:spewpa:9",
+    "sourceFormId": "form:0664:base",
+    "targetFormId": "form:0665:base",
+    "method": null,
+    "level": 9,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:scorbunny:raboot:16",
+    "sourceFormId": "form:0813:base",
+    "targetFormId": "form:0814:base",
+    "method": null,
+    "level": 16,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:scraggy:scrafty:39",
+    "sourceFormId": "form:0559:base",
+    "targetFormId": "form:0560:base",
+    "method": null,
+    "level": 39,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:scyther:kleavor:useitem-black-augurite",
+    "sourceFormId": "form:0123:base",
+    "targetFormId": "form:0900:base",
+    "method": "useItem",
+    "level": null,
+    "item": null,
+    "rawCondition": "Black Augurite",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:scyther:scizor:trade-metal-coat",
+    "sourceFormId": "form:0123:base",
+    "targetFormId": "form:0212:base",
+    "method": "trade",
+    "level": null,
+    "item": "Metal Coat",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:seadra:kingdra:trade-dragon-scale",
+    "sourceFormId": "form:0117:base",
+    "targetFormId": "form:0230:base",
+    "method": "trade",
+    "level": null,
+    "item": "Dragon Scale",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:sealeo:walrein:44",
+    "sourceFormId": "form:0364:base",
+    "targetFormId": "form:0365:base",
+    "method": null,
+    "level": 44,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:seedot:nuzleaf:14",
+    "sourceFormId": "form:0273:base",
+    "targetFormId": "form:0274:base",
+    "method": null,
+    "level": 14,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:seel:dewgong:34",
+    "sourceFormId": "form:0086:base",
+    "targetFormId": "form:0087:base",
+    "method": null,
+    "level": 34,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:sentret:furret:15",
+    "sourceFormId": "form:0161:base",
+    "targetFormId": "form:0162:base",
+    "method": null,
+    "level": 15,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:servine:serperior:36",
+    "sourceFormId": "form:0496:base",
+    "targetFormId": "form:0497:base",
+    "method": null,
+    "level": 36,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:sewaddle:swadloon:20",
+    "sourceFormId": "form:0540:base",
+    "targetFormId": "form:0541:base",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:shelgon:salamence:50",
+    "sourceFormId": "form:0372:base",
+    "targetFormId": "form:0373:base",
+    "method": null,
+    "level": 50,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:shellder:cloyster:useitem-water-stone",
+    "sourceFormId": "form:0090:base",
+    "targetFormId": "form:0091:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Water Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:shellos:gastrodon:30",
+    "sourceFormId": "form:0422:base",
+    "targetFormId": "form:0423:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:shelmet:accelgor:trade-with-a-karrablast",
+    "sourceFormId": "form:0616:base",
+    "targetFormId": "form:0617:base",
+    "method": "trade",
+    "level": null,
+    "item": null,
+    "rawCondition": "with a Karrablast",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:shieldon:bastiodon:30",
+    "sourceFormId": "form:0410:base",
+    "targetFormId": "form:0411:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:shinx:luxio:15",
+    "sourceFormId": "form:0403:base",
+    "targetFormId": "form:0404:base",
+    "method": null,
+    "level": 15,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:shroodle:grafaiai:28",
+    "sourceFormId": "form:0944:base",
+    "targetFormId": "form:0945:base",
+    "method": null,
+    "level": 28,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:shroomish:breloom:23",
+    "sourceFormId": "form:0285:base",
+    "targetFormId": "form:0286:base",
+    "method": null,
+    "level": 23,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:shuppet:banette:37",
+    "sourceFormId": "form:0353:base",
+    "targetFormId": "form:0354:base",
+    "method": null,
+    "level": 37,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:silcoon:beautifly:10",
+    "sourceFormId": "form:0266:base",
+    "targetFormId": "form:0267:base",
+    "method": null,
+    "level": 10,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:silicobra:sandaconda:36",
+    "sourceFormId": "form:0843:base",
+    "targetFormId": "form:0844:base",
+    "method": null,
+    "level": 36,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:sinistea:polteageist:useitem-cracked-pot",
+    "sourceFormId": "form:0854:base",
+    "targetFormId": "form:0855:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Cracked Pot",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:sinisteaantique:polteageistantique:useitem-chipped-pot",
+    "sourceFormId": "form:0854:antique",
+    "targetFormId": "form:0855:antique",
+    "method": "useItem",
+    "level": null,
+    "item": "Chipped Pot",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:sizzlipede:centiskorch:28",
+    "sourceFormId": "form:0850:base",
+    "targetFormId": "form:0851:base",
+    "method": null,
+    "level": 28,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:skiddo:gogoat:32",
+    "sourceFormId": "form:0672:base",
+    "targetFormId": "form:0673:base",
+    "method": null,
+    "level": 32,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:skiploom:jumpluff:27",
+    "sourceFormId": "form:0188:base",
+    "targetFormId": "form:0189:base",
+    "method": null,
+    "level": 27,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:skitty:delcatty:useitem-moon-stone",
+    "sourceFormId": "form:0300:base",
+    "targetFormId": "form:0301:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Moon Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:skorupi:drapion:40",
+    "sourceFormId": "form:0451:base",
+    "targetFormId": "form:0452:base",
+    "method": null,
+    "level": 40,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:skrelp:dragalge:48",
+    "sourceFormId": "form:0690:base",
+    "targetFormId": "form:0691:base",
+    "method": null,
+    "level": 48,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:skwovet:greedent:24",
+    "sourceFormId": "form:0819:base",
+    "targetFormId": "form:0820:base",
+    "method": null,
+    "level": 24,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:slakoth:vigoroth:18",
+    "sourceFormId": "form:0287:base",
+    "targetFormId": "form:0288:base",
+    "method": null,
+    "level": 18,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:sliggoo:goodra:during-rain-50",
+    "sourceFormId": "form:0705:base",
+    "targetFormId": "form:0706:base",
+    "method": null,
+    "level": 50,
+    "item": null,
+    "rawCondition": "during rain",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:sliggoohisui:goodrahisui:during-rain-50",
+    "sourceFormId": "form:0705:hisui",
+    "targetFormId": "form:0706:hisui",
+    "method": null,
+    "level": 50,
+    "item": null,
+    "rawCondition": "during rain",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:slowpoke:slowbro:37",
+    "sourceFormId": "form:0079:base",
+    "targetFormId": "form:0080:base",
+    "method": null,
+    "level": 37,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:slowpoke:slowking:trade-king-s-rock",
+    "sourceFormId": "form:0079:base",
+    "targetFormId": "form:0199:base",
+    "method": "trade",
+    "level": null,
+    "item": "King's Rock",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:slowpokegalar:slowbrogalar:useitem-galarica-cuff",
+    "sourceFormId": "form:0079:galar",
+    "targetFormId": "form:0080:galar",
+    "method": "useItem",
+    "level": null,
+    "item": "Galarica Cuff",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:slowpokegalar:slowkinggalar:useitem-galarica-wreath",
+    "sourceFormId": "form:0079:galar",
+    "targetFormId": "form:0199:galar",
+    "method": "useItem",
+    "level": null,
+    "item": "Galarica Wreath",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:slugma:magcargo:38",
+    "sourceFormId": "form:0218:base",
+    "targetFormId": "form:0219:base",
+    "method": null,
+    "level": 38,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:smoliv:dolliv:25",
+    "sourceFormId": "form:0928:base",
+    "targetFormId": "form:0929:base",
+    "method": null,
+    "level": 25,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:smoochum:jynx:30",
+    "sourceFormId": "form:0238:base",
+    "targetFormId": "form:0124:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:sneasel:weavile:levelhold-razor-claw-at-night",
+    "sourceFormId": "form:0215:base",
+    "targetFormId": "form:0461:base",
+    "method": "levelHold",
+    "level": null,
+    "item": "Razor Claw",
+    "rawCondition": "at night",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:sneaselhisui:sneasler:levelhold-razor-claw-during-the-day",
+    "sourceFormId": "form:0215:hisui",
+    "targetFormId": "form:0903:base",
+    "method": "levelHold",
+    "level": null,
+    "item": "Razor Claw",
+    "rawCondition": "during the day",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:snivy:servine:17",
+    "sourceFormId": "form:0495:base",
+    "targetFormId": "form:0496:base",
+    "method": null,
+    "level": 17,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:snom:frosmoth:levelfriendship-at-night",
+    "sourceFormId": "form:0872:base",
+    "targetFormId": "form:0873:base",
+    "method": "levelFriendship",
+    "level": null,
+    "item": null,
+    "rawCondition": "at night",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:snorunt:froslass:useitem-dawn-stone",
+    "sourceFormId": "form:0361:base",
+    "targetFormId": "form:0478:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Dawn Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:snorunt:glalie:42",
+    "sourceFormId": "form:0361:base",
+    "targetFormId": "form:0362:base",
+    "method": null,
+    "level": 42,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:snover:abomasnow:40",
+    "sourceFormId": "form:0459:base",
+    "targetFormId": "form:0460:base",
+    "method": null,
+    "level": 40,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:snubbull:granbull:23",
+    "sourceFormId": "form:0209:base",
+    "targetFormId": "form:0210:base",
+    "method": null,
+    "level": 23,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:sobble:drizzile:16",
+    "sourceFormId": "form:0816:base",
+    "targetFormId": "form:0817:base",
+    "method": null,
+    "level": 16,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:solosis:duosion:32",
+    "sourceFormId": "form:0577:base",
+    "targetFormId": "form:0578:base",
+    "method": null,
+    "level": 32,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:spearow:fearow:20",
+    "sourceFormId": "form:0021:base",
+    "targetFormId": "form:0022:base",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:spewpa:vivillon:12",
+    "sourceFormId": "form:0665:base",
+    "targetFormId": "form:0666:base",
+    "method": null,
+    "level": 12,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:spewpa:vivillonfancy:12",
+    "sourceFormId": "form:0665:base",
+    "targetFormId": "form:0666:fancy",
+    "method": null,
+    "level": 12,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:spheal:sealeo:32",
+    "sourceFormId": "form:0363:base",
+    "targetFormId": "form:0364:base",
+    "method": null,
+    "level": 32,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:spinarak:ariados:22",
+    "sourceFormId": "form:0167:base",
+    "targetFormId": "form:0168:base",
+    "method": null,
+    "level": 22,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:spoink:grumpig:32",
+    "sourceFormId": "form:0325:base",
+    "targetFormId": "form:0326:base",
+    "method": null,
+    "level": 32,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:sprigatito:floragato:16",
+    "sourceFormId": "form:0906:base",
+    "targetFormId": "form:0907:base",
+    "method": null,
+    "level": 16,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:spritzee:aromatisse:trade-sachet",
+    "sourceFormId": "form:0682:base",
+    "targetFormId": "form:0683:base",
+    "method": "trade",
+    "level": null,
+    "item": "Sachet",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:squirtle:wartortle:16",
+    "sourceFormId": "form:0007:base",
+    "targetFormId": "form:0008:base",
+    "method": null,
+    "level": 16,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:stantler:wyrdeer:other-use-agile-style-psyshield-bash-20-times",
+    "sourceFormId": "form:0234:base",
+    "targetFormId": "form:0899:base",
+    "method": "other",
+    "level": null,
+    "item": null,
+    "rawCondition": "Use Agile style Psyshield Bash 20 times",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:staravia:staraptor:34",
+    "sourceFormId": "form:0397:base",
+    "targetFormId": "form:0398:base",
+    "method": null,
+    "level": 34,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:starly:staravia:14",
+    "sourceFormId": "form:0396:base",
+    "targetFormId": "form:0397:base",
+    "method": null,
+    "level": 14,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:staryu:starmie:useitem-water-stone",
+    "sourceFormId": "form:0120:base",
+    "targetFormId": "form:0121:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Water Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:steenee:tsareena:levelmove",
+    "sourceFormId": "form:0762:base",
+    "targetFormId": "form:0763:base",
+    "method": "levelMove",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:stufful:bewear:27",
+    "sourceFormId": "form:0759:base",
+    "targetFormId": "form:0760:base",
+    "method": null,
+    "level": 27,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:stunky:skuntank:34",
+    "sourceFormId": "form:0434:base",
+    "targetFormId": "form:0435:base",
+    "method": null,
+    "level": 34,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:sunkern:sunflora:useitem-sun-stone",
+    "sourceFormId": "form:0191:base",
+    "targetFormId": "form:0192:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Sun Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:surskit:masquerain:22",
+    "sourceFormId": "form:0283:base",
+    "targetFormId": "form:0284:base",
+    "method": null,
+    "level": 22,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:swablu:altaria:35",
+    "sourceFormId": "form:0333:base",
+    "targetFormId": "form:0334:base",
+    "method": null,
+    "level": 35,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:swadloon:leavanny:levelfriendship",
+    "sourceFormId": "form:0541:base",
+    "targetFormId": "form:0542:base",
+    "method": "levelFriendship",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:swinub:piloswine:33",
+    "sourceFormId": "form:0220:base",
+    "targetFormId": "form:0221:base",
+    "method": null,
+    "level": 33,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:swirlix:slurpuff:trade-whipped-dream",
+    "sourceFormId": "form:0684:base",
+    "targetFormId": "form:0685:base",
+    "method": "trade",
+    "level": null,
+    "item": "Whipped Dream",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:tadbulb:bellibolt:useitem-thunder-stone",
+    "sourceFormId": "form:0938:base",
+    "targetFormId": "form:0939:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Thunder Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:taillow:swellow:22",
+    "sourceFormId": "form:0276:base",
+    "targetFormId": "form:0277:base",
+    "method": null,
+    "level": 22,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:tandemaus:maushold:25",
+    "sourceFormId": "form:0924:base",
+    "targetFormId": "form:0925:base",
+    "method": null,
+    "level": 25,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:tandemaus:mausholdfour:25",
+    "sourceFormId": "form:0924:base",
+    "targetFormId": "form:0925:four",
+    "method": null,
+    "level": 25,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:tangela:tangrowth:levelmove",
+    "sourceFormId": "form:0114:base",
+    "targetFormId": "form:0465:base",
+    "method": "levelMove",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:tarountula:spidops:15",
+    "sourceFormId": "form:0917:base",
+    "targetFormId": "form:0918:base",
+    "method": null,
+    "level": 15,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:teddiursa:ursaring:30",
+    "sourceFormId": "form:0216:base",
+    "targetFormId": "form:0217:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:tentacool:tentacruel:30",
+    "sourceFormId": "form:0072:base",
+    "targetFormId": "form:0073:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:tepig:pignite:17",
+    "sourceFormId": "form:0498:base",
+    "targetFormId": "form:0499:base",
+    "method": null,
+    "level": 17,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:thwackey:rillaboom:35",
+    "sourceFormId": "form:0811:base",
+    "targetFormId": "form:0812:base",
+    "method": null,
+    "level": 35,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:timburr:gurdurr:25",
+    "sourceFormId": "form:0532:base",
+    "targetFormId": "form:0533:base",
+    "method": null,
+    "level": 25,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:tinkatink:tinkatuff:24",
+    "sourceFormId": "form:0957:base",
+    "targetFormId": "form:0958:base",
+    "method": null,
+    "level": 24,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:tinkatuff:tinkaton:38",
+    "sourceFormId": "form:0958:base",
+    "targetFormId": "form:0959:base",
+    "method": null,
+    "level": 38,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:tirtouga:carracosta:37",
+    "sourceFormId": "form:0564:base",
+    "targetFormId": "form:0565:base",
+    "method": null,
+    "level": 37,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:toedscool:toedscruel:30",
+    "sourceFormId": "form:0948:base",
+    "targetFormId": "form:0949:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:togepi:togetic:levelfriendship",
+    "sourceFormId": "form:0175:base",
+    "targetFormId": "form:0176:base",
+    "method": "levelFriendship",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:togetic:togekiss:useitem-shiny-stone",
+    "sourceFormId": "form:0176:base",
+    "targetFormId": "form:0468:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Shiny Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:torchic:combusken:16",
+    "sourceFormId": "form:0255:base",
+    "targetFormId": "form:0256:base",
+    "method": null,
+    "level": 16,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:torracat:incineroar:34",
+    "sourceFormId": "form:0726:base",
+    "targetFormId": "form:0727:base",
+    "method": null,
+    "level": 34,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:totodile:croconaw:18",
+    "sourceFormId": "form:0158:base",
+    "targetFormId": "form:0159:base",
+    "method": null,
+    "level": 18,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:toxel:toxtricity:30",
+    "sourceFormId": "form:0848:base",
+    "targetFormId": "form:0849:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:toxel:toxtricitylowkey:30",
+    "sourceFormId": "form:0848:base",
+    "targetFormId": "form:0849:low-key",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:tranquill:unfezant:32",
+    "sourceFormId": "form:0520:base",
+    "targetFormId": "form:0521:base",
+    "method": null,
+    "level": 32,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:trapinch:vibrava:35",
+    "sourceFormId": "form:0328:base",
+    "targetFormId": "form:0329:base",
+    "method": null,
+    "level": 35,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:treecko:grovyle:16",
+    "sourceFormId": "form:0252:base",
+    "targetFormId": "form:0253:base",
+    "method": null,
+    "level": 16,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:trubbish:garbodor:36",
+    "sourceFormId": "form:0568:base",
+    "targetFormId": "form:0569:base",
+    "method": null,
+    "level": 36,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:trumbeak:toucannon:28",
+    "sourceFormId": "form:0732:base",
+    "targetFormId": "form:0733:base",
+    "method": null,
+    "level": 28,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:turtwig:grotle:18",
+    "sourceFormId": "form:0387:base",
+    "targetFormId": "form:0388:base",
+    "method": null,
+    "level": 18,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:tympole:palpitoad:25",
+    "sourceFormId": "form:0535:base",
+    "targetFormId": "form:0536:base",
+    "method": null,
+    "level": 25,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:tynamo:eelektrik:39",
+    "sourceFormId": "form:0602:base",
+    "targetFormId": "form:0603:base",
+    "method": null,
+    "level": 39,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:typenull:silvally:levelfriendship",
+    "sourceFormId": "form:0772:base",
+    "targetFormId": "form:0773:base",
+    "method": "levelFriendship",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:tyrogue:hitmonchan:with-an-atk-stat-its-def-stat-20",
+    "sourceFormId": "form:0236:base",
+    "targetFormId": "form:0107:base",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": "with an Atk stat < its Def stat",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:tyrogue:hitmonlee:with-an-atk-stat-its-def-stat-20",
+    "sourceFormId": "form:0236:base",
+    "targetFormId": "form:0106:base",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": "with an Atk stat > its Def stat",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:tyrogue:hitmontop:with-an-atk-stat-equal-to-its-def-stat-20",
+    "sourceFormId": "form:0236:base",
+    "targetFormId": "form:0237:base",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": "with an Atk stat equal to its Def stat",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:tyrunt:tyrantrum:during-the-day-39",
+    "sourceFormId": "form:0696:base",
+    "targetFormId": "form:0697:base",
+    "method": null,
+    "level": 39,
+    "item": null,
+    "rawCondition": "during the day",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:ursaring:ursaluna:other-peat-block-when-there-s-a-full-moon",
+    "sourceFormId": "form:0217:base",
+    "targetFormId": "form:0901:base",
+    "method": "other",
+    "level": null,
+    "item": null,
+    "rawCondition": "Peat Block when there's a full moon",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:vanillish:vanilluxe:47",
+    "sourceFormId": "form:0583:base",
+    "targetFormId": "form:0584:base",
+    "method": null,
+    "level": 47,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:vanillite:vanillish:35",
+    "sourceFormId": "form:0582:base",
+    "targetFormId": "form:0583:base",
+    "method": null,
+    "level": 35,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:varoom:revavroom:40",
+    "sourceFormId": "form:0965:base",
+    "targetFormId": "form:0966:base",
+    "method": null,
+    "level": 40,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:venipede:whirlipede:22",
+    "sourceFormId": "form:0543:base",
+    "targetFormId": "form:0544:base",
+    "method": null,
+    "level": 22,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:venonat:venomoth:31",
+    "sourceFormId": "form:0048:base",
+    "targetFormId": "form:0049:base",
+    "method": null,
+    "level": 31,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:vibrava:flygon:45",
+    "sourceFormId": "form:0329:base",
+    "targetFormId": "form:0330:base",
+    "method": null,
+    "level": 45,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:vigoroth:slaking:36",
+    "sourceFormId": "form:0288:base",
+    "targetFormId": "form:0289:base",
+    "method": null,
+    "level": 36,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:voltorb:electrode:30",
+    "sourceFormId": "form:0100:base",
+    "targetFormId": "form:0101:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:voltorbhisui:electrodehisui:useitem-leaf-stone",
+    "sourceFormId": "form:0100:hisui",
+    "targetFormId": "form:0101:hisui",
+    "method": "useItem",
+    "level": null,
+    "item": "Leaf Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:vullaby:mandibuzz:54",
+    "sourceFormId": "form:0629:base",
+    "targetFormId": "form:0630:base",
+    "method": null,
+    "level": 54,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:vulpix:ninetales:useitem-fire-stone",
+    "sourceFormId": "form:0037:base",
+    "targetFormId": "form:0038:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Fire Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:vulpixalola:ninetalesalola:useitem-ice-stone",
+    "sourceFormId": "form:0037:alola",
+    "targetFormId": "form:0038:alola",
+    "method": "useItem",
+    "level": null,
+    "item": "Ice Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:wailmer:wailord:40",
+    "sourceFormId": "form:0320:base",
+    "targetFormId": "form:0321:base",
+    "method": null,
+    "level": 40,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:wartortle:blastoise:36",
+    "sourceFormId": "form:0008:base",
+    "targetFormId": "form:0009:base",
+    "method": null,
+    "level": 36,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:wattrel:kilowattrel:25",
+    "sourceFormId": "form:0940:base",
+    "targetFormId": "form:0941:base",
+    "method": null,
+    "level": 25,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:weedle:kakuna:7",
+    "sourceFormId": "form:0013:base",
+    "targetFormId": "form:0014:base",
+    "method": null,
+    "level": 7,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:weepinbell:victreebel:useitem-leaf-stone",
+    "sourceFormId": "form:0070:base",
+    "targetFormId": "form:0071:base",
+    "method": "useItem",
+    "level": null,
+    "item": "Leaf Stone",
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:whirlipede:scolipede:30",
+    "sourceFormId": "form:0544:base",
+    "targetFormId": "form:0545:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:whismur:loudred:20",
+    "sourceFormId": "form:0293:base",
+    "targetFormId": "form:0294:base",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:wiglett:wugtrio:26",
+    "sourceFormId": "form:0960:base",
+    "targetFormId": "form:0961:base",
+    "method": null,
+    "level": 26,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:wimpod:golisopod:30",
+    "sourceFormId": "form:0767:base",
+    "targetFormId": "form:0768:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:wingull:pelipper:25",
+    "sourceFormId": "form:0278:base",
+    "targetFormId": "form:0279:base",
+    "method": null,
+    "level": 25,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:woobat:swoobat:levelfriendship",
+    "sourceFormId": "form:0527:base",
+    "targetFormId": "form:0528:base",
+    "method": "levelFriendship",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:wooloo:dubwool:24",
+    "sourceFormId": "form:0831:base",
+    "targetFormId": "form:0832:base",
+    "method": null,
+    "level": 24,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:wooper:quagsire:20",
+    "sourceFormId": "form:0194:base",
+    "targetFormId": "form:0195:base",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:wooperpaldea:clodsire:20",
+    "sourceFormId": "form:0194:paldea",
+    "targetFormId": "form:0980:base",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:wurmple:cascoon:7",
+    "sourceFormId": "form:0265:base",
+    "targetFormId": "form:0268:base",
+    "method": null,
+    "level": 7,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:wurmple:silcoon:7",
+    "sourceFormId": "form:0265:base",
+    "targetFormId": "form:0266:base",
+    "method": null,
+    "level": 7,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:wynaut:wobbuffet:15",
+    "sourceFormId": "form:0360:base",
+    "targetFormId": "form:0202:base",
+    "method": null,
+    "level": 15,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:yamask:cofagrigus:34",
+    "sourceFormId": "form:0562:base",
+    "targetFormId": "form:0563:base",
+    "method": null,
+    "level": 34,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:yamaskgalar:runerigus:other-have-49-hp-lost-and-walk-under-stone-sculpture-in-dusty-bowl",
+    "sourceFormId": "form:0562:galar",
+    "targetFormId": "form:0867:base",
+    "method": "other",
+    "level": null,
+    "item": null,
+    "rawCondition": "Have 49+ HP lost and walk under stone sculpture in Dusty Bowl",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:yamper:boltund:25",
+    "sourceFormId": "form:0835:base",
+    "targetFormId": "form:0836:base",
+    "method": null,
+    "level": 25,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:yanma:yanmega:levelmove",
+    "sourceFormId": "form:0193:base",
+    "targetFormId": "form:0469:base",
+    "method": "levelMove",
+    "level": null,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:yungoos:gumshoos:during-the-day-20",
+    "sourceFormId": "form:0734:base",
+    "targetFormId": "form:0735:base",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": "during the day",
+    "dataStatus": "partial"
+  },
+  {
+    "evolutionId": "evolution:zigzagoon:linoone:20",
+    "sourceFormId": "form:0263:base",
+    "targetFormId": "form:0264:base",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:zigzagoongalar:linoonegalar:20",
+    "sourceFormId": "form:0263:galar",
+    "targetFormId": "form:0264:galar",
+    "method": null,
+    "level": 20,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:zorua:zoroark:30",
+    "sourceFormId": "form:0570:base",
+    "targetFormId": "form:0571:base",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:zoruahisui:zoroarkhisui:30",
+    "sourceFormId": "form:0570:hisui",
+    "targetFormId": "form:0571:hisui",
+    "method": null,
+    "level": 30,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:zubat:golbat:22",
+    "sourceFormId": "form:0041:base",
+    "targetFormId": "form:0042:base",
+    "method": null,
+    "level": 22,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  },
+  {
+    "evolutionId": "evolution:zweilous:hydreigon:64",
+    "sourceFormId": "form:0634:base",
+    "targetFormId": "form:0635:base",
+    "method": null,
+    "level": 64,
+    "item": null,
+    "rawCondition": null,
+    "dataStatus": "complete"
+  }
+]

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { loadPokemonRuntimeData } from './lib/runtime-data/loader'
-  import type { PokemonRuntimeData, RuntimeAbility, RuntimeForm, RuntimeSpecies, RuntimeStatBlock } from './lib/runtime-data/types'
+  import type { PokemonRuntimeData, RuntimeAbility, RuntimeEvolution, RuntimeForm, RuntimeMove, RuntimeSpecies, RuntimeStatBlock } from './lib/runtime-data/types'
   import { calculateDefensiveMatchup, groupDefensiveMatchup } from './lib/runtime-data/type-matchup'
   import { calculateStats, totalEvs } from './lib/runtime-data/stat-calculator'
   import { expProgress, levelToTotalExp, resolveEffectiveGrowthRate } from './lib/runtime-data/experience-calculator'
@@ -20,6 +20,8 @@
   let experienceMode: 'total-exp' | 'level' = 'total-exp'
   let totalExperience = 0
   let experienceLevel = 50
+  let moveQuery = ''
+  let selectedMove: RuntimeMove | null = null
 
   const statLabels: Record<keyof RuntimeStatBlock, string> = {
     hp: 'HP', atk: 'Attack', def: 'Defense', spa: 'Special Attack', spd: 'Special Defense', spe: 'Speed',
@@ -57,6 +59,32 @@
 
   function typeName(typeId: string): string {
     return data?.types.find(type => type.typeId === typeId)?.canonicalName ?? typeId
+  }
+
+  function moveCategory(category: RuntimeMove['category']): string {
+    return ({ physical: '物理', special: '特殊', status: '变化' })[category]
+  }
+
+  function numericValue(value: RuntimeMove['power']): string {
+    return value.kind === 'numeric' ? String(value.value) : value.kind === 'not-applicable' ? '—' : '未知'
+  }
+
+  function accuracyValue(accuracy: RuntimeMove['accuracy']): string {
+    return accuracy.kind === 'percent' ? `${accuracy.value}%` : accuracy.kind === 'always' ? '必定命中' : '未知'
+  }
+
+  function formLabel(formId: string): string {
+    const form = data?.forms.find(candidate => candidate.formId === formId)
+    const species = form ? data?.species.find(candidate => candidate.speciesId === form.speciesId) : null
+    if (!form || !species) return formId
+    const formName = displayFormName(form)
+    return formName === species.zhName ? species.zhName : `${species.zhName}（${formName}）`
+  }
+
+  function evolutionCondition(edge: RuntimeEvolution): string {
+    const method = edge.method ? ({ level: '升级', levelFriendship: '亲密度升级', levelExtra: '满足额外条件后升级', useItem: '使用道具', trade: '通信交换', other: '其他条件' })[edge.method] ?? edge.method : null
+    const details = [method, edge.level !== null ? `等级 ${edge.level}` : null, edge.item, edge.rawCondition].filter((value): value is string => value !== null)
+    return `${details.join('；') || '条件未提供'}${edge.dataStatus === 'partial' ? '（条件信息不完整）' : ''}`
   }
 
   function matchupGroups(primaryTypeId: string, secondaryTypeId?: string) {
@@ -110,6 +138,13 @@
   $: statResult = statCalculation(data, selectedSpecies, selectedForm, statLevel, statIvs, statEvs, statNatureId)
   $: evTotal = totalEvs(statEvs)
   $: experienceResult = experienceCalculation(data, selectedSpecies, selectedForm, experienceMode, totalExperience, experienceLevel)
+  $: normalizedMoveQuery = moveQuery.trim().toLocaleLowerCase()
+  $: moveResults = data && normalizedMoveQuery
+    ? data.moves.filter(move => (move.zhName?.includes(moveQuery.trim()) ?? false) || move.canonicalName.toLocaleLowerCase().includes(normalizedMoveQuery)).slice(0, 30)
+    : []
+  $: selectedFormId = selectedForm?.formId ?? null
+  $: previousEvolutions = data && selectedFormId ? data.evolutions.filter(edge => edge.targetFormId === selectedFormId) : []
+  $: nextEvolutions = data && selectedFormId ? data.evolutions.filter(edge => edge.sourceFormId === selectedFormId) : []
 </script>
 
 <main>
@@ -254,6 +289,29 @@
             <p class="status">当前形态的成长曲线仍未解析，暂时无法计算经验与等级。</p>
           {/if}
         </section>
+        <section class="evolutions">
+          <h3>进化</h3>
+          {#if previousEvolutions.length || nextEvolutions.length}
+            {#if previousEvolutions.length}
+              <h4>可由以下形态进化而来</h4>
+              <ul>
+                {#each previousEvolutions as edge (edge.evolutionId)}
+                  <li><strong>{formLabel(edge.sourceFormId)}</strong> → 当前形态：{evolutionCondition(edge)}</li>
+                {/each}
+              </ul>
+            {/if}
+            {#if nextEvolutions.length}
+              <h4>可进化为</h4>
+              <ul>
+                {#each nextEvolutions as edge (edge.evolutionId)}
+                  <li><strong>{formLabel(edge.targetFormId)}</strong>：{evolutionCondition(edge)}</li>
+                {/each}
+              </ul>
+            {/if}
+          {:else}
+            <p>当前稳定进化图中没有该形态的进化关系。</p>
+          {/if}
+        </section>
       </section>
     {/if}
 
@@ -282,6 +340,40 @@
           <p><strong>{group.multiplier}×</strong>：{group.entries.map(entry => typeName(entry.attackingTypeId)).join('、')}</p>
         {/each}
       </div>
+    </section>
+
+    <section class="move-browser">
+      <h2>招式查询</h2>
+      <p>按中文名或英文名查询已验证的稳定招式数据。当前没有可验证的宝可梦可学招式关系，因此不会在宝可梦详情中推测招式列表。</p>
+      <label class="search">
+        <span>搜索招式</span>
+        <input bind:value={moveQuery} placeholder="例如：拍击、Pound、高速星星、Swift" />
+      </label>
+      {#if normalizedMoveQuery}
+        <div class="move-results" aria-label="招式搜索结果">
+          {#if moveResults.length}
+            {#each moveResults as move (move.moveId)}
+              <button class:active={selectedMove?.moveId === move.moveId} onclick={() => selectedMove = move}>{move.zhName ?? '未本地化'} <small>{move.canonicalName}</small></button>
+            {/each}
+          {:else}
+            <p>没有找到匹配的稳定招式。</p>
+          {/if}
+        </div>
+      {/if}
+      {#if selectedMove}
+        <div class="move-detail" aria-live="polite">
+          <h3>{selectedMove.zhName ?? '未本地化'} <small>{selectedMove.canonicalName}</small></h3>
+          <p>{selectedMove.zhDescription ?? '暂无中文简介。'}</p>
+          <div class="move-mechanics">
+            <span>属性 <b>{typeName(selectedMove.typeId)}</b></span>
+            <span>分类 <b>{moveCategory(selectedMove.category)}</b></span>
+            <span>威力 <b>{numericValue(selectedMove.power)}</b></span>
+            <span>命中 <b>{accuracyValue(selectedMove.accuracy)}</b></span>
+            <span>PP <b>{numericValue(selectedMove.pp)}</b></span>
+            <span>优先度 <b>{selectedMove.priority}</b></span>
+          </div>
+        </div>
+      {/if}
     </section>
   {/if}
 </main>

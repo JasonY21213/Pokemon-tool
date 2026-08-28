@@ -67,3 +67,11 @@ td input { width: 4.5rem; padding: 0.4rem; }
 .experience-modes { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .experience-input { display: grid; gap: 0.35rem; width: min(16rem, 100%); font-weight: 600; }
 .experience-result { display: grid; gap: 0.35rem; padding: 0.75rem; border-radius: 0.35rem; background: #f1f5f9; }
+.evolutions { display: grid; gap: 0.65rem; padding-top: 0.25rem; }
+h4 { margin: 0; font-size: 1rem; }
+.move-browser { display: grid; gap: 0.9rem; margin-top: 1.25rem; padding: 1.25rem; border: 1px solid #cbd5e1; border-radius: 0.6rem; background: #fff; }
+.move-results { display: grid; gap: 0.4rem; }
+.move-results button { text-align: left; }
+.move-detail { display: grid; gap: 0.75rem; padding: 0.9rem; border-radius: 0.4rem; background: #f1f5f9; }
+.move-mechanics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.move-mechanics span { padding: 0.45rem 0.6rem; border-radius: 0.35rem; background: #fff; }

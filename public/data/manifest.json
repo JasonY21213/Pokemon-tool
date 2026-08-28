@@ -30,6 +30,16 @@
       "path": "growth-rates.json",
       "recordCount": 6,
       "sha256": "1f324509722fa6f94eb5c8155a44bf9d471c6c73b38ae30a7655332662cdd9ce"
+    },
+    {
+      "path": "moves.json",
+      "recordCount": 950,
+      "sha256": "390907d9f51b12708597f4a16eb72832b2e1fbc91006f208c320c0b3263dcf6a"
+    },
+    {
+      "path": "evolutions.json",
+      "recordCount": 529,
+      "sha256": "9483614517b29c8a746283176c63e9255b4398397719a3db2c44c4424e1d99ca"
     }
   ]
 }

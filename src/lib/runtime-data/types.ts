@@ -73,6 +73,40 @@ export type RuntimeGrowthRate = {
   totalExpByLevel: number[]
 }
 
+export type RuntimeNumericValue =
+  | { kind: 'numeric'; value: number }
+  | { kind: 'not-applicable' }
+  | { kind: 'unknown' }
+
+export type RuntimeAccuracy =
+  | { kind: 'percent'; value: number }
+  | { kind: 'always' }
+  | { kind: 'unknown' }
+
+export type RuntimeMove = {
+  moveId: string
+  canonicalName: string
+  zhName: string | null
+  zhDescription: string | null
+  typeId: string
+  category: 'physical' | 'special' | 'status'
+  power: RuntimeNumericValue
+  accuracy: RuntimeAccuracy
+  pp: RuntimeNumericValue
+  priority: number
+}
+
+export type RuntimeEvolution = {
+  evolutionId: string
+  sourceFormId: string
+  targetFormId: string
+  method: string | null
+  level: number | null
+  item: string | null
+  rawCondition: string | null
+  dataStatus: 'complete' | 'partial'
+}
+
 export type RuntimeManifestFile = {
   path: string
   sha256: string
@@ -91,5 +125,7 @@ export type PokemonRuntimeData = {
   types: RuntimeType[]
   natures: RuntimeNature[]
   growthRates: RuntimeGrowthRate[]
+  moves: RuntimeMove[]
+  evolutions: RuntimeEvolution[]
   manifest: RuntimeManifest
 }

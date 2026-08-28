@@ -1,5 +1,5 @@
 import { join, resolve } from 'node:path'
-import type { RuntimeAbility, RuntimeForm, RuntimeGrowthRate, RuntimeGrowthRateResolution, RuntimeManifest, RuntimeNature, RuntimeSpecies, RuntimeType } from '../../src/lib/runtime-data/types.ts'
+import type { RuntimeAbility, RuntimeAccuracy, RuntimeEvolution, RuntimeForm, RuntimeGrowthRate, RuntimeGrowthRateResolution, RuntimeManifest, RuntimeMove, RuntimeNature, RuntimeNumericValue, RuntimeSpecies, RuntimeType } from '../../src/lib/runtime-data/types.ts'
 import { buildFullDryRun, type FullDryRunArtifacts } from './full-dry-run.ts'
 import { CANONICAL_GROWTH_RATES } from './growth-rate.ts'
 import { getProjectRoot, sha256 } from './source.ts'
@@ -59,6 +59,16 @@ function statBlock(record: CanonicalRecord): RuntimeForm['baseStats'] {
   return Object.fromEntries(keys.map(key => [key, stats[key]])) as RuntimeForm['baseStats']
 }
 
+function numericValue(value: unknown, notApplicable = false): RuntimeNumericValue {
+  if (notApplicable) return { kind: 'not-applicable' }
+  return Number.isInteger(value) && Number(value) > 0 ? { kind: 'numeric', value: Number(value) } : { kind: 'unknown' }
+}
+
+function accuracyValue(value: unknown): RuntimeAccuracy {
+  if (value === 'always') return { kind: 'always' }
+  return Number.isInteger(value) && Number(value) > 0 && Number(value) <= 100 ? { kind: 'percent', value: Number(value) } : { kind: 'unknown' }
+}
+
 function localizationMap(entries: Array<Record<string, unknown>>): Map<string, CanonicalRecord> {
   return new Map(entries.map(entry => [stringValue(entry, 'entityId'), entry]))
 }
@@ -69,7 +79,7 @@ function tagMap(assignments: Array<{ entityId: string; tagId: string }>): Map<st
   return result
 }
 
-function assertRuntimeReferences(species: RuntimeSpecies[], forms: RuntimeForm[], abilities: RuntimeAbility[], types: RuntimeType[], natures: RuntimeNature[], growthRates: RuntimeGrowthRate[]): void {
+function assertRuntimeReferences(species: RuntimeSpecies[], forms: RuntimeForm[], abilities: RuntimeAbility[], types: RuntimeType[], natures: RuntimeNature[], growthRates: RuntimeGrowthRate[], moves: RuntimeMove[], evolutions: RuntimeEvolution[]): void {
   const formIds = new Set(forms.map(form => form.formId))
   const abilityIds = new Set(abilities.map(ability => ability.abilityId))
   for (const entry of species) {
@@ -88,12 +98,15 @@ function assertRuntimeReferences(species: RuntimeSpecies[], forms: RuntimeForm[]
   if (growthRates.length !== 6 || growthRates.some(rate => rate.totalExpByLevel.length !== 100 || rate.totalExpByLevel[99] !== rate.level100Total || rate.totalExpByLevel.some((total, index) => !Number.isInteger(total) || total < 0 || (index > 0 && total < rate.totalExpByLevel[index - 1])))) throw new Error('RUNTIME_GROWTH_RATE_TABLE_INTEGRITY')
   if (species.some(entry => entry.growthRate.status === 'resolved' ? !entry.growthRate.id || !growthIds.has(entry.growthRate.id) : entry.growthRate.id !== null)) throw new Error('RUNTIME_SPECIES_GROWTH_REFERENCE')
   if (forms.some(entry => entry.growthRateOverride !== null && (entry.growthRateOverride.status === 'resolved' ? !entry.growthRateOverride.id || !growthIds.has(entry.growthRateOverride.id) : entry.growthRateOverride.id !== null))) throw new Error('RUNTIME_FORM_GROWTH_REFERENCE')
+  if (new Set(moves.map(move => move.moveId)).size !== moves.length || moves.some(move => !typeIds.has(move.typeId) || !move.zhName || !move.zhDescription)) throw new Error('RUNTIME_MOVE_REFERENCE_INTEGRITY')
+  if (evolutions.some(edge => !formIds.has(edge.sourceFormId) || !formIds.has(edge.targetFormId) || (edge.level !== null && (!Number.isInteger(edge.level) || edge.level < 1)) || (edge.dataStatus === 'complete' && edge.rawCondition !== null))) throw new Error('RUNTIME_EVOLUTION_REFERENCE_INTEGRITY')
 }
 
-export function buildRuntimeData(artifacts: FullDryRunArtifacts): { species: RuntimeSpecies[]; forms: RuntimeForm[]; abilities: RuntimeAbility[]; types: RuntimeType[]; natures: RuntimeNature[]; growthRates: RuntimeGrowthRate[] } {
+export function buildRuntimeData(artifacts: FullDryRunArtifacts): { species: RuntimeSpecies[]; forms: RuntimeForm[]; abilities: RuntimeAbility[]; types: RuntimeType[]; natures: RuntimeNature[]; growthRates: RuntimeGrowthRate[]; moves: RuntimeMove[]; evolutions: RuntimeEvolution[] } {
   const speciesLocalization = localizationMap(artifacts.localization.species)
   const formLocalization = localizationMap(artifacts.localization.forms)
   const abilityLocalization = localizationMap(artifacts.localization.abilities)
+  const moveLocalization = localizationMap(artifacts.localization.moves)
   const tagsByEntity = tagMap(artifacts.tags.assignments)
   const growthBySpecies = new Map(artifacts.growthRates.map(record => [stringValue(record, 'entityId'), growthResolution({ id: record.growthRateId, status: record.status })]))
   const growthOverrideByForm = new Map(artifacts.formGrowthRateOverrides.map(record => [stringValue(record, 'formId'), growthResolution(record.growthRateOverride)]))
@@ -184,8 +197,42 @@ export function buildRuntimeData(artifacts: FullDryRunArtifacts): { species: Run
     level100Total: rate.level100Total,
     totalExpByLevel: Array.from({ length: 100 }, (_, index) => experienceTotal(rate.formulaId, index + 1)),
   })).sort((left, right) => left.growthRateId.localeCompare(right.growthRateId, 'en'))
-  assertRuntimeReferences(species, forms, abilities, types, natures, growthRates)
-  return { species, forms, abilities, types, natures, growthRates }
+  const moves: RuntimeMove[] = artifacts.moves
+    .filter(record => record.dataStatus === 'complete')
+    .map(record => {
+      const moveId = stringValue(record, 'moveId')
+      const localized = moveLocalization.get(moveId)
+      const category = record.category
+      if (category !== 'physical' && category !== 'special' && category !== 'status') throw new Error(`RUNTIME_MOVE_CATEGORY: ${moveId}`)
+      return {
+        moveId,
+        canonicalName: canonicalName(record),
+        zhName: localized ? stringValue(localized, 'name') : null,
+        zhDescription: localized && typeof localized.shortDescription === 'string' && localized.shortDescription.length > 0 ? localized.shortDescription : null,
+        typeId: stringValue(record, 'typeId'),
+      category: category as RuntimeMove['category'],
+        power: numericValue(record.basePower, category === 'status'),
+        accuracy: accuracyValue(record.accuracy),
+        pp: numericValue(record.pp),
+        priority: Number.isInteger(record.priority) ? Number(record.priority) : (() => { throw new Error(`RUNTIME_MOVE_PRIORITY: ${moveId}`) })(),
+      }
+    })
+    .sort((left, right) => left.moveId.localeCompare(right.moveId, 'en'))
+  const evolutions: RuntimeEvolution[] = artifacts.evolutions
+    .filter(record => record.sourceFormId !== null && record.targetFormId !== null && (record.dataStatus === 'complete' || record.dataStatus === 'partial'))
+    .map(record => ({
+      evolutionId: stringValue(record, 'evolutionId'),
+      sourceFormId: stringValue(record, 'sourceFormId'),
+      targetFormId: stringValue(record, 'targetFormId'),
+      method: typeof record.evoType === 'string' ? record.evoType : null,
+      level: Number.isInteger(record.evoLevel) ? Number(record.evoLevel) : null,
+      item: typeof record.evoItem === 'string' ? record.evoItem : null,
+      rawCondition: typeof record.rawCondition === 'string' ? record.rawCondition : null,
+      dataStatus: record.dataStatus as RuntimeEvolution['dataStatus'],
+    }))
+    .sort((left, right) => left.evolutionId.localeCompare(right.evolutionId, 'en'))
+  assertRuntimeReferences(species, forms, abilities, types, natures, growthRates, moves, evolutions)
+  return { species, forms, abilities, types, natures, growthRates, moves, evolutions }
 }
 
 export async function emitRuntimeData(artifacts: FullDryRunArtifacts, outputRoot = resolve(getProjectRoot(), 'public', 'data')): Promise<{ outputRoot: string; manifest: RuntimeManifest }> {
@@ -197,6 +244,8 @@ export async function emitRuntimeData(artifacts: FullDryRunArtifacts, outputRoot
     ['types.json', runtime.types, runtime.types.length],
     ['natures.json', runtime.natures, runtime.natures.length],
     ['growth-rates.json', runtime.growthRates, runtime.growthRates.length],
+    ['moves.json', runtime.moves, runtime.moves.length],
+    ['evolutions.json', runtime.evolutions, runtime.evolutions.length],
   ]
   const manifest: RuntimeManifest = {
     schemaVersion: 1,
