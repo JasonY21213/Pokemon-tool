@@ -30,7 +30,8 @@ p {
   color: #475569;
 }
 
-header, .search, .detail, .results, .calculator, .stat-calculator { margin-bottom: 1.25rem; }
+header, .search, .detail, .results, .calculator, .stat-calculator, .pokemon-query { margin-bottom: 1.25rem; }
+.app-nav { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.25rem; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 0.6rem; background: #fff; }
 .search { display: grid; gap: 0.4rem; font-weight: 600; }
 input { padding: 0.7rem; border: 1px solid #94a3b8; border-radius: 0.4rem; font: inherit; }
 button { cursor: pointer; border: 1px solid #cbd5e1; border-radius: 0.4rem; background: #fff; padding: 0.55rem 0.7rem; color: inherit; font: inherit; }
@@ -96,3 +97,4 @@ h4 { margin: 0; font-size: 1rem; }
 .damage-summary { display: flex; flex-wrap: wrap; gap: 1rem; }
 .damage-modifiers { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .damage-modifiers span { padding: 0.45rem 0.6rem; border-radius: 0.35rem; background: #fff; }
+@media (max-width: 36rem) { main { padding: 1.5rem 0; } .app-nav button { flex: 1 1 8rem; } .damage-sides { grid-template-columns: 1fr; } }
