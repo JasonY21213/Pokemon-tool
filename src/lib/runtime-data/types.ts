@@ -18,6 +18,7 @@ export type RuntimeSpecies = {
   canonicalName: string
   zhName: string
   defaultFormId: string
+  growthRate: RuntimeGrowthRateResolution
   formIds: string[]
   tagIds: string[]
 }
@@ -30,6 +31,7 @@ export type RuntimeForm = {
   types: string[]
   baseStats: RuntimeStatBlock
   abilities: RuntimeAbilitySlot[]
+  growthRateOverride: RuntimeGrowthRateResolution | null
   tagIds: string[]
 }
 
@@ -59,6 +61,18 @@ export type RuntimeNature = {
   neutral: boolean
 }
 
+export type RuntimeGrowthRateResolution = {
+  id: string | null
+  status: 'resolved' | 'unresolved'
+}
+
+export type RuntimeGrowthRate = {
+  growthRateId: string
+  canonicalName: string
+  level100Total: number
+  totalExpByLevel: number[]
+}
+
 export type RuntimeManifestFile = {
   path: string
   sha256: string
@@ -76,5 +90,6 @@ export type PokemonRuntimeData = {
   abilities: RuntimeAbility[]
   types: RuntimeType[]
   natures: RuntimeNature[]
+  growthRates: RuntimeGrowthRate[]
   manifest: RuntimeManifest
 }

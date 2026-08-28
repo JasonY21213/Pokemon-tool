@@ -4,12 +4,12 @@
     {
       "path": "species.json",
       "recordCount": 1025,
-      "sha256": "42fd71dd05ee28febe2479f75c8056a71f4b328acec0f5eb1483ee7bf975d19f"
+      "sha256": "ab3e1c3fc92621508b6b4b19257eca8da0ca730f2c658d3727934da09990d0db"
     },
     {
       "path": "forms.json",
       "recordCount": 1380,
-      "sha256": "b8c8941fc343815f3aaa2cb220521286686a9c6e9e8af8d454321c63f7443f0a"
+      "sha256": "b883ef6a180f4b4dabab64d141f9ea6a73c22d36c1720d49e3c27a449344a7ca"
     },
     {
       "path": "abilities.json",
@@ -25,6 +25,11 @@
       "path": "natures.json",
       "recordCount": 25,
       "sha256": "e37ffe9eadfbe1c1f8d3f72e8f4319854f18efb2ddc0f06f98982febe1de489d"
+    },
+    {
+      "path": "growth-rates.json",
+      "recordCount": 6,
+      "sha256": "1f324509722fa6f94eb5c8155a44bf9d471c6c73b38ae30a7655332662cdd9ce"
     }
   ]
 }

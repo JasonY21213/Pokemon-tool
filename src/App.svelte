@@ -4,6 +4,7 @@
   import type { PokemonRuntimeData, RuntimeAbility, RuntimeForm, RuntimeSpecies, RuntimeStatBlock } from './lib/runtime-data/types'
   import { calculateDefensiveMatchup, groupDefensiveMatchup } from './lib/runtime-data/type-matchup'
   import { calculateStats, totalEvs } from './lib/runtime-data/stat-calculator'
+  import { expProgress, levelToTotalExp, resolveEffectiveGrowthRate } from './lib/runtime-data/experience-calculator'
 
   let data: PokemonRuntimeData | null = null
   let error = ''
@@ -16,6 +17,9 @@
   let statNatureId = 'nature:hardy'
   let statIvs: RuntimeStatBlock = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 }
   let statEvs: RuntimeStatBlock = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 }
+  let experienceMode: 'total-exp' | 'level' = 'total-exp'
+  let totalExperience = 0
+  let experienceLevel = 50
 
   const statLabels: Record<keyof RuntimeStatBlock, string> = {
     hp: 'HP', atk: 'Attack', def: 'Defense', spa: 'Special Attack', spd: 'Special Defense', spe: 'Speed',
@@ -77,6 +81,19 @@
     statEvs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 }
   }
 
+  function experienceCalculation(runtime: PokemonRuntimeData | null, species: RuntimeSpecies | null, form: RuntimeForm | null, mode: 'total-exp' | 'level', totalExp: number, level: number): { growthRate: ReturnType<typeof resolveEffectiveGrowthRate>; progress: ReturnType<typeof expProgress> | null; levelTotalExp: number | null; error: string | null } {
+    if (!runtime || !species || !form) return { growthRate: null, progress: null, levelTotalExp: null, error: null }
+    const growthRate = resolveEffectiveGrowthRate(species, form, runtime.growthRates)
+    if (!growthRate) return { growthRate: null, progress: null, levelTotalExp: null, error: null }
+    try {
+      return mode === 'total-exp'
+        ? { growthRate, progress: expProgress(growthRate, totalExp), levelTotalExp: null, error: null }
+        : { growthRate, progress: null, levelTotalExp: levelToTotalExp(growthRate, level), error: null }
+    } catch {
+      return { growthRate, progress: null, levelTotalExp: null, error: mode === 'total-exp' ? '总经验值必须是非负整数。' : '等级必须是 1 到 100 的整数。' }
+    }
+  }
+
   $: normalizedQuery = query.trim().toLocaleLowerCase()
   $: results = data && normalizedQuery
     ? data.species.filter(species => species.zhName.includes(query.trim())
@@ -92,6 +109,7 @@
   $: calculatorMatchup = calculatorPrimaryTypeId ? matchupGroups(calculatorPrimaryTypeId, calculatorSecondaryTypeId || undefined) : []
   $: statResult = statCalculation(data, selectedSpecies, selectedForm, statLevel, statIvs, statEvs, statNatureId)
   $: evTotal = totalEvs(statEvs)
+  $: experienceResult = experienceCalculation(data, selectedSpecies, selectedForm, experienceMode, totalExperience, experienceLevel)
 </script>
 
 <main>
@@ -196,6 +214,45 @@
               <p><strong>{group.multiplier}×</strong>：{group.entries.map(entry => typeName(entry.attackingTypeId)).join('、')}</p>
             {/each}
           </div>
+        </section>
+        <section class="experience-calculator">
+          <h3>经验与等级计算器</h3>
+          {#if experienceResult.growthRate}
+            <p>当前形态成长曲线：{experienceResult.growthRate.canonicalName}。达到 Lv.100 共需 {experienceResult.growthRate.level100Total.toLocaleString()} EXP。</p>
+            <div class="experience-modes" aria-label="计算模式">
+              <button class:active={experienceMode === 'total-exp'} type="button" onclick={() => experienceMode = 'total-exp'}>总 EXP → 等级</button>
+              <button class:active={experienceMode === 'level'} type="button" onclick={() => experienceMode = 'level'}>等级 → 总 EXP</button>
+            </div>
+            {#if experienceMode === 'total-exp'}
+              <label class="experience-input">总经验值
+                <input type="number" min="0" step="1" bind:value={totalExperience} />
+              </label>
+              {#if experienceResult.error}
+                <p class="status error" role="alert">{experienceResult.error}</p>
+              {:else if experienceResult.progress}
+                <div class="experience-result">
+                  <p><strong>当前等级：Lv.{experienceResult.progress.currentLevel}</strong></p>
+                  <p>当前等级累计 EXP：{experienceResult.progress.currentLevelTotalExp.toLocaleString()}</p>
+                  {#if experienceResult.progress.nextLevelTotalExp !== null}
+                    <p>距 Lv.{experienceResult.progress.currentLevel + 1} 还需 {experienceResult.progress.expNeededForNextLevel?.toLocaleString()} EXP（本级进度 {((experienceResult.progress.progressFraction ?? 0) * 100).toFixed(1)}%）</p>
+                  {:else}
+                    <p>已达到最高等级；不会计算超过 Lv.100 的等级。</p>
+                  {/if}
+                </div>
+              {/if}
+            {:else}
+              <label class="experience-input">等级
+                <input type="number" min="1" max="100" step="1" bind:value={experienceLevel} />
+              </label>
+              {#if experienceResult.error}
+                <p class="status error" role="alert">{experienceResult.error}</p>
+              {:else if experienceResult.levelTotalExp !== null}
+                <div class="experience-result"><p><strong>达到 Lv.{experienceLevel} 所需累计 EXP：{experienceResult.levelTotalExp.toLocaleString()}</strong></p></div>
+              {/if}
+            {/if}
+          {:else}
+            <p class="status">当前形态的成长曲线仍未解析，暂时无法计算经验与等级。</p>
+          {/if}
         </section>
       </section>
     {/if}

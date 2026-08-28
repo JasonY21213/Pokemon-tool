@@ -63,3 +63,7 @@ select { min-width: 10rem; padding: 0.55rem; border: 1px solid #94a3b8; border-r
 table { width: 100%; border-collapse: collapse; text-align: left; }
 th, td { padding: 0.5rem; border-bottom: 1px solid #e2e8f0; }
 td input { width: 4.5rem; padding: 0.4rem; }
+.experience-calculator { display: grid; gap: 0.75rem; padding-top: 0.25rem; }
+.experience-modes { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.experience-input { display: grid; gap: 0.35rem; width: min(16rem, 100%); font-weight: 600; }
+.experience-result { display: grid; gap: 0.35rem; padding: 0.75rem; border-radius: 0.35rem; background: #f1f5f9; }

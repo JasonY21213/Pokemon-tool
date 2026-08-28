@@ -115,6 +115,7 @@ export interface FullDryRunArtifacts {
   abilities: Array<Record<string, unknown>>
   moves: Array<Record<string, unknown>>
   growthRates: Array<Record<string, unknown>>
+  formGrowthRateOverrides: Array<Record<string, unknown>>
   appearances: unknown[]
   appearanceCandidates: Array<Record<string, unknown>>
   evolutions: Array<Record<string, unknown>>
@@ -719,7 +720,7 @@ export async function buildFullDryRun(options: { fullCachePath?: string; skipTag
   stage = performance.now()
   const partial = {
     sourceManifest, types: smoke.dataset.types as unknown as Array<Record<string, unknown>>, natures: smoke.dataset.natures as unknown as Array<Record<string, unknown>>, species: speciesForms.species, forms: speciesForms.forms,
-    abilities: abilityBuild.abilities, moves: moveBuild.moves, growthRates,
+    abilities: abilityBuild.abilities, moves: moveBuild.moves, growthRates, formGrowthRateOverrides: smoke.dataset.forms.filter(form => form.growthRateOverride !== null).map(form => ({ formId: form.formId, growthRateOverride: form.growthRateOverride })),
     appearances: smoke.dataset.appearances, appearanceCandidates, evolutions,
     dexes: dexBuild.dexes, dexEntries: dexBuild.entries, dexCandidates: dexBuild.candidates,
     localization: { species: localizationSpecies, forms: localizationForms, abilities: abilityBuild.localization, moves: moveBuild.localization },
@@ -752,6 +753,7 @@ export async function emitFullDryRun(artifacts: FullDryRunArtifacts): Promise<{ 
     ['canonical-candidates/abilities.json', artifacts.abilities],
     ['canonical-candidates/moves.json', artifacts.moves],
     ['canonical-candidates/growth-rates.json', artifacts.growthRates],
+    ['canonical-candidates/form-growth-rate-overrides.json', artifacts.formGrowthRateOverrides],
     ['canonical-candidates/appearances.json', artifacts.appearances],
     ['canonical-candidates/evolutions.json', artifacts.evolutions],
     ['canonical-candidates/dexes.json', artifacts.dexes],

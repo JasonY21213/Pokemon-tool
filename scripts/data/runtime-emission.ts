@@ -1,12 +1,42 @@
 import { join, resolve } from 'node:path'
-import type { RuntimeAbility, RuntimeForm, RuntimeManifest, RuntimeNature, RuntimeSpecies, RuntimeType } from '../../src/lib/runtime-data/types.ts'
+import type { RuntimeAbility, RuntimeForm, RuntimeGrowthRate, RuntimeGrowthRateResolution, RuntimeManifest, RuntimeNature, RuntimeSpecies, RuntimeType } from '../../src/lib/runtime-data/types.ts'
 import { buildFullDryRun, type FullDryRunArtifacts } from './full-dry-run.ts'
+import { CANONICAL_GROWTH_RATES } from './growth-rate.ts'
 import { getProjectRoot, sha256 } from './source.ts'
 import { serializeJson, writeJson } from './serialization.ts'
 
 const SLOT_ORDER = new Map([['0', 0], ['1', 1], ['H', 2], ['S', 3]])
 
 type CanonicalRecord = Record<string, unknown>
+
+function experienceTotal(formulaId: string, level: number): number {
+  if (level === 1) return 0
+  const cube = level ** 3
+  if (formulaId === 'erratic') {
+    if (level <= 50) return Math.floor((cube * (100 - level)) / 50)
+    if (level <= 68) return Math.floor((cube * (150 - level)) / 100)
+    if (level <= 98) return Math.floor((cube * Math.floor((1911 - 10 * level) / 3)) / 500)
+    return Math.floor((cube * (160 - level)) / 100)
+  }
+  if (formulaId === 'fast') return Math.floor((4 * cube) / 5)
+  if (formulaId === 'mediumFast') return cube
+  if (formulaId === 'mediumSlow') return Math.max(0, Math.floor((6 * cube) / 5 - 15 * level ** 2 + 100 * level - 140))
+  if (formulaId === 'slow') return Math.floor((5 * cube) / 4)
+  if (formulaId === 'fluctuating') {
+    if (level <= 15) return Math.floor((cube * (Math.floor((level + 1) / 3) + 24)) / 50)
+    if (level <= 36) return Math.floor((cube * (level + 14)) / 50)
+    return Math.floor((cube * (Math.floor(level / 2) + 32)) / 50)
+  }
+  throw new Error(`RUNTIME_GROWTH_RATE_FORMULA: ${formulaId}`)
+}
+
+function growthResolution(value: unknown): RuntimeGrowthRateResolution {
+  if (!value || typeof value !== 'object') throw new Error('RUNTIME_GROWTH_RATE_RESOLUTION')
+  const record = value as CanonicalRecord
+  if (record.status === 'resolved' && typeof record.id === 'string') return { id: record.id, status: 'resolved' }
+  if (record.status === 'unresolved' && record.id === null) return { id: null, status: 'unresolved' }
+  throw new Error('RUNTIME_GROWTH_RATE_RESOLUTION')
+}
 
 function stringValue(record: CanonicalRecord, key: string): string {
   const value = record[key]
@@ -39,7 +69,7 @@ function tagMap(assignments: Array<{ entityId: string; tagId: string }>): Map<st
   return result
 }
 
-function assertRuntimeReferences(species: RuntimeSpecies[], forms: RuntimeForm[], abilities: RuntimeAbility[], types: RuntimeType[], natures: RuntimeNature[]): void {
+function assertRuntimeReferences(species: RuntimeSpecies[], forms: RuntimeForm[], abilities: RuntimeAbility[], types: RuntimeType[], natures: RuntimeNature[], growthRates: RuntimeGrowthRate[]): void {
   const formIds = new Set(forms.map(form => form.formId))
   const abilityIds = new Set(abilities.map(ability => ability.abilityId))
   for (const entry of species) {
@@ -54,13 +84,19 @@ function assertRuntimeReferences(species: RuntimeSpecies[], forms: RuntimeForm[]
   const typeIds = new Set(types.map(type => type.typeId))
   if (typeIds.size !== 18 || types.some(type => type.damageTaken.length !== 18 || !type.damageTaken.every(entry => typeIds.has(entry.attackingTypeId)))) throw new Error('RUNTIME_TYPE_REFERENCE_INTEGRITY')
   if (natures.length !== 25 || new Set(natures.map(nature => nature.natureId)).size !== 25 || natures.some(nature => nature.neutral ? nature.plusStat !== null || nature.minusStat !== null : nature.plusStat === null || nature.minusStat === null || nature.plusStat === nature.minusStat)) throw new Error('RUNTIME_NATURE_REFERENCE_INTEGRITY')
+  const growthIds = new Set(growthRates.map(rate => rate.growthRateId))
+  if (growthRates.length !== 6 || growthRates.some(rate => rate.totalExpByLevel.length !== 100 || rate.totalExpByLevel[99] !== rate.level100Total || rate.totalExpByLevel.some((total, index) => !Number.isInteger(total) || total < 0 || (index > 0 && total < rate.totalExpByLevel[index - 1])))) throw new Error('RUNTIME_GROWTH_RATE_TABLE_INTEGRITY')
+  if (species.some(entry => entry.growthRate.status === 'resolved' ? !entry.growthRate.id || !growthIds.has(entry.growthRate.id) : entry.growthRate.id !== null)) throw new Error('RUNTIME_SPECIES_GROWTH_REFERENCE')
+  if (forms.some(entry => entry.growthRateOverride !== null && (entry.growthRateOverride.status === 'resolved' ? !entry.growthRateOverride.id || !growthIds.has(entry.growthRateOverride.id) : entry.growthRateOverride.id !== null))) throw new Error('RUNTIME_FORM_GROWTH_REFERENCE')
 }
 
-export function buildRuntimeData(artifacts: FullDryRunArtifacts): { species: RuntimeSpecies[]; forms: RuntimeForm[]; abilities: RuntimeAbility[]; types: RuntimeType[]; natures: RuntimeNature[] } {
+export function buildRuntimeData(artifacts: FullDryRunArtifacts): { species: RuntimeSpecies[]; forms: RuntimeForm[]; abilities: RuntimeAbility[]; types: RuntimeType[]; natures: RuntimeNature[]; growthRates: RuntimeGrowthRate[] } {
   const speciesLocalization = localizationMap(artifacts.localization.species)
   const formLocalization = localizationMap(artifacts.localization.forms)
   const abilityLocalization = localizationMap(artifacts.localization.abilities)
   const tagsByEntity = tagMap(artifacts.tags.assignments)
+  const growthBySpecies = new Map(artifacts.growthRates.map(record => [stringValue(record, 'entityId'), growthResolution({ id: record.growthRateId, status: record.status })]))
+  const growthOverrideByForm = new Map(artifacts.formGrowthRateOverrides.map(record => [stringValue(record, 'formId'), growthResolution(record.growthRateOverride)]))
   const abilityByCanonicalName = new Map<string, CanonicalRecord>()
   for (const ability of artifacts.abilities) {
     const name = canonicalName(ability)
@@ -81,6 +117,7 @@ export function buildRuntimeData(artifacts: FullDryRunArtifacts): { species: Run
       canonicalName: canonicalName(record),
       zhName: localized ? stringValue(localized, 'name') : (() => { throw new Error(`RUNTIME_SPECIES_LOCALIZATION: ${speciesId}`) })(),
       defaultFormId: stringValue(record, 'defaultFormId'),
+      growthRate: growthBySpecies.get(speciesId) ?? (() => { throw new Error(`RUNTIME_SPECIES_GROWTH_RATE: ${speciesId}`) })(),
       formIds: formIdsBySpecies.get(speciesId) ?? [],
       tagIds: tagsByEntity.get(speciesId) ?? [],
     }
@@ -107,6 +144,7 @@ export function buildRuntimeData(artifacts: FullDryRunArtifacts): { species: Run
         return { slot: slot as RuntimeForm['abilities'][number]['slot'], abilityId: stringValue(ability, 'abilityId') }
       }),
       tagIds: tagsByEntity.get(formId) ?? [],
+      growthRateOverride: growthOverrideByForm.get(formId) ?? null,
     }
   })
   const abilities = artifacts.abilities.map(record => {
@@ -140,8 +178,14 @@ export function buildRuntimeData(artifacts: FullDryRunArtifacts): { species: Run
     const stat = (value: unknown): RuntimeNature['plusStat'] => value === null ? null : value === 'atk' || value === 'def' || value === 'spa' || value === 'spd' || value === 'spe' ? value : (() => { throw new Error('RUNTIME_NATURE_STAT') })()
     return { natureId: stringValue(record, 'natureId'), canonicalName: canonicalName(record), plusStat: stat(plusStat), minusStat: stat(minusStat), neutral: record.neutral === true }
   })
-  assertRuntimeReferences(species, forms, abilities, types, natures)
-  return { species, forms, abilities, types, natures }
+  const growthRates: RuntimeGrowthRate[] = CANONICAL_GROWTH_RATES.map(rate => ({
+    growthRateId: rate.growthRateId,
+    canonicalName: rate.canonicalName,
+    level100Total: rate.level100Total,
+    totalExpByLevel: Array.from({ length: 100 }, (_, index) => experienceTotal(rate.formulaId, index + 1)),
+  })).sort((left, right) => left.growthRateId.localeCompare(right.growthRateId, 'en'))
+  assertRuntimeReferences(species, forms, abilities, types, natures, growthRates)
+  return { species, forms, abilities, types, natures, growthRates }
 }
 
 export async function emitRuntimeData(artifacts: FullDryRunArtifacts, outputRoot = resolve(getProjectRoot(), 'public', 'data')): Promise<{ outputRoot: string; manifest: RuntimeManifest }> {
@@ -152,6 +196,7 @@ export async function emitRuntimeData(artifacts: FullDryRunArtifacts, outputRoot
     ['abilities.json', runtime.abilities, runtime.abilities.length],
     ['types.json', runtime.types, runtime.types.length],
     ['natures.json', runtime.natures, runtime.natures.length],
+    ['growth-rates.json', runtime.growthRates, runtime.growthRates.length],
   ]
   const manifest: RuntimeManifest = {
     schemaVersion: 1,
