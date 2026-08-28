@@ -6,12 +6,13 @@
   import PokemonQuery from './lib/components/PokemonQuery.svelte'
   import StatCalculator from './lib/components/StatCalculator.svelte'
   import TypeMatchupCalculator from './lib/components/TypeMatchupCalculator.svelte'
+  import TeamBuilder from './lib/components/TeamBuilder.svelte'
   import { loadPokemonRuntimeData } from './lib/runtime-data/loader'
   import type { PokemonRuntimeData, RuntimeForm, RuntimeSpecies } from './lib/runtime-data/types'
 
-  type Section = 'pokemon' | 'moves' | 'type' | 'stats' | 'experience' | 'damage'
+  type Section = 'pokemon' | 'team' | 'moves' | 'type' | 'stats' | 'experience' | 'damage'
   const sections: Array<{ id: Section; label: string }> = [
-    { id: 'pokemon', label: '宝可梦查询' }, { id: 'moves', label: '招式查询' }, { id: 'type', label: '属性相性' },
+    { id: 'pokemon', label: '宝可梦查询' }, { id: 'team', label: '队伍构建' }, { id: 'moves', label: '招式查询' }, { id: 'type', label: '属性相性' },
     { id: 'stats', label: '种族值' }, { id: 'experience', label: '经验等级' }, { id: 'damage', label: '伤害计算' },
   ]
   let data: PokemonRuntimeData | null = null
@@ -32,6 +33,7 @@
   {:else}
     <nav class="app-nav" aria-label="工具导航">{#each sections as section (section.id)}<button class:active={activeSection === section.id} aria-current={activeSection === section.id ? 'page' : undefined} type="button" onclick={() => activeSection = section.id}>{section.label}</button>{/each}</nav>
     {#if activeSection === 'pokemon'}<PokemonQuery {data} bind:selectedSpecies bind:selectedForm />
+    {:else if activeSection === 'team'}<TeamBuilder {data} {selectedForm} />
     {:else if activeSection === 'moves'}<MoveQuery {data} />
     {:else if activeSection === 'type'}<TypeMatchupCalculator {data} />
     {:else if activeSection === 'stats'}<StatCalculator {data} {selectedSpecies} {selectedForm} />
