@@ -6,6 +6,7 @@ import { z } from 'zod'
 import { buildSmokeArtifacts } from './pipeline.ts'
 import { parseGrowthRate } from './growth-rate.ts'
 import { buildFormLocalizations, type StableFormLocalizationTarget } from './form-localization.ts'
+import { buildTagArtifacts, emptyTagArtifacts, loadCuratedTags, type TagArtifacts } from './tags.ts'
 import { serializeJson, writeJson } from './serialization.ts'
 import {
   loadReviewDecisions,
@@ -124,6 +125,9 @@ export interface FullDryRunArtifacts {
     abilities: Array<Record<string, unknown>>
     moves: Array<Record<string, unknown>>
   }
+  tags: TagArtifacts['canonical']
+  tagProvenance: TagArtifacts['provenance']
+  tagMigrationReport: TagArtifacts['report']
   provenance: Array<Record<string, unknown>>
   conflicts: DryRunConflict[]
   registryProposals: RegistryProposal[]
@@ -640,6 +644,14 @@ function summaryFor(artifacts: Omit<FullDryRunArtifacts, 'summary' | 'performanc
       abilities: { complete: artifacts.localization.abilities.length, missing: artifacts.abilities.length - artifacts.localization.abilities.length, duplicateDisplayNameGroups: duplicateDisplayNameGroups(artifacts.localization.abilities) },
       moves: { complete: artifacts.localization.moves.length, missing: artifacts.moves.length - artifacts.localization.moves.length, duplicateDisplayNameGroups: duplicateDisplayNameGroups(artifacts.localization.moves) },
     },
+    tags: {
+      definitions: artifacts.tags.definitions.length,
+      assignments: artifacts.tags.assignments.length,
+      species: artifacts.tags.assignments.filter(item => item.entityId.startsWith('species:')).length,
+      forms: artifacts.tags.assignments.filter(item => item.entityId.startsWith('form:')).length,
+      unresolved: artifacts.tagProvenance.unresolved.length,
+      byTag: Object.fromEntries(artifacts.tags.definitions.map(definition => [definition.tagId, artifacts.tags.assignments.filter(item => item.tagId === definition.tagId).length])),
+    },
     provenanceCount: artifacts.provenance.length,
     conflicts: { bySeverity, byDomain, total: artifacts.conflicts.length },
     registryProposals: Object.fromEntries(['species', 'form', 'ability', 'move'].map(kind => [kind, artifacts.registryProposals.filter(item => item.entityKind === kind).length])),
@@ -647,7 +659,7 @@ function summaryFor(artifacts: Omit<FullDryRunArtifacts, 'summary' | 'performanc
   }
 }
 
-export async function buildFullDryRun(options: { fullCachePath?: string } = {}): Promise<FullDryRunArtifacts> {
+export async function buildFullDryRun(options: { fullCachePath?: string; skipTags?: boolean } = {}): Promise<FullDryRunArtifacts> {
   const start = performance.now()
   let stage = performance.now()
   const source = await verifySource()
@@ -687,6 +699,9 @@ export async function buildFullDryRun(options: { fullCachePath?: string } = {}):
     fullZh.abilities,
   )
   const localizationForms = formLocalization.entries
+  const tagArtifacts = options.skipTags
+    ? emptyTagArtifacts()
+    : buildTagArtifacts(await loadCuratedTags(), { species: speciesForms.species, forms: speciesForms.forms })
   const showdownManifest = await selectedShowdownManifest(source)
   const manifestFiles = [...showdownManifest, ...fullZh.manifestEntries].sort((left, right) => `${left.source}:${left.path}`.localeCompare(`${right.source}:${right.path}`, 'en'))
   const sourceManifest = {
@@ -706,6 +721,7 @@ export async function buildFullDryRun(options: { fullCachePath?: string } = {}):
     appearances: smoke.dataset.appearances, appearanceCandidates, evolutions,
     dexes: dexBuild.dexes, dexEntries: dexBuild.entries, dexCandidates: dexBuild.candidates,
     localization: { species: localizationSpecies, forms: localizationForms, abilities: abilityBuild.localization, moves: moveBuild.localization },
+    tags: tagArtifacts.canonical, tagProvenance: tagArtifacts.provenance, tagMigrationReport: tagArtifacts.report,
     provenance, conflicts, registryProposals: proposals, extraShowdownRecords: speciesForms.extras,
   }
   validateArtifacts(partial, conflicts)
@@ -737,13 +753,16 @@ export async function emitFullDryRun(artifacts: FullDryRunArtifacts): Promise<{ 
     ['canonical-candidates/dexes.json', artifacts.dexes],
     ['canonical-candidates/dex-entries.json', artifacts.dexEntries],
     ['canonical-candidates/localization.json', artifacts.localization],
+    ['canonical-candidates/tags.json', artifacts.tags],
     ['provenance/source-manifest.json', artifacts.sourceManifest],
     ['provenance/candidate-provenance.json', artifacts.provenance],
+    ['provenance/tag-assignments.json', artifacts.tagProvenance],
     ['reports/summary.json', artifacts.summary],
     ['reports/conflicts.json', artifacts.conflicts],
     ['reports/extra-showdown-records.json', artifacts.extraShowdownRecords],
     ['reports/appearance-candidates.json', artifacts.appearanceCandidates],
     ['reports/dex-candidates.json', artifacts.dexCandidates],
+    ['reports/tag-migration.json', artifacts.tagMigrationReport],
     ['id-registry-proposals.json', artifacts.registryProposals],
     ['reports/registry-diff.json', {
       addProposalCount: artifacts.registryProposals.length,
@@ -774,7 +793,7 @@ export async function emitFullDryRun(artifacts: FullDryRunArtifacts): Promise<{ 
   return { outputRoot, deterministicHashes: Object.fromEntries(Object.entries(deterministicHashes).sort(([left], [right]) => left.localeCompare(right, 'en'))) }
 }
 
-export async function runFullDryRun(options: { fullCachePath?: string } = {}): Promise<{
+export async function runFullDryRun(options: { fullCachePath?: string; skipTags?: boolean } = {}): Promise<{
   artifacts: FullDryRunArtifacts
   outputRoot: string
   deterministicHashes: Record<string, string>

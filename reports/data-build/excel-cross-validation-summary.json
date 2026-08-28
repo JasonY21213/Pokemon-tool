@@ -9,18 +9,18 @@
   },
   "totalComparisonRecords": 25660,
   "classifications": {
-    "agree": 23400,
+    "agree": 23424,
     "canonical-only": 149,
     "excel-only": 1104,
-    "conflict": 203,
+    "conflict": 179,
     "representation-difference": 684,
     "suspected-legacy-error": 30,
     "confirmed-legacy-error": 19,
     "unverifiable": 71
   },
   "severity": {
-    "info": 23497,
-    "warning": 2030,
+    "info": 23521,
+    "warning": 2006,
     "error": 133,
     "blocking": 0
   },
