@@ -7,6 +7,7 @@ import { buildSmokeArtifacts } from './pipeline.ts'
 import { parseGrowthRate } from './growth-rate.ts'
 import { buildFormLocalizations, type StableFormLocalizationTarget } from './form-localization.ts'
 import { buildTagArtifacts, emptyTagArtifacts, loadCuratedTags, type TagArtifacts } from './tags.ts'
+import { buildLearnsetArtifacts, type LearnsetArtifacts } from './learnsets.ts'
 import { serializeJson, writeJson } from './serialization.ts'
 import {
   loadReviewDecisions,
@@ -114,6 +115,11 @@ export interface FullDryRunArtifacts {
   forms: Array<Record<string, unknown>>
   abilities: Array<Record<string, unknown>>
   moves: Array<Record<string, unknown>>
+  learnsets: LearnsetArtifacts['entries']
+  learnsetInheritance: LearnsetArtifacts['inheritance']
+  learnsetUnresolved: LearnsetArtifacts['unresolved']
+  learnsetQuarantined: LearnsetArtifacts['quarantined']
+  learnsetReport: LearnsetArtifacts['report']
   growthRates: Array<Record<string, unknown>>
   formGrowthRateOverrides: Array<Record<string, unknown>>
   appearances: unknown[]
@@ -598,6 +604,7 @@ function validateArtifacts(artifacts: Omit<FullDryRunArtifacts, 'summary' | 'per
   if (artifacts.species.some(species => Number(species.nationalDexNumber) <= 0)) conflict(conflicts, 'identity', 'blocking', null, 'CAP_IN_MAIN_NAMESPACE', 'Non-positive Species entered the main namespace.')
   const speciesIds = new Set(artifacts.species.map(species => String(species.speciesId)))
   const formIds = new Set(artifacts.forms.map(form => String(form.formId)))
+  const usableMoveIds = new Set(artifacts.moves.filter(move => move.dataStatus === 'complete').map(move => String(move.moveId)))
   for (const form of artifacts.forms) if (!speciesIds.has(String(form.speciesId))) conflict(conflicts, 'provenance', 'blocking', String(form.formId), 'ORPHAN_FORM_SPECIES', `${form.speciesId} is missing.`)
   for (const entry of artifacts.dexEntries) {
     if (!speciesIds.has(String(entry.speciesId))) conflict(conflicts, 'provenance', 'blocking', String(entry.dexId), 'ORPHAN_DEX_SPECIES', `${entry.speciesId} is missing.`)
@@ -605,6 +612,16 @@ function validateArtifacts(artifacts: Omit<FullDryRunArtifacts, 'summary' | 'per
   for (const edge of artifacts.evolutions) {
     if (edge.sourceFormId && !formIds.has(String(edge.sourceFormId))) conflict(conflicts, 'provenance', 'blocking', String(edge.evolutionId), 'ORPHAN_EVOLUTION_SOURCE', String(edge.sourceFormId))
     if (edge.targetFormId && !formIds.has(String(edge.targetFormId))) conflict(conflicts, 'provenance', 'blocking', String(edge.evolutionId), 'ORPHAN_EVOLUTION_TARGET', String(edge.targetFormId))
+  }
+  const learnsetPairKeys = artifacts.learnsets.map(entry => `${entry.entityId}:${entry.moveId}`)
+  if (new Set(learnsetPairKeys).size !== learnsetPairKeys.length) conflict(conflicts, 'provenance', 'blocking', null, 'LEARNSET_PAIR_DUPLICATE', 'Canonical learnsets contain duplicate entity/move pairs.')
+  for (const entry of artifacts.learnsets) {
+    if (!formIds.has(entry.entityId)) conflict(conflicts, 'provenance', 'blocking', entry.entityId, 'ORPHAN_LEARNSET_ENTITY', entry.moveId)
+    if (!usableMoveIds.has(entry.moveId)) conflict(conflicts, 'provenance', 'blocking', entry.entityId, 'ORPHAN_LEARNSET_MOVE', entry.moveId)
+  }
+  if (artifacts.learnsetInheritance.length !== artifacts.forms.length) conflict(conflicts, 'provenance', 'blocking', null, 'LEARNSET_INHERITANCE_COVERAGE', `Expected ${artifacts.forms.length} learnset inheritance records, received ${artifacts.learnsetInheritance.length}.`)
+  for (const edge of artifacts.learnsetInheritance) {
+    if (!formIds.has(edge.entityId) || (edge.parentEntityId !== null && !formIds.has(edge.parentEntityId))) conflict(conflicts, 'provenance', 'blocking', edge.entityId, 'ORPHAN_LEARNSET_INHERITANCE', String(edge.parentEntityId))
   }
   const proposalIds = artifacts.registryProposals.map(proposal => proposal.proposedProjectId)
   if (new Set(proposalIds).size !== proposalIds.length) conflict(conflicts, 'identity', 'blocking', null, 'REGISTRY_PROPOSAL_DUPLICATE', 'Registry proposals contain duplicate project IDs.')
@@ -655,6 +672,7 @@ function summaryFor(artifacts: Omit<FullDryRunArtifacts, 'summary' | 'performanc
       unresolved: artifacts.tagProvenance.unresolved.length,
       byTag: Object.fromEntries(artifacts.tags.definitions.map(definition => [definition.tagId, artifacts.tags.assignments.filter(item => item.tagId === definition.tagId).length])),
     },
+    learnsets: artifacts.learnsetReport,
     provenanceCount: artifacts.provenance.length,
     conflicts: { bySeverity, byDomain, total: artifacts.conflicts.length },
     registryProposals: Object.fromEntries(['species', 'form', 'ability', 'move'].map(kind => [kind, artifacts.registryProposals.filter(item => item.entityKind === kind).length])),
@@ -681,6 +699,12 @@ export async function buildFullDryRun(options: { fullCachePath?: string; skipTag
   const speciesForms = buildSpeciesAndForms(showdown.pokedex, fullZh.pokemon, source, proposals, conflicts, provenance)
   const abilityBuild = buildAbilities(showdown.abilities, fullZh.abilities, source, proposals, conflicts, provenance, reviewDecisions)
   const moveBuild = buildMoves(showdown.moves, fullZh.moves, source, proposals, conflicts, provenance, reviewDecisions)
+  const learnsetBuild = buildLearnsetArtifacts({
+    forms: speciesForms.forms,
+    moves: moveBuild.moves,
+    showdownPokedex: showdown.pokedex,
+    showdownLearnsets: showdown.learnsets,
+  })
   const growthRates = buildGrowth(fullZh.pokemon, conflicts, provenance)
   const smoke = await buildSmokeArtifacts()
   const formCounts = new Map<number, number>()
@@ -720,7 +744,10 @@ export async function buildFullDryRun(options: { fullCachePath?: string; skipTag
   stage = performance.now()
   const partial = {
     sourceManifest, types: smoke.dataset.types as unknown as Array<Record<string, unknown>>, natures: smoke.dataset.natures as unknown as Array<Record<string, unknown>>, species: speciesForms.species, forms: speciesForms.forms,
-    abilities: abilityBuild.abilities, moves: moveBuild.moves, growthRates, formGrowthRateOverrides: smoke.dataset.forms.filter(form => form.growthRateOverride !== null).map(form => ({ formId: form.formId, growthRateOverride: form.growthRateOverride })),
+    abilities: abilityBuild.abilities, moves: moveBuild.moves,
+    learnsets: learnsetBuild.entries, learnsetInheritance: learnsetBuild.inheritance,
+    learnsetUnresolved: learnsetBuild.unresolved, learnsetQuarantined: learnsetBuild.quarantined, learnsetReport: learnsetBuild.report,
+    growthRates, formGrowthRateOverrides: smoke.dataset.forms.filter(form => form.growthRateOverride !== null).map(form => ({ formId: form.formId, growthRateOverride: form.growthRateOverride })),
     appearances: smoke.dataset.appearances, appearanceCandidates, evolutions,
     dexes: dexBuild.dexes, dexEntries: dexBuild.entries, dexCandidates: dexBuild.candidates,
     localization: { species: localizationSpecies, forms: localizationForms, abilities: abilityBuild.localization, moves: moveBuild.localization },
@@ -752,6 +779,8 @@ export async function emitFullDryRun(artifacts: FullDryRunArtifacts): Promise<{ 
     ['canonical-candidates/forms.json', artifacts.forms],
     ['canonical-candidates/abilities.json', artifacts.abilities],
     ['canonical-candidates/moves.json', artifacts.moves],
+    ['canonical-candidates/learnsets.json', artifacts.learnsets],
+    ['canonical-candidates/learnset-inheritance.json', artifacts.learnsetInheritance],
     ['canonical-candidates/growth-rates.json', artifacts.growthRates],
     ['canonical-candidates/form-growth-rate-overrides.json', artifacts.formGrowthRateOverrides],
     ['canonical-candidates/appearances.json', artifacts.appearances],
@@ -769,6 +798,9 @@ export async function emitFullDryRun(artifacts: FullDryRunArtifacts): Promise<{ 
     ['reports/appearance-candidates.json', artifacts.appearanceCandidates],
     ['reports/dex-candidates.json', artifacts.dexCandidates],
     ['reports/tag-migration.json', artifacts.tagMigrationReport],
+    ['reports/learnsets.json', artifacts.learnsetReport],
+    ['reports/learnset-unresolved.json', artifacts.learnsetUnresolved],
+    ['reports/learnset-quarantined.json', artifacts.learnsetQuarantined],
     ['id-registry-proposals.json', artifacts.registryProposals],
     ['reports/registry-diff.json', {
       addProposalCount: artifacts.registryProposals.length,

@@ -1,5 +1,5 @@
 import { join, resolve } from 'node:path'
-import type { RuntimeAbility, RuntimeAccuracy, RuntimeEvolution, RuntimeForm, RuntimeGrowthRate, RuntimeGrowthRateResolution, RuntimeManifest, RuntimeMove, RuntimeNature, RuntimeNumericValue, RuntimeSpecies, RuntimeType } from '../../src/lib/runtime-data/types.ts'
+import type { RuntimeAbility, RuntimeAccuracy, RuntimeEvolution, RuntimeForm, RuntimeGrowthRate, RuntimeGrowthRateResolution, RuntimeLearnsets, RuntimeManifest, RuntimeMove, RuntimeNature, RuntimeNumericValue, RuntimeSpecies, RuntimeType } from '../../src/lib/runtime-data/types.ts'
 import { buildFullDryRun, type FullDryRunArtifacts } from './full-dry-run.ts'
 import { CANONICAL_GROWTH_RATES } from './growth-rate.ts'
 import { getProjectRoot, sha256 } from './source.ts'
@@ -79,7 +79,7 @@ function tagMap(assignments: Array<{ entityId: string; tagId: string }>): Map<st
   return result
 }
 
-function assertRuntimeReferences(species: RuntimeSpecies[], forms: RuntimeForm[], abilities: RuntimeAbility[], types: RuntimeType[], natures: RuntimeNature[], growthRates: RuntimeGrowthRate[], moves: RuntimeMove[], evolutions: RuntimeEvolution[]): void {
+function assertRuntimeReferences(species: RuntimeSpecies[], forms: RuntimeForm[], abilities: RuntimeAbility[], types: RuntimeType[], natures: RuntimeNature[], growthRates: RuntimeGrowthRate[], moves: RuntimeMove[], evolutions: RuntimeEvolution[], learnsets: RuntimeLearnsets): void {
   const formIds = new Set(forms.map(form => form.formId))
   const abilityIds = new Set(abilities.map(ability => ability.abilityId))
   for (const entry of species) {
@@ -100,9 +100,12 @@ function assertRuntimeReferences(species: RuntimeSpecies[], forms: RuntimeForm[]
   if (forms.some(entry => entry.growthRateOverride !== null && (entry.growthRateOverride.status === 'resolved' ? !entry.growthRateOverride.id || !growthIds.has(entry.growthRateOverride.id) : entry.growthRateOverride.id !== null))) throw new Error('RUNTIME_FORM_GROWTH_REFERENCE')
   if (new Set(moves.map(move => move.moveId)).size !== moves.length || moves.some(move => !typeIds.has(move.typeId) || !move.zhName || !move.zhDescription)) throw new Error('RUNTIME_MOVE_REFERENCE_INTEGRITY')
   if (evolutions.some(edge => !formIds.has(edge.sourceFormId) || !formIds.has(edge.targetFormId) || (edge.level !== null && (!Number.isInteger(edge.level) || edge.level < 1)) || (edge.dataStatus === 'complete' && edge.rawCondition !== null))) throw new Error('RUNTIME_EVOLUTION_REFERENCE_INTEGRITY')
+  const moveIds = new Set(moves.map(move => move.moveId))
+  if (learnsets.entries.length !== forms.length || new Set(learnsets.entries.map(entry => entry.entityId)).size !== forms.length) throw new Error('RUNTIME_LEARNSET_ENTITY_COVERAGE')
+  if (learnsets.entries.some(entry => !formIds.has(entry.entityId) || (entry.parentEntityId !== null && !formIds.has(entry.parentEntityId)) || !entry.directMoveIds.every(moveId => moveIds.has(moveId)) || new Set(entry.directMoveIds).size !== entry.directMoveIds.length)) throw new Error('RUNTIME_LEARNSET_REFERENCE_INTEGRITY')
 }
 
-export function buildRuntimeData(artifacts: FullDryRunArtifacts): { species: RuntimeSpecies[]; forms: RuntimeForm[]; abilities: RuntimeAbility[]; types: RuntimeType[]; natures: RuntimeNature[]; growthRates: RuntimeGrowthRate[]; moves: RuntimeMove[]; evolutions: RuntimeEvolution[] } {
+export function buildRuntimeData(artifacts: FullDryRunArtifacts): { species: RuntimeSpecies[]; forms: RuntimeForm[]; abilities: RuntimeAbility[]; types: RuntimeType[]; natures: RuntimeNature[]; growthRates: RuntimeGrowthRate[]; moves: RuntimeMove[]; evolutions: RuntimeEvolution[]; learnsets: RuntimeLearnsets } {
   const speciesLocalization = localizationMap(artifacts.localization.species)
   const formLocalization = localizationMap(artifacts.localization.forms)
   const abilityLocalization = localizationMap(artifacts.localization.abilities)
@@ -231,8 +234,18 @@ export function buildRuntimeData(artifacts: FullDryRunArtifacts): { species: Run
       dataStatus: record.dataStatus as RuntimeEvolution['dataStatus'],
     }))
     .sort((left, right) => left.evolutionId.localeCompare(right.evolutionId, 'en'))
-  assertRuntimeReferences(species, forms, abilities, types, natures, growthRates, moves, evolutions)
-  return { species, forms, abilities, types, natures, growthRates, moves, evolutions }
+  const directMoveIdsByEntity = new Map<string, string[]>()
+  for (const entry of artifacts.learnsets) directMoveIdsByEntity.set(entry.entityId, [...(directMoveIdsByEntity.get(entry.entityId) ?? []), entry.moveId])
+  const learnsets: RuntimeLearnsets = {
+    scope: 'pinned-showdown-known-association-across-generations',
+    entries: artifacts.learnsetInheritance.map(edge => ({
+      entityId: edge.entityId,
+      parentEntityId: edge.parentEntityId,
+      directMoveIds: (directMoveIdsByEntity.get(edge.entityId) ?? []).sort((left, right) => left.localeCompare(right, 'en')),
+    })).sort((left, right) => left.entityId.localeCompare(right.entityId, 'en')),
+  }
+  assertRuntimeReferences(species, forms, abilities, types, natures, growthRates, moves, evolutions, learnsets)
+  return { species, forms, abilities, types, natures, growthRates, moves, evolutions, learnsets }
 }
 
 export async function emitRuntimeData(artifacts: FullDryRunArtifacts, outputRoot = resolve(getProjectRoot(), 'public', 'data')): Promise<{ outputRoot: string; manifest: RuntimeManifest }> {
@@ -246,6 +259,7 @@ export async function emitRuntimeData(artifacts: FullDryRunArtifacts, outputRoot
     ['growth-rates.json', runtime.growthRates, runtime.growthRates.length],
     ['moves.json', runtime.moves, runtime.moves.length],
     ['evolutions.json', runtime.evolutions, runtime.evolutions.length],
+    ['learnsets.json', runtime.learnsets, runtime.learnsets.entries.length],
   ]
   const manifest: RuntimeManifest = {
     schemaVersion: 1,

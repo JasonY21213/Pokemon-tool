@@ -5,6 +5,7 @@
   import { calculateDefensiveMatchup, groupDefensiveMatchup } from './lib/runtime-data/type-matchup'
   import { calculateStats, totalEvs } from './lib/runtime-data/stat-calculator'
   import { expProgress, levelToTotalExp, resolveEffectiveGrowthRate } from './lib/runtime-data/experience-calculator'
+  import { resolveEffectiveLearnsetMoveIds } from './lib/runtime-data/learnsets'
 
   let data: PokemonRuntimeData | null = null
   let error = ''
@@ -22,6 +23,7 @@
   let experienceLevel = 50
   let moveQuery = ''
   let selectedMove: RuntimeMove | null = null
+  let learnsetQuery = ''
 
   const statLabels: Record<keyof RuntimeStatBlock, string> = {
     hp: 'HP', atk: 'Attack', def: 'Defense', spa: 'Special Attack', spd: 'Special Defense', spe: 'Speed',
@@ -39,10 +41,12 @@
   function selectSpecies(species: RuntimeSpecies): void {
     selectedSpecies = species
     selectedForm = data?.forms.find(form => form.formId === species.defaultFormId) ?? null
+    learnsetQuery = ''
   }
 
   function selectForm(form: RuntimeForm): void {
     selectedForm = form
+    learnsetQuery = ''
   }
 
   function displayFormName(form: RuntimeForm): string {
@@ -145,6 +149,13 @@
   $: selectedFormId = selectedForm?.formId ?? null
   $: previousEvolutions = data && selectedFormId ? data.evolutions.filter(edge => edge.targetFormId === selectedFormId) : []
   $: nextEvolutions = data && selectedFormId ? data.evolutions.filter(edge => edge.sourceFormId === selectedFormId) : []
+  $: effectiveLearnsetMoveIds = data && selectedFormId ? resolveEffectiveLearnsetMoveIds(data.learnsets, selectedFormId) : []
+  $: normalizedLearnsetQuery = learnsetQuery.trim().toLocaleLowerCase()
+  $: learnsetMoves = data ? effectiveLearnsetMoveIds
+    .map(moveId => data?.moves.find(move => move.moveId === moveId))
+    .filter((move): move is RuntimeMove => move !== undefined)
+    .filter(move => !normalizedLearnsetQuery || (move.zhName?.includes(learnsetQuery.trim()) ?? false) || move.canonicalName.toLocaleLowerCase().includes(normalizedLearnsetQuery))
+    : []
 </script>
 
 <main>
@@ -241,6 +252,29 @@
               <li><strong>{slot === 'H' ? '隐藏特性' : `特性 ${slot}`}</strong>：{ability.zhName ?? ability.canonicalName} <small>{ability.canonicalName}</small>{#if ability.zhDescription} — {ability.zhDescription}{/if}</li>
             {/each}
           </ul>
+        </section>
+        <section class="learnset">
+          <h3>可学招式 / Learnset</h3>
+          <p>固定 Showdown 来源中与当前形态关联的已知招式（跨世代汇总），不表示每种获取方式在当前游戏中仍然可用。</p>
+          <label class="search">
+            <span>筛选当前形态的 {effectiveLearnsetMoveIds.length} 个关联招式</span>
+            <input bind:value={learnsetQuery} placeholder="输入中文名或英文名" />
+          </label>
+          {#if learnsetMoves.length}
+            <div class="learnset-list" aria-label="当前形态可学招式">
+              {#each learnsetMoves as move (move.moveId)}
+                <article>
+                  <strong>{move.zhName ?? '未本地化'}</strong>
+                  <small>{move.canonicalName}</small>
+                  <span>{typeName(move.typeId)} · {moveCategory(move.category)}</span>
+                </article>
+              {/each}
+            </div>
+          {:else if normalizedLearnsetQuery}
+            <p>当前形态的关联招式中没有匹配项。</p>
+          {:else}
+            <p>固定来源中没有该形态的可解析关联招式。</p>
+          {/if}
         </section>
         <section>
           <h3>防御属性相性</h3>
@@ -344,7 +378,7 @@
 
     <section class="move-browser">
       <h2>招式查询</h2>
-      <p>按中文名或英文名查询已验证的稳定招式数据。当前没有可验证的宝可梦可学招式关系，因此不会在宝可梦详情中推测招式列表。</p>
+      <p>按中文名或英文名查询已验证的稳定招式数据。宝可梦详情中的关联列表来自固定 Showdown learnset 来源。</p>
       <label class="search">
         <span>搜索招式</span>
         <input bind:value={moveQuery} placeholder="例如：拍击、Pound、高速星星、Swift" />

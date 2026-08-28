@@ -107,6 +107,17 @@ export type RuntimeEvolution = {
   dataStatus: 'complete' | 'partial'
 }
 
+export type RuntimeLearnsetEntry = {
+  entityId: string
+  parentEntityId: string | null
+  directMoveIds: string[]
+}
+
+export type RuntimeLearnsets = {
+  scope: 'pinned-showdown-known-association-across-generations'
+  entries: RuntimeLearnsetEntry[]
+}
+
 export type RuntimeManifestFile = {
   path: string
   sha256: string
@@ -127,5 +138,6 @@ export type PokemonRuntimeData = {
   growthRates: RuntimeGrowthRate[]
   moves: RuntimeMove[]
   evolutions: RuntimeEvolution[]
+  learnsets: RuntimeLearnsets
   manifest: RuntimeManifest
 }

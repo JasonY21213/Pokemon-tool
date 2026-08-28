@@ -143,6 +143,7 @@ export type RegistryEntity = z.infer<typeof RegistryEntitySchema>
 
 export interface ShowdownSourceData {
   pokedex: Record<string, unknown>
+  learnsets: Record<string, unknown>
   abilities: Record<string, unknown>
   moves: Record<string, unknown>
   natures: Record<string, RawNatureRecord>
@@ -314,8 +315,9 @@ function parseRecord<T>(
 
 export async function loadShowdownSource(source: VerifiedSource): Promise<ShowdownSourceData> {
   const dataPath = join(source.cachePath, 'data')
-  const [pokedex, abilities, moves, natures, typeChart] = await Promise.all([
+  const [pokedex, learnsets, abilities, moves, natures, typeChart] = await Promise.all([
     importRecord(join(dataPath, 'pokedex.ts'), 'Pokedex'),
+    importRecord(join(dataPath, 'learnsets.ts'), 'Learnsets'),
     importRecord(join(dataPath, 'abilities.ts'), 'Abilities'),
     importRecord(join(dataPath, 'moves.ts'), 'Moves'),
     importRecord(join(dataPath, 'natures.ts'), 'Natures'),
@@ -323,6 +325,7 @@ export async function loadShowdownSource(source: VerifiedSource): Promise<Showdo
   ])
   return {
     pokedex,
+    learnsets,
     abilities,
     moves,
     natures: parseRecord(natures, RawNatureRecordSchema, 'Nature'),

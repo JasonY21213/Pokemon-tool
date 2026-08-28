@@ -40,6 +40,11 @@
       "path": "evolutions.json",
       "recordCount": 529,
       "sha256": "9483614517b29c8a746283176c63e9255b4398397719a3db2c44c4424e1d99ca"
+    },
+    {
+      "path": "learnsets.json",
+      "recordCount": 1380,
+      "sha256": "ba1f8ff1f30bcebbea50632c6a2f55a16770eb0bb3589a3e454a0b2116487509"
     }
   ]
 }
