@@ -4,7 +4,7 @@
   import { resolveEffectiveLearnsetMoveIds } from '../runtime-data/learnsets'
   import { totalEvs } from '../runtime-data/stat-calculator'
   import { resolveAttackerItem, resolveCombatantConfiguration, validateDamageCalculatorContext, type CombatantConfiguration, type ResolvedCombatantConfiguration } from '../runtime-data/damage-calculator-state'
-  import { INACTIVE_TERASTALLIZATION, STANDARD_TERA_TYPE_IDS, type ResolvedStab, type StandardTeraTypeId, type TerastallizationState } from '../runtime-data/terastallization'
+  import { INACTIVE_TERASTALLIZATION, STANDARD_TERA_TYPE_IDS, type ResolvedStab, type StellarBoostUsageState, type TeraSelection, type TerastallizationState } from '../runtime-data/terastallization'
   import type { PokemonRuntimeData, RuntimeAbility, RuntimeAbilityMechanicsEffect, RuntimeForm, RuntimeItem, RuntimeItemMechanicsEffect, RuntimeMove, RuntimeMoveDamageUnsupportedReason, RuntimeSpecies, RuntimeStatBlock } from '../runtime-data/types'
   import ModifierTrace from './ModifierTrace.svelte'
 
@@ -22,7 +22,8 @@
   let attackerNatureId = 'nature:hardy'
   let attackerAbilityId: string | null = null
   let attackerItemId: string | null = null
-  let attackerTeraTypeId: StandardTeraTypeId | '' = ''
+  let attackerTeraTypeId: TeraSelection = ''
+  let stellarBoostUsage: StellarBoostUsageState = 'unknown'
   let attackerIvs = all31()
   let attackerEvs = all0()
   let defenderSpeciesId = 'species:0035'
@@ -30,7 +31,7 @@
   let defenderLevel = 50
   let defenderNatureId = 'nature:hardy'
   let defenderAbilityId: string | null = null
-  let defenderTeraTypeId: StandardTeraTypeId | '' = ''
+  let defenderTeraTypeId: TeraSelection = ''
   let defenderIvs = all31()
   let defenderEvs = all0()
   let moveQuery = ''
@@ -59,12 +60,18 @@
     const species = data.species.find(candidate => candidate.speciesId === attackerSpeciesId)
     attackerFormId = species?.defaultFormId ?? ''
     attackerAbilityId = null
+    if (attackerTeraTypeId === 'stellar') stellarBoostUsage = 'unknown'
   }
 
   function resetDefenderForm(): void {
     const species = data.species.find(candidate => candidate.speciesId === defenderSpeciesId)
     defenderFormId = species?.defaultFormId ?? ''
     defenderAbilityId = null
+  }
+
+  function selectMove(moveId: string): void {
+    selectedMoveId = moveId
+    if (attackerTeraTypeId === 'stellar') stellarBoostUsage = 'unknown'
   }
 
   function abilitiesFor(form: RuntimeForm | undefined): Array<{ slot: RuntimeForm['abilities'][number]['slot']; ability: RuntimeAbility }> {
@@ -147,6 +154,10 @@
     if (basis === 'original-type') return '原始属性'
     if (basis === 'tera-type') return '太晶属性'
     if (basis === 'same-type-tera') return '同属性太晶'
+    if (basis === 'stellar-original-available') return 'Stellar 原属性增伤可用'
+    if (basis === 'stellar-original-consumed') return 'Stellar 原属性增伤已消耗'
+    if (basis === 'stellar-non-original-available') return 'Stellar 非原属性增伤可用'
+    if (basis === 'stellar-non-original-consumed') return 'Stellar 非原属性增伤已消耗'
     return '无匹配'
   }
 
@@ -167,9 +178,9 @@
       : `${terrainName}：着地防守方受到的龙属性招式威力 0.5×`
   }
 
-  function damageOutcome(move: RuntimeMove | undefined, attackerForm: RuntimeForm | undefined, defenderForm: RuntimeForm | undefined, attackerStats: RuntimeStatBlock | null, defenderStats: RuntimeStatBlock | null, attackerAbility: RuntimeAbility | null, defenderAbility: RuntimeAbility | null, attackerItem: RuntimeItem | null, battleContext: BattleContext, attackerTerastallization: TerastallizationState, defenderTerastallization: TerastallizationState): MoveDamageResult | null {
+  function damageOutcome(move: RuntimeMove | undefined, attackerForm: RuntimeForm | undefined, defenderForm: RuntimeForm | undefined, attackerStats: RuntimeStatBlock | null, defenderStats: RuntimeStatBlock | null, attackerAbility: RuntimeAbility | null, defenderAbility: RuntimeAbility | null, attackerItem: RuntimeItem | null, battleContext: BattleContext, attackerTerastallization: TerastallizationState, defenderTerastallization: TerastallizationState, stellarBoostUsage: StellarBoostUsageState): MoveDamageResult | null {
     if (!move || !attackerForm || !defenderForm || !attackerStats || !defenderStats) return null
-    return calculateMoveDamage({ level: attackerLevel, move, attackerStats, defenderStats, attackerTypeIds: attackerForm.types, defenderTypeIds: defenderForm.types, types: data.types, attackerAbility, defenderAbility, attackerItem, battleContext, attackerTerastallization, defenderTerastallization })
+    return calculateMoveDamage({ level: attackerLevel, move, attackerStats, defenderStats, attackerTypeIds: attackerForm.types, defenderTypeIds: defenderForm.types, types: data.types, attackerAbility, defenderAbility, attackerItem, battleContext, attackerTerastallization, defenderTerastallization, stellarBoostUsage })
   }
 
   $: attackerSpecies = data.species.find(candidate => candidate.speciesId === attackerSpeciesId)
@@ -197,12 +208,12 @@
   $: attackerTerastallization = attackerConfiguration.value?.terastallization ?? INACTIVE_TERASTALLIZATION
   $: defenderTerastallization = defenderConfiguration.value?.terastallization ?? INACTIVE_TERASTALLIZATION
   $: battleContextValidationError = contextError(battleContext)
-  $: damageResult = battleContextValidationError || attackerItemConfiguration.error ? null : damageOutcome(selectedMove, attackerForm, defenderForm, attackerStatResult.stats, defenderStatResult.stats, attackerAbility, defenderAbility, attackerItem, battleContext, attackerTerastallization, defenderTerastallization)
+  $: damageResult = battleContextValidationError || attackerItemConfiguration.error ? null : damageOutcome(selectedMove, attackerForm, defenderForm, attackerStatResult.stats, defenderStatResult.stats, attackerAbility, defenderAbility, attackerItem, battleContext, attackerTerastallization, defenderTerastallization, stellarBoostUsage)
 </script>
 
 <section class="damage-calculator">
   <h2>核心伤害计算器</h2>
-  <p>第九世代普通单目标伤害范围，假设招式成功命中。支持普通 18 属性太晶化与已审查的战斗修正；不包含星晶、太晶生命周期或队伍级使用限制。</p>
+  <p>第九世代普通单目标伤害范围，假设招式成功命中。支持普通 18 属性太晶与 Stellar 的可确定直接伤害；Stellar 每属性增伤是否已使用必须由用户明确提供。</p>
 
   <div class="damage-sides">
     <section class="damage-side">
@@ -215,11 +226,15 @@
         </select>
       </label>
       <label>形态
-        <select bind:value={attackerFormId} onchange={() => attackerAbilityId = null}>
+        <select bind:value={attackerFormId} onchange={() => { attackerAbilityId = null; if (attackerTeraTypeId === 'stellar') stellarBoostUsage = 'unknown' }}>
           {#each attackerForms as form (form.formId)}<option value={form.formId}>{displayForm(form, attackerSpecies)}</option>{/each}
         </select>
       </label>
-      <label>太晶状态<select aria-label="攻击方太晶状态" bind:value={attackerTeraTypeId}><option value="">未太晶化</option>{#each STANDARD_TERA_TYPE_IDS as typeId}<option value={typeId}>太晶 {typeName(typeId)}</option>{/each}</select></label>
+      <label>太晶状态<select aria-label="攻击方太晶状态" bind:value={attackerTeraTypeId} onchange={() => stellarBoostUsage = 'unknown'}><option value="">未太晶化</option>{#each STANDARD_TERA_TYPE_IDS as typeId}<option value={typeId}>太晶 {typeName(typeId)}</option>{/each}<option value="stellar">Stellar（保留原防守属性）</option></select></label>
+      {#if attackerTeraTypeId === 'stellar'}
+        <label>本招式属性的 Stellar 增伤<select aria-label="Stellar 增伤使用状态" bind:value={stellarBoostUsage}><option value="unknown">请选择，不能推测</option><option value="available">尚未使用（本次可用）</option><option value="consumed">已经使用</option></select></label>
+        <p class="status">普通宝可梦每个招式属性仅有一次 Stellar 增伤；太乐巴戈斯 Stellar 形态不会消耗该增伤，但本阶段不自动模拟其形态转换。</p>
+      {/if}
       <label>特性效果<select aria-label="攻击方特性效果" bind:value={attackerAbilityId}><option value={null}>不启用</option>{#each attackerAbilityOptions as { slot, ability } (ability.abilityId)}<option value={ability.abilityId}>{slot} · {ability.zhName ?? ability.canonicalName}（{ability.mechanics.status === 'supported' ? '支持' : '未建模'}）</option>{/each}</select></label>
       <label>持有物效果<select aria-label="攻击方持有物效果" bind:value={attackerItemId}><option value={null}>无持有物</option>{#each data.items as item (item.itemId)}<option value={item.itemId}>{item.canonicalName}（{item.mechanics.status === 'supported' ? '支持' : '未建模'}）</option>{/each}</select></label>
       <div class="damage-basic-inputs">
@@ -250,7 +265,7 @@
           {#each defenderForms as form (form.formId)}<option value={form.formId}>{displayForm(form, defenderSpecies)}</option>{/each}
         </select>
       </label>
-      <label>太晶状态<select aria-label="防守方太晶状态" bind:value={defenderTeraTypeId}><option value="">未太晶化</option>{#each STANDARD_TERA_TYPE_IDS as typeId}<option value={typeId}>太晶 {typeName(typeId)}</option>{/each}</select></label>
+      <label>太晶状态<select aria-label="防守方太晶状态" bind:value={defenderTeraTypeId}><option value="">未太晶化</option>{#each STANDARD_TERA_TYPE_IDS as typeId}<option value={typeId}>太晶 {typeName(typeId)}</option>{/each}<option value="stellar">Stellar（保留原防守属性）</option></select></label>
       <label>特性效果<select aria-label="防守方特性效果" bind:value={defenderAbilityId}><option value={null}>不启用</option>{#each defenderAbilityOptions as { slot, ability } (ability.abilityId)}<option value={ability.abilityId}>{slot} · {ability.zhName ?? ability.canonicalName}（{ability.mechanics.status === 'supported' ? '支持' : '未建模'}）</option>{/each}</select></label>
       <div class="damage-basic-inputs">
         <label>等级 <input aria-label="防守方等级" type="number" min="1" max="100" step="1" bind:value={defenderLevel} /></label>
@@ -291,7 +306,7 @@
     <p>匹配 {filteredMoves.length} 个；列表最多显示前 60 个，请继续输入名称缩小范围。</p>
     <div class="damage-move-results">
       {#each filteredMoves.slice(0, 60) as move (move.moveId)}
-        <button class:active={selectedMoveId === move.moveId} type="button" onclick={() => selectedMoveId = move.moveId}>
+        <button class:active={selectedMoveId === move.moveId} type="button" onclick={() => selectMove(move.moveId)}>
           <strong>{move.zhName ?? '未本地化'}</strong> <small>{move.canonicalName}</small><span>{supportLabel(move)}</span>
         </button>
       {/each}
@@ -310,8 +325,8 @@
         <div class="damage-modifiers">
           <span>攻击方原始属性 {attackerForm ? attackerForm.types.map(typeName).join('/') : '—'}</span>
           <span>防守方原始属性 {defenderForm ? defenderForm.types.map(typeName).join('/') : '—'}</span>
-          {#if attackerTerastallization.active}<span>攻击方当前属性 太晶 {typeName(attackerTerastallization.teraType)}</span>{/if}
-          {#if defenderTerastallization.active}<span>防守方当前属性 太晶 {typeName(defenderTerastallization.teraType)}</span>{/if}
+          {#if attackerTerastallization.kind === 'ordinary'}<span>攻击方当前属性 太晶 {typeName(attackerTerastallization.typeId)}</span>{:else if attackerTerastallization.kind === 'stellar'}<span>攻击方 Stellar；有效防守属性 {damageResult.effectiveAttackerTypeIds.map(typeName).join('/')}</span>{/if}
+          {#if defenderTerastallization.kind === 'ordinary'}<span>防守方当前属性 太晶 {typeName(defenderTerastallization.typeId)}</span>{:else if defenderTerastallization.kind === 'stellar'}<span>防守方 Stellar；有效防守属性 {damageResult.effectiveDefenderTypeIds.map(typeName).join('/')}</span>{/if}
           <span>{damageResult.attackingStat.toUpperCase()} {damageResult.attack}{damageResult.effectiveAttack !== damageResult.attack ? ` → ${damageResult.effectiveAttack}` : ''}</span>
           <span>{damageResult.defendingStat.toUpperCase()} {damageResult.defense}{damageResult.effectiveDefense !== damageResult.defense ? ` → ${damageResult.effectiveDefense}` : ''}</span>
           {#if selectedMove.power.kind === 'numeric' && damageResult.effectiveBasePower !== selectedMove.power.value}<span>威力 {selectedMove.power.value} → {damageResult.effectiveBasePower}</span>{/if}
@@ -334,8 +349,10 @@
         <p class="status">暂不支持：{unsupportedLabels[damageResult.reason]}</p>
       {:else if damageResult?.status === 'incomplete'}
         <p class="status">招式资料不足，无法可靠计算。</p>
+      {:else if damageResult?.status === 'unresolved-context'}
+        <p class="status">需要明确状态：请选择该招式属性的 Stellar 增伤是“尚未使用”还是“已经使用”；计算器不会默认推测。</p>
       {:else if damageResult?.status === 'unsupported-context'}
-        <p class="status">当前组合暂不计算：{damageResult.reason === 'burn-with-guts' ? '灼伤与“毅力”的能力修正及灼伤豁免尚未建模。' : '“水蒸气”在日照下具有特殊增伤规则，不能套用普通水属性减伤。'}</p>
+        <p class="status">当前组合暂不计算：{damageResult.reason === 'burn-with-guts' ? '灼伤与“毅力”的能力修正及灼伤豁免尚未建模。' : damageResult.reason === 'sun-with-hydro-steam' ? '“水蒸气”在日照下具有特殊增伤规则，不能套用普通水属性减伤。' : damageResult.reason === 'stellar-tera-blast' ? 'Stellar 太晶爆发会变为 Stellar 属性、威力 100、按攻击与特攻选择分类，并在命中后降低攻击与特攻；本阶段保持显式不支持。' : damageResult.reason === 'stellar-tera-starstorm' ? '晶光星群依赖太乐巴戈斯 Stellar 形态、动态属性/分类和范围目标，本阶段不引入专属形态战斗引擎。' : '觉醒之舞会按使用者当前属性动态改变招式属性，Stellar 状态下不能使用静态招式属性计算。'}</p>
       {:else}
         <p class="status">请先修正双方配置。</p>
       {/if}

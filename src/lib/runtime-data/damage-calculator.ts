@@ -2,7 +2,7 @@ import { calculateDefensiveMatchup, type DefensiveMatchup } from './type-matchup
 import { adjustDefensiveMultiplier, type AbilityAdjustedMultiplier, type AppliedAbilityEffect } from './ability-mechanics.ts'
 import { applyStatStage, DEFAULT_BATTLE_CONTEXT, isGroundedForTerrain, resolveCriticalHitStage, validateBattleContext, type BattleContext, type BattleStatStage, type BattleTerrain, type BattleWeather } from './battle-context.ts'
 import { applyItemFixedPointModifier, itemEffect, type AppliedItemEffect } from './held-item-mechanics.ts'
-import { effectiveTypeIds, INACTIVE_TERASTALLIZATION, resolveOrdinaryTeraBasePower, resolveStab, validateTerastallizationState, type ResolvedStab, type TerastallizationState } from './terastallization.ts'
+import { effectiveTypeIds, INACTIVE_TERASTALLIZATION, resolveOrdinaryTeraBasePower, resolveStab, validateTerastallizationState, type ResolvedStab, type StellarBoostUsageState, type TerastallizationState } from './terastallization.ts'
 import type { RuntimeAbility, RuntimeItem, RuntimeMove, RuntimeMoveDamageUnsupportedReason, RuntimeStatBlock, RuntimeType } from './types.js'
 
 export type DamageCoreInput = {
@@ -21,6 +21,7 @@ export type DamageCoreInput = {
   battleContext?: BattleContext
   attackerTerastallization?: TerastallizationState
   defenderTerastallization?: TerastallizationState
+  stellarBoostUsage?: StellarBoostUsageState
   movePriority?: number
 }
 
@@ -39,7 +40,7 @@ export type AppliedTerrainEffect =
 
 export type DamageModifierTraceCategory =
   | 'stat-stage' | 'defensive-weather-stat' | 'ability-stat' | 'item-stat' | 'move-power'
-  | 'core-base-damage' | 'weather' | 'critical' | 'random' | 'stab' | 'type-effectiveness'
+  | 'core-base-damage' | 'weather' | 'critical' | 'random' | 'stellar-usage' | 'stab' | 'type-effectiveness'
   | 'burn' | 'screen' | 'ability-final' | 'item-final'
 
 export type DamageModifierTraceEntry = {
@@ -55,7 +56,7 @@ export type DamageModifierTraceEntry = {
 // implementation. It documents the calculation below; it does not execute it.
 export const DAMAGE_MODIFIER_TRACE_ORDER: readonly DamageModifierTraceCategory[] = [
   'stat-stage', 'defensive-weather-stat', 'ability-stat', 'item-stat', 'move-power',
-  'core-base-damage', 'weather', 'critical', 'random', 'stab', 'type-effectiveness',
+  'core-base-damage', 'weather', 'critical', 'random', 'stellar-usage', 'stab', 'type-effectiveness',
   'burn', 'screen', 'ability-final', 'item-final',
 ]
 
@@ -65,8 +66,8 @@ export type DamageCoreResult = {
   rolls: number[]
   typeMultiplier: DefensiveMatchup['multiplier']
   abilityAdjustedTypeMultiplier: AbilityAdjustedMultiplier
-  stabMultiplier: 1 | 1.5 | 2 | 2.25
-  stabResolution: ResolvedStab
+  stabMultiplier: 1 | 1.2 | 1.5 | 2 | 2.25
+  stabResolution: Extract<ResolvedStab, { status: 'resolved' }>
   modifiers: Array<'random-85-to-100' | 'stab' | 'type-effectiveness'>
   appliedAbilityEffects: AppliedAbilityEffect[]
   unmodeledAbilityIds: string[]
@@ -99,6 +100,7 @@ export type MoveDamageInput = {
   battleContext?: BattleContext
   attackerTerastallization?: TerastallizationState
   defenderTerastallization?: TerastallizationState
+  stellarBoostUsage?: StellarBoostUsageState
 }
 
 export type MoveDamageResult =
@@ -106,7 +108,8 @@ export type MoveDamageResult =
   | { status: 'non-damaging' }
   | { status: 'unsupported'; reason: RuntimeMoveDamageUnsupportedReason }
   | { status: 'incomplete'; reason: 'unknown-or-incomplete-mechanics' }
-  | { status: 'unsupported-context'; reason: 'burn-with-guts' | 'sun-with-hydro-steam' }
+  | { status: 'unresolved-context'; reason: 'stellar-boost-usage-required' }
+  | { status: 'unsupported-context'; reason: 'burn-with-guts' | 'sun-with-hydro-steam' | 'stellar-tera-blast' | 'stellar-tera-starstorm' | 'stellar-revelation-dance' }
 
 function assertInteger(value: number, minimum: number, maximum: number, label: string): void {
   if (!Number.isInteger(value) || value < minimum || value > maximum) throw new Error(`DAMAGE_CALCULATOR_INVALID_${label}`)
@@ -171,7 +174,8 @@ export function calculateCoreDamage(input: DamageCoreInput): DamageCoreResult {
   const stabEffect = input.attackerAbility?.mechanics.status === 'supported'
     ? input.attackerAbility.mechanics.effects.find(effect => effect.kind === 'stab-multiplier')
     : undefined
-  const stabResolution = resolveStab(input.attackerTypeIds, attackerTerastallization, input.moveTypeId, stabEffect?.kind === 'stab-multiplier')
+  const stabResolution = resolveStab(input.attackerTypeIds, attackerTerastallization, input.moveTypeId, stabEffect?.kind === 'stab-multiplier', input.stellarBoostUsage)
+  if (stabResolution.status === 'unresolved') throw new Error('DAMAGE_CALCULATOR_STELLAR_BOOST_USAGE_REQUIRED')
   const stabMultiplier = stabResolution.multiplier
   const appliedAbilityEffects: AppliedAbilityEffect[] = [
     ...(stabResolution.adaptabilityApplied && stabEffect ? [{ abilityId: input.attackerAbility!.abilityId, effect: stabEffect }] : []),
@@ -255,9 +259,9 @@ export function calculateCoreDamage(input: DamageCoreInput): DamageCoreResult {
     let damage = weather === 1 ? baseDamage : applyFixedPointModifier(baseDamage, weather === 1.5 ? 3 : 1, 2)
     if (context.criticalHit) damage = Math.floor((damage * 3) / 2)
     damage = Math.floor((damage * randomRoll) / 100)
-    if (stabMultiplier === 1.5) damage = applyFixedPointModifier(damage, 3, 2)
-    if (stabMultiplier === 2) damage = applyFixedPointModifier(damage, 2, 1)
-    if (stabMultiplier === 2.25) damage = applyFixedPointModifier(damage, 9, 4)
+    if (stabResolution.numerator !== 1 || stabResolution.denominator !== 1) {
+      damage = applyFixedPointModifier(damage, stabResolution.numerator, stabResolution.denominator)
+    }
     damage = applyTypeMultiplier(damage, typeMultiplier)
     if (burnApplies) damage = applyFixedPointModifier(damage, 1, 2)
     let finalModifier = 4096
@@ -284,7 +288,8 @@ export function calculateCoreDamage(input: DamageCoreInput): DamageCoreResult {
     ...(weather !== 1 ? [{ category: 'weather' as const, source: context.weather, label: input.moveTypeId, multiplier: weather }] : []),
     ...(context.criticalHit ? [{ category: 'critical' as const, source: 'critical-hit', label: 'ordinary critical', multiplier: 1.5 }] : []),
     { category: 'random' as const, source: 'gen-9', label: '85–100%' },
-    ...(stabMultiplier > 1 ? [{ category: 'stab' as const, source: stabResolution.adaptabilityApplied ? input.attackerAbility!.abilityId : 'typing', label: stabResolution.basis, multiplier: stabMultiplier }] : []),
+    ...(attackerTerastallization.kind === 'stellar' ? [{ category: 'stellar-usage' as const, source: input.stellarBoostUsage!, label: input.moveTypeId, multiplier: stabMultiplier }] : []),
+    ...(stabMultiplier > 1 ? [{ category: 'stab' as const, source: stabResolution.adaptabilityApplied ? input.attackerAbility!.abilityId : attackerTerastallization.kind === 'stellar' ? 'stellar' : 'typing', label: stabResolution.basis, multiplier: stabMultiplier }] : []),
     { category: 'type-effectiveness' as const, source: 'defender-typing', label: input.moveTypeId, multiplier: typeMultiplier },
     ...(burnApplies ? [{ category: 'burn' as const, source: 'attacker', label: 'physical damage', multiplier: 0.5 }] : []),
     ...(relevantScreen && !context.criticalHit ? [{ category: 'screen' as const, source: relevantScreen, label: 'damage reduction', multiplier: 0.5 }] : []),
@@ -319,15 +324,21 @@ export function calculateCoreDamage(input: DamageCoreInput): DamageCoreResult {
 }
 
 export function calculateMoveDamage(input: MoveDamageInput): MoveDamageResult {
-  if (input.move.damageSupport.status !== 'supported') return input.move.damageSupport
-  if (input.move.category === 'status') return { status: 'non-damaging' }
-  if (input.move.power.kind !== 'numeric') return { status: 'incomplete', reason: 'unknown-or-incomplete-mechanics' }
   const context = input.battleContext ?? DEFAULT_BATTLE_CONTEXT
   validateBattleContext(context)
   const attackerTerastallization = input.attackerTerastallization ?? INACTIVE_TERASTALLIZATION
   const defenderTerastallization = input.defenderTerastallization ?? INACTIVE_TERASTALLIZATION
   validateTerastallizationState(attackerTerastallization)
   validateTerastallizationState(defenderTerastallization)
+  if (attackerTerastallization.kind === 'stellar' && input.move.moveId === 'move:0851') return { status: 'unsupported-context', reason: 'stellar-tera-blast' }
+  if (attackerTerastallization.kind === 'stellar' && input.move.moveId === 'move:0906') return { status: 'unsupported-context', reason: 'stellar-tera-starstorm' }
+  if (attackerTerastallization.kind === 'stellar' && input.move.moveId === 'move:0686') return { status: 'unsupported-context', reason: 'stellar-revelation-dance' }
+  if (input.move.damageSupport.status !== 'supported') return input.move.damageSupport
+  if (input.move.category === 'status') return { status: 'non-damaging' }
+  if (input.move.power.kind !== 'numeric') return { status: 'incomplete', reason: 'unknown-or-incomplete-mechanics' }
+  if (attackerTerastallization.kind === 'stellar' && (input.stellarBoostUsage ?? 'unknown') === 'unknown') {
+    return { status: 'unresolved-context', reason: 'stellar-boost-usage-required' }
+  }
   if (context.attackerBurned && input.attackerAbility?.abilityId === 'ability:0062') return { status: 'unsupported-context', reason: 'burn-with-guts' }
   if (context.weather === 'sun' && input.move.moveId === 'move:0876') return { status: 'unsupported-context', reason: 'sun-with-hydro-steam' }
   const physical = input.move.category === 'physical'
@@ -353,6 +364,7 @@ export function calculateMoveDamage(input: MoveDamageInput): MoveDamageResult {
       battleContext: context,
       attackerTerastallization,
       defenderTerastallization,
+      stellarBoostUsage: input.stellarBoostUsage,
       movePriority: input.move.priority,
     }),
   }

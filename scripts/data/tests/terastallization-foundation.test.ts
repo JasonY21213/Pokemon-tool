@@ -10,7 +10,8 @@ import { buildRuntimeData } from '../runtime-emission.ts'
 const runtimePromise = buildFullDryRun().then(buildRuntimeData)
 const stats: RuntimeStatBlock = { hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100 }
 
-const tera = (teraType: StandardTeraTypeId): TerastallizationState => ({ active: true, teraType })
+const tera = (typeId: StandardTeraTypeId): TerastallizationState => ({ kind: 'ordinary', typeId })
+const stabSummary = (result: ReturnType<typeof resolveStab>) => ({ multiplier: result.multiplier, basis: result.basis, adaptabilityApplied: result.adaptabilityApplied })
 
 function context(overrides: Partial<BattleContext> = {}): BattleContext {
   return {
@@ -71,15 +72,15 @@ test('4. selected Levitate remains a separate Ground immunity after Tera', async
 })
 
 test('5. an original-type Move retains ordinary STAB after off-type Tera', () => {
-  assert.deepEqual(resolveStab(['type:fire', 'type:flying'], tera('type:dragon'), 'type:fire', false), { multiplier: 1.5, basis: 'original-type', adaptabilityApplied: false })
+  assert.deepEqual(stabSummary(resolveStab(['type:fire', 'type:flying'], tera('type:dragon'), 'type:fire', false)), { multiplier: 1.5, basis: 'original-type', adaptabilityApplied: false })
 })
 
 test('6. a new Tera-type Move receives ordinary STAB', () => {
-  assert.deepEqual(resolveStab(['type:fire', 'type:flying'], tera('type:dragon'), 'type:dragon', false), { multiplier: 1.5, basis: 'tera-type', adaptabilityApplied: false })
+  assert.deepEqual(stabSummary(resolveStab(['type:fire', 'type:flying'], tera('type:dragon'), 'type:dragon', false)), { multiplier: 1.5, basis: 'tera-type', adaptabilityApplied: false })
 })
 
 test('7. same-type Tera resolves to one 2x STAB', () => {
-  assert.deepEqual(resolveStab(['type:fire', 'type:flying'], tera('type:fire'), 'type:fire', false), { multiplier: 2, basis: 'same-type-tera', adaptabilityApplied: false })
+  assert.deepEqual(stabSummary(resolveStab(['type:fire', 'type:flying'], tera('type:fire'), 'type:fire', false)), { multiplier: 2, basis: 'same-type-tera', adaptabilityApplied: false })
 })
 
 test('8. a Move matching neither original nor Tera type receives no STAB', () => {
@@ -91,19 +92,19 @@ test('9. both original types of a dual-type Form retain STAB history', () => {
 })
 
 test('10. non-Tera Adaptability retains its reviewed 2x baseline', () => {
-  assert.equal(resolveStab(['type:normal'], { active: false, teraType: null }, 'type:normal', true).multiplier, 2)
+  assert.equal(resolveStab(['type:normal'], { kind: 'none' }, 'type:normal', true).multiplier, 2)
 })
 
 test('11. Adaptability does not enhance an old original type after off-type Tera', () => {
-  assert.deepEqual(resolveStab(['type:normal'], tera('type:water'), 'type:normal', true), { multiplier: 1.5, basis: 'original-type', adaptabilityApplied: false })
+  assert.deepEqual(stabSummary(resolveStab(['type:normal'], tera('type:water'), 'type:normal', true)), { multiplier: 1.5, basis: 'original-type', adaptabilityApplied: false })
 })
 
 test('12. Adaptability enhances a new Tera type to 2x', () => {
-  assert.deepEqual(resolveStab(['type:normal'], tera('type:water'), 'type:water', true), { multiplier: 2, basis: 'tera-type', adaptabilityApplied: true })
+  assert.deepEqual(stabSummary(resolveStab(['type:normal'], tera('type:water'), 'type:water', true)), { multiplier: 2, basis: 'tera-type', adaptabilityApplied: true })
 })
 
 test('13. same-type Tera plus Adaptability resolves to exact 2.25x', () => {
-  assert.deepEqual(resolveStab(['type:normal'], tera('type:normal'), 'type:normal', true), { multiplier: 2.25, basis: 'same-type-tera', adaptabilityApplied: true })
+  assert.deepEqual(stabSummary(resolveStab(['type:normal'], tera('type:normal'), 'type:normal', true)), { multiplier: 2.25, basis: 'same-type-tera', adaptabilityApplied: true })
 })
 
 test('Adaptability integration selects 1.5x, 2x, and 2.25x in the canonical Tera branches', async () => {
@@ -216,8 +217,8 @@ test('29. Tera-sensitive Moves remain explicitly unsupported', async () => {
 })
 
 test('30. Stellar and malformed inactive states are rejected', () => {
-  assert.throws(() => validateTerastallizationState({ active: true, teraType: 'type:stellar' as StandardTeraTypeId }), /TERASTALLIZATION_INVALID_TYPE/)
-  assert.throws(() => validateTerastallizationState({ active: false, teraType: 'type:fire' } as unknown as TerastallizationState), /TERASTALLIZATION_INACTIVE_WITH_TYPE/)
+  assert.throws(() => validateTerastallizationState({ kind: 'ordinary', typeId: 'type:stellar' as StandardTeraTypeId }), /TERASTALLIZATION_INVALID_STATE/)
+  assert.throws(() => validateTerastallizationState({ kind: 'stellar', typeId: 'type:fire' } as unknown as TerastallizationState), /TERASTALLIZATION_INVALID_STATE/)
 })
 
 test('ordinary Tera raises eligible matching fixed BasePower below 60 to 60', async () => {
