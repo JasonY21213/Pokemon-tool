@@ -14,7 +14,7 @@ const WEATHER_DEFENSE_ROLLS = [13, 13, 13, 14, 14, 14, 14, 14, 14, 15, 15, 15, 1
 
 function context(overrides: Partial<BattleContext> = {}): BattleContext {
   return {
-    weather: 'none', attackerBurned: false, criticalHit: false, reflect: false, lightScreen: false,
+    weather: 'none', terrain: 'none', attackerBurned: false, criticalHit: false, reflect: false, lightScreen: false,
     attackerStatStages: { atk: 0, spa: 0 }, defenderStatStages: { def: 0, spd: 0 },
     ...overrides,
   }

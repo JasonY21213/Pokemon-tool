@@ -1,9 +1,12 @@
 export type BattleWeather = 'none' | 'sun' | 'rain' | 'sandstorm' | 'snow'
 
+export type BattleTerrain = 'none' | 'electric' | 'grassy' | 'psychic' | 'misty'
+
 export type BattleStatStage = -6 | -5 | -4 | -3 | -2 | -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6
 
 export type BattleContext = {
   weather: BattleWeather
+  terrain: BattleTerrain
   attackerBurned: boolean
   criticalHit: boolean
   reflect: boolean
@@ -14,12 +17,19 @@ export type BattleContext = {
 
 export const DEFAULT_BATTLE_CONTEXT: Readonly<BattleContext> = {
   weather: 'none',
+  terrain: 'none',
   attackerBurned: false,
   criticalHit: false,
   reflect: false,
   lightScreen: false,
   attackerStatStages: { atk: 0, spa: 0 },
   defenderStatStages: { def: 0, spd: 0 },
+}
+
+// Deliberately limited Phase 17 policy: actual Form typing and an explicitly
+// selected Levitate are the only airborne signals currently represented.
+export function isGroundedForTerrain(typeIds: readonly string[], selectedAbilityId?: string | null): boolean {
+  return !typeIds.includes('type:flying') && selectedAbilityId !== 'ability:0026'
 }
 
 export function assertBattleStatStage(stage: number): asserts stage is BattleStatStage {
@@ -48,6 +58,7 @@ export function resolveCriticalHitStage(
 
 export function validateBattleContext(context: BattleContext): void {
   if (!['none', 'sun', 'rain', 'sandstorm', 'snow'].includes(context.weather)) throw new Error('BATTLE_CONTEXT_INVALID_WEATHER')
+  if (!['none', 'electric', 'grassy', 'psychic', 'misty'].includes(context.terrain)) throw new Error('BATTLE_CONTEXT_INVALID_TERRAIN')
   if (typeof context.attackerBurned !== 'boolean') throw new Error('BATTLE_CONTEXT_INVALID_BURN')
   if (typeof context.criticalHit !== 'boolean') throw new Error('BATTLE_CONTEXT_INVALID_CRITICAL_HIT')
   if (typeof context.reflect !== 'boolean') throw new Error('BATTLE_CONTEXT_INVALID_REFLECT')

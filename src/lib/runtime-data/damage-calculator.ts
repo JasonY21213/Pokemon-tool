@@ -1,6 +1,6 @@
 import { calculateDefensiveMatchup, type DefensiveMatchup } from './type-matchup.ts'
 import { adjustDefensiveMultiplier, type AbilityAdjustedMultiplier, type AppliedAbilityEffect } from './ability-mechanics.ts'
-import { applyStatStage, DEFAULT_BATTLE_CONTEXT, resolveCriticalHitStage, validateBattleContext, type BattleContext, type BattleStatStage, type BattleWeather } from './battle-context.ts'
+import { applyStatStage, DEFAULT_BATTLE_CONTEXT, isGroundedForTerrain, resolveCriticalHitStage, validateBattleContext, type BattleContext, type BattleStatStage, type BattleTerrain, type BattleWeather } from './battle-context.ts'
 import { applyItemFixedPointModifier, itemEffect, type AppliedItemEffect } from './held-item-mechanics.ts'
 import type { RuntimeAbility, RuntimeItem, RuntimeMove, RuntimeMoveDamageUnsupportedReason, RuntimeStatBlock, RuntimeType } from './types.js'
 
@@ -29,6 +29,10 @@ export type AppliedBattleContextModifier =
   | { kind: 'screen'; screen: 'reflect' | 'light-screen'; multiplier: 0.5 }
   | { kind: 'screen-bypassed'; screen: 'reflect' | 'light-screen'; reason: 'critical-hit' }
 
+export type AppliedTerrainEffect =
+  | { kind: 'attacker-type-base-power'; terrain: 'electric' | 'grassy' | 'psychic'; typeId: 'type:electric' | 'type:grass' | 'type:psychic'; numerator: 5325; denominator: 4096 }
+  | { kind: 'defender-dragon-base-power-reduction'; terrain: 'misty'; typeId: 'type:dragon'; numerator: 1; denominator: 2 }
+
 export type DamageCoreResult = {
   minDamage: number
   maxDamage: number
@@ -42,6 +46,9 @@ export type DamageCoreResult = {
   effectiveAttack: number
   effectiveDefense: number
   appliedBattleContextModifiers: AppliedBattleContextModifier[]
+  attackerGrounded: boolean
+  defenderGrounded: boolean
+  appliedTerrainEffects: AppliedTerrainEffect[]
   effectiveBasePower: number
   appliedItemEffects: AppliedItemEffect[]
   unmodeledItemIds: string[]
@@ -100,6 +107,14 @@ function weatherMultiplier(weather: BattleWeather, moveTypeId: string): 0.5 | 1 
   return 1
 }
 
+function terrainEffect(terrain: BattleTerrain, moveTypeId: string, attackerGrounded: boolean, defenderGrounded: boolean): AppliedTerrainEffect | undefined {
+  if (attackerGrounded && terrain === 'electric' && moveTypeId === 'type:electric') return { kind: 'attacker-type-base-power', terrain, typeId: moveTypeId, numerator: 5325, denominator: 4096 }
+  if (attackerGrounded && terrain === 'grassy' && moveTypeId === 'type:grass') return { kind: 'attacker-type-base-power', terrain, typeId: moveTypeId, numerator: 5325, denominator: 4096 }
+  if (attackerGrounded && terrain === 'psychic' && moveTypeId === 'type:psychic') return { kind: 'attacker-type-base-power', terrain, typeId: moveTypeId, numerator: 5325, denominator: 4096 }
+  if (defenderGrounded && terrain === 'misty' && moveTypeId === 'type:dragon') return { kind: 'defender-dragon-base-power-reduction', terrain, typeId: moveTypeId, numerator: 1, denominator: 2 }
+  return undefined
+}
+
 export function calculateCoreDamage(input: DamageCoreInput): DamageCoreResult {
   assertInteger(input.level, 1, 100, 'LEVEL')
   assertInteger(input.attack, 1, 9999, 'ATTACK')
@@ -126,6 +141,10 @@ export function calculateCoreDamage(input: DamageCoreInput): DamageCoreResult {
   const unmodeledAbilityIds = [input.attackerAbility, input.defenderAbility]
     .filter((ability): ability is RuntimeAbility => ability?.mechanics.status === 'unsupported')
     .map(ability => ability.abilityId)
+  const attackerGrounded = isGroundedForTerrain(input.attackerTypeIds, input.attackerAbility?.abilityId)
+  const defenderGrounded = isGroundedForTerrain(input.defenderTypeIds, input.defenderAbility?.abilityId)
+  const appliedTerrainEffect = terrainEffect(context.terrain, input.moveTypeId, attackerGrounded, defenderGrounded)
+  const appliedTerrainEffects = appliedTerrainEffect ? [appliedTerrainEffect] : []
 
   const attackingStat: 'atk' | 'spa' = input.moveCategory === 'physical' ? 'atk' : 'spa'
   const defendingStat: 'def' | 'spd' = input.moveCategory === 'physical' ? 'def' : 'spd'
@@ -159,9 +178,12 @@ export function calculateCoreDamage(input: DamageCoreInput): DamageCoreResult {
     : abilityAdjustedAttack
   const typePowerEffect = itemEffect(input.attackerItem, 'move-type-base-power-multiplier')
   const appliedTypePowerEffect = typePowerEffect?.typeId === input.moveTypeId ? typePowerEffect : undefined
-  const effectiveBasePower = appliedTypePowerEffect
-    ? applyItemFixedPointModifier(input.basePower, appliedTypePowerEffect.numerator, appliedTypePowerEffect.denominator)
-    : input.basePower
+  let basePowerModifier = 4096
+  // Pinned Showdown runs held Item BasePower callbacks (priority 15) before
+  // Terrain BasePower callbacks (priority 6), chaining both before one rounding.
+  if (appliedTypePowerEffect) basePowerModifier = chainFixedPointModifier(basePowerModifier, appliedTypePowerEffect.numerator, appliedTypePowerEffect.denominator)
+  if (appliedTerrainEffect) basePowerModifier = chainFixedPointModifier(basePowerModifier, appliedTerrainEffect.numerator, appliedTerrainEffect.denominator)
+  const effectiveBasePower = basePowerModifier === 4096 ? input.basePower : applyFixedPointModifier(input.basePower, basePowerModifier, 4096)
   const appliedItemEffects: AppliedItemEffect[] = [
     ...(attackItemEffect && input.attackerItem ? [{ itemId: input.attackerItem.itemId, effect: attackItemEffect }] : []),
     ...(appliedTypePowerEffect && input.attackerItem ? [{ itemId: input.attackerItem.itemId, effect: appliedTypePowerEffect }] : []),
@@ -215,6 +237,9 @@ export function calculateCoreDamage(input: DamageCoreInput): DamageCoreResult {
     effectiveAttack,
     effectiveDefense,
     appliedBattleContextModifiers,
+    attackerGrounded,
+    defenderGrounded,
+    appliedTerrainEffects,
     effectiveBasePower,
     appliedItemEffects,
     unmodeledItemIds: input.attackerItem?.mechanics.status === 'unsupported' ? [input.attackerItem.itemId] : [],

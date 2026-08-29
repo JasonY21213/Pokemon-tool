@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { calculateMoveDamage, type AppliedBattleContextModifier, type MoveDamageResult } from '../runtime-data/damage-calculator'
-  import type { BattleContext, BattleStatStage, BattleWeather } from '../runtime-data/battle-context'
+  import { calculateMoveDamage, type AppliedBattleContextModifier, type AppliedTerrainEffect, type MoveDamageResult } from '../runtime-data/damage-calculator'
+  import type { BattleContext, BattleStatStage, BattleTerrain, BattleWeather } from '../runtime-data/battle-context'
   import { resolveEffectiveLearnsetMoveIds } from '../runtime-data/learnsets'
   import { calculateStats, totalEvs } from '../runtime-data/stat-calculator'
   import { selectAbilityForForm } from '../runtime-data/ability-mechanics'
@@ -38,6 +38,7 @@
   let defenderSpdStage: BattleStatStage = 0
   let attackerBurned = false
   let weather: BattleWeather = 'none'
+  let terrain: BattleTerrain = 'none'
   let criticalHit = false
   let reflect = false
   let lightScreen = false
@@ -144,6 +145,13 @@
     return modifier.kind === 'screen' ? `${screen} ${modifier.multiplier}×` : `${screen}被要害绕过`
   }
 
+  function terrainEffectLabel(effect: AppliedTerrainEffect): string {
+    const terrainName = effect.terrain === 'electric' ? '电气场地' : effect.terrain === 'grassy' ? '青草场地' : effect.terrain === 'psychic' ? '精神场地' : '薄雾场地'
+    return effect.kind === 'attacker-type-base-power'
+      ? `${terrainName}：着地攻击方的${typeName(effect.typeId)}招式威力 1.3×`
+      : `${terrainName}：着地防守方受到的龙属性招式威力 0.5×`
+  }
+
   function damageOutcome(move: RuntimeMove | undefined, attackerForm: RuntimeForm | undefined, defenderForm: RuntimeForm | undefined, attackerStats: RuntimeStatBlock | null, defenderStats: RuntimeStatBlock | null, attackerAbility: RuntimeAbility | null, defenderAbility: RuntimeAbility | null, attackerItem: RuntimeItem | null, battleContext: BattleContext): MoveDamageResult | null {
     if (!move || !attackerForm || !defenderForm || !attackerStats || !defenderStats) return null
     return calculateMoveDamage({ level: attackerLevel, move, attackerStats, defenderStats, attackerTypeIds: attackerForm.types, defenderTypeIds: defenderForm.types, types: data.types, attackerAbility, defenderAbility, attackerItem, battleContext })
@@ -167,13 +175,13 @@
   $: filteredMoves = data.moves.filter(move => (!learnsetOnly || knownMoveIds.has(move.moveId))
     && (!normalizedMoveQuery || (move.zhName?.includes(moveQuery.trim()) ?? false) || move.canonicalName.toLocaleLowerCase().includes(normalizedMoveQuery)))
   $: selectedMove = data.moves.find(move => move.moveId === selectedMoveId)
-  $: battleContext = { weather, attackerBurned, criticalHit, reflect, lightScreen, attackerStatStages: { atk: attackerAtkStage, spa: attackerSpaStage }, defenderStatStages: { def: defenderDefStage, spd: defenderSpdStage } } satisfies BattleContext
+  $: battleContext = { weather, terrain, attackerBurned, criticalHit, reflect, lightScreen, attackerStatStages: { atk: attackerAtkStage, spa: attackerSpaStage }, defenderStatStages: { def: defenderDefStage, spd: defenderSpdStage } } satisfies BattleContext
   $: damageResult = damageOutcome(selectedMove, attackerForm, defenderForm, attackerStatResult.stats, defenderStatResult.stats, attackerAbility, defenderAbility, attackerItem, battleContext)
 </script>
 
 <section class="damage-calculator">
   <h2>核心伤害计算器</h2>
-  <p>第九世代普通单目标伤害范围，假设招式成功命中。支持少量已审查特性、持有物、攻防能力阶级、攻击方灼伤、普通要害、单打反射壁/光墙，以及日照/下雨的火水伤害修正；不计算要害概率。</p>
+  <p>第九世代普通单目标伤害范围，假设招式成功命中。支持少量已审查特性、持有物、攻防能力阶级、攻击方灼伤、普通要害、单打反射壁/光墙、天气，以及四种场地的有限直接伤害效果；不计算要害概率。</p>
 
   <div class="damage-sides">
     <section class="damage-side">
@@ -242,12 +250,13 @@
       <label>防御阶级<select aria-label="防御阶级" bind:value={defenderDefStage}>{#each stageOptions as stage}<option value={stage}>{stageLabel(stage)}</option>{/each}</select></label>
       <label>特防阶级<select aria-label="特防阶级" bind:value={defenderSpdStage}>{#each stageOptions as stage}<option value={stage}>{stageLabel(stage)}</option>{/each}</select></label>
       <label>天气<select aria-label="天气" bind:value={weather}><option value="none">无</option><option value="sun">日照</option><option value="rain">下雨</option><option value="sandstorm">沙暴</option><option value="snow">雪天</option></select></label>
+      <label>场地<select aria-label="场地" bind:value={terrain}><option value="none">无</option><option value="electric">电气场地</option><option value="grassy">青草场地</option><option value="psychic">精神场地</option><option value="misty">薄雾场地</option></select></label>
       <label class="burn-toggle"><input type="checkbox" bind:checked={attackerBurned} /> 攻击方灼伤</label>
       <label class="burn-toggle"><input aria-label="普通要害攻击" type="checkbox" bind:checked={criticalHit} /> 按普通要害计算</label>
       <label class="burn-toggle"><input aria-label="反射壁" type="checkbox" bind:checked={reflect} /> 防守方反射壁</label>
       <label class="burn-toggle"><input aria-label="光墙" type="checkbox" bind:checked={lightScreen} /> 防守方光墙</label>
     </div>
-    <p>这里的天气只影响当前支持的直接伤害或防御能力值：沙暴强化岩石属性特防，雪天强化冰属性防御；不计算天气持续时间或残余伤害。普通要害会绕过对应墙，并只忽略不利于攻击方的能力阶级。</p>
+    <p>天气和场地可以同时存在。场地只实现直接伤害效果；着地仅按当前形态的飞行属性与明确启用的飘浮判断，不计算持续时间、回复、状态防护或优先度变化，地震／重踏／震级等招式特殊交互保持不支持。</p>
   </section>
 
   <section class="damage-move-picker">
@@ -282,6 +291,8 @@
           {#if damageResult.abilityAdjustedTypeMultiplier !== damageResult.typeMultiplier}<span>特性后 {damageResult.abilityAdjustedTypeMultiplier}×</span>{/if}
         </div>
         {#if damageResult.appliedBattleContextModifiers.length}<p class="status">战斗状态：{damageResult.appliedBattleContextModifiers.map(battleContextModifierLabel).join('、')}</p>{/if}
+        {#if terrain !== 'none'}<p class="status">场地着地状态：攻击方{damageResult.attackerGrounded ? '着地' : '未着地'}；防守方{damageResult.defenderGrounded ? '着地' : '未着地'}。</p>{/if}
+        {#if damageResult.appliedTerrainEffects.length}<p class="status">场地效果：{damageResult.appliedTerrainEffects.map(terrainEffectLabel).join('、')}</p>{/if}
         {#if damageResult.appliedAbilityEffects.length}<p class="status">已应用：{damageResult.appliedAbilityEffects.map(item => `${data.abilities.find(ability => ability.abilityId === item.abilityId)?.zhName ?? item.abilityId}（${abilityEffectLabel(item.effect)}）`).join('、')}</p>{/if}
         {#if damageResult.appliedItemEffects.length}<p class="status">持有物：{damageResult.appliedItemEffects.map(item => `${data.items.find(candidate => candidate.itemId === item.itemId)?.canonicalName ?? item.itemId}（${itemEffectLabel(item.effect)}）`).join('、')}</p>{/if}
         {#if damageResult.unmodeledAbilityIds.length}<p class="status">已选择但未建模：{damageResult.unmodeledAbilityIds.map(id => data.abilities.find(ability => ability.abilityId === id)?.zhName ?? id).join('、')}；结果仅使用核心伤害机制。</p>{/if}

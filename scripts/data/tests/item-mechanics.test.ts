@@ -16,7 +16,7 @@ async function item(itemId: string): Promise<RuntimeItem> {
 }
 
 function context(overrides: Partial<BattleContext> = {}): BattleContext {
-  return { weather: 'none', attackerBurned: false, criticalHit: false, reflect: false, lightScreen: false, attackerStatStages: { atk: 0, spa: 0 }, defenderStatStages: { def: 0, spd: 0 }, ...overrides }
+  return { weather: 'none', terrain: 'none', attackerBurned: false, criticalHit: false, reflect: false, lightScreen: false, attackerStatStages: { atk: 0, spa: 0 }, defenderStatStages: { def: 0, spd: 0 }, ...overrides }
 }
 
 async function core(overrides: Partial<Parameters<typeof calculateCoreDamage>[0]> = {}) {

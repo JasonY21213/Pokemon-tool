@@ -10,7 +10,7 @@ const runtimePromise = buildFullDryRun().then(buildRuntimeData)
 
 function context(overrides: Partial<BattleContext> = {}): BattleContext {
   return {
-    weather: 'none', attackerBurned: false, criticalHit: false, reflect: false, lightScreen: false,
+    weather: 'none', terrain: 'none', attackerBurned: false, criticalHit: false, reflect: false, lightScreen: false,
     attackerStatStages: { atk: 0, spa: 0 }, defenderStatStages: { def: 0, spd: 0 },
     ...overrides,
   }
