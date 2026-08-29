@@ -2,6 +2,7 @@ import { calculateDefensiveMatchup, type DefensiveMatchup } from './type-matchup
 import { adjustDefensiveMultiplier, type AbilityAdjustedMultiplier, type AppliedAbilityEffect } from './ability-mechanics.ts'
 import { applyStatStage, DEFAULT_BATTLE_CONTEXT, isGroundedForTerrain, resolveCriticalHitStage, validateBattleContext, type BattleContext, type BattleStatStage, type BattleTerrain, type BattleWeather } from './battle-context.ts'
 import { applyItemFixedPointModifier, itemEffect, type AppliedItemEffect } from './held-item-mechanics.ts'
+import { effectiveTypeIds, INACTIVE_TERASTALLIZATION, resolveOrdinaryTeraBasePower, resolveStab, validateTerastallizationState, type ResolvedStab, type TerastallizationState } from './terastallization.ts'
 import type { RuntimeAbility, RuntimeItem, RuntimeMove, RuntimeMoveDamageUnsupportedReason, RuntimeStatBlock, RuntimeType } from './types.js'
 
 export type DamageCoreInput = {
@@ -18,6 +19,9 @@ export type DamageCoreInput = {
   attackerItem?: RuntimeItem | null
   moveCategory: 'physical' | 'special'
   battleContext?: BattleContext
+  attackerTerastallization?: TerastallizationState
+  defenderTerastallization?: TerastallizationState
+  movePriority?: number
 }
 
 export type AppliedBattleContextModifier =
@@ -39,7 +43,8 @@ export type DamageCoreResult = {
   rolls: number[]
   typeMultiplier: DefensiveMatchup['multiplier']
   abilityAdjustedTypeMultiplier: AbilityAdjustedMultiplier
-  stabMultiplier: 1 | 1.5 | 2
+  stabMultiplier: 1 | 1.5 | 2 | 2.25
+  stabResolution: ResolvedStab
   modifiers: Array<'random-85-to-100' | 'stab' | 'type-effectiveness'>
   appliedAbilityEffects: AppliedAbilityEffect[]
   unmodeledAbilityIds: string[]
@@ -52,6 +57,9 @@ export type DamageCoreResult = {
   effectiveBasePower: number
   appliedItemEffects: AppliedItemEffect[]
   unmodeledItemIds: string[]
+  effectiveAttackerTypeIds: string[]
+  effectiveDefenderTypeIds: string[]
+  teraBasePowerFloorApplied: boolean
 }
 
 export type MoveDamageInput = {
@@ -66,6 +74,8 @@ export type MoveDamageInput = {
   defenderAbility?: RuntimeAbility | null
   attackerItem?: RuntimeItem | null
   battleContext?: BattleContext
+  attackerTerastallization?: TerastallizationState
+  defenderTerastallization?: TerastallizationState
 }
 
 export type MoveDamageResult =
@@ -122,27 +132,33 @@ export function calculateCoreDamage(input: DamageCoreInput): DamageCoreResult {
   assertInteger(input.basePower, 1, 9999, 'BASE_POWER')
   const context = input.battleContext ?? DEFAULT_BATTLE_CONTEXT
   validateBattleContext(context)
+  const attackerTerastallization = input.attackerTerastallization ?? INACTIVE_TERASTALLIZATION
+  const defenderTerastallization = input.defenderTerastallization ?? INACTIVE_TERASTALLIZATION
+  validateTerastallizationState(attackerTerastallization)
+  validateTerastallizationState(defenderTerastallization)
   if (input.attackerTypeIds.length < 1 || input.attackerTypeIds.length > 2 || new Set(input.attackerTypeIds).size !== input.attackerTypeIds.length) throw new Error('DAMAGE_CALCULATOR_INVALID_ATTACKER_TYPES')
   if (input.defenderTypeIds.length < 1 || input.defenderTypeIds.length > 2 || new Set(input.defenderTypeIds).size !== input.defenderTypeIds.length) throw new Error('DAMAGE_CALCULATOR_INVALID_DEFENDER_TYPES')
 
-  const matchup = calculateDefensiveMatchup(input.types, input.defenderTypeIds[0], input.defenderTypeIds[1])
+  const effectiveAttackerTypeIds = effectiveTypeIds(input.attackerTypeIds, attackerTerastallization)
+  const effectiveDefenderTypeIds = effectiveTypeIds(input.defenderTypeIds, defenderTerastallization)
+  const matchup = calculateDefensiveMatchup(input.types, effectiveDefenderTypeIds[0], effectiveDefenderTypeIds[1])
   const typeMultiplier = matchup.find(entry => entry.attackingTypeId === input.moveTypeId)?.multiplier
   if (typeMultiplier === undefined) throw new Error(`DAMAGE_CALCULATOR_UNKNOWN_MOVE_TYPE: ${input.moveTypeId}`)
   const defensiveAdjustment = adjustDefensiveMultiplier({ attackingTypeId: input.moveTypeId, multiplier: typeMultiplier }, input.defenderAbility ?? null)
-  const hasStab = input.attackerTypeIds.includes(input.moveTypeId)
   const stabEffect = input.attackerAbility?.mechanics.status === 'supported'
     ? input.attackerAbility.mechanics.effects.find(effect => effect.kind === 'stab-multiplier')
     : undefined
-  const stabMultiplier: 1 | 1.5 | 2 = hasStab ? stabEffect?.kind === 'stab-multiplier' ? stabEffect.multiplier : 1.5 : 1
+  const stabResolution = resolveStab(input.attackerTypeIds, attackerTerastallization, input.moveTypeId, stabEffect?.kind === 'stab-multiplier')
+  const stabMultiplier = stabResolution.multiplier
   const appliedAbilityEffects: AppliedAbilityEffect[] = [
-    ...(hasStab && stabEffect ? [{ abilityId: input.attackerAbility!.abilityId, effect: stabEffect }] : []),
+    ...(stabResolution.adaptabilityApplied && stabEffect ? [{ abilityId: input.attackerAbility!.abilityId, effect: stabEffect }] : []),
     ...defensiveAdjustment.appliedEffects,
   ]
   const unmodeledAbilityIds = [input.attackerAbility, input.defenderAbility]
     .filter((ability): ability is RuntimeAbility => ability?.mechanics.status === 'unsupported')
     .map(ability => ability.abilityId)
-  const attackerGrounded = isGroundedForTerrain(input.attackerTypeIds, input.attackerAbility?.abilityId)
-  const defenderGrounded = isGroundedForTerrain(input.defenderTypeIds, input.defenderAbility?.abilityId)
+  const attackerGrounded = isGroundedForTerrain(effectiveAttackerTypeIds, input.attackerAbility?.abilityId)
+  const defenderGrounded = isGroundedForTerrain(effectiveDefenderTypeIds, input.defenderAbility?.abilityId)
   const appliedTerrainEffect = terrainEffect(context.terrain, input.moveTypeId, attackerGrounded, defenderGrounded)
   const appliedTerrainEffects = appliedTerrainEffect ? [appliedTerrainEffect] : []
 
@@ -154,9 +170,9 @@ export function calculateCoreDamage(input: DamageCoreInput): DamageCoreResult {
   const effectiveDefenseStage = resolveCriticalHitStage(defenseStage, 'defender', context.criticalHit)
   const stagedAttack = applyStatStage(input.attack, effectiveAttackStage)
   const stagedDefense = applyStatStage(input.defense, effectiveDefenseStage)
-  const defensiveWeather = context.weather === 'sandstorm' && defendingStat === 'spd' && input.defenderTypeIds.includes('type:rock')
+  const defensiveWeather = context.weather === 'sandstorm' && defendingStat === 'spd' && effectiveDefenderTypeIds.includes('type:rock')
     ? 'sandstorm' as const
-    : context.weather === 'snow' && defendingStat === 'def' && input.defenderTypeIds.includes('type:ice')
+    : context.weather === 'snow' && defendingStat === 'def' && effectiveDefenderTypeIds.includes('type:ice')
       ? 'snow' as const
       : null
   const effectiveDefense = defensiveWeather ? applyFixedPointModifier(stagedDefense, 3, 2) : stagedDefense
@@ -183,7 +199,11 @@ export function calculateCoreDamage(input: DamageCoreInput): DamageCoreResult {
   // Terrain BasePower callbacks (priority 6), chaining both before one rounding.
   if (appliedTypePowerEffect) basePowerModifier = chainFixedPointModifier(basePowerModifier, appliedTypePowerEffect.numerator, appliedTypePowerEffect.denominator)
   if (appliedTerrainEffect) basePowerModifier = chainFixedPointModifier(basePowerModifier, appliedTerrainEffect.numerator, appliedTerrainEffect.denominator)
-  const effectiveBasePower = basePowerModifier === 4096 ? input.basePower : applyFixedPointModifier(input.basePower, basePowerModifier, 4096)
+  const modifiedBasePower = basePowerModifier === 4096 ? input.basePower : applyFixedPointModifier(input.basePower, basePowerModifier, 4096)
+  const teraBasePower = input.movePriority === undefined
+    ? { basePower: modifiedBasePower, floorApplied: false }
+    : resolveOrdinaryTeraBasePower(modifiedBasePower, input.moveTypeId, input.movePriority, attackerTerastallization)
+  const effectiveBasePower = teraBasePower.basePower
   const appliedItemEffects: AppliedItemEffect[] = [
     ...(attackItemEffect && input.attackerItem ? [{ itemId: input.attackerItem.itemId, effect: attackItemEffect }] : []),
     ...(appliedTypePowerEffect && input.attackerItem ? [{ itemId: input.attackerItem.itemId, effect: appliedTypePowerEffect }] : []),
@@ -214,6 +234,7 @@ export function calculateCoreDamage(input: DamageCoreInput): DamageCoreResult {
     damage = Math.floor((damage * randomRoll) / 100)
     if (stabMultiplier === 1.5) damage = applyFixedPointModifier(damage, 3, 2)
     if (stabMultiplier === 2) damage = applyFixedPointModifier(damage, 2, 1)
+    if (stabMultiplier === 2.25) damage = applyFixedPointModifier(damage, 9, 4)
     damage = applyTypeMultiplier(damage, typeMultiplier)
     if (burnApplies) damage = applyFixedPointModifier(damage, 1, 2)
     let finalModifier = 4096
@@ -231,6 +252,7 @@ export function calculateCoreDamage(input: DamageCoreInput): DamageCoreResult {
     typeMultiplier,
     abilityAdjustedTypeMultiplier: defensiveAdjustment.adjustedMultiplier,
     stabMultiplier,
+    stabResolution,
     modifiers: ['random-85-to-100', ...(stabMultiplier > 1 ? ['stab' as const] : []), 'type-effectiveness'],
     appliedAbilityEffects,
     unmodeledAbilityIds,
@@ -243,6 +265,9 @@ export function calculateCoreDamage(input: DamageCoreInput): DamageCoreResult {
     effectiveBasePower,
     appliedItemEffects,
     unmodeledItemIds: input.attackerItem?.mechanics.status === 'unsupported' ? [input.attackerItem.itemId] : [],
+    effectiveAttackerTypeIds,
+    effectiveDefenderTypeIds,
+    teraBasePowerFloorApplied: teraBasePower.floorApplied,
   }
 }
 
@@ -252,6 +277,10 @@ export function calculateMoveDamage(input: MoveDamageInput): MoveDamageResult {
   if (input.move.power.kind !== 'numeric') return { status: 'incomplete', reason: 'unknown-or-incomplete-mechanics' }
   const context = input.battleContext ?? DEFAULT_BATTLE_CONTEXT
   validateBattleContext(context)
+  const attackerTerastallization = input.attackerTerastallization ?? INACTIVE_TERASTALLIZATION
+  const defenderTerastallization = input.defenderTerastallization ?? INACTIVE_TERASTALLIZATION
+  validateTerastallizationState(attackerTerastallization)
+  validateTerastallizationState(defenderTerastallization)
   if (context.attackerBurned && input.attackerAbility?.abilityId === 'ability:0062') return { status: 'unsupported-context', reason: 'burn-with-guts' }
   if (context.weather === 'sun' && input.move.moveId === 'move:0876') return { status: 'unsupported-context', reason: 'sun-with-hydro-steam' }
   const physical = input.move.category === 'physical'
@@ -275,6 +304,9 @@ export function calculateMoveDamage(input: MoveDamageInput): MoveDamageResult {
       attackerItem: input.attackerItem,
       moveCategory: input.move.category,
       battleContext: context,
+      attackerTerastallization,
+      defenderTerastallization,
+      movePriority: input.move.priority,
     }),
   }
 }

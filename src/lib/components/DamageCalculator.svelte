@@ -4,6 +4,7 @@
   import { resolveEffectiveLearnsetMoveIds } from '../runtime-data/learnsets'
   import { calculateStats, totalEvs } from '../runtime-data/stat-calculator'
   import { selectAbilityForForm } from '../runtime-data/ability-mechanics'
+  import { STANDARD_TERA_TYPE_IDS, type ResolvedStab, type StandardTeraTypeId, type TerastallizationState } from '../runtime-data/terastallization'
   import type { PokemonRuntimeData, RuntimeAbility, RuntimeAbilityMechanicsEffect, RuntimeForm, RuntimeItem, RuntimeItemMechanicsEffect, RuntimeMove, RuntimeMoveDamageUnsupportedReason, RuntimeSpecies, RuntimeStatBlock } from '../runtime-data/types'
 
   export let data: PokemonRuntimeData
@@ -20,6 +21,7 @@
   let attackerNatureId = 'nature:hardy'
   let attackerAbilityId: string | null = null
   let attackerItemId: string | null = null
+  let attackerTeraTypeId: StandardTeraTypeId | '' = ''
   let attackerIvs = all31()
   let attackerEvs = all0()
   let defenderSpeciesId = 'species:0035'
@@ -27,6 +29,7 @@
   let defenderLevel = 50
   let defenderNatureId = 'nature:hardy'
   let defenderAbilityId: string | null = null
+  let defenderTeraTypeId: StandardTeraTypeId | '' = ''
   let defenderIvs = all31()
   let defenderEvs = all0()
   let moveQuery = ''
@@ -135,6 +138,17 @@
     return stage > 0 ? `+${stage}` : String(stage)
   }
 
+  function teraState(typeId: StandardTeraTypeId | ''): TerastallizationState {
+    return typeId === '' ? { active: false, teraType: null } : { active: true, teraType: typeId }
+  }
+
+  function stabBasisLabel(basis: ResolvedStab['basis']): string {
+    if (basis === 'original-type') return '原始属性'
+    if (basis === 'tera-type') return '太晶属性'
+    if (basis === 'same-type-tera') return '同属性太晶'
+    return '无匹配'
+  }
+
   function battleContextModifierLabel(modifier: AppliedBattleContextModifier): string {
     if (modifier.kind === 'stat-stage') return `${modifier.stat.toUpperCase()} ${stageLabel(modifier.stage)}${modifier.effectiveStage !== modifier.stage ? `（要害按 ${stageLabel(modifier.effectiveStage)}）` : ''}：${modifier.before} → ${modifier.after}`
     if (modifier.kind === 'weather') return `${modifier.weather === 'sun' ? '日照' : '下雨'} ${modifier.multiplier}×`
@@ -152,9 +166,9 @@
       : `${terrainName}：着地防守方受到的龙属性招式威力 0.5×`
   }
 
-  function damageOutcome(move: RuntimeMove | undefined, attackerForm: RuntimeForm | undefined, defenderForm: RuntimeForm | undefined, attackerStats: RuntimeStatBlock | null, defenderStats: RuntimeStatBlock | null, attackerAbility: RuntimeAbility | null, defenderAbility: RuntimeAbility | null, attackerItem: RuntimeItem | null, battleContext: BattleContext): MoveDamageResult | null {
+  function damageOutcome(move: RuntimeMove | undefined, attackerForm: RuntimeForm | undefined, defenderForm: RuntimeForm | undefined, attackerStats: RuntimeStatBlock | null, defenderStats: RuntimeStatBlock | null, attackerAbility: RuntimeAbility | null, defenderAbility: RuntimeAbility | null, attackerItem: RuntimeItem | null, battleContext: BattleContext, attackerTerastallization: TerastallizationState, defenderTerastallization: TerastallizationState): MoveDamageResult | null {
     if (!move || !attackerForm || !defenderForm || !attackerStats || !defenderStats) return null
-    return calculateMoveDamage({ level: attackerLevel, move, attackerStats, defenderStats, attackerTypeIds: attackerForm.types, defenderTypeIds: defenderForm.types, types: data.types, attackerAbility, defenderAbility, attackerItem, battleContext })
+    return calculateMoveDamage({ level: attackerLevel, move, attackerStats, defenderStats, attackerTypeIds: attackerForm.types, defenderTypeIds: defenderForm.types, types: data.types, attackerAbility, defenderAbility, attackerItem, battleContext, attackerTerastallization, defenderTerastallization })
   }
 
   $: attackerSpecies = data.species.find(candidate => candidate.speciesId === attackerSpeciesId)
@@ -176,12 +190,14 @@
     && (!normalizedMoveQuery || (move.zhName?.includes(moveQuery.trim()) ?? false) || move.canonicalName.toLocaleLowerCase().includes(normalizedMoveQuery)))
   $: selectedMove = data.moves.find(move => move.moveId === selectedMoveId)
   $: battleContext = { weather, terrain, attackerBurned, criticalHit, reflect, lightScreen, attackerStatStages: { atk: attackerAtkStage, spa: attackerSpaStage }, defenderStatStages: { def: defenderDefStage, spd: defenderSpdStage } } satisfies BattleContext
-  $: damageResult = damageOutcome(selectedMove, attackerForm, defenderForm, attackerStatResult.stats, defenderStatResult.stats, attackerAbility, defenderAbility, attackerItem, battleContext)
+  $: attackerTerastallization = teraState(attackerTeraTypeId)
+  $: defenderTerastallization = teraState(defenderTeraTypeId)
+  $: damageResult = damageOutcome(selectedMove, attackerForm, defenderForm, attackerStatResult.stats, defenderStatResult.stats, attackerAbility, defenderAbility, attackerItem, battleContext, attackerTerastallization, defenderTerastallization)
 </script>
 
 <section class="damage-calculator">
   <h2>核心伤害计算器</h2>
-  <p>第九世代普通单目标伤害范围，假设招式成功命中。支持少量已审查特性、持有物、攻防能力阶级、攻击方灼伤、普通要害、单打反射壁/光墙、天气，以及四种场地的有限直接伤害效果；不计算要害概率。</p>
+  <p>第九世代普通单目标伤害范围，假设招式成功命中。支持普通 18 属性太晶化与已审查的战斗修正；不包含星晶、太晶生命周期或队伍级使用限制。</p>
 
   <div class="damage-sides">
     <section class="damage-side">
@@ -198,6 +214,7 @@
           {#each attackerForms as form (form.formId)}<option value={form.formId}>{displayForm(form, attackerSpecies)}</option>{/each}
         </select>
       </label>
+      <label>太晶状态<select aria-label="攻击方太晶状态" bind:value={attackerTeraTypeId}><option value="">未太晶化</option>{#each STANDARD_TERA_TYPE_IDS as typeId}<option value={typeId}>太晶 {typeName(typeId)}</option>{/each}</select></label>
       <label>特性效果<select aria-label="攻击方特性效果" bind:value={attackerAbilityId}><option value={null}>不启用</option>{#each attackerAbilityOptions as { slot, ability } (ability.abilityId)}<option value={ability.abilityId}>{slot} · {ability.zhName ?? ability.canonicalName}（{ability.mechanics.status === 'supported' ? '支持' : '未建模'}）</option>{/each}</select></label>
       <label>持有物效果<select aria-label="攻击方持有物效果" bind:value={attackerItemId}><option value={null}>无持有物</option>{#each data.items as item (item.itemId)}<option value={item.itemId}>{item.canonicalName}（{item.mechanics.status === 'supported' ? '支持' : '未建模'}）</option>{/each}</select></label>
       <div class="damage-basic-inputs">
@@ -227,6 +244,7 @@
           {#each defenderForms as form (form.formId)}<option value={form.formId}>{displayForm(form, defenderSpecies)}</option>{/each}
         </select>
       </label>
+      <label>太晶状态<select aria-label="防守方太晶状态" bind:value={defenderTeraTypeId}><option value="">未太晶化</option>{#each STANDARD_TERA_TYPE_IDS as typeId}<option value={typeId}>太晶 {typeName(typeId)}</option>{/each}</select></label>
       <label>特性效果<select aria-label="防守方特性效果" bind:value={defenderAbilityId}><option value={null}>不启用</option>{#each defenderAbilityOptions as { slot, ability } (ability.abilityId)}<option value={ability.abilityId}>{slot} · {ability.zhName ?? ability.canonicalName}（{ability.mechanics.status === 'supported' ? '支持' : '未建模'}）</option>{/each}</select></label>
       <div class="damage-basic-inputs">
         <label>等级 <input aria-label="防守方等级" type="number" min="1" max="100" step="1" bind:value={defenderLevel} /></label>
@@ -283,17 +301,22 @@
           <p><strong>{((damageResult.minDamage / defenderStatResult.stats.hp) * 100).toFixed(1)}%–{((damageResult.maxDamage / defenderStatResult.stats.hp) * 100).toFixed(1)}%</strong>（防守方 HP {defenderStatResult.stats.hp}）</p>
         </div>
         <div class="damage-modifiers">
+          <span>攻击方原始属性 {attackerForm ? attackerForm.types.map(typeName).join('/') : '—'}</span>
+          <span>防守方原始属性 {defenderForm ? defenderForm.types.map(typeName).join('/') : '—'}</span>
+          {#if attackerTerastallization.active}<span>攻击方当前属性 太晶 {typeName(attackerTerastallization.teraType)}</span>{/if}
+          {#if defenderTerastallization.active}<span>防守方当前属性 太晶 {typeName(defenderTerastallization.teraType)}</span>{/if}
           <span>{damageResult.attackingStat.toUpperCase()} {damageResult.attack}{damageResult.effectiveAttack !== damageResult.attack ? ` → ${damageResult.effectiveAttack}` : ''}</span>
           <span>{damageResult.defendingStat.toUpperCase()} {damageResult.defense}{damageResult.effectiveDefense !== damageResult.defense ? ` → ${damageResult.effectiveDefense}` : ''}</span>
           {#if selectedMove.power.kind === 'numeric' && damageResult.effectiveBasePower !== selectedMove.power.value}<span>威力 {selectedMove.power.value} → {damageResult.effectiveBasePower}</span>{/if}
-          <span>STAB {damageResult.stabMultiplier}×</span>
-          <span>原始属性 {damageResult.typeMultiplier}×</span>
+          <span>STAB {damageResult.stabMultiplier}×（{stabBasisLabel(damageResult.stabResolution.basis)}）</span>
+          <span>防守属性相性 {damageResult.typeMultiplier}×</span>
           {#if damageResult.abilityAdjustedTypeMultiplier !== damageResult.typeMultiplier}<span>特性后 {damageResult.abilityAdjustedTypeMultiplier}×</span>{/if}
         </div>
+        {#if damageResult.teraBasePowerFloorApplied}<p class="status">太晶效果：匹配太晶属性的固定低威力招式提升至威力 60。</p>{/if}
         {#if damageResult.appliedBattleContextModifiers.length}<p class="status">战斗状态：{damageResult.appliedBattleContextModifiers.map(battleContextModifierLabel).join('、')}</p>{/if}
         {#if terrain !== 'none'}<p class="status">场地着地状态：攻击方{damageResult.attackerGrounded ? '着地' : '未着地'}；防守方{damageResult.defenderGrounded ? '着地' : '未着地'}。</p>{/if}
         {#if damageResult.appliedTerrainEffects.length}<p class="status">场地效果：{damageResult.appliedTerrainEffects.map(terrainEffectLabel).join('、')}</p>{/if}
-        {#if damageResult.appliedAbilityEffects.length}<p class="status">已应用：{damageResult.appliedAbilityEffects.map(item => `${data.abilities.find(ability => ability.abilityId === item.abilityId)?.zhName ?? item.abilityId}（${abilityEffectLabel(item.effect)}）`).join('、')}</p>{/if}
+        {#if damageResult.appliedAbilityEffects.length}<p class="status">已应用：{damageResult.appliedAbilityEffects.map(item => `${data.abilities.find(ability => ability.abilityId === item.abilityId)?.zhName ?? item.abilityId}（${item.effect.kind === 'stab-multiplier' ? `STAB ${damageResult.stabMultiplier}×` : abilityEffectLabel(item.effect)}）`).join('、')}</p>{/if}
         {#if damageResult.appliedItemEffects.length}<p class="status">持有物：{damageResult.appliedItemEffects.map(item => `${data.items.find(candidate => candidate.itemId === item.itemId)?.canonicalName ?? item.itemId}（${itemEffectLabel(item.effect)}）`).join('、')}</p>{/if}
         {#if damageResult.unmodeledAbilityIds.length}<p class="status">已选择但未建模：{damageResult.unmodeledAbilityIds.map(id => data.abilities.find(ability => ability.abilityId === id)?.zhName ?? id).join('、')}；结果仅使用核心伤害机制。</p>{/if}
         {#if damageResult.unmodeledItemIds.length}<p class="status">已选择但未建模的持有物：{damageResult.unmodeledItemIds.map(id => data.items.find(item => item.itemId === id)?.canonicalName ?? id).join('、')}；该物品不会改变结果。</p>{/if}
