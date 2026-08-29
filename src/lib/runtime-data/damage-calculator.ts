@@ -37,6 +37,28 @@ export type AppliedTerrainEffect =
   | { kind: 'attacker-type-base-power'; terrain: 'electric' | 'grassy' | 'psychic'; typeId: 'type:electric' | 'type:grass' | 'type:psychic'; numerator: 5325; denominator: 4096 }
   | { kind: 'defender-dragon-base-power-reduction'; terrain: 'misty'; typeId: 'type:dragon'; numerator: 1; denominator: 2 }
 
+export type DamageModifierTraceCategory =
+  | 'stat-stage' | 'defensive-weather-stat' | 'ability-stat' | 'item-stat' | 'move-power'
+  | 'core-base-damage' | 'weather' | 'critical' | 'random' | 'stab' | 'type-effectiveness'
+  | 'burn' | 'screen' | 'ability-final' | 'item-final'
+
+export type DamageModifierTraceEntry = {
+  category: DamageModifierTraceCategory
+  source: string
+  label: string
+  before?: number
+  after?: number
+  multiplier?: number
+}
+
+// This order is the single audited explanation order for the existing Gen 9
+// implementation. It documents the calculation below; it does not execute it.
+export const DAMAGE_MODIFIER_TRACE_ORDER: readonly DamageModifierTraceCategory[] = [
+  'stat-stage', 'defensive-weather-stat', 'ability-stat', 'item-stat', 'move-power',
+  'core-base-damage', 'weather', 'critical', 'random', 'stab', 'type-effectiveness',
+  'burn', 'screen', 'ability-final', 'item-final',
+]
+
 export type DamageCoreResult = {
   minDamage: number
   maxDamage: number
@@ -60,6 +82,7 @@ export type DamageCoreResult = {
   effectiveAttackerTypeIds: string[]
   effectiveDefenderTypeIds: string[]
   teraBasePowerFloorApplied: boolean
+  modifierTrace: DamageModifierTraceEntry[]
 }
 
 export type MoveDamageInput = {
@@ -245,6 +268,29 @@ export function calculateCoreDamage(input: DamageCoreInput): DamageCoreResult {
     return Math.max(1, damage)
   })
   if (finalItemEffect && input.attackerItem) appliedItemEffects.push({ itemId: input.attackerItem.itemId, effect: finalItemEffect })
+  const contextTrace: DamageModifierTraceEntry[] = []
+  for (const modifier of appliedBattleContextModifiers) {
+    if (modifier.kind === 'stat-stage') contextTrace.push({ category: 'stat-stage', source: modifier.stat, label: `stage ${modifier.stage}${modifier.effectiveStage !== modifier.stage ? ` (critical ${modifier.effectiveStage})` : ''}`, before: modifier.before, after: modifier.after })
+    if (modifier.kind === 'weather-defense-stat') contextTrace.push({ category: 'defensive-weather-stat', source: modifier.weather, label: modifier.stat, before: modifier.before, after: modifier.after, multiplier: modifier.multiplier })
+  }
+  const modifierTrace: DamageModifierTraceEntry[] = [
+    ...contextTrace,
+    ...(incomingAttackEffect?.kind === 'incoming-type-attack-multiplier' ? [{ category: 'ability-stat' as const, source: input.defenderAbility!.abilityId, label: incomingAttackEffect.kind, before: stagedAttack, after: abilityAdjustedAttack, multiplier: incomingAttackEffect.multiplier }] : []),
+    ...(attackItemEffect && input.attackerItem ? [{ category: 'item-stat' as const, source: input.attackerItem.itemId, label: attackItemEffect.kind, before: abilityAdjustedAttack, after: effectiveAttack, multiplier: attackItemEffect.numerator / attackItemEffect.denominator }] : []),
+    ...(appliedTypePowerEffect && input.attackerItem ? [{ category: 'move-power' as const, source: input.attackerItem.itemId, label: appliedTypePowerEffect.kind, multiplier: appliedTypePowerEffect.numerator / appliedTypePowerEffect.denominator }] : []),
+    ...appliedTerrainEffects.map(effect => ({ category: 'move-power' as const, source: effect.terrain, label: effect.kind, multiplier: effect.numerator / effect.denominator })),
+    ...(teraBasePower.floorApplied ? [{ category: 'move-power' as const, source: 'tera', label: 'minimum-base-power', before: modifiedBasePower, after: effectiveBasePower }] : []),
+    { category: 'core-base-damage' as const, source: 'gen-9-core', label: 'base damage' },
+    ...(weather !== 1 ? [{ category: 'weather' as const, source: context.weather, label: input.moveTypeId, multiplier: weather }] : []),
+    ...(context.criticalHit ? [{ category: 'critical' as const, source: 'critical-hit', label: 'ordinary critical', multiplier: 1.5 }] : []),
+    { category: 'random' as const, source: 'gen-9', label: '85–100%' },
+    ...(stabMultiplier > 1 ? [{ category: 'stab' as const, source: stabResolution.adaptabilityApplied ? input.attackerAbility!.abilityId : 'typing', label: stabResolution.basis, multiplier: stabMultiplier }] : []),
+    { category: 'type-effectiveness' as const, source: 'defender-typing', label: input.moveTypeId, multiplier: typeMultiplier },
+    ...(burnApplies ? [{ category: 'burn' as const, source: 'attacker', label: 'physical damage', multiplier: 0.5 }] : []),
+    ...(relevantScreen && !context.criticalHit ? [{ category: 'screen' as const, source: relevantScreen, label: 'damage reduction', multiplier: 0.5 }] : []),
+    ...(defensiveFinalEffect ? [{ category: 'ability-final' as const, source: input.defenderAbility!.abilityId, label: 'super-effective damage', multiplier: 0.75 }] : []),
+    ...(finalItemEffect && input.attackerItem ? [{ category: 'item-final' as const, source: input.attackerItem.itemId, label: finalItemEffect.kind, multiplier: finalItemEffect.numerator / finalItemEffect.denominator }] : []),
+  ]
   return {
     minDamage: Math.min(...rolls),
     maxDamage: Math.max(...rolls),
@@ -268,6 +314,7 @@ export function calculateCoreDamage(input: DamageCoreInput): DamageCoreResult {
     effectiveAttackerTypeIds,
     effectiveDefenderTypeIds,
     teraBasePowerFloorApplied: teraBasePower.floorApplied,
+    modifierTrace,
   }
 }
 

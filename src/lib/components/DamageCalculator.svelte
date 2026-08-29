@@ -2,10 +2,11 @@
   import { calculateMoveDamage, type AppliedBattleContextModifier, type AppliedTerrainEffect, type MoveDamageResult } from '../runtime-data/damage-calculator'
   import type { BattleContext, BattleStatStage, BattleTerrain, BattleWeather } from '../runtime-data/battle-context'
   import { resolveEffectiveLearnsetMoveIds } from '../runtime-data/learnsets'
-  import { calculateStats, totalEvs } from '../runtime-data/stat-calculator'
-  import { selectAbilityForForm } from '../runtime-data/ability-mechanics'
-  import { STANDARD_TERA_TYPE_IDS, type ResolvedStab, type StandardTeraTypeId, type TerastallizationState } from '../runtime-data/terastallization'
+  import { totalEvs } from '../runtime-data/stat-calculator'
+  import { resolveAttackerItem, resolveCombatantConfiguration, validateDamageCalculatorContext, type CombatantConfiguration, type ResolvedCombatantConfiguration } from '../runtime-data/damage-calculator-state'
+  import { INACTIVE_TERASTALLIZATION, STANDARD_TERA_TYPE_IDS, type ResolvedStab, type StandardTeraTypeId, type TerastallizationState } from '../runtime-data/terastallization'
   import type { PokemonRuntimeData, RuntimeAbility, RuntimeAbilityMechanicsEffect, RuntimeForm, RuntimeItem, RuntimeItemMechanicsEffect, RuntimeMove, RuntimeMoveDamageUnsupportedReason, RuntimeSpecies, RuntimeStatBlock } from '../runtime-data/types'
+  import ModifierTrace from './ModifierTrace.svelte'
 
   export let data: PokemonRuntimeData
 
@@ -91,14 +92,18 @@
     return species && name === species.zhName ? species.zhName : name
   }
 
-  function sideStats(species: RuntimeSpecies | undefined, form: RuntimeForm | undefined, level: number, natureId: string, ivs: RuntimeStatBlock, evs: RuntimeStatBlock): { stats: RuntimeStatBlock | null; error: string | null } {
-    const nature = data.natures.find(candidate => candidate.natureId === natureId)
-    if (!species || !form || !nature) return { stats: null, error: '配置不完整。' }
-    try {
-      return { stats: calculateStats({ speciesId: species.speciesId, baseStats: form.baseStats, level, nature, ivs, evs }), error: null }
-    } catch (cause) {
-      return { stats: null, error: cause instanceof Error && cause.message === 'STAT_CALCULATOR_EV_TOTAL_EXCEEDED' ? '努力值总和不能超过 510。' : '等级、IV 或 EV 超出允许范围。' }
-    }
+  function resolveCombatant(configuration: CombatantConfiguration): { value: ResolvedCombatantConfiguration | null; error: string | null } {
+    try { return { value: resolveCombatantConfiguration(data, configuration), error: null } }
+    catch (cause) { return { value: null, error: cause instanceof Error && cause.message === 'STAT_CALCULATOR_EV_TOTAL_EXCEEDED' ? '努力值总和不能超过 510。' : '等级、IV、EV、形态、特性或太晶属性配置无效。' } }
+  }
+
+  function resolveItem(itemId: string | null): { value: RuntimeItem | null; error: string | null } {
+    try { return { value: resolveAttackerItem(data, itemId), error: null } }
+    catch { return { value: null, error: '持有物配置无效。' } }
+  }
+
+  function contextError(context: BattleContext): string | null {
+    try { validateDamageCalculatorContext(context); return null } catch { return '战斗状态配置无效。' }
   }
 
   function supportLabel(move: RuntimeMove): string {
@@ -138,10 +143,6 @@
     return stage > 0 ? `+${stage}` : String(stage)
   }
 
-  function teraState(typeId: StandardTeraTypeId | ''): TerastallizationState {
-    return typeId === '' ? { active: false, teraType: null } : { active: true, teraType: typeId }
-  }
-
   function stabBasisLabel(basis: ResolvedStab['basis']): string {
     if (basis === 'original-type') return '原始属性'
     if (basis === 'tera-type') return '太晶属性'
@@ -179,20 +180,24 @@
   $: defenderForm = data.forms.find(candidate => candidate.formId === defenderFormId)
   $: attackerAbilityOptions = abilitiesFor(attackerForm)
   $: defenderAbilityOptions = abilitiesFor(defenderForm)
-  $: attackerAbility = attackerForm ? selectAbilityForForm(attackerForm, data.abilities, attackerAbilityId) : null
-  $: defenderAbility = defenderForm ? selectAbilityForForm(defenderForm, data.abilities, defenderAbilityId) : null
-  $: attackerItem = data.items.find(item => item.itemId === attackerItemId) ?? null
-  $: attackerStatResult = sideStats(attackerSpecies, attackerForm, attackerLevel, attackerNatureId, attackerIvs, attackerEvs)
-  $: defenderStatResult = sideStats(defenderSpecies, defenderForm, defenderLevel, defenderNatureId, defenderIvs, defenderEvs)
+  $: attackerConfiguration = resolveCombatant({ speciesId: attackerSpeciesId, formId: attackerFormId, level: attackerLevel, natureId: attackerNatureId, ivs: attackerIvs, evs: attackerEvs, abilityId: attackerAbilityId, teraTypeId: attackerTeraTypeId })
+  $: defenderConfiguration = resolveCombatant({ speciesId: defenderSpeciesId, formId: defenderFormId, level: defenderLevel, natureId: defenderNatureId, ivs: defenderIvs, evs: defenderEvs, abilityId: defenderAbilityId, teraTypeId: defenderTeraTypeId })
+  $: attackerAbility = attackerConfiguration.value?.ability ?? null
+  $: defenderAbility = defenderConfiguration.value?.ability ?? null
+  $: attackerItemConfiguration = resolveItem(attackerItemId)
+  $: attackerItem = attackerItemConfiguration.value
+  $: attackerStatResult = { stats: attackerConfiguration.value?.stats ?? null, error: attackerConfiguration.error }
+  $: defenderStatResult = { stats: defenderConfiguration.value?.stats ?? null, error: defenderConfiguration.error }
   $: knownMoveIds = attackerForm ? new Set(resolveEffectiveLearnsetMoveIds(data.learnsets, attackerForm.formId)) : new Set<string>()
   $: normalizedMoveQuery = moveQuery.trim().toLocaleLowerCase()
   $: filteredMoves = data.moves.filter(move => (!learnsetOnly || knownMoveIds.has(move.moveId))
     && (!normalizedMoveQuery || (move.zhName?.includes(moveQuery.trim()) ?? false) || move.canonicalName.toLocaleLowerCase().includes(normalizedMoveQuery)))
   $: selectedMove = data.moves.find(move => move.moveId === selectedMoveId)
   $: battleContext = { weather, terrain, attackerBurned, criticalHit, reflect, lightScreen, attackerStatStages: { atk: attackerAtkStage, spa: attackerSpaStage }, defenderStatStages: { def: defenderDefStage, spd: defenderSpdStage } } satisfies BattleContext
-  $: attackerTerastallization = teraState(attackerTeraTypeId)
-  $: defenderTerastallization = teraState(defenderTeraTypeId)
-  $: damageResult = damageOutcome(selectedMove, attackerForm, defenderForm, attackerStatResult.stats, defenderStatResult.stats, attackerAbility, defenderAbility, attackerItem, battleContext, attackerTerastallization, defenderTerastallization)
+  $: attackerTerastallization = attackerConfiguration.value?.terastallization ?? INACTIVE_TERASTALLIZATION
+  $: defenderTerastallization = defenderConfiguration.value?.terastallization ?? INACTIVE_TERASTALLIZATION
+  $: battleContextValidationError = contextError(battleContext)
+  $: damageResult = battleContextValidationError || attackerItemConfiguration.error ? null : damageOutcome(selectedMove, attackerForm, defenderForm, attackerStatResult.stats, defenderStatResult.stats, attackerAbility, defenderAbility, attackerItem, battleContext, attackerTerastallization, defenderTerastallization)
 </script>
 
 <section class="damage-calculator">
@@ -228,6 +233,7 @@
       </tbody></table>
       <p class:ev-over={totalEvs(attackerEvs) > 510}>EV：{totalEvs(attackerEvs)} / 510</p>
       {#if attackerStatResult.error}<p class="status error">{attackerStatResult.error}</p>{/if}
+      {#if attackerItemConfiguration.error}<p class="status error">{attackerItemConfiguration.error}</p>{/if}
     </section>
 
     <section class="damage-side">
@@ -275,6 +281,7 @@
       <label class="burn-toggle"><input aria-label="光墙" type="checkbox" bind:checked={lightScreen} /> 防守方光墙</label>
     </div>
     <p>天气和场地可以同时存在。场地只实现直接伤害效果；着地仅按当前形态的飞行属性与明确启用的飘浮判断，不计算持续时间、回复、状态防护或优先度变化，地震／重踏／震级等招式特殊交互保持不支持。</p>
+    {#if battleContextValidationError}<p class="status error">{battleContextValidationError}</p>{/if}
   </section>
 
   <section class="damage-move-picker">
@@ -320,6 +327,7 @@
         {#if damageResult.appliedItemEffects.length}<p class="status">持有物：{damageResult.appliedItemEffects.map(item => `${data.items.find(candidate => candidate.itemId === item.itemId)?.canonicalName ?? item.itemId}（${itemEffectLabel(item.effect)}）`).join('、')}</p>{/if}
         {#if damageResult.unmodeledAbilityIds.length}<p class="status">已选择但未建模：{damageResult.unmodeledAbilityIds.map(id => data.abilities.find(ability => ability.abilityId === id)?.zhName ?? id).join('、')}；结果仅使用核心伤害机制。</p>{/if}
         {#if damageResult.unmodeledItemIds.length}<p class="status">已选择但未建模的持有物：{damageResult.unmodeledItemIds.map(id => data.items.find(item => item.itemId === id)?.canonicalName ?? id).join('、')}；该物品不会改变结果。</p>{/if}
+        <ModifierTrace trace={damageResult.modifierTrace} />
       {:else if damageResult?.status === 'non-damaging'}
         <p class="status">这是变化招式，不使用普通伤害公式。</p>
       {:else if damageResult?.status === 'unsupported'}

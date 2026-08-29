@@ -92,6 +92,9 @@ td input { width: 4.5rem; padding: 0.4rem; }
 .team-analysis { padding: 1rem; border: 1px solid #cbd5e1; border-radius: 0.5rem; background: #f8fafc; }
 .team-analysis > section { display: grid; gap: 0.5rem; }
 .team-analysis h3, .team-analysis h4, .team-analysis p, .team-analysis ul { margin: 0; }
+.modifier-trace { display: grid; gap: 0.45rem; margin-top: 0.8rem; padding: 0.75rem; border-radius: 0.4rem; background: #f1f5f9; }
+.modifier-trace h4, .modifier-trace ol { margin: 0; }
+.modifier-trace li { margin: 0.2rem 0; }
 h4 { margin: 0; font-size: 1rem; }
 .move-browser { display: grid; gap: 0.9rem; margin-top: 1.25rem; padding: 1.25rem; border: 1px solid #cbd5e1; border-radius: 0.6rem; background: #fff; }
 .move-results { display: grid; gap: 0.4rem; }
