@@ -1,4 +1,4 @@
-export type BattleWeather = 'none' | 'sun' | 'rain'
+export type BattleWeather = 'none' | 'sun' | 'rain' | 'sandstorm' | 'snow'
 
 export type BattleStatStage = -6 | -5 | -4 | -3 | -2 | -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6
 
@@ -47,7 +47,7 @@ export function resolveCriticalHitStage(
 }
 
 export function validateBattleContext(context: BattleContext): void {
-  if (!['none', 'sun', 'rain'].includes(context.weather)) throw new Error('BATTLE_CONTEXT_INVALID_WEATHER')
+  if (!['none', 'sun', 'rain', 'sandstorm', 'snow'].includes(context.weather)) throw new Error('BATTLE_CONTEXT_INVALID_WEATHER')
   if (typeof context.attackerBurned !== 'boolean') throw new Error('BATTLE_CONTEXT_INVALID_BURN')
   if (typeof context.criticalHit !== 'boolean') throw new Error('BATTLE_CONTEXT_INVALID_CRITICAL_HIT')
   if (typeof context.reflect !== 'boolean') throw new Error('BATTLE_CONTEXT_INVALID_REFLECT')

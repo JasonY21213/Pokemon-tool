@@ -137,6 +137,7 @@
   function battleContextModifierLabel(modifier: AppliedBattleContextModifier): string {
     if (modifier.kind === 'stat-stage') return `${modifier.stat.toUpperCase()} ${stageLabel(modifier.stage)}${modifier.effectiveStage !== modifier.stage ? `（要害按 ${stageLabel(modifier.effectiveStage)}）` : ''}：${modifier.before} → ${modifier.after}`
     if (modifier.kind === 'weather') return `${modifier.weather === 'sun' ? '日照' : '下雨'} ${modifier.multiplier}×`
+    if (modifier.kind === 'weather-defense-stat') return `${modifier.weather === 'sandstorm' ? '沙暴' : '雪天'}：${modifier.stat.toUpperCase()} ${modifier.before} → ${modifier.after}`
     if (modifier.kind === 'critical-hit') return `普通要害 ${modifier.multiplier}×`
     if (modifier.kind === 'burn') return `灼伤物理伤害 ${modifier.multiplier}×`
     const screen = modifier.screen === 'reflect' ? '反射壁' : '光墙'
@@ -240,13 +241,13 @@
       <label>特攻阶级<select aria-label="特攻阶级" bind:value={attackerSpaStage}>{#each stageOptions as stage}<option value={stage}>{stageLabel(stage)}</option>{/each}</select></label>
       <label>防御阶级<select aria-label="防御阶级" bind:value={defenderDefStage}>{#each stageOptions as stage}<option value={stage}>{stageLabel(stage)}</option>{/each}</select></label>
       <label>特防阶级<select aria-label="特防阶级" bind:value={defenderSpdStage}>{#each stageOptions as stage}<option value={stage}>{stageLabel(stage)}</option>{/each}</select></label>
-      <label>天气<select aria-label="天气" bind:value={weather}><option value="none">无</option><option value="sun">日照</option><option value="rain">下雨</option></select></label>
+      <label>天气<select aria-label="天气" bind:value={weather}><option value="none">无</option><option value="sun">日照</option><option value="rain">下雨</option><option value="sandstorm">沙暴</option><option value="snow">雪天</option></select></label>
       <label class="burn-toggle"><input type="checkbox" bind:checked={attackerBurned} /> 攻击方灼伤</label>
       <label class="burn-toggle"><input aria-label="普通要害攻击" type="checkbox" bind:checked={criticalHit} /> 按普通要害计算</label>
       <label class="burn-toggle"><input aria-label="反射壁" type="checkbox" bind:checked={reflect} /> 防守方反射壁</label>
       <label class="burn-toggle"><input aria-label="光墙" type="checkbox" bind:checked={lightScreen} /> 防守方光墙</label>
     </div>
-    <p>反射壁只影响物理招式，光墙只影响特殊招式；普通要害会绕过对应墙，并只忽略不利于攻击方的能力阶级。灼伤仍会降低要害物理伤害。</p>
+    <p>这里的天气只影响当前支持的直接伤害或防御能力值：沙暴强化岩石属性特防，雪天强化冰属性防御；不计算天气持续时间或残余伤害。普通要害会绕过对应墙，并只忽略不利于攻击方的能力阶级。</p>
   </section>
 
   <section class="damage-move-picker">

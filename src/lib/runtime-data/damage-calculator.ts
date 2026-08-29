@@ -22,7 +22,8 @@ export type DamageCoreInput = {
 
 export type AppliedBattleContextModifier =
   | { kind: 'stat-stage'; stat: 'atk' | 'def' | 'spa' | 'spd'; stage: BattleStatStage; effectiveStage: BattleStatStage; before: number; after: number }
-  | { kind: 'weather'; weather: Exclude<BattleWeather, 'none'>; multiplier: 0.5 | 1.5 }
+  | { kind: 'weather'; weather: 'sun' | 'rain'; multiplier: 0.5 | 1.5 }
+  | { kind: 'weather-defense-stat'; weather: 'sandstorm' | 'snow'; stat: 'def' | 'spd'; before: number; after: number; multiplier: 1.5 }
   | { kind: 'critical-hit'; multiplier: 1.5 }
   | { kind: 'burn'; multiplier: 0.5 }
   | { kind: 'screen'; screen: 'reflect' | 'light-screen'; multiplier: 0.5 }
@@ -133,10 +134,17 @@ export function calculateCoreDamage(input: DamageCoreInput): DamageCoreResult {
   const effectiveAttackStage = resolveCriticalHitStage(attackStage, 'attacker', context.criticalHit)
   const effectiveDefenseStage = resolveCriticalHitStage(defenseStage, 'defender', context.criticalHit)
   const stagedAttack = applyStatStage(input.attack, effectiveAttackStage)
-  const effectiveDefense = applyStatStage(input.defense, effectiveDefenseStage)
+  const stagedDefense = applyStatStage(input.defense, effectiveDefenseStage)
+  const defensiveWeather = context.weather === 'sandstorm' && defendingStat === 'spd' && input.defenderTypeIds.includes('type:rock')
+    ? 'sandstorm' as const
+    : context.weather === 'snow' && defendingStat === 'def' && input.defenderTypeIds.includes('type:ice')
+      ? 'snow' as const
+      : null
+  const effectiveDefense = defensiveWeather ? applyFixedPointModifier(stagedDefense, 3, 2) : stagedDefense
   const appliedBattleContextModifiers: AppliedBattleContextModifier[] = [
     ...(attackStage !== 0 ? [{ kind: 'stat-stage' as const, stat: attackingStat, stage: attackStage, effectiveStage: effectiveAttackStage, before: input.attack, after: stagedAttack }] : []),
-    ...(defenseStage !== 0 ? [{ kind: 'stat-stage' as const, stat: defendingStat, stage: defenseStage, effectiveStage: effectiveDefenseStage, before: input.defense, after: effectiveDefense }] : []),
+    ...(defenseStage !== 0 ? [{ kind: 'stat-stage' as const, stat: defendingStat, stage: defenseStage, effectiveStage: effectiveDefenseStage, before: input.defense, after: stagedDefense }] : []),
+    ...(defensiveWeather ? [{ kind: 'weather-defense-stat' as const, weather: defensiveWeather, stat: defendingStat, before: stagedDefense, after: effectiveDefense, multiplier: 1.5 as const }] : []),
   ]
   const levelFactor = Math.floor((2 * input.level) / 5) + 2
   const incomingAttackEffect = defensiveAdjustment.appliedEffects.find(item => item.effect.kind === 'incoming-type-attack-multiplier')?.effect
@@ -161,7 +169,7 @@ export function calculateCoreDamage(input: DamageCoreInput): DamageCoreResult {
   const dividedByDefense = Math.floor((levelFactor * effectiveBasePower * effectiveAttack) / effectiveDefense)
   const baseDamage = Math.floor(dividedByDefense / 50) + 2
   const weather = weatherMultiplier(context.weather, input.moveTypeId)
-  if (weather !== 1) appliedBattleContextModifiers.push({ kind: 'weather', weather: context.weather as Exclude<BattleWeather, 'none'>, multiplier: weather })
+  if (weather !== 1) appliedBattleContextModifiers.push({ kind: 'weather', weather: context.weather as 'sun' | 'rain', multiplier: weather })
   if (context.criticalHit) appliedBattleContextModifiers.push({ kind: 'critical-hit', multiplier: 1.5 })
   const burnApplies = context.attackerBurned && input.moveCategory === 'physical'
   if (burnApplies) appliedBattleContextModifiers.push({ kind: 'burn', multiplier: 0.5 })
