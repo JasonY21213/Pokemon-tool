@@ -16,7 +16,7 @@ async function item(itemId: string): Promise<RuntimeItem> {
 }
 
 function context(overrides: Partial<BattleContext> = {}): BattleContext {
-  return { weather: 'none', attackerBurned: false, attackerStatStages: { atk: 0, spa: 0 }, defenderStatStages: { def: 0, spd: 0 }, ...overrides }
+  return { weather: 'none', attackerBurned: false, criticalHit: false, reflect: false, lightScreen: false, attackerStatStages: { atk: 0, spa: 0 }, defenderStatStages: { def: 0, spd: 0 }, ...overrides }
 }
 
 async function core(overrides: Partial<Parameters<typeof calculateCoreDamage>[0]> = {}) {
@@ -99,7 +99,7 @@ test('Choice Band composes with stages and burn while preserving integer order',
   assert.equal(staged.rolls.every((value, index) => index === 0 || value >= staged.rolls[index - 1]), true)
 })
 
-test('supported Item and Ability modifiers compose in pinned stat/final order', async () => {
+test('supported Item and Ability modifiers compose in pinned stat/final fixed-point chains', async () => {
   const runtime = await runtimePromise
   const thickFat = runtime.abilities.find(ability => ability.abilityId === 'ability:0047')!
   const filter = runtime.abilities.find(ability => ability.abilityId === 'ability:0111')!
@@ -109,7 +109,7 @@ test('supported Item and Ability modifiers compose in pinned stat/final order', 
   const finalOrder = await core({ attackerItem: lifeOrb, defenderAbility: filter, defenderTypeIds: ['type:grass'] })
   assert.equal(statOrder.effectiveAttack, 75)
   assert.deepEqual([statOrder.minDamage, statOrder.maxDamage], [15, 18])
-  assert.deepEqual([finalOrder.minDamage, finalOrder.maxDamage], [39, 46])
+  assert.deepEqual([finalOrder.minDamage, finalOrder.maxDamage], [39, 47])
 })
 
 test('unsupported selected Item is reported and never silently changes damage', async () => {

@@ -5,6 +5,9 @@ export type BattleStatStage = -6 | -5 | -4 | -3 | -2 | -1 | 0 | 1 | 2 | 3 | 4 | 
 export type BattleContext = {
   weather: BattleWeather
   attackerBurned: boolean
+  criticalHit: boolean
+  reflect: boolean
+  lightScreen: boolean
   attackerStatStages: { atk: BattleStatStage; spa: BattleStatStage }
   defenderStatStages: { def: BattleStatStage; spd: BattleStatStage }
 }
@@ -12,6 +15,9 @@ export type BattleContext = {
 export const DEFAULT_BATTLE_CONTEXT: Readonly<BattleContext> = {
   weather: 'none',
   attackerBurned: false,
+  criticalHit: false,
+  reflect: false,
+  lightScreen: false,
   attackerStatStages: { atk: 0, spa: 0 },
   defenderStatStages: { def: 0, spd: 0 },
 }
@@ -28,9 +34,24 @@ export function applyStatStage(value: number, stage: BattleStatStage): number {
     : Math.floor((value * 2) / (2 - stage))
 }
 
+export function resolveCriticalHitStage(
+  stage: BattleStatStage,
+  side: 'attacker' | 'defender',
+  criticalHit: boolean,
+): BattleStatStage {
+  assertBattleStatStage(stage)
+  if (!criticalHit) return stage
+  if (side === 'attacker' && stage < 0) return 0
+  if (side === 'defender' && stage > 0) return 0
+  return stage
+}
+
 export function validateBattleContext(context: BattleContext): void {
   if (!['none', 'sun', 'rain'].includes(context.weather)) throw new Error('BATTLE_CONTEXT_INVALID_WEATHER')
   if (typeof context.attackerBurned !== 'boolean') throw new Error('BATTLE_CONTEXT_INVALID_BURN')
+  if (typeof context.criticalHit !== 'boolean') throw new Error('BATTLE_CONTEXT_INVALID_CRITICAL_HIT')
+  if (typeof context.reflect !== 'boolean') throw new Error('BATTLE_CONTEXT_INVALID_REFLECT')
+  if (typeof context.lightScreen !== 'boolean') throw new Error('BATTLE_CONTEXT_INVALID_LIGHT_SCREEN')
   assertBattleStatStage(context.attackerStatStages.atk)
   assertBattleStatStage(context.attackerStatStages.spa)
   assertBattleStatStage(context.defenderStatStages.def)

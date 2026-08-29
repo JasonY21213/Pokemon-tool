@@ -38,6 +38,9 @@
   let defenderSpdStage: BattleStatStage = 0
   let attackerBurned = false
   let weather: BattleWeather = 'none'
+  let criticalHit = false
+  let reflect = false
+  let lightScreen = false
 
   function formsFor(species: RuntimeSpecies | undefined): RuntimeForm[] {
     if (!species) return []
@@ -132,9 +135,12 @@
   }
 
   function battleContextModifierLabel(modifier: AppliedBattleContextModifier): string {
-    if (modifier.kind === 'stat-stage') return `${modifier.stat.toUpperCase()} ${stageLabel(modifier.stage)}：${modifier.before} → ${modifier.after}`
+    if (modifier.kind === 'stat-stage') return `${modifier.stat.toUpperCase()} ${stageLabel(modifier.stage)}${modifier.effectiveStage !== modifier.stage ? `（要害按 ${stageLabel(modifier.effectiveStage)}）` : ''}：${modifier.before} → ${modifier.after}`
     if (modifier.kind === 'weather') return `${modifier.weather === 'sun' ? '日照' : '下雨'} ${modifier.multiplier}×`
-    return `灼伤物理伤害 ${modifier.multiplier}×`
+    if (modifier.kind === 'critical-hit') return `普通要害 ${modifier.multiplier}×`
+    if (modifier.kind === 'burn') return `灼伤物理伤害 ${modifier.multiplier}×`
+    const screen = modifier.screen === 'reflect' ? '反射壁' : '光墙'
+    return modifier.kind === 'screen' ? `${screen} ${modifier.multiplier}×` : `${screen}被要害绕过`
   }
 
   function damageOutcome(move: RuntimeMove | undefined, attackerForm: RuntimeForm | undefined, defenderForm: RuntimeForm | undefined, attackerStats: RuntimeStatBlock | null, defenderStats: RuntimeStatBlock | null, attackerAbility: RuntimeAbility | null, defenderAbility: RuntimeAbility | null, attackerItem: RuntimeItem | null, battleContext: BattleContext): MoveDamageResult | null {
@@ -160,13 +166,13 @@
   $: filteredMoves = data.moves.filter(move => (!learnsetOnly || knownMoveIds.has(move.moveId))
     && (!normalizedMoveQuery || (move.zhName?.includes(moveQuery.trim()) ?? false) || move.canonicalName.toLocaleLowerCase().includes(normalizedMoveQuery)))
   $: selectedMove = data.moves.find(move => move.moveId === selectedMoveId)
-  $: battleContext = { weather, attackerBurned, attackerStatStages: { atk: attackerAtkStage, spa: attackerSpaStage }, defenderStatStages: { def: defenderDefStage, spd: defenderSpdStage } } satisfies BattleContext
+  $: battleContext = { weather, attackerBurned, criticalHit, reflect, lightScreen, attackerStatStages: { atk: attackerAtkStage, spa: attackerSpaStage }, defenderStatStages: { def: defenderDefStage, spd: defenderSpdStage } } satisfies BattleContext
   $: damageResult = damageOutcome(selectedMove, attackerForm, defenderForm, attackerStatResult.stats, defenderStatResult.stats, attackerAbility, defenderAbility, attackerItem, battleContext)
 </script>
 
 <section class="damage-calculator">
   <h2>核心伤害计算器</h2>
-  <p>第九世代普通单目标伤害范围，假设招式成功命中。支持少量已审查特性、持有物、攻防能力阶级、攻击方灼伤，以及普通日照/下雨的火水伤害修正；不包含场地、太晶化或要害。</p>
+  <p>第九世代普通单目标伤害范围，假设招式成功命中。支持少量已审查特性、持有物、攻防能力阶级、攻击方灼伤、普通要害、单打反射壁/光墙，以及日照/下雨的火水伤害修正；不计算要害概率。</p>
 
   <div class="damage-sides">
     <section class="damage-side">
@@ -236,8 +242,11 @@
       <label>特防阶级<select aria-label="特防阶级" bind:value={defenderSpdStage}>{#each stageOptions as stage}<option value={stage}>{stageLabel(stage)}</option>{/each}</select></label>
       <label>天气<select aria-label="天气" bind:value={weather}><option value="none">无</option><option value="sun">日照</option><option value="rain">下雨</option></select></label>
       <label class="burn-toggle"><input type="checkbox" bind:checked={attackerBurned} /> 攻击方灼伤</label>
+      <label class="burn-toggle"><input aria-label="普通要害攻击" type="checkbox" bind:checked={criticalHit} /> 按普通要害计算</label>
+      <label class="burn-toggle"><input aria-label="反射壁" type="checkbox" bind:checked={reflect} /> 防守方反射壁</label>
+      <label class="burn-toggle"><input aria-label="光墙" type="checkbox" bind:checked={lightScreen} /> 防守方光墙</label>
     </div>
-    <p>灼伤只降低普通物理招式伤害；反射壁、光墙及其他天气未纳入。特殊招式或特性交互无法可靠处理时会明确停止计算。</p>
+    <p>反射壁只影响物理招式，光墙只影响特殊招式；普通要害会绕过对应墙，并只忽略不利于攻击方的能力阶级。灼伤仍会降低要害物理伤害。</p>
   </section>
 
   <section class="damage-move-picker">

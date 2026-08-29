@@ -1,6 +1,6 @@
 import { calculateDefensiveMatchup, type DefensiveMatchup } from './type-matchup.ts'
 import { adjustDefensiveMultiplier, type AbilityAdjustedMultiplier, type AppliedAbilityEffect } from './ability-mechanics.ts'
-import { applyStatStage, DEFAULT_BATTLE_CONTEXT, validateBattleContext, type BattleContext, type BattleStatStage, type BattleWeather } from './battle-context.ts'
+import { applyStatStage, DEFAULT_BATTLE_CONTEXT, resolveCriticalHitStage, validateBattleContext, type BattleContext, type BattleStatStage, type BattleWeather } from './battle-context.ts'
 import { applyItemFixedPointModifier, itemEffect, type AppliedItemEffect } from './held-item-mechanics.ts'
 import type { RuntimeAbility, RuntimeItem, RuntimeMove, RuntimeMoveDamageUnsupportedReason, RuntimeStatBlock, RuntimeType } from './types.js'
 
@@ -21,9 +21,12 @@ export type DamageCoreInput = {
 }
 
 export type AppliedBattleContextModifier =
-  | { kind: 'stat-stage'; stat: 'atk' | 'def' | 'spa' | 'spd'; stage: BattleStatStage; before: number; after: number }
+  | { kind: 'stat-stage'; stat: 'atk' | 'def' | 'spa' | 'spd'; stage: BattleStatStage; effectiveStage: BattleStatStage; before: number; after: number }
   | { kind: 'weather'; weather: Exclude<BattleWeather, 'none'>; multiplier: 0.5 | 1.5 }
+  | { kind: 'critical-hit'; multiplier: 1.5 }
   | { kind: 'burn'; multiplier: 0.5 }
+  | { kind: 'screen'; screen: 'reflect' | 'light-screen'; multiplier: 0.5 }
+  | { kind: 'screen-bypassed'; screen: 'reflect' | 'light-screen'; reason: 'critical-hit' }
 
 export type DamageCoreResult = {
   minDamage: number
@@ -74,6 +77,11 @@ function applyFixedPointModifier(value: number, numerator: number, denominator: 
   return Math.floor((value * modifier + 2047) / 4096)
 }
 
+function chainFixedPointModifier(previous: number, numerator: number, denominator: number): number {
+  const next = Math.floor((numerator * 4096) / denominator)
+  return Math.floor((previous * next + 2048) / 4096)
+}
+
 function applyTypeMultiplier(value: number, multiplier: DefensiveMatchup['multiplier']): number {
   if (multiplier === 0) return 0
   if (multiplier === 4) return value * 4
@@ -122,11 +130,13 @@ export function calculateCoreDamage(input: DamageCoreInput): DamageCoreResult {
   const defendingStat: 'def' | 'spd' = input.moveCategory === 'physical' ? 'def' : 'spd'
   const attackStage = context.attackerStatStages[attackingStat]
   const defenseStage = context.defenderStatStages[defendingStat]
-  const stagedAttack = applyStatStage(input.attack, attackStage)
-  const effectiveDefense = applyStatStage(input.defense, defenseStage)
+  const effectiveAttackStage = resolveCriticalHitStage(attackStage, 'attacker', context.criticalHit)
+  const effectiveDefenseStage = resolveCriticalHitStage(defenseStage, 'defender', context.criticalHit)
+  const stagedAttack = applyStatStage(input.attack, effectiveAttackStage)
+  const effectiveDefense = applyStatStage(input.defense, effectiveDefenseStage)
   const appliedBattleContextModifiers: AppliedBattleContextModifier[] = [
-    ...(attackStage !== 0 ? [{ kind: 'stat-stage' as const, stat: attackingStat, stage: attackStage, before: input.attack, after: stagedAttack }] : []),
-    ...(defenseStage !== 0 ? [{ kind: 'stat-stage' as const, stat: defendingStat, stage: defenseStage, before: input.defense, after: effectiveDefense }] : []),
+    ...(attackStage !== 0 ? [{ kind: 'stat-stage' as const, stat: attackingStat, stage: attackStage, effectiveStage: effectiveAttackStage, before: input.attack, after: stagedAttack }] : []),
+    ...(defenseStage !== 0 ? [{ kind: 'stat-stage' as const, stat: defendingStat, stage: defenseStage, effectiveStage: effectiveDefenseStage, before: input.defense, after: effectiveDefense }] : []),
   ]
   const levelFactor = Math.floor((2 * input.level) / 5) + 2
   const incomingAttackEffect = defensiveAdjustment.appliedEffects.find(item => item.effect.kind === 'incoming-type-attack-multiplier')?.effect
@@ -152,26 +162,37 @@ export function calculateCoreDamage(input: DamageCoreInput): DamageCoreResult {
   const baseDamage = Math.floor(dividedByDefense / 50) + 2
   const weather = weatherMultiplier(context.weather, input.moveTypeId)
   if (weather !== 1) appliedBattleContextModifiers.push({ kind: 'weather', weather: context.weather as Exclude<BattleWeather, 'none'>, multiplier: weather })
+  if (context.criticalHit) appliedBattleContextModifiers.push({ kind: 'critical-hit', multiplier: 1.5 })
   const burnApplies = context.attackerBurned && input.moveCategory === 'physical'
   if (burnApplies) appliedBattleContextModifiers.push({ kind: 'burn', multiplier: 0.5 })
+  const relevantScreen = input.moveCategory === 'physical'
+    ? context.reflect ? 'reflect' as const : null
+    : context.lightScreen ? 'light-screen' as const : null
+  if (relevantScreen) {
+    appliedBattleContextModifiers.push(context.criticalHit
+      ? { kind: 'screen-bypassed', screen: relevantScreen, reason: 'critical-hit' }
+      : { kind: 'screen', screen: relevantScreen, multiplier: 0.5 })
+  }
+  const lifeOrbEffect = itemEffect(input.attackerItem, 'final-damage-multiplier')
+  const expertBeltEffect = typeMultiplier > 1 ? itemEffect(input.attackerItem, 'super-effective-damage-multiplier') : undefined
+  const finalItemEffect = lifeOrbEffect ?? expertBeltEffect
+  const defensiveFinalEffect = defensiveAdjustment.appliedEffects.some(item => item.effect.kind === 'super-effective-damage-multiplier')
   const rolls = Array.from({ length: 16 }, (_, index) => index + 85).map(randomRoll => {
     if (defensiveAdjustment.adjustedMultiplier === 0) return 0
     let damage = weather === 1 ? baseDamage : applyFixedPointModifier(baseDamage, weather === 1.5 ? 3 : 1, 2)
+    if (context.criticalHit) damage = Math.floor((damage * 3) / 2)
     damage = Math.floor((damage * randomRoll) / 100)
     if (stabMultiplier === 1.5) damage = applyFixedPointModifier(damage, 3, 2)
     if (stabMultiplier === 2) damage = applyFixedPointModifier(damage, 2, 1)
     damage = applyTypeMultiplier(damage, typeMultiplier)
     if (burnApplies) damage = applyFixedPointModifier(damage, 1, 2)
-    const lifeOrbEffect = itemEffect(input.attackerItem, 'final-damage-multiplier')
-    const expertBeltEffect = typeMultiplier > 1 ? itemEffect(input.attackerItem, 'super-effective-damage-multiplier') : undefined
-    const finalItemEffect = lifeOrbEffect ?? expertBeltEffect
-    if (finalItemEffect) damage = applyItemFixedPointModifier(damage, finalItemEffect.numerator, finalItemEffect.denominator)
-    if (defensiveAdjustment.appliedEffects.some(item => item.effect.kind === 'super-effective-damage-multiplier')) damage = applyFixedPointModifier(damage, 3, 4)
+    let finalModifier = 4096
+    if (relevantScreen && !context.criticalHit) finalModifier = chainFixedPointModifier(finalModifier, 1, 2)
+    if (defensiveFinalEffect) finalModifier = chainFixedPointModifier(finalModifier, 3, 4)
+    if (finalItemEffect) finalModifier = chainFixedPointModifier(finalModifier, finalItemEffect.numerator, finalItemEffect.denominator)
+    if (finalModifier !== 4096) damage = applyFixedPointModifier(damage, finalModifier, 4096)
     return Math.max(1, damage)
   })
-  const lifeOrbEffect = itemEffect(input.attackerItem, 'final-damage-multiplier')
-  const expertBeltEffect = typeMultiplier > 1 ? itemEffect(input.attackerItem, 'super-effective-damage-multiplier') : undefined
-  const finalItemEffect = lifeOrbEffect ?? expertBeltEffect
   if (finalItemEffect && input.attackerItem) appliedItemEffects.push({ itemId: input.attackerItem.itemId, effect: finalItemEffect })
   return {
     minDamage: Math.min(...rolls),

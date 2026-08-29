@@ -10,7 +10,7 @@ const runtimePromise = buildFullDryRun().then(buildRuntimeData)
 
 function context(overrides: Partial<BattleContext> = {}): BattleContext {
   return {
-    weather: 'none', attackerBurned: false,
+    weather: 'none', attackerBurned: false, criticalHit: false, reflect: false, lightScreen: false,
     attackerStatStages: { atk: 0, spa: 0 }, defenderStatStages: { def: 0, spd: 0 },
     ...overrides,
   }
@@ -39,8 +39,8 @@ test('physical and special categories select only their matching stage pair', as
   assert.deepEqual([physical.effectiveAttack, physical.effectiveDefense], [150, 66])
   assert.deepEqual([special.effectiveAttack, special.effectiveDefense], [25, 400])
   assert.deepEqual(physical.appliedBattleContextModifiers.slice(0, 2), [
-    { kind: 'stat-stage', stat: 'atk', stage: 1, before: 100, after: 150 },
-    { kind: 'stat-stage', stat: 'def', stage: -1, before: 100, after: 66 },
+    { kind: 'stat-stage', stat: 'atk', stage: 1, effectiveStage: 1, before: 100, after: 150 },
+    { kind: 'stat-stage', stat: 'def', stage: -1, effectiveStage: -1, before: 100, after: 66 },
   ])
 })
 
