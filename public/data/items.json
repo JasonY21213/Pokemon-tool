@@ -1,0 +1,4018 @@
+[
+  {
+    "itemId": "item:0001",
+    "canonicalName": "Master Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0002",
+    "canonicalName": "Ultra Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0003",
+    "canonicalName": "Great Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0004",
+    "canonicalName": "Poke Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0005",
+    "canonicalName": "Safari Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0006",
+    "canonicalName": "Net Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0007",
+    "canonicalName": "Dive Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0008",
+    "canonicalName": "Nest Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0009",
+    "canonicalName": "Repeat Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0010",
+    "canonicalName": "Timer Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0011",
+    "canonicalName": "Luxury Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0012",
+    "canonicalName": "Premier Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0013",
+    "canonicalName": "Dusk Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0014",
+    "canonicalName": "Heal Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0015",
+    "canonicalName": "Quick Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0016",
+    "canonicalName": "Cherish Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0043",
+    "canonicalName": "Berry Juice",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0080",
+    "canonicalName": "Sun Stone",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0081",
+    "canonicalName": "Moon Stone",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0082",
+    "canonicalName": "Fire Stone",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0083",
+    "canonicalName": "Thunder Stone",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0084",
+    "canonicalName": "Water Stone",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0085",
+    "canonicalName": "Leaf Stone",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0099",
+    "canonicalName": "Root Fossil",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0100",
+    "canonicalName": "Claw Fossil",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0101",
+    "canonicalName": "Helix Fossil",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0102",
+    "canonicalName": "Dome Fossil",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0103",
+    "canonicalName": "Old Amber",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0104",
+    "canonicalName": "Armor Fossil",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0105",
+    "canonicalName": "Skull Fossil",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0106",
+    "canonicalName": "Rare Bone",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0107",
+    "canonicalName": "Shiny Stone",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0108",
+    "canonicalName": "Dusk Stone",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0109",
+    "canonicalName": "Dawn Stone",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0110",
+    "canonicalName": "Oval Stone",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0112",
+    "canonicalName": "Griseous Orb",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0116",
+    "canonicalName": "Douse Drive",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0117",
+    "canonicalName": "Shock Drive",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0118",
+    "canonicalName": "Burn Drive",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0119",
+    "canonicalName": "Chill Drive",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0135",
+    "canonicalName": "Adamant Orb",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0136",
+    "canonicalName": "Lustrous Orb",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0137",
+    "canonicalName": "Mail",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0149",
+    "canonicalName": "Cheri Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0150",
+    "canonicalName": "Chesto Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0151",
+    "canonicalName": "Pecha Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0152",
+    "canonicalName": "Rawst Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0153",
+    "canonicalName": "Aspear Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0154",
+    "canonicalName": "Leppa Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0155",
+    "canonicalName": "Oran Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0156",
+    "canonicalName": "Persim Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0157",
+    "canonicalName": "Lum Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0158",
+    "canonicalName": "Sitrus Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0159",
+    "canonicalName": "Figy Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0160",
+    "canonicalName": "Wiki Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0161",
+    "canonicalName": "Mago Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0162",
+    "canonicalName": "Aguav Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0163",
+    "canonicalName": "Iapapa Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0164",
+    "canonicalName": "Razz Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0165",
+    "canonicalName": "Bluk Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0166",
+    "canonicalName": "Nanab Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0167",
+    "canonicalName": "Wepear Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0168",
+    "canonicalName": "Pinap Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0169",
+    "canonicalName": "Pomeg Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0170",
+    "canonicalName": "Kelpsy Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0171",
+    "canonicalName": "Qualot Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0172",
+    "canonicalName": "Hondew Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0173",
+    "canonicalName": "Grepa Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0174",
+    "canonicalName": "Tamato Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0175",
+    "canonicalName": "Cornn Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0176",
+    "canonicalName": "Magost Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0177",
+    "canonicalName": "Rabuta Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0178",
+    "canonicalName": "Nomel Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0179",
+    "canonicalName": "Spelon Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0180",
+    "canonicalName": "Pamtre Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0181",
+    "canonicalName": "Watmel Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0182",
+    "canonicalName": "Durin Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0183",
+    "canonicalName": "Belue Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0184",
+    "canonicalName": "Occa Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0185",
+    "canonicalName": "Passho Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0186",
+    "canonicalName": "Wacan Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0187",
+    "canonicalName": "Rindo Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0188",
+    "canonicalName": "Yache Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0189",
+    "canonicalName": "Chople Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0190",
+    "canonicalName": "Kebia Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0191",
+    "canonicalName": "Shuca Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0192",
+    "canonicalName": "Coba Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0193",
+    "canonicalName": "Payapa Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0194",
+    "canonicalName": "Tanga Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0195",
+    "canonicalName": "Charti Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0196",
+    "canonicalName": "Kasib Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0197",
+    "canonicalName": "Haban Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0198",
+    "canonicalName": "Colbur Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0199",
+    "canonicalName": "Babiri Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0200",
+    "canonicalName": "Chilan Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0201",
+    "canonicalName": "Liechi Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0202",
+    "canonicalName": "Ganlon Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0203",
+    "canonicalName": "Salac Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0204",
+    "canonicalName": "Petaya Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0205",
+    "canonicalName": "Apicot Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0206",
+    "canonicalName": "Lansat Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0207",
+    "canonicalName": "Starf Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0208",
+    "canonicalName": "Enigma Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0209",
+    "canonicalName": "Micle Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0210",
+    "canonicalName": "Custap Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0211",
+    "canonicalName": "Jaboca Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0212",
+    "canonicalName": "Rowap Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0213",
+    "canonicalName": "Bright Powder",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0214",
+    "canonicalName": "White Herb",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0215",
+    "canonicalName": "Macho Brace",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0217",
+    "canonicalName": "Quick Claw",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0219",
+    "canonicalName": "Mental Herb",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0220",
+    "canonicalName": "Choice Band",
+    "mechanics": {
+      "status": "supported",
+      "effects": [
+        {
+          "kind": "attack-stat-multiplier",
+          "numerator": 3,
+          "denominator": 2,
+          "unmodeledDrawback": "move-lock"
+        }
+      ]
+    }
+  },
+  {
+    "itemId": "item:0221",
+    "canonicalName": "King's Rock",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0222",
+    "canonicalName": "Silver Powder",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0225",
+    "canonicalName": "Soul Dew",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0226",
+    "canonicalName": "Deep Sea Tooth",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0227",
+    "canonicalName": "Deep Sea Scale",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0230",
+    "canonicalName": "Focus Band",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0232",
+    "canonicalName": "Scope Lens",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0233",
+    "canonicalName": "Metal Coat",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0234",
+    "canonicalName": "Leftovers",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0235",
+    "canonicalName": "Dragon Scale",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0236",
+    "canonicalName": "Light Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0237",
+    "canonicalName": "Soft Sand",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0238",
+    "canonicalName": "Hard Stone",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0239",
+    "canonicalName": "Miracle Seed",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0240",
+    "canonicalName": "Black Glasses",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0241",
+    "canonicalName": "Black Belt",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0242",
+    "canonicalName": "Magnet",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0243",
+    "canonicalName": "Mystic Water",
+    "mechanics": {
+      "status": "supported",
+      "effects": [
+        {
+          "kind": "move-type-base-power-multiplier",
+          "typeId": "type:water",
+          "numerator": 4915,
+          "denominator": 4096
+        }
+      ]
+    }
+  },
+  {
+    "itemId": "item:0244",
+    "canonicalName": "Sharp Beak",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0245",
+    "canonicalName": "Poison Barb",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0246",
+    "canonicalName": "Never-Melt Ice",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0247",
+    "canonicalName": "Spell Tag",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0248",
+    "canonicalName": "Twisted Spoon",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0249",
+    "canonicalName": "Charcoal",
+    "mechanics": {
+      "status": "supported",
+      "effects": [
+        {
+          "kind": "move-type-base-power-multiplier",
+          "typeId": "type:fire",
+          "numerator": 4915,
+          "denominator": 4096
+        }
+      ]
+    }
+  },
+  {
+    "itemId": "item:0250",
+    "canonicalName": "Dragon Fang",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0251",
+    "canonicalName": "Silk Scarf",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0252",
+    "canonicalName": "Up-Grade",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0253",
+    "canonicalName": "Shell Bell",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0254",
+    "canonicalName": "Sea Incense",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0255",
+    "canonicalName": "Lax Incense",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0256",
+    "canonicalName": "Lucky Punch",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0257",
+    "canonicalName": "Metal Powder",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0258",
+    "canonicalName": "Thick Club",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0259",
+    "canonicalName": "Leek",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0265",
+    "canonicalName": "Wide Lens",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0266",
+    "canonicalName": "Muscle Band",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0267",
+    "canonicalName": "Wise Glasses",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0268",
+    "canonicalName": "Expert Belt",
+    "mechanics": {
+      "status": "supported",
+      "effects": [
+        {
+          "kind": "super-effective-damage-multiplier",
+          "numerator": 4915,
+          "denominator": 4096
+        }
+      ]
+    }
+  },
+  {
+    "itemId": "item:0269",
+    "canonicalName": "Light Clay",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0270",
+    "canonicalName": "Life Orb",
+    "mechanics": {
+      "status": "supported",
+      "effects": [
+        {
+          "kind": "final-damage-multiplier",
+          "numerator": 5324,
+          "denominator": 4096,
+          "unmodeledDrawback": "recoil"
+        }
+      ]
+    }
+  },
+  {
+    "itemId": "item:0271",
+    "canonicalName": "Power Herb",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0272",
+    "canonicalName": "Toxic Orb",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0273",
+    "canonicalName": "Flame Orb",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0274",
+    "canonicalName": "Quick Powder",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0275",
+    "canonicalName": "Focus Sash",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0276",
+    "canonicalName": "Zoom Lens",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0277",
+    "canonicalName": "Metronome",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0278",
+    "canonicalName": "Iron Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0279",
+    "canonicalName": "Lagging Tail",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0280",
+    "canonicalName": "Destiny Knot",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0281",
+    "canonicalName": "Black Sludge",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0282",
+    "canonicalName": "Icy Rock",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0283",
+    "canonicalName": "Smooth Rock",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0284",
+    "canonicalName": "Heat Rock",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0285",
+    "canonicalName": "Damp Rock",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0286",
+    "canonicalName": "Grip Claw",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0287",
+    "canonicalName": "Choice Scarf",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0288",
+    "canonicalName": "Sticky Barb",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0289",
+    "canonicalName": "Power Bracer",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0290",
+    "canonicalName": "Power Belt",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0291",
+    "canonicalName": "Power Lens",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0292",
+    "canonicalName": "Power Band",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0293",
+    "canonicalName": "Power Anklet",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0294",
+    "canonicalName": "Power Weight",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0295",
+    "canonicalName": "Shed Shell",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0296",
+    "canonicalName": "Big Root",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0297",
+    "canonicalName": "Choice Specs",
+    "mechanics": {
+      "status": "supported",
+      "effects": [
+        {
+          "kind": "special-attack-stat-multiplier",
+          "numerator": 3,
+          "denominator": 2,
+          "unmodeledDrawback": "move-lock"
+        }
+      ]
+    }
+  },
+  {
+    "itemId": "item:0298",
+    "canonicalName": "Flame Plate",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0299",
+    "canonicalName": "Splash Plate",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0300",
+    "canonicalName": "Zap Plate",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0301",
+    "canonicalName": "Meadow Plate",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0302",
+    "canonicalName": "Icicle Plate",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0303",
+    "canonicalName": "Fist Plate",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0304",
+    "canonicalName": "Toxic Plate",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0305",
+    "canonicalName": "Earth Plate",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0306",
+    "canonicalName": "Sky Plate",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0307",
+    "canonicalName": "Mind Plate",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0308",
+    "canonicalName": "Insect Plate",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0309",
+    "canonicalName": "Stone Plate",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0310",
+    "canonicalName": "Spooky Plate",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0311",
+    "canonicalName": "Draco Plate",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0312",
+    "canonicalName": "Dread Plate",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0313",
+    "canonicalName": "Iron Plate",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0314",
+    "canonicalName": "Odd Incense",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0315",
+    "canonicalName": "Rock Incense",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0316",
+    "canonicalName": "Full Incense",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0317",
+    "canonicalName": "Wave Incense",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0318",
+    "canonicalName": "Rose Incense",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0321",
+    "canonicalName": "Protector",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0322",
+    "canonicalName": "Electirizer",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0323",
+    "canonicalName": "Magmarizer",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0324",
+    "canonicalName": "Dubious Disc",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0325",
+    "canonicalName": "Reaper Cloth",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0326",
+    "canonicalName": "Razor Claw",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0327",
+    "canonicalName": "Razor Fang",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0492",
+    "canonicalName": "Fast Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0493",
+    "canonicalName": "Level Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0494",
+    "canonicalName": "Lure Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0495",
+    "canonicalName": "Heavy Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0496",
+    "canonicalName": "Love Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0497",
+    "canonicalName": "Friend Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0498",
+    "canonicalName": "Moon Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0499",
+    "canonicalName": "Sport Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0500",
+    "canonicalName": "Park Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0534",
+    "canonicalName": "Red Orb",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0535",
+    "canonicalName": "Blue Orb",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0537",
+    "canonicalName": "Prism Scale",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0538",
+    "canonicalName": "Eviolite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0539",
+    "canonicalName": "Float Stone",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0540",
+    "canonicalName": "Rocky Helmet",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0541",
+    "canonicalName": "Air Balloon",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0542",
+    "canonicalName": "Red Card",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0543",
+    "canonicalName": "Ring Target",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0544",
+    "canonicalName": "Binding Band",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0545",
+    "canonicalName": "Absorb Bulb",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0546",
+    "canonicalName": "Cell Battery",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0547",
+    "canonicalName": "Eject Button",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0548",
+    "canonicalName": "Fire Gem",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0549",
+    "canonicalName": "Water Gem",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0550",
+    "canonicalName": "Electric Gem",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0551",
+    "canonicalName": "Grass Gem",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0552",
+    "canonicalName": "Ice Gem",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0553",
+    "canonicalName": "Fighting Gem",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0554",
+    "canonicalName": "Poison Gem",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0555",
+    "canonicalName": "Ground Gem",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0556",
+    "canonicalName": "Flying Gem",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0557",
+    "canonicalName": "Psychic Gem",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0558",
+    "canonicalName": "Bug Gem",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0559",
+    "canonicalName": "Rock Gem",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0560",
+    "canonicalName": "Ghost Gem",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0561",
+    "canonicalName": "Dragon Gem",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0562",
+    "canonicalName": "Dark Gem",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0563",
+    "canonicalName": "Steel Gem",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0564",
+    "canonicalName": "Normal Gem",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0571",
+    "canonicalName": "Pretty Feather",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0572",
+    "canonicalName": "Cover Fossil",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0573",
+    "canonicalName": "Plume Fossil",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0576",
+    "canonicalName": "Dream Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0581",
+    "canonicalName": "Big Nugget",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0639",
+    "canonicalName": "Weakness Policy",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0640",
+    "canonicalName": "Assault Vest",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0644",
+    "canonicalName": "Pixie Plate",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0646",
+    "canonicalName": "Whipped Dream",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0647",
+    "canonicalName": "Sachet",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0648",
+    "canonicalName": "Luminous Moss",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0649",
+    "canonicalName": "Snowball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0650",
+    "canonicalName": "Safety Goggles",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0656",
+    "canonicalName": "Gengarite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0657",
+    "canonicalName": "Gardevoirite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0658",
+    "canonicalName": "Ampharosite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0659",
+    "canonicalName": "Venusaurite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0660",
+    "canonicalName": "Charizardite X",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0661",
+    "canonicalName": "Blastoisinite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0662",
+    "canonicalName": "Mewtwonite X",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0663",
+    "canonicalName": "Mewtwonite Y",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0664",
+    "canonicalName": "Blazikenite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0665",
+    "canonicalName": "Medichamite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0666",
+    "canonicalName": "Houndoominite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0667",
+    "canonicalName": "Aggronite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0668",
+    "canonicalName": "Banettite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0669",
+    "canonicalName": "Tyranitarite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0670",
+    "canonicalName": "Scizorite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0671",
+    "canonicalName": "Pinsirite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0672",
+    "canonicalName": "Aerodactylite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0673",
+    "canonicalName": "Lucarionite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0674",
+    "canonicalName": "Abomasite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0675",
+    "canonicalName": "Kangaskhanite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0676",
+    "canonicalName": "Gyaradosite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0677",
+    "canonicalName": "Absolite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0678",
+    "canonicalName": "Charizardite Y",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0679",
+    "canonicalName": "Alakazite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0680",
+    "canonicalName": "Heracronite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0681",
+    "canonicalName": "Mawilite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0682",
+    "canonicalName": "Manectite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0683",
+    "canonicalName": "Garchompite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0684",
+    "canonicalName": "Latiasite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0685",
+    "canonicalName": "Latiosite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0686",
+    "canonicalName": "Roseli Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0687",
+    "canonicalName": "Kee Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0688",
+    "canonicalName": "Maranga Berry",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0710",
+    "canonicalName": "Jaw Fossil",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0711",
+    "canonicalName": "Sail Fossil",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0715",
+    "canonicalName": "Fairy Gem",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0752",
+    "canonicalName": "Swampertite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0753",
+    "canonicalName": "Sceptilite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0754",
+    "canonicalName": "Sablenite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0755",
+    "canonicalName": "Altarianite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0756",
+    "canonicalName": "Galladite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0757",
+    "canonicalName": "Audinite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0758",
+    "canonicalName": "Metagrossite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0759",
+    "canonicalName": "Sharpedonite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0760",
+    "canonicalName": "Slowbronite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0761",
+    "canonicalName": "Steelixite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0762",
+    "canonicalName": "Pidgeotite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0763",
+    "canonicalName": "Glalitite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0764",
+    "canonicalName": "Diancite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0767",
+    "canonicalName": "Cameruptite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0768",
+    "canonicalName": "Lopunnite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0769",
+    "canonicalName": "Salamencite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0770",
+    "canonicalName": "Beedrillite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0776",
+    "canonicalName": "Normalium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0777",
+    "canonicalName": "Firium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0778",
+    "canonicalName": "Waterium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0779",
+    "canonicalName": "Electrium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0780",
+    "canonicalName": "Grassium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0781",
+    "canonicalName": "Icium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0782",
+    "canonicalName": "Fightinium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0783",
+    "canonicalName": "Poisonium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0784",
+    "canonicalName": "Groundium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0785",
+    "canonicalName": "Flyinium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0786",
+    "canonicalName": "Psychium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0787",
+    "canonicalName": "Buginium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0788",
+    "canonicalName": "Rockium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0789",
+    "canonicalName": "Ghostium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0790",
+    "canonicalName": "Dragonium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0791",
+    "canonicalName": "Darkinium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0792",
+    "canonicalName": "Steelium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0793",
+    "canonicalName": "Fairium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0794",
+    "canonicalName": "Pikanium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0795",
+    "canonicalName": "Bottle Cap",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0796",
+    "canonicalName": "Gold Bottle Cap",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0798",
+    "canonicalName": "Decidium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0799",
+    "canonicalName": "Incinium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0800",
+    "canonicalName": "Primarium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0801",
+    "canonicalName": "Tapunium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0802",
+    "canonicalName": "Marshadium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0803",
+    "canonicalName": "Aloraichium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0804",
+    "canonicalName": "Snorlium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0805",
+    "canonicalName": "Eevium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0806",
+    "canonicalName": "Mewnium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0836",
+    "canonicalName": "Pikashunium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0846",
+    "canonicalName": "Adrenaline Orb",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0849",
+    "canonicalName": "Ice Stone",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0851",
+    "canonicalName": "Beast Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0879",
+    "canonicalName": "Terrain Extender",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0880",
+    "canonicalName": "Protective Pads",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0881",
+    "canonicalName": "Electric Seed",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0882",
+    "canonicalName": "Psychic Seed",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0883",
+    "canonicalName": "Misty Seed",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0884",
+    "canonicalName": "Grassy Seed",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0904",
+    "canonicalName": "Fighting Memory",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0905",
+    "canonicalName": "Flying Memory",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0906",
+    "canonicalName": "Poison Memory",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0907",
+    "canonicalName": "Ground Memory",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0908",
+    "canonicalName": "Rock Memory",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0909",
+    "canonicalName": "Bug Memory",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0910",
+    "canonicalName": "Ghost Memory",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0911",
+    "canonicalName": "Steel Memory",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0912",
+    "canonicalName": "Fire Memory",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0913",
+    "canonicalName": "Water Memory",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0914",
+    "canonicalName": "Grass Memory",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0915",
+    "canonicalName": "Electric Memory",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0916",
+    "canonicalName": "Psychic Memory",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0917",
+    "canonicalName": "Ice Memory",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0918",
+    "canonicalName": "Dragon Memory",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0919",
+    "canonicalName": "Dark Memory",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0920",
+    "canonicalName": "Fairy Memory",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0921",
+    "canonicalName": "Solganium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0922",
+    "canonicalName": "Lunalium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0923",
+    "canonicalName": "Ultranecrozium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0924",
+    "canonicalName": "Mimikium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0925",
+    "canonicalName": "Lycanium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:0926",
+    "canonicalName": "Kommonium Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1103",
+    "canonicalName": "Rusted Sword",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1104",
+    "canonicalName": "Rusted Shield",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1105",
+    "canonicalName": "Fossilized Bird",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1106",
+    "canonicalName": "Fossilized Fish",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1107",
+    "canonicalName": "Fossilized Drake",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1108",
+    "canonicalName": "Fossilized Dino",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1109",
+    "canonicalName": "Strawberry Sweet",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1110",
+    "canonicalName": "Love Sweet",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1111",
+    "canonicalName": "Berry Sweet",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1112",
+    "canonicalName": "Clover Sweet",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1113",
+    "canonicalName": "Flower Sweet",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1114",
+    "canonicalName": "Star Sweet",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1115",
+    "canonicalName": "Ribbon Sweet",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1116",
+    "canonicalName": "Sweet Apple",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1117",
+    "canonicalName": "Tart Apple",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1118",
+    "canonicalName": "Throat Spray",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1119",
+    "canonicalName": "Eject Pack",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1120",
+    "canonicalName": "Heavy-Duty Boots",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1121",
+    "canonicalName": "Blunder Policy",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1122",
+    "canonicalName": "Room Service",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1123",
+    "canonicalName": "Utility Umbrella",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1130",
+    "canonicalName": "TR00",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1131",
+    "canonicalName": "TR01",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1132",
+    "canonicalName": "TR02",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1133",
+    "canonicalName": "TR03",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1134",
+    "canonicalName": "TR04",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1135",
+    "canonicalName": "TR05",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1136",
+    "canonicalName": "TR06",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1137",
+    "canonicalName": "TR07",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1138",
+    "canonicalName": "TR08",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1139",
+    "canonicalName": "TR09",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1140",
+    "canonicalName": "TR10",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1141",
+    "canonicalName": "TR11",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1142",
+    "canonicalName": "TR12",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1143",
+    "canonicalName": "TR13",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1144",
+    "canonicalName": "TR14",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1145",
+    "canonicalName": "TR15",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1146",
+    "canonicalName": "TR16",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1147",
+    "canonicalName": "TR17",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1148",
+    "canonicalName": "TR18",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1149",
+    "canonicalName": "TR19",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1150",
+    "canonicalName": "TR20",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1151",
+    "canonicalName": "TR21",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1152",
+    "canonicalName": "TR22",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1153",
+    "canonicalName": "TR23",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1154",
+    "canonicalName": "TR24",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1155",
+    "canonicalName": "TR25",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1156",
+    "canonicalName": "TR26",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1157",
+    "canonicalName": "TR27",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1158",
+    "canonicalName": "TR28",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1159",
+    "canonicalName": "TR29",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1160",
+    "canonicalName": "TR30",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1161",
+    "canonicalName": "TR31",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1162",
+    "canonicalName": "TR32",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1163",
+    "canonicalName": "TR33",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1164",
+    "canonicalName": "TR34",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1165",
+    "canonicalName": "TR35",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1166",
+    "canonicalName": "TR36",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1167",
+    "canonicalName": "TR37",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1168",
+    "canonicalName": "TR38",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1169",
+    "canonicalName": "TR39",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1170",
+    "canonicalName": "TR40",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1171",
+    "canonicalName": "TR41",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1172",
+    "canonicalName": "TR42",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1173",
+    "canonicalName": "TR43",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1174",
+    "canonicalName": "TR44",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1175",
+    "canonicalName": "TR45",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1176",
+    "canonicalName": "TR46",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1177",
+    "canonicalName": "TR47",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1178",
+    "canonicalName": "TR48",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1179",
+    "canonicalName": "TR49",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1180",
+    "canonicalName": "TR50",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1181",
+    "canonicalName": "TR51",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1182",
+    "canonicalName": "TR52",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1183",
+    "canonicalName": "TR53",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1184",
+    "canonicalName": "TR54",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1185",
+    "canonicalName": "TR55",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1186",
+    "canonicalName": "TR56",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1187",
+    "canonicalName": "TR57",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1188",
+    "canonicalName": "TR58",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1189",
+    "canonicalName": "TR59",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1190",
+    "canonicalName": "TR60",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1191",
+    "canonicalName": "TR61",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1192",
+    "canonicalName": "TR62",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1193",
+    "canonicalName": "TR63",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1194",
+    "canonicalName": "TR64",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1195",
+    "canonicalName": "TR65",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1196",
+    "canonicalName": "TR66",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1197",
+    "canonicalName": "TR67",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1198",
+    "canonicalName": "TR68",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1199",
+    "canonicalName": "TR69",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1200",
+    "canonicalName": "TR70",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1201",
+    "canonicalName": "TR71",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1202",
+    "canonicalName": "TR72",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1203",
+    "canonicalName": "TR73",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1204",
+    "canonicalName": "TR74",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1205",
+    "canonicalName": "TR75",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1206",
+    "canonicalName": "TR76",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1207",
+    "canonicalName": "TR77",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1208",
+    "canonicalName": "TR78",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1209",
+    "canonicalName": "TR79",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1210",
+    "canonicalName": "TR80",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1211",
+    "canonicalName": "TR81",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1212",
+    "canonicalName": "TR82",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1213",
+    "canonicalName": "TR83",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1214",
+    "canonicalName": "TR84",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1215",
+    "canonicalName": "TR85",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1216",
+    "canonicalName": "TR86",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1217",
+    "canonicalName": "TR87",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1218",
+    "canonicalName": "TR88",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1219",
+    "canonicalName": "TR89",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1220",
+    "canonicalName": "TR90",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1221",
+    "canonicalName": "TR91",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1222",
+    "canonicalName": "TR92",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1223",
+    "canonicalName": "TR93",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1224",
+    "canonicalName": "TR94",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1225",
+    "canonicalName": "TR95",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1226",
+    "canonicalName": "TR96",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1227",
+    "canonicalName": "TR97",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1228",
+    "canonicalName": "TR98",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1229",
+    "canonicalName": "TR99",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1253",
+    "canonicalName": "Cracked Pot",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1254",
+    "canonicalName": "Chipped Pot",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1582",
+    "canonicalName": "Galarica Cuff",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1592",
+    "canonicalName": "Galarica Wreath",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1777",
+    "canonicalName": "Adamant Crystal",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1778",
+    "canonicalName": "Lustrous Globe",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1779",
+    "canonicalName": "Griseous Core",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1785",
+    "canonicalName": "Strange Ball",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1861",
+    "canonicalName": "Malicious Armor",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1880",
+    "canonicalName": "Booster Energy",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1881",
+    "canonicalName": "Ability Shield",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1882",
+    "canonicalName": "Clear Amulet",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1883",
+    "canonicalName": "Mirror Herb",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1884",
+    "canonicalName": "Punching Glove",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1885",
+    "canonicalName": "Covert Cloak",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:1886",
+    "canonicalName": "Loaded Dice",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2344",
+    "canonicalName": "Auspicious Armor",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2401",
+    "canonicalName": "Fairy Feather",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2402",
+    "canonicalName": "Syrupy Apple",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2403",
+    "canonicalName": "Unremarkable Teacup",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2404",
+    "canonicalName": "Masterpiece Teacup",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2406",
+    "canonicalName": "Cornerstone Mask",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2407",
+    "canonicalName": "Wellspring Mask",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2408",
+    "canonicalName": "Hearthflame Mask",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2482",
+    "canonicalName": "Metal Alloy",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2559",
+    "canonicalName": "Clefablite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2560",
+    "canonicalName": "Victreebelite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2561",
+    "canonicalName": "Starminite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2562",
+    "canonicalName": "Dragoninite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2563",
+    "canonicalName": "Meganiumite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2564",
+    "canonicalName": "Feraligite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2565",
+    "canonicalName": "Skarmorite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2566",
+    "canonicalName": "Froslassite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2567",
+    "canonicalName": "Heatranite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2568",
+    "canonicalName": "Darkranite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2569",
+    "canonicalName": "Emboarite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2570",
+    "canonicalName": "Excadrite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2571",
+    "canonicalName": "Scolipite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2572",
+    "canonicalName": "Scraftinite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2573",
+    "canonicalName": "Eelektrossite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2574",
+    "canonicalName": "Chandelurite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2575",
+    "canonicalName": "Chesnaughtite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2576",
+    "canonicalName": "Delphoxite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2577",
+    "canonicalName": "Greninjite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2578",
+    "canonicalName": "Pyroarite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2579",
+    "canonicalName": "Floettite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2580",
+    "canonicalName": "Malamarite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2581",
+    "canonicalName": "Barbaracite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2582",
+    "canonicalName": "Dragalgite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2583",
+    "canonicalName": "Hawluchanite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2584",
+    "canonicalName": "Zygardite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2585",
+    "canonicalName": "Drampanite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2586",
+    "canonicalName": "Zeraorite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2587",
+    "canonicalName": "Falinksite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2635",
+    "canonicalName": "Raichunite X",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2636",
+    "canonicalName": "Raichunite Y",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2637",
+    "canonicalName": "Chimechite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2638",
+    "canonicalName": "Absolite Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2639",
+    "canonicalName": "Staraptite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2640",
+    "canonicalName": "Garchompite Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2641",
+    "canonicalName": "Lucarionite Z",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2642",
+    "canonicalName": "Golurkite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2643",
+    "canonicalName": "Meowsticite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2644",
+    "canonicalName": "Crabominite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2645",
+    "canonicalName": "Golisopite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2646",
+    "canonicalName": "Magearnite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2647",
+    "canonicalName": "Scovillainite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2648",
+    "canonicalName": "Baxcalibrite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2649",
+    "canonicalName": "Tatsugirinite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  },
+  {
+    "itemId": "item:2650",
+    "canonicalName": "Glimmoranite",
+    "mechanics": {
+      "status": "unsupported"
+    }
+  }
+]

@@ -91,7 +91,7 @@ test('rebuilds the curated tags deterministically from the read-only workbook', 
 })
 
 test('does not mutate the stable registry or pre-existing canonical data', async () => {
-  assert.equal(sha256(await readFile(resolve(getProjectRoot(), 'data-curated', 'id-registry.json'))), '44e1b57e4924bcc44f03fae8933c1cc5d72c2624766d1f681a84f04703e02529')
+  assert.equal(sha256(await readFile(resolve(getProjectRoot(), 'data-curated', 'id-registry.json'))), '1fe332dcb200e7d5b92d958d3890c10ed95c2ca2023abf6682caf558c3cfe138')
   assert.equal(sha256(serializeJson(artifacts.species)), '98e7f84f75ad8acda35414cbfa5b336ae20b6eaf886ccfea0ed73dc0a5506ac3')
   assert.equal(sha256(serializeJson(artifacts.forms)), 'd6e79eb7897f9e71f66c8716b725d5516b013bacc300d54cbd8a34d0dbebc201')
   assert.equal(sha256(serializeJson(artifacts.abilities)), '342261a8096f9c720b30233136b3092379c7867f657bd03f182c211f1b64a090')

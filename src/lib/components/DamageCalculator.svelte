@@ -4,7 +4,7 @@
   import { resolveEffectiveLearnsetMoveIds } from '../runtime-data/learnsets'
   import { calculateStats, totalEvs } from '../runtime-data/stat-calculator'
   import { selectAbilityForForm } from '../runtime-data/ability-mechanics'
-  import type { PokemonRuntimeData, RuntimeAbility, RuntimeAbilityMechanicsEffect, RuntimeForm, RuntimeMove, RuntimeMoveDamageUnsupportedReason, RuntimeSpecies, RuntimeStatBlock } from '../runtime-data/types'
+  import type { PokemonRuntimeData, RuntimeAbility, RuntimeAbilityMechanicsEffect, RuntimeForm, RuntimeItem, RuntimeItemMechanicsEffect, RuntimeMove, RuntimeMoveDamageUnsupportedReason, RuntimeSpecies, RuntimeStatBlock } from '../runtime-data/types'
 
   export let data: PokemonRuntimeData
 
@@ -19,6 +19,7 @@
   let attackerLevel = 50
   let attackerNatureId = 'nature:hardy'
   let attackerAbilityId: string | null = null
+  let attackerItemId: string | null = null
   let attackerIvs = all31()
   let attackerEvs = all0()
   let defenderSpeciesId = 'species:0035'
@@ -67,6 +68,15 @@
     if (effect.kind === 'incoming-type-attack-multiplier') return `${effect.typeIds.map(typeName).join('/')} 攻击能力修正 ${effect.multiplier}×`
     if (effect.kind === 'super-effective-damage-multiplier') return `效果绝佳伤害 ${effect.multiplier}×`
     return `STAB ${effect.multiplier}×`
+  }
+
+  function itemEffectLabel(effect: RuntimeItemMechanicsEffect): string {
+    const multiplier = `${(effect.numerator / effect.denominator).toFixed(effect.denominator === 2 ? 1 : 2)}×`
+    if (effect.kind === 'attack-stat-multiplier') return `物理攻击能力 ${multiplier}；未模拟招式锁定`
+    if (effect.kind === 'special-attack-stat-multiplier') return `特殊攻击能力 ${multiplier}；未模拟招式锁定`
+    if (effect.kind === 'final-damage-multiplier') return `最终伤害 ${multiplier}；未模拟反作用伤害`
+    if (effect.kind === 'super-effective-damage-multiplier') return `效果绝佳伤害 ${multiplier}`
+    return `${typeName(effect.typeId)} 招式威力 ${multiplier}`
   }
 
   function displayForm(form: RuntimeForm, species: RuntimeSpecies | undefined): string {
@@ -127,9 +137,9 @@
     return `灼伤物理伤害 ${modifier.multiplier}×`
   }
 
-  function damageOutcome(move: RuntimeMove | undefined, attackerForm: RuntimeForm | undefined, defenderForm: RuntimeForm | undefined, attackerStats: RuntimeStatBlock | null, defenderStats: RuntimeStatBlock | null, attackerAbility: RuntimeAbility | null, defenderAbility: RuntimeAbility | null, battleContext: BattleContext): MoveDamageResult | null {
+  function damageOutcome(move: RuntimeMove | undefined, attackerForm: RuntimeForm | undefined, defenderForm: RuntimeForm | undefined, attackerStats: RuntimeStatBlock | null, defenderStats: RuntimeStatBlock | null, attackerAbility: RuntimeAbility | null, defenderAbility: RuntimeAbility | null, attackerItem: RuntimeItem | null, battleContext: BattleContext): MoveDamageResult | null {
     if (!move || !attackerForm || !defenderForm || !attackerStats || !defenderStats) return null
-    return calculateMoveDamage({ level: attackerLevel, move, attackerStats, defenderStats, attackerTypeIds: attackerForm.types, defenderTypeIds: defenderForm.types, types: data.types, attackerAbility, defenderAbility, battleContext })
+    return calculateMoveDamage({ level: attackerLevel, move, attackerStats, defenderStats, attackerTypeIds: attackerForm.types, defenderTypeIds: defenderForm.types, types: data.types, attackerAbility, defenderAbility, attackerItem, battleContext })
   }
 
   $: attackerSpecies = data.species.find(candidate => candidate.speciesId === attackerSpeciesId)
@@ -142,6 +152,7 @@
   $: defenderAbilityOptions = abilitiesFor(defenderForm)
   $: attackerAbility = attackerForm ? selectAbilityForForm(attackerForm, data.abilities, attackerAbilityId) : null
   $: defenderAbility = defenderForm ? selectAbilityForForm(defenderForm, data.abilities, defenderAbilityId) : null
+  $: attackerItem = data.items.find(item => item.itemId === attackerItemId) ?? null
   $: attackerStatResult = sideStats(attackerSpecies, attackerForm, attackerLevel, attackerNatureId, attackerIvs, attackerEvs)
   $: defenderStatResult = sideStats(defenderSpecies, defenderForm, defenderLevel, defenderNatureId, defenderIvs, defenderEvs)
   $: knownMoveIds = attackerForm ? new Set(resolveEffectiveLearnsetMoveIds(data.learnsets, attackerForm.formId)) : new Set<string>()
@@ -150,12 +161,12 @@
     && (!normalizedMoveQuery || (move.zhName?.includes(moveQuery.trim()) ?? false) || move.canonicalName.toLocaleLowerCase().includes(normalizedMoveQuery)))
   $: selectedMove = data.moves.find(move => move.moveId === selectedMoveId)
   $: battleContext = { weather, attackerBurned, attackerStatStages: { atk: attackerAtkStage, spa: attackerSpaStage }, defenderStatStages: { def: defenderDefStage, spd: defenderSpdStage } } satisfies BattleContext
-  $: damageResult = damageOutcome(selectedMove, attackerForm, defenderForm, attackerStatResult.stats, defenderStatResult.stats, attackerAbility, defenderAbility, battleContext)
+  $: damageResult = damageOutcome(selectedMove, attackerForm, defenderForm, attackerStatResult.stats, defenderStatResult.stats, attackerAbility, defenderAbility, attackerItem, battleContext)
 </script>
 
 <section class="damage-calculator">
   <h2>核心伤害计算器</h2>
-  <p>第九世代普通单目标伤害范围，假设招式成功命中。支持已审查特性、攻防能力阶级、攻击方灼伤，以及普通日照/下雨的火水伤害修正；不包含道具、场地、太晶化或要害。</p>
+  <p>第九世代普通单目标伤害范围，假设招式成功命中。支持少量已审查特性、持有物、攻防能力阶级、攻击方灼伤，以及普通日照/下雨的火水伤害修正；不包含场地、太晶化或要害。</p>
 
   <div class="damage-sides">
     <section class="damage-side">
@@ -173,6 +184,7 @@
         </select>
       </label>
       <label>特性效果<select aria-label="攻击方特性效果" bind:value={attackerAbilityId}><option value={null}>不启用</option>{#each attackerAbilityOptions as { slot, ability } (ability.abilityId)}<option value={ability.abilityId}>{slot} · {ability.zhName ?? ability.canonicalName}（{ability.mechanics.status === 'supported' ? '支持' : '未建模'}）</option>{/each}</select></label>
+      <label>持有物效果<select aria-label="攻击方持有物效果" bind:value={attackerItemId}><option value={null}>无持有物</option>{#each data.items as item (item.itemId)}<option value={item.itemId}>{item.canonicalName}（{item.mechanics.status === 'supported' ? '支持' : '未建模'}）</option>{/each}</select></label>
       <div class="damage-basic-inputs">
         <label>等级 <input aria-label="攻击方等级" type="number" min="1" max="100" step="1" bind:value={attackerLevel} /></label>
         <label>性格
@@ -254,13 +266,16 @@
         <div class="damage-modifiers">
           <span>{damageResult.attackingStat.toUpperCase()} {damageResult.attack}{damageResult.effectiveAttack !== damageResult.attack ? ` → ${damageResult.effectiveAttack}` : ''}</span>
           <span>{damageResult.defendingStat.toUpperCase()} {damageResult.defense}{damageResult.effectiveDefense !== damageResult.defense ? ` → ${damageResult.effectiveDefense}` : ''}</span>
+          {#if selectedMove.power.kind === 'numeric' && damageResult.effectiveBasePower !== selectedMove.power.value}<span>威力 {selectedMove.power.value} → {damageResult.effectiveBasePower}</span>{/if}
           <span>STAB {damageResult.stabMultiplier}×</span>
           <span>原始属性 {damageResult.typeMultiplier}×</span>
           {#if damageResult.abilityAdjustedTypeMultiplier !== damageResult.typeMultiplier}<span>特性后 {damageResult.abilityAdjustedTypeMultiplier}×</span>{/if}
         </div>
         {#if damageResult.appliedBattleContextModifiers.length}<p class="status">战斗状态：{damageResult.appliedBattleContextModifiers.map(battleContextModifierLabel).join('、')}</p>{/if}
         {#if damageResult.appliedAbilityEffects.length}<p class="status">已应用：{damageResult.appliedAbilityEffects.map(item => `${data.abilities.find(ability => ability.abilityId === item.abilityId)?.zhName ?? item.abilityId}（${abilityEffectLabel(item.effect)}）`).join('、')}</p>{/if}
+        {#if damageResult.appliedItemEffects.length}<p class="status">持有物：{damageResult.appliedItemEffects.map(item => `${data.items.find(candidate => candidate.itemId === item.itemId)?.canonicalName ?? item.itemId}（${itemEffectLabel(item.effect)}）`).join('、')}</p>{/if}
         {#if damageResult.unmodeledAbilityIds.length}<p class="status">已选择但未建模：{damageResult.unmodeledAbilityIds.map(id => data.abilities.find(ability => ability.abilityId === id)?.zhName ?? id).join('、')}；结果仅使用核心伤害机制。</p>{/if}
+        {#if damageResult.unmodeledItemIds.length}<p class="status">已选择但未建模的持有物：{damageResult.unmodeledItemIds.map(id => data.items.find(item => item.itemId === id)?.canonicalName ?? id).join('、')}；该物品不会改变结果。</p>{/if}
       {:else if damageResult?.status === 'non-damaging'}
         <p class="status">这是变化招式，不使用普通伤害公式。</p>
       {:else if damageResult?.status === 'unsupported'}

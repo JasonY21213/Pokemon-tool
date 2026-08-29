@@ -17,6 +17,11 @@
       "sha256": "eda6d7ab5f1d94072095798095db111b45bef055c83a2c40fcd3cc52d903a93f"
     },
     {
+      "path": "items.json",
+      "recordCount": 567,
+      "sha256": "a79e79e9dc27e3c4068a42c0971e3add12b4a89cfba5cdf2fb9b14e57872ef7a"
+    },
+    {
       "path": "types.json",
       "recordCount": 18,
       "sha256": "1a972c076ae429836b3767ee2ee8e303dbc684d1e3417212086a6ef5867a3161"

@@ -13,6 +13,7 @@ test('runtime projection preserves stable Species, Form, Ability, and tag refere
   assert.equal(runtime.species.length, 1025)
   assert.equal(runtime.forms.length, 1380)
   assert.equal(runtime.abilities.length, 316)
+  assert.equal(runtime.items.length, 567)
   assert.equal(runtime.types.length, 18)
   assert.equal(runtime.natures.length, 25)
   assert.equal(runtime.growthRates.length, 6)
@@ -40,9 +41,9 @@ test('runtime public/data emission is deterministic byte-for-byte', async () => 
     const artifacts = await artifactsPromise
     const outputRoot = join(temporaryRoot, 'public', 'data')
     await emitRuntimeData(artifacts, outputRoot)
-    const first = await Promise.all(['species.json', 'forms.json', 'abilities.json', 'types.json', 'natures.json', 'growth-rates.json', 'moves.json', 'evolutions.json', 'learnsets.json', 'manifest.json'].map(file => readFile(join(temporaryRoot, 'public', 'data', file))))
+    const first = await Promise.all(['species.json', 'forms.json', 'abilities.json', 'items.json', 'types.json', 'natures.json', 'growth-rates.json', 'moves.json', 'evolutions.json', 'learnsets.json', 'manifest.json'].map(file => readFile(join(temporaryRoot, 'public', 'data', file))))
     await emitRuntimeData(artifacts, outputRoot)
-    const second = await Promise.all(['species.json', 'forms.json', 'abilities.json', 'types.json', 'natures.json', 'growth-rates.json', 'moves.json', 'evolutions.json', 'learnsets.json', 'manifest.json'].map(file => readFile(join(temporaryRoot, 'public', 'data', file))))
+    const second = await Promise.all(['species.json', 'forms.json', 'abilities.json', 'items.json', 'types.json', 'natures.json', 'growth-rates.json', 'moves.json', 'evolutions.json', 'learnsets.json', 'manifest.json'].map(file => readFile(join(temporaryRoot, 'public', 'data', file))))
     assert.deepEqual(second, first)
   } finally {
     await rm(temporaryRoot, { recursive: true, force: true })

@@ -10,6 +10,7 @@
       "selectedPaths": [
         { "path": "data/abilities.ts", "sha256": "60cd08e04a802b182cc9507a5514cd88300373dbb8a5833e3e049d27cf682942" },
         { "path": "data/learnsets.ts", "sha256": "21c5020b242b567b20bbcf25e8cdbddef46e603ded82923b8d1ee4a8907c659b" },
+        { "path": "data/items.ts", "sha256": "b8ec6ef48590402e83502902f5205a798c02a72f35d710d35cd30902e08c3f4e" },
         { "path": "data/moves.ts", "sha256": "30e36c2295ce6e2088cbdbebc41fb554c32a8d52be5635ace6067aaf1532ed11" },
         { "path": "data/natures.ts", "sha256": "e05107d75d6cdb08e51e1dbd7c2365d1d3883f9c11acd2d63efe770a42ec9ee7" },
         { "path": "data/pokedex.ts", "sha256": "ea070678bfb5143511e8b88d8244dcc46e7f72b517c2adead4b1516f41452b27" },

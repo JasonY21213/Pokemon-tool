@@ -53,6 +53,23 @@ export type RuntimeAbilityMechanics =
   | { status: 'supported'; effects: RuntimeAbilityMechanicsEffect[] }
   | { status: 'unsupported' }
 
+export type RuntimeItemMechanicsEffect =
+  | { kind: 'attack-stat-multiplier'; numerator: 3; denominator: 2; unmodeledDrawback: 'move-lock' }
+  | { kind: 'special-attack-stat-multiplier'; numerator: 3; denominator: 2; unmodeledDrawback: 'move-lock' }
+  | { kind: 'final-damage-multiplier'; numerator: 5324; denominator: 4096; unmodeledDrawback: 'recoil' }
+  | { kind: 'super-effective-damage-multiplier'; numerator: 4915; denominator: 4096 }
+  | { kind: 'move-type-base-power-multiplier'; typeId: 'type:fire' | 'type:water'; numerator: 4915; denominator: 4096 }
+
+export type RuntimeItemMechanics =
+  | { status: 'supported'; effects: RuntimeItemMechanicsEffect[] }
+  | { status: 'unsupported' }
+
+export type RuntimeItem = {
+  itemId: string
+  canonicalName: string
+  mechanics: RuntimeItemMechanics
+}
+
 export type RuntimeTypeEffectiveness = 0 | 0.5 | 1 | 2
 
 export type RuntimeType = {
@@ -168,6 +185,7 @@ export type PokemonRuntimeData = {
   species: RuntimeSpecies[]
   forms: RuntimeForm[]
   abilities: RuntimeAbility[]
+  items: RuntimeItem[]
   types: RuntimeType[]
   natures: RuntimeNature[]
   growthRates: RuntimeGrowthRate[]

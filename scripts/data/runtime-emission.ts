@@ -1,5 +1,5 @@
 import { join, resolve } from 'node:path'
-import type { RuntimeAbility, RuntimeAccuracy, RuntimeEvolution, RuntimeForm, RuntimeGrowthRate, RuntimeGrowthRateResolution, RuntimeLearnsets, RuntimeManifest, RuntimeMove, RuntimeNature, RuntimeNumericValue, RuntimeSpecies, RuntimeType } from '../../src/lib/runtime-data/types.ts'
+import type { RuntimeAbility, RuntimeAccuracy, RuntimeEvolution, RuntimeForm, RuntimeGrowthRate, RuntimeGrowthRateResolution, RuntimeItem, RuntimeLearnsets, RuntimeManifest, RuntimeMove, RuntimeNature, RuntimeNumericValue, RuntimeSpecies, RuntimeType } from '../../src/lib/runtime-data/types.ts'
 import { buildFullDryRun, type FullDryRunArtifacts } from './full-dry-run.ts'
 import { CANONICAL_GROWTH_RATES } from './growth-rate.ts'
 import { getProjectRoot, sha256 } from './source.ts'
@@ -79,7 +79,7 @@ function tagMap(assignments: Array<{ entityId: string; tagId: string }>): Map<st
   return result
 }
 
-function assertRuntimeReferences(species: RuntimeSpecies[], forms: RuntimeForm[], abilities: RuntimeAbility[], types: RuntimeType[], natures: RuntimeNature[], growthRates: RuntimeGrowthRate[], moves: RuntimeMove[], evolutions: RuntimeEvolution[], learnsets: RuntimeLearnsets): void {
+function assertRuntimeReferences(species: RuntimeSpecies[], forms: RuntimeForm[], abilities: RuntimeAbility[], items: RuntimeItem[], types: RuntimeType[], natures: RuntimeNature[], growthRates: RuntimeGrowthRate[], moves: RuntimeMove[], evolutions: RuntimeEvolution[], learnsets: RuntimeLearnsets): void {
   const formIds = new Set(forms.map(form => form.formId))
   const abilityIds = new Set(abilities.map(ability => ability.abilityId))
   for (const entry of species) {
@@ -101,6 +101,11 @@ function assertRuntimeReferences(species: RuntimeSpecies[], forms: RuntimeForm[]
       if (effect.kind === 'incoming-type-attack-multiplier' && (effect.typeIds.length === 0 || !effect.typeIds.every(typeId => typeIds.has(typeId)))) throw new Error(`RUNTIME_ABILITY_TYPE_REFERENCE: ${ability.abilityId}`)
     }
   }
+  if (new Set(items.map(item => item.itemId)).size !== items.length) throw new Error('RUNTIME_ITEM_ID_UNIQUENESS')
+  for (const item of items) {
+    if (item.mechanics.status === 'supported' && item.mechanics.effects.length === 0) throw new Error(`RUNTIME_ITEM_EMPTY_MECHANICS: ${item.itemId}`)
+    if (item.mechanics.status === 'supported' && item.mechanics.effects.some(effect => effect.kind === 'move-type-base-power-multiplier' && !typeIds.has(effect.typeId))) throw new Error(`RUNTIME_ITEM_TYPE_REFERENCE: ${item.itemId}`)
+  }
   if (typeIds.size !== 18 || types.some(type => type.damageTaken.length !== 18 || !type.damageTaken.every(entry => typeIds.has(entry.attackingTypeId)))) throw new Error('RUNTIME_TYPE_REFERENCE_INTEGRITY')
   if (natures.length !== 25 || new Set(natures.map(nature => nature.natureId)).size !== 25 || natures.some(nature => nature.neutral ? nature.plusStat !== null || nature.minusStat !== null : nature.plusStat === null || nature.minusStat === null || nature.plusStat === nature.minusStat)) throw new Error('RUNTIME_NATURE_REFERENCE_INTEGRITY')
   const growthIds = new Set(growthRates.map(rate => rate.growthRateId))
@@ -114,13 +119,14 @@ function assertRuntimeReferences(species: RuntimeSpecies[], forms: RuntimeForm[]
   if (learnsets.entries.some(entry => !formIds.has(entry.entityId) || (entry.parentEntityId !== null && !formIds.has(entry.parentEntityId)) || !entry.directMoveIds.every(moveId => moveIds.has(moveId)) || new Set(entry.directMoveIds).size !== entry.directMoveIds.length)) throw new Error('RUNTIME_LEARNSET_REFERENCE_INTEGRITY')
 }
 
-export function buildRuntimeData(artifacts: FullDryRunArtifacts): { species: RuntimeSpecies[]; forms: RuntimeForm[]; abilities: RuntimeAbility[]; types: RuntimeType[]; natures: RuntimeNature[]; growthRates: RuntimeGrowthRate[]; moves: RuntimeMove[]; evolutions: RuntimeEvolution[]; learnsets: RuntimeLearnsets } {
+export function buildRuntimeData(artifacts: FullDryRunArtifacts): { species: RuntimeSpecies[]; forms: RuntimeForm[]; abilities: RuntimeAbility[]; items: RuntimeItem[]; types: RuntimeType[]; natures: RuntimeNature[]; growthRates: RuntimeGrowthRate[]; moves: RuntimeMove[]; evolutions: RuntimeEvolution[]; learnsets: RuntimeLearnsets } {
   const speciesLocalization = localizationMap(artifacts.localization.species)
   const formLocalization = localizationMap(artifacts.localization.forms)
   const abilityLocalization = localizationMap(artifacts.localization.abilities)
   const moveLocalization = localizationMap(artifacts.localization.moves)
   const damageSupportByMove = new Map(artifacts.damageSupport.map(record => [record.moveId, record.support]))
   const mechanicsByAbility = new Map(artifacts.abilityMechanics.map(record => [record.abilityId, record.mechanics]))
+  const mechanicsByItem = new Map(artifacts.itemMechanics.map(record => [record.itemId, record.mechanics]))
   const tagsByEntity = tagMap(artifacts.tags.assignments)
   const growthBySpecies = new Map(artifacts.growthRates.map(record => [stringValue(record, 'entityId'), growthResolution({ id: record.growthRateId, status: record.status })]))
   const growthOverrideByForm = new Map(artifacts.formGrowthRateOverrides.map(record => [stringValue(record, 'formId'), growthResolution(record.growthRateOverride)]))
@@ -185,6 +191,11 @@ export function buildRuntimeData(artifacts: FullDryRunArtifacts): { species: Run
       mechanics: mechanicsByAbility.get(abilityId) ?? (() => { throw new Error(`RUNTIME_ABILITY_MECHANICS: ${abilityId}`) })(),
     }
   })
+  const items: RuntimeItem[] = artifacts.items.map(record => ({
+    itemId: record.itemId,
+    canonicalName: record.canonicalName.en,
+    mechanics: mechanicsByItem.get(record.itemId) ?? (() => { throw new Error(`RUNTIME_ITEM_MECHANICS: ${record.itemId}`) })(),
+  }))
   const types: RuntimeType[] = artifacts.types.map(record => {
     const rawDamageTaken = record.damageTaken
     if (!Array.isArray(rawDamageTaken)) throw new Error('RUNTIME_TYPE_DAMAGE_TAKEN')
@@ -257,8 +268,8 @@ export function buildRuntimeData(artifacts: FullDryRunArtifacts): { species: Run
       directMoveIds: (directMoveIdsByEntity.get(edge.entityId) ?? []).sort((left, right) => left.localeCompare(right, 'en')),
     })).sort((left, right) => left.entityId.localeCompare(right.entityId, 'en')),
   }
-  assertRuntimeReferences(species, forms, abilities, types, natures, growthRates, moves, evolutions, learnsets)
-  return { species, forms, abilities, types, natures, growthRates, moves, evolutions, learnsets }
+  assertRuntimeReferences(species, forms, abilities, items, types, natures, growthRates, moves, evolutions, learnsets)
+  return { species, forms, abilities, items, types, natures, growthRates, moves, evolutions, learnsets }
 }
 
 export async function emitRuntimeData(artifacts: FullDryRunArtifacts, outputRoot = resolve(getProjectRoot(), 'public', 'data')): Promise<{ outputRoot: string; manifest: RuntimeManifest }> {
@@ -267,6 +278,7 @@ export async function emitRuntimeData(artifacts: FullDryRunArtifacts, outputRoot
     ['species.json', runtime.species, runtime.species.length],
     ['forms.json', runtime.forms, runtime.forms.length],
     ['abilities.json', runtime.abilities, runtime.abilities.length],
+    ['items.json', runtime.items, runtime.items.length],
     ['types.json', runtime.types, runtime.types.length],
     ['natures.json', runtime.natures, runtime.natures.length],
     ['growth-rates.json', runtime.growthRates, runtime.growthRates.length],

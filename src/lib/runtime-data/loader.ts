@@ -1,4 +1,4 @@
-import type { PokemonRuntimeData, RuntimeAbility, RuntimeEvolution, RuntimeForm, RuntimeGrowthRate, RuntimeLearnsets, RuntimeManifest, RuntimeMove, RuntimeNature, RuntimeSpecies, RuntimeType } from './types'
+import type { PokemonRuntimeData, RuntimeAbility, RuntimeEvolution, RuntimeForm, RuntimeGrowthRate, RuntimeItem, RuntimeLearnsets, RuntimeManifest, RuntimeMove, RuntimeNature, RuntimeSpecies, RuntimeType } from './types'
 
 const dataRoot = `${import.meta.env.BASE_URL}data`
 
@@ -9,10 +9,11 @@ async function fetchJson<T>(path: string): Promise<T> {
 }
 
 export async function loadPokemonRuntimeData(): Promise<PokemonRuntimeData> {
-  const [species, forms, abilities, types, natures, growthRates, moves, evolutions, learnsets, manifest] = await Promise.all([
+  const [species, forms, abilities, items, types, natures, growthRates, moves, evolutions, learnsets, manifest] = await Promise.all([
     fetchJson<RuntimeSpecies[]>('species.json'),
     fetchJson<RuntimeForm[]>('forms.json'),
     fetchJson<RuntimeAbility[]>('abilities.json'),
+    fetchJson<RuntimeItem[]>('items.json'),
     fetchJson<RuntimeType[]>('types.json'),
     fetchJson<RuntimeNature[]>('natures.json'),
     fetchJson<RuntimeGrowthRate[]>('growth-rates.json'),
@@ -21,5 +22,5 @@ export async function loadPokemonRuntimeData(): Promise<PokemonRuntimeData> {
     fetchJson<RuntimeLearnsets>('learnsets.json'),
     fetchJson<RuntimeManifest>('manifest.json'),
   ])
-  return { species, forms, abilities, types, natures, growthRates, moves, evolutions, learnsets, manifest }
+  return { species, forms, abilities, items, types, natures, growthRates, moves, evolutions, learnsets, manifest }
 }

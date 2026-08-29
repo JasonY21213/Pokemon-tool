@@ -36,8 +36,8 @@ describe('full-domain dry run', () => {
   })
 
   test('records every selected input with a real SHA-256 and byte length', () => {
-    assert.equal(artifacts.sourceManifest.selectedFileCount, 1060)
-    assert.equal(artifacts.sourceManifest.files.length, 1060)
+    assert.equal(artifacts.sourceManifest.selectedFileCount, 1061)
+    assert.equal(artifacts.sourceManifest.files.length, 1061)
     assert.equal(artifacts.sourceManifest.files.every(file => /^[a-f0-9]{64}$/.test(file.sha256) && file.byteLength > 0), true)
   })
 
