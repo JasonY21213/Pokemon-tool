@@ -40,7 +40,7 @@ export type AppliedTerrainEffect =
 
 export type DamageModifierTraceCategory =
   | 'stat-stage' | 'defensive-weather-stat' | 'ability-stat' | 'item-stat' | 'move-power'
-  | 'core-base-damage' | 'weather' | 'critical' | 'random' | 'stellar-usage' | 'stab' | 'type-effectiveness'
+  | 'core-base-damage' | 'weather' | 'critical' | 'random' | 'stellar-usage' | 'stab' | 'type-effectiveness' | 'ability-immunity'
   | 'burn' | 'screen' | 'ability-final' | 'item-final'
 
 export type DamageModifierTraceEntry = {
@@ -56,7 +56,7 @@ export type DamageModifierTraceEntry = {
 // implementation. It documents the calculation below; it does not execute it.
 export const DAMAGE_MODIFIER_TRACE_ORDER: readonly DamageModifierTraceCategory[] = [
   'stat-stage', 'defensive-weather-stat', 'ability-stat', 'item-stat', 'move-power',
-  'core-base-damage', 'weather', 'critical', 'random', 'stellar-usage', 'stab', 'type-effectiveness',
+  'core-base-damage', 'weather', 'critical', 'random', 'stellar-usage', 'stab', 'type-effectiveness', 'ability-immunity',
   'burn', 'screen', 'ability-final', 'item-final',
 ]
 
@@ -277,7 +277,7 @@ export function calculateCoreDamage(input: DamageCoreInput): DamageCoreResult {
     if (modifier.kind === 'stat-stage') contextTrace.push({ category: 'stat-stage', source: modifier.stat, label: `stage ${modifier.stage}${modifier.effectiveStage !== modifier.stage ? ` (critical ${modifier.effectiveStage})` : ''}`, before: modifier.before, after: modifier.after })
     if (modifier.kind === 'weather-defense-stat') contextTrace.push({ category: 'defensive-weather-stat', source: modifier.weather, label: modifier.stat, before: modifier.before, after: modifier.after, multiplier: modifier.multiplier })
   }
-  const modifierTrace: DamageModifierTraceEntry[] = [
+  const ordinaryModifierTrace: DamageModifierTraceEntry[] = [
     ...contextTrace,
     ...(incomingAttackEffect?.kind === 'incoming-type-attack-multiplier' ? [{ category: 'ability-stat' as const, source: input.defenderAbility!.abilityId, label: incomingAttackEffect.kind, before: stagedAttack, after: abilityAdjustedAttack, multiplier: incomingAttackEffect.multiplier }] : []),
     ...(attackItemEffect && input.attackerItem ? [{ category: 'item-stat' as const, source: input.attackerItem.itemId, label: attackItemEffect.kind, before: abilityAdjustedAttack, after: effectiveAttack, multiplier: attackItemEffect.numerator / attackItemEffect.denominator }] : []),
@@ -296,6 +296,15 @@ export function calculateCoreDamage(input: DamageCoreInput): DamageCoreResult {
     ...(defensiveFinalEffect ? [{ category: 'ability-final' as const, source: input.defenderAbility!.abilityId, label: 'super-effective damage', multiplier: 0.75 }] : []),
     ...(finalItemEffect && input.attackerItem ? [{ category: 'item-final' as const, source: input.attackerItem.itemId, label: finalItemEffect.kind, multiplier: finalItemEffect.numerator / finalItemEffect.denominator }] : []),
   ]
+  const abilityImmunity = defensiveAdjustment.appliedEffects.find(item => item.effect.kind === 'incoming-type-immunity')
+  // Immunity stops the damage path before downstream damage modifiers. Keep the
+  // trace minimal and identify whether typing or an Ability established it.
+  const modifierTrace: DamageModifierTraceEntry[] = defensiveAdjustment.adjustedMultiplier !== 0
+    ? ordinaryModifierTrace
+    : [
+        { category: 'type-effectiveness', source: 'defender-typing', label: input.moveTypeId, multiplier: typeMultiplier },
+        ...(abilityImmunity ? [{ category: 'ability-immunity' as const, source: abilityImmunity.abilityId, label: abilityImmunity.effect.kind, multiplier: 0 }] : []),
+      ]
   return {
     minDamage: Math.min(...rolls),
     maxDamage: Math.max(...rolls),
