@@ -78,12 +78,16 @@
   })
 </script>
 
+<header class="app-header">
+  <div class="app-header-inner">
+    <h1>Pokémon Tool</h1>
+    {#if data}<nav class="app-nav" aria-label="工具导航">{#each sections as section (section.id)}<button class:active={activeSection === section.id} aria-current={activeSection === section.id ? 'page' : undefined} type="button" onclick={() => activeSection = section.id}><BilingualLabel label={section.label} /></button>{/each}</nav>{/if}
+  </div>
+</header>
 <main>
-  <header><h1>Pokémon Tool</h1><p>离线宝可梦资料查询与基础计算工具。</p></header>
   {#if error}<p class="status error" role="alert">{error}</p>
   {:else if !data}<p class="status" role="status" aria-live="polite">正在加载宝可梦数据…</p>
   {:else}
-    <nav class="app-nav" aria-label="工具导航">{#each sections as section (section.id)}<button class:active={activeSection === section.id} aria-current={activeSection === section.id ? 'page' : undefined} type="button" onclick={() => activeSection = section.id}><BilingualLabel label={section.label} /></button>{/each}</nav>
     {#if activeSection === 'pokemon'}<PokemonQuery {data} {learnsets} {learnsetsLoading} {learnsetsError} onRequestLearnsets={requestLearnsets} bind:selectedSpecies bind:selectedForm />
     {:else if activeSection === 'team'}<TeamBuilder {data} {learnsets} {learnsetsLoading} {learnsetsError} onRequestLearnsets={requestLearnsets} {selectedForm} members={teamMembers} onMembersChange={setTeamMembers} onClearSavedTeam={clearSavedTeam} onCopyShareLink={copyShareLink} {shareStatus} />
     {:else if activeSection === 'moves'}<MoveQuery {data} />
