@@ -53,6 +53,8 @@ GitHub Pages 等子目录部署应把 Vite base 设置为最终公开路径，�
 npm run build -- --base=/Pokemon-tool/
 ```
 
+本仓库通过 `.github/workflows/deploy-pages.yml` 在 `main` 更新后自动部署到 GitHub Pages，预期公开地址为 <https://jasony21213.github.io/Pokemon-tool/>。仓库的 **Settings → Pages → Source** 应设置为 **GitHub Actions**。
+
 将生成的整个 `dist/` 目录原样发布。不要只上传 `index.html`，也不要遗漏 `dist/data/`。站点必须通过 HTTP(S) 静态服务器访问，不能直接双击 `index.html`。应用没有客户端路由；分享队伍使用 `?team=...` 查询参数，因此刷新仍落在同一个静态入口。
 
 ## 数据来源与许可
