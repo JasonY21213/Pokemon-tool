@@ -8,6 +8,8 @@
   import TypeMatchupCalculator from './lib/components/TypeMatchupCalculator.svelte'
   import TeamBuilder from './lib/components/TeamBuilder.svelte'
   import { loadPokemonRuntimeData } from './lib/runtime-data/loader'
+  import { TEAM_STORAGE_KEY, clearStoredTeamState, encodeShareTeamState, resolveStartupTeamState, saveStoredTeamState } from './lib/runtime-data/team-persistence'
+  import type { TeamMember } from './lib/runtime-data/team-builder'
   import type { PokemonRuntimeData, RuntimeForm, RuntimeSpecies } from './lib/runtime-data/types'
 
   type Section = 'pokemon' | 'team' | 'moves' | 'type' | 'stats' | 'experience' | 'damage'
@@ -20,8 +22,34 @@
   let activeSection: Section = 'pokemon'
   let selectedSpecies: RuntimeSpecies | null = null
   let selectedForm: RuntimeForm | null = null
+  let teamMembers: TeamMember[] = []
+  let shareStatus = ''
+  let persistenceReady = false
+  function setTeamMembers(members: TeamMember[]): void {
+    teamMembers = members
+    if (persistenceReady && !saveStoredTeamState(window.localStorage, members)) shareStatus = '无法保存到此浏览器；队伍仍可在当前页面使用。'
+  }
+  function clearSavedTeam(): void {
+    teamMembers = []
+    shareStatus = clearStoredTeamState(window.localStorage) ? '已清除本浏览器保存的队伍。' : '无法清除浏览器保存内容；当前队伍已清空。'
+  }
+  async function copyShareLink(): Promise<void> {
+    const url = new URL(window.location.href)
+    url.searchParams.set('team', encodeShareTeamState(teamMembers))
+    try { await navigator.clipboard.writeText(url.toString()); shareStatus = '分享链接已复制。' }
+    catch { shareStatus = `无法访问剪贴板，请复制此链接：${url.toString()}` }
+  }
   onMount(async () => {
-    try { data = await loadPokemonRuntimeData() }
+    try {
+      data = await loadPokemonRuntimeData()
+      const shared = new URLSearchParams(window.location.search).get('team')
+      let stored: string | null = null
+      try { stored = window.localStorage.getItem(TEAM_STORAGE_KEY) } catch { /* Browser storage can be unavailable. */ }
+      const restored = resolveStartupTeamState(shared, stored, data)
+      teamMembers = restored.members
+      persistenceReady = true
+      if (restored.source === 'url') shareStatus = '已从分享链接恢复队伍；它优先于本浏览器保存内容。'
+    }
     catch (cause) { error = cause instanceof Error ? cause.message : '无法加载运行时数据。' }
   })
 </script>
@@ -33,7 +61,7 @@
   {:else}
     <nav class="app-nav" aria-label="工具导航">{#each sections as section (section.id)}<button class:active={activeSection === section.id} aria-current={activeSection === section.id ? 'page' : undefined} type="button" onclick={() => activeSection = section.id}>{section.label}</button>{/each}</nav>
     {#if activeSection === 'pokemon'}<PokemonQuery {data} bind:selectedSpecies bind:selectedForm />
-    {:else if activeSection === 'team'}<TeamBuilder {data} {selectedForm} />
+    {:else if activeSection === 'team'}<TeamBuilder {data} {selectedForm} members={teamMembers} onMembersChange={setTeamMembers} onClearSavedTeam={clearSavedTeam} onCopyShareLink={copyShareLink} {shareStatus} />
     {:else if activeSection === 'moves'}<MoveQuery {data} />
     {:else if activeSection === 'type'}<TypeMatchupCalculator {data} />
     {:else if activeSection === 'stats'}<StatCalculator {data} {selectedSpecies} {selectedForm} />

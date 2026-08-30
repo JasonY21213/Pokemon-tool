@@ -93,6 +93,8 @@ td input { width: 4.5rem; padding: 0.4rem; }
 .team-builder, .team-members, .team-member, .team-summary, .team-analysis { display: grid; gap: 0.75rem; }
 .team-builder { padding: 1.25rem; border: 1px solid #cbd5e1; border-radius: 0.6rem; background: #fff; }
 .team-add { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; padding: 0.75rem; border-radius: 0.4rem; background: #f1f5f9; }
+.team-state-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; }
+.team-state-actions .status { margin: 0; flex-basis: 100%; }
 .team-member { padding: 0.9rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; }
 .team-member label { display: grid; gap: 0.3rem; font-weight: 600; }
 .team-summary { padding: 0.9rem; border-radius: 0.5rem; background: #f1f5f9; }
