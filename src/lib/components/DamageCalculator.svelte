@@ -8,6 +8,7 @@
   import type { LearnsetRuntimeData, PokemonRuntimeData, RuntimeAbility, RuntimeAbilityMechanicsEffect, RuntimeForm, RuntimeItem, RuntimeItemMechanicsEffect, RuntimeMove, RuntimeMoveDamageUnsupportedReason, RuntimeSpecies, RuntimeStatBlock } from '../runtime-data/types'
   import ModifierTrace from './ModifierTrace.svelte'
   import { formatLabel, typeLabel } from '../presentation/labels'
+  import { editableInteger, normalizeEditableInteger } from '../presentation/editable-number'
 
   export let data: PokemonRuntimeData
   export let learnsets: LearnsetRuntimeData | null = null
@@ -31,6 +32,7 @@
   let stellarBoostUsage: StellarBoostUsageState = 'unknown'
   let attackerIvs = all31()
   let attackerEvs = all0()
+  let attackerEvDrafts: Record<keyof RuntimeStatBlock, string> = { hp: '0', atk: '0', def: '0', spa: '0', spd: '0', spe: '0' }
   let defenderSpeciesId = 'species:0035'
   let defenderFormId = 'form:0035:base'
   let defenderLevel = 50
@@ -39,6 +41,7 @@
   let defenderTeraTypeId: TeraSelection = ''
   let defenderIvs = all31()
   let defenderEvs = all0()
+  let defenderEvDrafts: Record<keyof RuntimeStatBlock, string> = { hp: '0', atk: '0', def: '0', spa: '0', spd: '0', spe: '0' }
   let moveQuery = ''
   let learnsetOnly = false
   let selectedMoveId = 'move:0053'
@@ -77,6 +80,13 @@
     defenderFormId = species?.defaultFormId ?? ''
     defenderAbilityId = null
   }
+
+  function maximumEvFor(evs: RuntimeStatBlock, stat: keyof RuntimeStatBlock): number { return Math.min(252, 510 - statIds.filter(id => id !== stat).reduce((total, id) => total + evs[id], 0)) }
+  function editAttackerEv(stat: keyof RuntimeStatBlock, raw: string): void { attackerEvDrafts = { ...attackerEvDrafts, [stat]: raw }; const value = editableInteger(raw, 0, maximumEvFor(attackerEvs, stat)); if (value !== null) attackerEvs = { ...attackerEvs, [stat]: value } }
+  function editDefenderEv(stat: keyof RuntimeStatBlock, raw: string): void { defenderEvDrafts = { ...defenderEvDrafts, [stat]: raw }; const value = editableInteger(raw, 0, maximumEvFor(defenderEvs, stat)); if (value !== null) defenderEvs = { ...defenderEvs, [stat]: value } }
+  function commitAttackerEv(stat: keyof RuntimeStatBlock): void { const value = normalizeEditableInteger(attackerEvDrafts[stat], 0, maximumEvFor(attackerEvs, stat), attackerEvs[stat]); attackerEvs = { ...attackerEvs, [stat]: value }; attackerEvDrafts = { ...attackerEvDrafts, [stat]: String(value) } }
+  function commitDefenderEv(stat: keyof RuntimeStatBlock): void { const value = normalizeEditableInteger(defenderEvDrafts[stat], 0, maximumEvFor(defenderEvs, stat), defenderEvs[stat]); defenderEvs = { ...defenderEvs, [stat]: value }; defenderEvDrafts = { ...defenderEvDrafts, [stat]: String(value) } }
+  function commitOnEnter(event: KeyboardEvent, commit: () => void): void { if (event.key === 'Enter') { event.preventDefault(); commit() } }
 
   function selectMove(moveId: string): void {
     selectedMoveId = moveId
@@ -254,7 +264,7 @@
         </label>
       </div>
       <table><thead><tr><th>能力</th><th>IV</th><th>EV</th><th>结果</th></tr></thead><tbody>
-        {#each statIds as stat}<tr><th scope="row">{statLabels[stat]}</th><td><input aria-label={`攻击方 ${stat} IV`} type="number" min="0" max="31" bind:value={attackerIvs[stat]} /></td><td><input aria-label={`攻击方 ${stat} EV`} type="number" min="0" max="252" bind:value={attackerEvs[stat]} /></td><td>{attackerStatResult.stats?.[stat] ?? '—'}</td></tr>{/each}
+        {#each statIds as stat}<tr><th scope="row">{statLabels[stat]}</th><td><input aria-label={`攻击方 ${stat} IV`} type="number" min="0" max="31" bind:value={attackerIvs[stat]} /></td><td><input aria-label={`攻击方 ${stat} EV`} type="number" min="0" max={maximumEvFor(attackerEvs, stat)} value={attackerEvDrafts[stat]} oninput={(event) => editAttackerEv(stat, (event.currentTarget as HTMLInputElement).value)} onblur={() => commitAttackerEv(stat)} onkeydown={(event) => commitOnEnter(event, () => commitAttackerEv(stat))} /></td><td>{attackerStatResult.stats?.[stat] ?? '—'}</td></tr>{/each}
       </tbody></table>
       <p class:ev-over={totalEvs(attackerEvs) > 510}>EV：{totalEvs(attackerEvs)} / 510</p>
       {#if attackerStatResult.error}<p class="status error">{attackerStatResult.error}</p>{/if}
@@ -284,7 +294,7 @@
         </label>
       </div>
       <table><thead><tr><th>能力</th><th>IV</th><th>EV</th><th>结果</th></tr></thead><tbody>
-        {#each statIds as stat}<tr><th scope="row">{statLabels[stat]}</th><td><input aria-label={`防守方 ${stat} IV`} type="number" min="0" max="31" bind:value={defenderIvs[stat]} /></td><td><input aria-label={`防守方 ${stat} EV`} type="number" min="0" max="252" bind:value={defenderEvs[stat]} /></td><td>{defenderStatResult.stats?.[stat] ?? '—'}</td></tr>{/each}
+        {#each statIds as stat}<tr><th scope="row">{statLabels[stat]}</th><td><input aria-label={`防守方 ${stat} IV`} type="number" min="0" max="31" bind:value={defenderIvs[stat]} /></td><td><input aria-label={`防守方 ${stat} EV`} type="number" min="0" max={maximumEvFor(defenderEvs, stat)} value={defenderEvDrafts[stat]} oninput={(event) => editDefenderEv(stat, (event.currentTarget as HTMLInputElement).value)} onblur={() => commitDefenderEv(stat)} onkeydown={(event) => commitOnEnter(event, () => commitDefenderEv(stat))} /></td><td>{defenderStatResult.stats?.[stat] ?? '—'}</td></tr>{/each}
       </tbody></table>
       <p class:ev-over={totalEvs(defenderEvs) > 510}>EV：{totalEvs(defenderEvs)} / 510</p>
       {#if defenderStatResult.error}<p class="status error">{defenderStatResult.error}</p>{/if}
