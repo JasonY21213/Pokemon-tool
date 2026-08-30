@@ -44,6 +44,10 @@ button:disabled { cursor: not-allowed; opacity: 0.6; }
 .results button em { grid-column: 1 / -1; color: #475569; font-size: 0.82rem; font-style: normal; }
 .results span, .dex { color: #64748b; font-variant-numeric: tabular-nums; }
 small { color: #64748b; font-weight: 400; }
+.bilingual-label { display: inline-flex; align-items: baseline; gap: 0.35rem; min-width: 0; }
+.bilingual-label:not(.bilingual-inline) { display: grid; gap: 0.08rem; }
+.bilingual-primary { color: #1f2937; font-weight: 650; }
+.bilingual-secondary { color: #64748b; font-size: 0.82em; font-weight: 400; overflow-wrap: anywhere; }
 .detail { display: grid; gap: 1rem; padding: 1.25rem; border: 1px solid #cbd5e1; border-radius: 0.6rem; background: #fff; }
 h2, h3 { margin: 0; }
 .forms, .stats { display: flex; flex-wrap: wrap; gap: 0.5rem; }

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { calculateStats, totalEvs } from '../runtime-data/stat-calculator'
   import type { PokemonRuntimeData, RuntimeForm, RuntimeSpecies, RuntimeStatBlock } from '../runtime-data/types'
+  import { formatLabel, natureLabel, statLabel } from '../presentation/labels'
 
   export let data: PokemonRuntimeData
   export let selectedSpecies: RuntimeSpecies | null
@@ -27,20 +28,20 @@
 </script>
 
 <section class="stat-calculator">
-  <h2>种族值计算器</h2>
+  <h2>能力值计算 <small>Stat Calculator</small></h2>
   {#if !selectedSpecies || !selectedForm}
     <p class="status">请先在“宝可梦查询”中选择一个形态。</p>
   {:else}
     <p>使用 {selectedSpecies.zhName} 的当前形态种族值。努力值单项最多 252，总和最多 510。</p>
     <div class="stat-controls">
       <label>等级 <input type="number" min="1" max="100" step="1" bind:value={level} /></label>
-      <label>性格<select bind:value={natureId}>{#each data.natures as nature (nature.natureId)}<option value={nature.natureId}>{nature.canonicalName}{nature.neutral ? '（中性）' : `（+${labels[nature.plusStat!]} / -${labels[nature.minusStat!]}）`}</option>{/each}</select></label>
+      <label>性格 <small>Nature</small><select bind:value={natureId}>{#each data.natures as nature (nature.natureId)}<option value={nature.natureId}>{formatLabel(natureLabel(nature.natureId, nature.canonicalName))}{nature.neutral ? '（中性）' : `（+${formatLabel(statLabel(nature.plusStat!))} / -${formatLabel(statLabel(nature.minusStat!))}）`}</option>{/each}</select></label>
       <button type="button" onclick={setAllIvs}>全部 IV 设为 31</button><button type="button" onclick={clearEvs}>清空 EV</button>
     </div>
     <p class:ev-over={evTotal > 510} class="ev-total">当前 EV 总和：{evTotal} / 510</p>
     {#if result.error}<p class="status error" role="alert">{result.error}</p>
-    {:else if result.stats}<div class="stat-table-wrap"><table><thead><tr><th>属性</th><th>Base</th><th>IV</th><th>EV</th><th>结果</th></tr></thead><tbody>
-      {#each ids as stat}<tr><th scope="row">{labels[stat]}</th><td>{selectedForm.baseStats[stat]}</td><td><input aria-label={`${labels[stat]} IV`} type="number" min="0" max="31" step="1" bind:value={ivs[stat]} /></td><td><input aria-label={`${labels[stat]} EV`} type="number" min="0" max="252" step="1" bind:value={evs[stat]} /></td><td><strong>{result.stats[stat]}</strong></td></tr>{/each}
+    {:else if result.stats}<div class="stat-table-wrap"><table><thead><tr><th>属性 / Stat</th><th>基础 / Base</th><th>个体值 / IV</th><th>努力值 / EV</th><th>最终数值 / Final</th></tr></thead><tbody>
+      {#each ids as stat}<tr><th scope="row">{formatLabel(statLabel(stat))}</th><td>{selectedForm.baseStats[stat]}</td><td><input aria-label={`${labels[stat]} IV`} type="number" min="0" max="31" step="1" bind:value={ivs[stat]} /></td><td><input aria-label={`${labels[stat]} EV`} type="number" min="0" max="252" step="1" bind:value={evs[stat]} /></td><td><strong>{result.stats[stat]}</strong></td></tr>{/each}
     </tbody></table></div>{/if}
   {/if}
 </section>

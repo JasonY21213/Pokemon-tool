@@ -7,15 +7,17 @@
   import StatCalculator from './lib/components/StatCalculator.svelte'
   import TypeMatchupCalculator from './lib/components/TypeMatchupCalculator.svelte'
   import TeamBuilder from './lib/components/TeamBuilder.svelte'
+  import BilingualLabel from './lib/components/BilingualLabel.svelte'
+  import { appLabels } from './lib/presentation/labels'
   import { loadPokemonRuntimeData } from './lib/runtime-data/loader'
   import { TEAM_STORAGE_KEY, clearStoredTeamState, encodeShareTeamState, resolveStartupTeamState, saveStoredTeamState } from './lib/runtime-data/team-persistence'
   import type { TeamMember } from './lib/runtime-data/team-builder'
   import type { PokemonRuntimeData, RuntimeForm, RuntimeSpecies } from './lib/runtime-data/types'
 
   type Section = 'pokemon' | 'team' | 'moves' | 'type' | 'stats' | 'experience' | 'damage'
-  const sections: Array<{ id: Section; label: string }> = [
-    { id: 'pokemon', label: '宝可梦查询' }, { id: 'team', label: '队伍构建' }, { id: 'moves', label: '招式查询' }, { id: 'type', label: '属性相性' },
-    { id: 'stats', label: '种族值' }, { id: 'experience', label: '经验等级' }, { id: 'damage', label: '伤害计算' },
+  const sections: Array<{ id: Section; label: typeof appLabels[keyof typeof appLabels] }> = [
+    { id: 'pokemon', label: appLabels.pokemon }, { id: 'team', label: appLabels.team }, { id: 'moves', label: appLabels.moves }, { id: 'type', label: appLabels.type },
+    { id: 'stats', label: appLabels.stats }, { id: 'experience', label: appLabels.experience }, { id: 'damage', label: appLabels.damage },
   ]
   let data: PokemonRuntimeData | null = null
   let error = ''
@@ -62,7 +64,7 @@
   {#if error}<p class="status error" role="alert">{error}</p>
   {:else if !data}<p class="status" role="status" aria-live="polite">正在加载宝可梦数据…</p>
   {:else}
-    <nav class="app-nav" aria-label="工具导航">{#each sections as section (section.id)}<button class:active={activeSection === section.id} aria-current={activeSection === section.id ? 'page' : undefined} type="button" onclick={() => activeSection = section.id}>{section.label}</button>{/each}</nav>
+    <nav class="app-nav" aria-label="工具导航">{#each sections as section (section.id)}<button class:active={activeSection === section.id} aria-current={activeSection === section.id ? 'page' : undefined} type="button" onclick={() => activeSection = section.id}><BilingualLabel label={section.label} /></button>{/each}</nav>
     {#if activeSection === 'pokemon'}<PokemonQuery {data} bind:selectedSpecies bind:selectedForm />
     {:else if activeSection === 'team'}<TeamBuilder {data} {selectedForm} members={teamMembers} onMembersChange={setTeamMembers} onClearSavedTeam={clearSavedTeam} onCopyShareLink={copyShareLink} {shareStatus} />
     {:else if activeSection === 'moves'}<MoveQuery {data} />

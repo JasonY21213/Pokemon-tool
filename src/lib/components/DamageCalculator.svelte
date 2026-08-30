@@ -7,6 +7,7 @@
   import { INACTIVE_TERASTALLIZATION, STANDARD_TERA_TYPE_IDS, type ResolvedStab, type StellarBoostUsageState, type TeraSelection, type TerastallizationState } from '../runtime-data/terastallization'
   import type { PokemonRuntimeData, RuntimeAbility, RuntimeAbilityMechanicsEffect, RuntimeForm, RuntimeItem, RuntimeItemMechanicsEffect, RuntimeMove, RuntimeMoveDamageUnsupportedReason, RuntimeSpecies, RuntimeStatBlock } from '../runtime-data/types'
   import ModifierTrace from './ModifierTrace.svelte'
+  import { formatLabel, typeLabel } from '../presentation/labels'
 
   export let data: PokemonRuntimeData
 
@@ -139,7 +140,8 @@
   }
 
   function typeName(typeId: string): string {
-    return data.types.find(type => type.typeId === typeId)?.canonicalName ?? typeId
+    const type = data.types.find(candidate => candidate.typeId === typeId)
+    return formatLabel(typeLabel(typeId, type?.canonicalName ?? typeId))
   }
 
   function categoryName(move: RuntimeMove): string {

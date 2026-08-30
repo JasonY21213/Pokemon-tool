@@ -1,6 +1,7 @@
 <script lang="ts">
   import { expProgress, levelToTotalExp, resolveEffectiveGrowthRate } from '../runtime-data/experience-calculator'
   import type { PokemonRuntimeData, RuntimeForm, RuntimeSpecies } from '../runtime-data/types'
+  import { formatLabel, growthRateLabel } from '../presentation/labels'
   export let data: PokemonRuntimeData
   export let selectedSpecies: RuntimeSpecies | null
   export let selectedForm: RuntimeForm | null
@@ -19,10 +20,10 @@
 </script>
 
 <section class="experience-calculator calculator">
-  <h2>经验与等级计算器</h2>
+  <h2>经验与等级 <small>Experience</small></h2>
   {#if !selectedSpecies || !selectedForm}<p class="status">请先在“宝可梦查询”中选择一个形态。</p>
   {:else if result.growthRate}
-    <p>当前形态成长曲线：{result.growthRate.canonicalName}。达到 Lv.100 共需 {result.growthRate.level100Total.toLocaleString()} EXP。</p>
+    <p>当前形态成长曲线：{formatLabel(growthRateLabel(result.growthRate.growthRateId, result.growthRate.canonicalName))}。达到 Lv.100 共需 {result.growthRate.level100Total.toLocaleString()} EXP。</p>
     <div class="experience-modes" aria-label="计算模式"><button class:active={mode === 'total-exp'} type="button" onclick={() => mode = 'total-exp'}>总 EXP → 等级</button><button class:active={mode === 'level'} type="button" onclick={() => mode = 'level'}>等级 → 总 EXP</button></div>
     {#if mode === 'total-exp'}
       <label class="experience-input">总经验值<input type="number" min="0" step="1" bind:value={totalExperience} /></label>
