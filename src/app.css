@@ -36,14 +36,23 @@ header, .search, .detail, .results, .calculator, .stat-calculator, .pokemon-quer
 input { padding: 0.7rem; border: 1px solid #94a3b8; border-radius: 0.4rem; font: inherit; }
 button { cursor: pointer; border: 1px solid #cbd5e1; border-radius: 0.4rem; background: #fff; padding: 0.55rem 0.7rem; color: inherit; font: inherit; }
 button:hover, button.active { border-color: #2563eb; background: #eff6ff; }
-.results { display: grid; gap: 0.4rem; }
-.results button { text-align: left; }
+.results { display: grid; gap: 0.4rem; max-height: 22rem; overflow-y: auto; }
+.results button { display: grid; grid-template-columns: auto 1fr auto; gap: 0.15rem 0.55rem; align-items: baseline; text-align: left; }
+.results button span { grid-column: 1 / -1; font-size: 0.8rem; }
+.results button em { grid-column: 1 / -1; color: #475569; font-size: 0.82rem; font-style: normal; }
 .results span, .dex { color: #64748b; font-variant-numeric: tabular-nums; }
 small { color: #64748b; font-weight: 400; }
 .detail { display: grid; gap: 1rem; padding: 1.25rem; border: 1px solid #cbd5e1; border-radius: 0.6rem; background: #fff; }
 h2, h3 { margin: 0; }
 .forms, .stats { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .stats span { padding: 0.45rem 0.6rem; border-radius: 0.35rem; background: #f1f5f9; }
+.stats .bst { background: #dbeafe; }
+.detail > section { display: grid; gap: 0.65rem; }
+.detail-identity { display: grid; gap: 0.3rem; }
+.detail-identity h2 { margin: 0; }
+.tag-list { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.tag-list span { padding: 0.3rem 0.55rem; border-radius: 999px; background: #e0f2fe; color: #0c4a6e; font-size: 0.9rem; font-weight: 600; }
+.learnset-entry { padding: 0.8rem; border-radius: 0.45rem; background: #f1f5f9; }
 ul { margin: 0; padding-left: 1.25rem; }
 li + li { margin-top: 0.45rem; }
 .status { padding: 1rem; border-radius: 0.5rem; background: #e2e8f0; }
@@ -122,4 +131,4 @@ h4 { margin: 0; font-size: 1rem; }
 .damage-summary { display: flex; flex-wrap: wrap; gap: 1rem; }
 .damage-modifiers { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .damage-modifiers span { padding: 0.45rem 0.6rem; border-radius: 0.35rem; background: #fff; }
-@media (max-width: 36rem) { main { padding: 1.5rem 0; } .app-nav button { flex: 1 1 8rem; } .damage-sides { grid-template-columns: 1fr; } }
+@media (max-width: 36rem) { main { padding: 1.5rem 0; } .app-nav button { flex: 1 1 8rem; } .damage-sides { grid-template-columns: 1fr; } .results button { grid-template-columns: 1fr; } .results button small { overflow-wrap: anywhere; } .forms button { flex: 1 1 8rem; } }
