@@ -2,18 +2,30 @@ import { resolveEffectiveLearnsetMoveIds } from './learnsets.ts'
 import { calculateDefensiveMatchup } from './type-matchup.ts'
 import type { CoreRuntimeData, LearnsetRuntimeData, RuntimeForm, RuntimeMove, RuntimeType } from './types.js'
 
-export type TeamMember = { memberId: string; formId: string; abilityId: string | null; moveIds: string[] }
+export type TeamMember = { memberId: string; formId: string; abilityId: string | null; natureId: string | null; itemId: string | null; moveIds: string[] }
 export type DefensiveTypeSummary = { attackingTypeId: string; weak: number; fourTimesWeak: number; twoTimesWeak: number; neutral: number; resistOrImmune: number }
 export type OffensiveTypeCoverage = { defenderTypeId: string; moveTypeIds: string[] }
 
 export function addTeamMember(members: TeamMember[], member: TeamMember, formIds: Set<string>): TeamMember[] {
   if (!formIds.has(member.formId) || members.length >= 6) return members
-  return [...members, { ...member, abilityId: null, moveIds: [] }]
+  return [...members, { ...member, abilityId: null, natureId: null, itemId: null, moveIds: [] }]
+}
+
+export function addPreparedTeamMember(members: TeamMember[], member: TeamMember, form: RuntimeForm, allowedMoveIds: Set<string> | null): TeamMember[] {
+  if (members.length >= 6 || member.formId !== form.formId) return members
+  const abilityId = member.abilityId !== null && form.abilities.some(slot => slot.abilityId === member.abilityId) ? member.abilityId : null
+  const uniqueMoveIds = [...new Set(member.moveIds)].slice(0, 4)
+  return [...members, { ...member, abilityId, moveIds: allowedMoveIds === null ? uniqueMoveIds : uniqueMoveIds.filter(id => allowedMoveIds.has(id)) }]
 }
 
 export function updateMemberAbility(member: TeamMember, abilityId: string | null, form: RuntimeForm): TeamMember {
   if (abilityId !== null && !form.abilities.some(slot => slot.abilityId === abilityId)) throw new Error(`TEAM_MEMBER_ABILITY_NOT_AVAILABLE: ${member.memberId}:${abilityId}`)
   return { ...member, abilityId }
+}
+
+export function updateMemberNature(member: TeamMember, natureId: string | null, natureIds: Set<string>): TeamMember {
+  if (natureId !== null && !natureIds.has(natureId)) throw new Error(`TEAM_MEMBER_NATURE_MISSING: ${member.memberId}:${natureId}`)
+  return { ...member, natureId }
 }
 
 export function updateMemberForm(member: TeamMember, form: RuntimeForm): TeamMember {
@@ -37,9 +49,11 @@ export function validateTeamMembers(data: CoreRuntimeData, members: TeamMember[]
   if (members.length > 6 || new Set(members.map(member => member.memberId)).size !== members.length) throw new Error('TEAM_MEMBER_LIMIT_OR_ID')
   const formMap = formsById(data)
   const moveIds = new Set(data.moves.map(move => move.moveId))
+  const natureIds = new Set(data.natures.map(nature => nature.natureId))
+  const itemIds = new Set(data.items.map(item => item.itemId))
   for (const member of members) {
     const form = formMap.get(member.formId)
-    if (!form || member.moveIds.length > 4 || new Set(member.moveIds).size !== member.moveIds.length || member.moveIds.some(id => !moveIds.has(id)) || (member.abilityId !== null && !form.abilities.some(slot => slot.abilityId === member.abilityId))) throw new Error(`TEAM_MEMBER_INVALID: ${member.memberId}`)
+    if (!form || member.moveIds.length > 4 || new Set(member.moveIds).size !== member.moveIds.length || member.moveIds.some(id => !moveIds.has(id)) || (member.abilityId !== null && !form.abilities.some(slot => slot.abilityId === member.abilityId)) || (member.natureId !== null && !natureIds.has(member.natureId)) || (member.itemId !== null && !itemIds.has(member.itemId))) throw new Error(`TEAM_MEMBER_INVALID: ${member.memberId}`)
   }
 }
 

@@ -6,9 +6,9 @@ import { analyzeAbilityAdjustedDefenses, analyzeDefensiveTypes, analyzeOffensive
 import { formsById, type TeamMember } from '../../../src/lib/runtime-data/team-builder.ts'
 
 const dataPromise = buildFullDryRun().then(buildRuntimeData)
-const charizard: TeamMember = { memberId: 'charizard', formId: 'form:0006:base', abilityId: null, moveIds: ['move:0053'] }
-const megaCharizardX: TeamMember = { memberId: 'mega-x', formId: 'form:0006:mega-x', abilityId: null, moveIds: [] }
-const gastrodon: TeamMember = { memberId: 'gastrodon', formId: 'form:0423:base', abilityId: null, moveIds: [] }
+const charizard: TeamMember = { memberId: 'charizard', formId: 'form:0006:base', abilityId: null, natureId: null, itemId: null, moveIds: ['move:0053'] }
+const megaCharizardX: TeamMember = { memberId: 'mega-x', formId: 'form:0006:mega-x', abilityId: null, natureId: null, itemId: null, moveIds: [] }
+const gastrodon: TeamMember = { memberId: 'gastrodon', formId: 'form:0423:base', abilityId: null, natureId: null, itemId: null, moveIds: [] }
 
 test('Team Analysis uses actual Forms and exposes repeat weaknesses and maximum multipliers', async () => {
   const data = await dataPromise
@@ -54,7 +54,7 @@ test('Team Analysis selected-Move coverage is deterministic and reports unavaila
 test('Team Analysis adds only explicitly selected supported defensive Ability effects', async () => {
   const data = await dataPromise
   const formMap = formsById(data)
-  const rotom: TeamMember = { memberId: 'rotom', formId: 'form:0479:base', abilityId: 'ability:0026', moveIds: [] }
+  const rotom: TeamMember = { memberId: 'rotom', formId: 'form:0479:base', abilityId: 'ability:0026', natureId: null, itemId: null, moveIds: [] }
   const selected = analyzeAbilityAdjustedDefenses([rotom], formMap, data.abilities, data.types)
   assert.deepEqual(selected.find(item => item.attackingTypeId === 'type:ground'), {
     attackingTypeId: 'type:ground',

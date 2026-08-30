@@ -3,6 +3,7 @@ import type { TeamMember } from './team-builder.ts'
 import type { CoreRuntimeData, LearnsetRuntimeData } from './types.js'
 
 export const TEAM_STORAGE_KEY = 'pokemon-tool.team-state'
+// Version 1 accepts additive optional fields. Older clients ignore natureId/itemId and will drop them if they re-save the team (forward-lossy compatibility).
 export const TEAM_STATE_VERSION = 1
 
 export type PersistedTeamState = {
@@ -15,12 +16,14 @@ export type StartupTeamState = {
   source: 'url' | 'storage' | 'empty'
 }
 
-type PersistenceData = Pick<CoreRuntimeData, 'forms' | 'moves'>
+type PersistenceData = Pick<CoreRuntimeData, 'forms' | 'moves' | 'natures' | 'items'>
 type StorageLike = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>
 
 const formIdPattern = /^form:(?:\d{4}|[a-z0-9-]+):[a-z0-9-]+$/
 const moveIdPattern = /^move:(?:\d{4}|[a-z0-9-]+)$/
 const abilityIdPattern = /^ability:(?:\d{4}|[a-z0-9-]+)$/
+const natureIdPattern = /^nature:[a-z0-9-]+$/
+const itemIdPattern = /^item:(?:\d{4}|[a-z0-9-]+)$/
 const memberIdPattern = /^team-member-[a-z0-9-]{1,32}$/
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -48,6 +51,8 @@ export function normalizeTeamState(value: unknown, data: PersistenceData): Persi
   if (!state) return null
   const forms = new Map(data.forms.map(form => [form.formId, form]))
   const moveIds = new Set(data.moves.map(move => move.moveId))
+  const natureIds = new Set(data.natures.map(nature => nature.natureId))
+  const itemIds = new Set(data.items.map(item => item.itemId))
   const usedMemberIds = new Set<string>()
   const team: TeamMember[] = []
   for (const [index, rawMember] of state.team.entries()) {
@@ -57,8 +62,10 @@ export function normalizeTeamState(value: unknown, data: PersistenceData): Persi
     const memberId = isStableId(rawMember.memberId, memberIdPattern) && !usedMemberIds.has(rawMember.memberId) ? rawMember.memberId : nextMemberId(index, usedMemberIds)
     usedMemberIds.add(memberId)
     const abilityId = isStableId(rawMember.abilityId, abilityIdPattern) && form.abilities.some(slot => slot.abilityId === rawMember.abilityId) ? rawMember.abilityId : null
+    const natureId = isStableId(rawMember.natureId, natureIdPattern) && natureIds.has(rawMember.natureId) ? rawMember.natureId : null
+    const itemId = isStableId(rawMember.itemId, itemIdPattern) && itemIds.has(rawMember.itemId) ? rawMember.itemId : null
     const moveIdsForMember = Array.isArray(rawMember.moveIds) ? rawMember.moveIds.filter((moveId): moveId is string => isStableId(moveId, moveIdPattern) && moveIds.has(moveId)) : []
-    team.push({ memberId, formId: form.formId, abilityId, moveIds: [...new Set(moveIdsForMember)].slice(0, 4) })
+    team.push({ memberId, formId: form.formId, abilityId, natureId, itemId, moveIds: [...new Set(moveIdsForMember)].slice(0, 4) })
   }
   return { version: TEAM_STATE_VERSION, team }
 }
@@ -71,7 +78,7 @@ export function revalidateTeamLearnsets(members: TeamMember[], learnsets: Learns
 }
 
 export function serializeTeamState(members: TeamMember[]): string {
-  return JSON.stringify({ version: TEAM_STATE_VERSION, team: members.map(member => ({ memberId: member.memberId, formId: member.formId, abilityId: member.abilityId, moveIds: [...member.moveIds] })) satisfies TeamMember[] })
+  return JSON.stringify({ version: TEAM_STATE_VERSION, team: members.map(member => ({ memberId: member.memberId, formId: member.formId, abilityId: member.abilityId, natureId: member.natureId, itemId: member.itemId, moveIds: [...member.moveIds] })) satisfies TeamMember[] })
 }
 
 export function parseSerializedTeamState(serialized: string, data: PersistenceData): PersistedTeamState | null {
