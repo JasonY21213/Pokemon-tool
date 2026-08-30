@@ -10,8 +10,9 @@
   import BilingualLabel from './lib/components/BilingualLabel.svelte'
   import { appLabels } from './lib/presentation/labels'
   import { loadCoreRuntimeData, loadLearnsets } from './lib/runtime-data/loader'
+  import { resolveEffectiveLearnsetMoveIds } from './lib/runtime-data/learnsets'
   import { TEAM_STORAGE_KEY, clearStoredTeamState, encodeShareTeamState, revalidateTeamLearnsets, resolveStartupTeamState, saveStoredTeamState } from './lib/runtime-data/team-persistence'
-  import type { TeamMember } from './lib/runtime-data/team-builder'
+  import { addPreparedTeamMember, type TeamMember } from './lib/runtime-data/team-builder'
   import type { CoreRuntimeData, LearnsetRuntimeData, RuntimeForm, RuntimeSpecies } from './lib/runtime-data/types'
 
   type Section = 'pokemon' | 'team' | 'moves' | 'type' | 'stats' | 'experience' | 'damage'
@@ -38,6 +39,12 @@
     teamMembers = []
     shareStatus = clearStoredTeamState(window.localStorage) ? '已清除本浏览器保存的队伍。' : '无法清除浏览器保存内容；当前队伍已清空。'
   }
+  function addQuerySelection(selection: { form: RuntimeForm; abilityId: string | null; moveIds: string[] }): void {
+    const allowed = learnsets ? new Set(resolveEffectiveLearnsetMoveIds(learnsets, selection.form.formId)) : null
+    const member: TeamMember = { memberId: nextTeamMemberId(), formId: selection.form.formId, abilityId: selection.abilityId, natureId: null, itemId: null, moveIds: selection.moveIds }
+    setTeamMembers(addPreparedTeamMember(teamMembers, member, selection.form, allowed))
+  }
+  function nextTeamMemberId(): string { let number = 1; while (teamMembers.some(member => member.memberId === `team-member-${number}`)) number += 1; return `team-member-${number}` }
   async function requestLearnsets(): Promise<void> {
     if (!data || learnsets || learnsetsLoading) return
     learnsetsLoading = true
@@ -78,13 +85,17 @@
   })
 </script>
 
+<header class="app-header">
+  <div class="app-header-inner">
+    <h1>Pokémon Tool</h1>
+    {#if data}<nav class="app-nav" aria-label="工具导航">{#each sections as section (section.id)}<button class:active={activeSection === section.id} aria-current={activeSection === section.id ? 'page' : undefined} type="button" onclick={() => activeSection = section.id}><BilingualLabel label={section.label} /></button>{/each}</nav>{/if}
+  </div>
+</header>
 <main>
-  <header><h1>Pokémon Tool</h1><p>离线宝可梦资料查询与基础计算工具。</p></header>
   {#if error}<p class="status error" role="alert">{error}</p>
   {:else if !data}<p class="status" role="status" aria-live="polite">正在加载宝可梦数据…</p>
   {:else}
-    <nav class="app-nav" aria-label="工具导航">{#each sections as section (section.id)}<button class:active={activeSection === section.id} aria-current={activeSection === section.id ? 'page' : undefined} type="button" onclick={() => activeSection = section.id}><BilingualLabel label={section.label} /></button>{/each}</nav>
-    {#if activeSection === 'pokemon'}<PokemonQuery {data} {learnsets} {learnsetsLoading} {learnsetsError} onRequestLearnsets={requestLearnsets} bind:selectedSpecies bind:selectedForm />
+    {#if activeSection === 'pokemon'}<PokemonQuery {data} {learnsets} {learnsetsLoading} {learnsetsError} onRequestLearnsets={requestLearnsets} teamSize={teamMembers.length} onAddToTeam={addQuerySelection} bind:selectedSpecies bind:selectedForm />
     {:else if activeSection === 'team'}<TeamBuilder {data} {learnsets} {learnsetsLoading} {learnsetsError} onRequestLearnsets={requestLearnsets} {selectedForm} members={teamMembers} onMembersChange={setTeamMembers} onClearSavedTeam={clearSavedTeam} onCopyShareLink={copyShareLink} {shareStatus} />
     {:else if activeSection === 'moves'}<MoveQuery {data} />
     {:else if activeSection === 'type'}<TypeMatchupCalculator {data} />

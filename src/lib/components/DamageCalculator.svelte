@@ -7,7 +7,9 @@
   import { INACTIVE_TERASTALLIZATION, STANDARD_TERA_TYPE_IDS, type ResolvedStab, type StellarBoostUsageState, type TeraSelection, type TerastallizationState } from '../runtime-data/terastallization'
   import type { LearnsetRuntimeData, PokemonRuntimeData, RuntimeAbility, RuntimeAbilityMechanicsEffect, RuntimeForm, RuntimeItem, RuntimeItemMechanicsEffect, RuntimeMove, RuntimeMoveDamageUnsupportedReason, RuntimeSpecies, RuntimeStatBlock } from '../runtime-data/types'
   import ModifierTrace from './ModifierTrace.svelte'
-  import { formatLabel, typeLabel } from '../presentation/labels'
+  import SearchableSelect from './SearchableSelect.svelte'
+  import { natureLabel, statLabel, typeLabel } from '../presentation/labels'
+  import { editableInteger, normalizeEditableInteger } from '../presentation/editable-number'
 
   export let data: PokemonRuntimeData
   export let learnsets: LearnsetRuntimeData | null = null
@@ -20,6 +22,14 @@
   const all31 = (): RuntimeStatBlock => ({ hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 })
   const all0 = (): RuntimeStatBlock => ({ hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 })
   const stageOptions: BattleStatStage[] = [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6]
+  const supportedItemNames: Record<string, string> = {
+    'item:0220': '讲究头带',
+    'item:0243': '神秘水滴',
+    'item:0249': '木炭',
+    'item:0268': '达人带',
+    'item:0270': '生命宝珠',
+    'item:0297': '讲究眼镜',
+  }
 
   let attackerSpeciesId = 'species:0006'
   let attackerFormId = 'form:0006:base'
@@ -31,6 +41,7 @@
   let stellarBoostUsage: StellarBoostUsageState = 'unknown'
   let attackerIvs = all31()
   let attackerEvs = all0()
+  let attackerEvDrafts: Record<keyof RuntimeStatBlock, string> = { hp: '0', atk: '0', def: '0', spa: '0', spd: '0', spe: '0' }
   let defenderSpeciesId = 'species:0035'
   let defenderFormId = 'form:0035:base'
   let defenderLevel = 50
@@ -39,6 +50,7 @@
   let defenderTeraTypeId: TeraSelection = ''
   let defenderIvs = all31()
   let defenderEvs = all0()
+  let defenderEvDrafts: Record<keyof RuntimeStatBlock, string> = { hp: '0', atk: '0', def: '0', spa: '0', spd: '0', spe: '0' }
   let moveQuery = ''
   let learnsetOnly = false
   let selectedMoveId = 'move:0053'
@@ -77,6 +89,17 @@
     defenderFormId = species?.defaultFormId ?? ''
     defenderAbilityId = null
   }
+
+  function selectAttackerSpecies(value: string): void { attackerSpeciesId = value; resetAttackerForm() }
+  function selectDefenderSpecies(value: string): void { defenderSpeciesId = value; resetDefenderForm() }
+  function setAttackerTera(value: string): void { attackerTeraTypeId = value as TeraSelection; stellarBoostUsage = 'unknown' }
+  function setDefenderTera(value: string): void { defenderTeraTypeId = value as TeraSelection }
+  function maximumEvFor(evs: RuntimeStatBlock, stat: keyof RuntimeStatBlock): number { return Math.min(252, 510 - statIds.filter(id => id !== stat).reduce((total, id) => total + evs[id], 0)) }
+  function editAttackerEv(stat: keyof RuntimeStatBlock, raw: string): void { attackerEvDrafts = { ...attackerEvDrafts, [stat]: raw }; const value = editableInteger(raw, 0, maximumEvFor(attackerEvs, stat)); if (value !== null) attackerEvs = { ...attackerEvs, [stat]: value } }
+  function editDefenderEv(stat: keyof RuntimeStatBlock, raw: string): void { defenderEvDrafts = { ...defenderEvDrafts, [stat]: raw }; const value = editableInteger(raw, 0, maximumEvFor(defenderEvs, stat)); if (value !== null) defenderEvs = { ...defenderEvs, [stat]: value } }
+  function commitAttackerEv(stat: keyof RuntimeStatBlock): void { const value = normalizeEditableInteger(attackerEvDrafts[stat], 0, maximumEvFor(attackerEvs, stat), attackerEvs[stat]); attackerEvs = { ...attackerEvs, [stat]: value }; attackerEvDrafts = { ...attackerEvDrafts, [stat]: String(value) } }
+  function commitDefenderEv(stat: keyof RuntimeStatBlock): void { const value = normalizeEditableInteger(defenderEvDrafts[stat], 0, maximumEvFor(defenderEvs, stat), defenderEvs[stat]); defenderEvs = { ...defenderEvs, [stat]: value }; defenderEvDrafts = { ...defenderEvDrafts, [stat]: String(value) } }
+  function commitOnEnter(event: KeyboardEvent, commit: () => void): void { if (event.key === 'Enter') { event.preventDefault(); commit() } }
 
   function selectMove(moveId: string): void {
     selectedMoveId = moveId
@@ -149,8 +172,11 @@
 
   function typeName(typeId: string): string {
     const type = data.types.find(candidate => candidate.typeId === typeId)
-    return formatLabel(typeLabel(typeId, type?.canonicalName ?? typeId))
+    return typeLabel(typeId, type?.canonicalName ?? typeId).zh
   }
+
+  function natureEffect(nature: PokemonRuntimeData['natures'][number]): string { return nature.neutral ? '无能力修正' : `${statLabel(nature.plusStat!).zh}+ · ${statLabel(nature.minusStat!).zh}-` }
+  function natureOption(nature: PokemonRuntimeData['natures'][number]): string { return `${natureLabel(nature.natureId, nature.canonicalName).zh}（${natureEffect(nature)}）` }
 
   function categoryName(move: RuntimeMove): string {
     return move.category === 'physical' ? '物理' : move.category === 'special' ? '特殊' : '变化'
@@ -164,10 +190,10 @@
     if (basis === 'original-type') return '原始属性'
     if (basis === 'tera-type') return '太晶属性'
     if (basis === 'same-type-tera') return '同属性太晶'
-    if (basis === 'stellar-original-available') return 'Stellar 原属性增伤可用'
-    if (basis === 'stellar-original-consumed') return 'Stellar 原属性增伤已消耗'
-    if (basis === 'stellar-non-original-available') return 'Stellar 非原属性增伤可用'
-    if (basis === 'stellar-non-original-consumed') return 'Stellar 非原属性增伤已消耗'
+    if (basis === 'stellar-original-available') return '星晶原属性增伤可用'
+    if (basis === 'stellar-original-consumed') return '星晶原属性增伤已消耗'
+    if (basis === 'stellar-non-original-available') return '星晶非原属性增伤可用'
+    if (basis === 'stellar-non-original-consumed') return '星晶非原属性增伤已消耗'
     return '无匹配'
   }
 
@@ -201,6 +227,10 @@
   $: defenderForm = data.forms.find(candidate => candidate.formId === defenderFormId)
   $: attackerAbilityOptions = abilitiesFor(attackerForm)
   $: defenderAbilityOptions = abilitiesFor(defenderForm)
+  $: speciesOptions = data.species.map(species => ({ value: species.speciesId, label: `#${species.nationalDexNumber.toString().padStart(4, '0')} ${species.zhName}` }))
+  $: teraOptions = [{ value: '', label: '未太晶化' }, ...STANDARD_TERA_TYPE_IDS.map(typeId => ({ value: typeId, label: `太晶 ${typeName(typeId)}` })), { value: 'stellar', label: '星晶（保留原防守属性）' }]
+  $: natureOptions = data.natures.map(nature => ({ value: nature.natureId, label: natureOption(nature), keywords: nature.canonicalName }))
+  $: itemOptions = [{ value: '', label: '无持有物' }, ...data.items.filter(item => supportedItemNames[item.itemId]).map(item => ({ value: item.itemId, label: `${supportedItemNames[item.itemId]}（${item.mechanics.status === 'supported' ? '已支持' : '未建模'}）`, keywords: item.canonicalName }))]
   $: attackerConfiguration = resolveCombatant({ speciesId: attackerSpeciesId, formId: attackerFormId, level: attackerLevel, natureId: attackerNatureId, ivs: attackerIvs, evs: attackerEvs, abilityId: attackerAbilityId, teraTypeId: attackerTeraTypeId })
   $: defenderConfiguration = resolveCombatant({ speciesId: defenderSpeciesId, formId: defenderFormId, level: defenderLevel, natureId: defenderNatureId, ivs: defenderIvs, evs: defenderEvs, abilityId: defenderAbilityId, teraTypeId: defenderTeraTypeId })
   $: attackerAbility = attackerConfiguration.value?.ability ?? null
@@ -223,38 +253,34 @@
 
 <section class="damage-calculator">
   <h2>核心伤害计算器</h2>
-  <p>第九世代普通单目标伤害范围，假设招式成功命中。支持普通 18 属性太晶与 Stellar 的可确定直接伤害；Stellar 每属性增伤是否已使用必须由用户明确提供。</p>
+  <p>第九世代普通单目标伤害范围，假设招式成功命中。支持普通 18 属性太晶与星晶的可确定直接伤害；星晶每属性增伤是否已使用必须由用户明确提供。</p>
 
   <div class="damage-sides">
     <section class="damage-side">
       <h3>攻击方</h3>
       <label>宝可梦
-        <select bind:value={attackerSpeciesId} onchange={resetAttackerForm}>
-          {#each data.species as species (species.speciesId)}
-            <option value={species.speciesId}>#{species.nationalDexNumber.toString().padStart(4, '0')} {species.zhName}</option>
-          {/each}
-        </select>
+        <SearchableSelect ariaLabel="攻击方宝可梦" listId="damage-attacker-species" options={speciesOptions} value={attackerSpeciesId} onSelect={selectAttackerSpecies} placeholder="输入名称或图鉴编号" />
       </label>
       <label>形态
         <select bind:value={attackerFormId} onchange={() => { attackerAbilityId = null; if (attackerTeraTypeId === 'stellar') stellarBoostUsage = 'unknown' }}>
           {#each attackerForms as form (form.formId)}<option value={form.formId}>{displayForm(form, attackerSpecies)}</option>{/each}
         </select>
       </label>
-      <label>太晶状态<select aria-label="攻击方太晶状态" bind:value={attackerTeraTypeId} onchange={() => stellarBoostUsage = 'unknown'}><option value="">未太晶化</option>{#each STANDARD_TERA_TYPE_IDS as typeId}<option value={typeId}>太晶 {typeName(typeId)}</option>{/each}<option value="stellar">Stellar（保留原防守属性）</option></select></label>
+      <label>太晶状态<SearchableSelect ariaLabel="攻击方太晶状态" listId="damage-attacker-tera" options={teraOptions} value={attackerTeraTypeId} onSelect={setAttackerTera} placeholder="输入或选择太晶状态" /></label>
       {#if attackerTeraTypeId === 'stellar'}
-        <label>本招式属性的 Stellar 增伤<select aria-label="Stellar 增伤使用状态" bind:value={stellarBoostUsage}><option value="unknown">请选择，不能推测</option><option value="available">尚未使用（本次可用）</option><option value="consumed">已经使用</option></select></label>
-        <p class="status">普通宝可梦每个招式属性仅有一次 Stellar 增伤；太乐巴戈斯 Stellar 形态不会消耗该增伤，但本阶段不自动模拟其形态转换。</p>
+        <label>本招式属性的星晶增伤<select aria-label="星晶增伤使用状态" bind:value={stellarBoostUsage}><option value="unknown">请选择，不能推测</option><option value="available">尚未使用（本次可用）</option><option value="consumed">已经使用</option></select></label>
+        <p class="status">普通宝可梦每个招式属性仅有一次星晶增伤；太乐巴戈斯星晶形态不会消耗该增伤，但本阶段不自动模拟其形态转换。</p>
       {/if}
       <label>特性效果<select aria-label="攻击方特性效果" bind:value={attackerAbilityId}><option value={null}>不启用</option>{#each attackerAbilityOptions as { slot, ability } (ability.abilityId)}<option value={ability.abilityId}>{slot} · {ability.zhName ?? ability.canonicalName}（{ability.mechanics.status === 'supported' ? '支持' : '未建模'}）</option>{/each}</select></label>
-      <label>持有物效果<select aria-label="攻击方持有物效果" bind:value={attackerItemId}><option value={null}>无持有物</option>{#each data.items as item (item.itemId)}<option value={item.itemId}>{item.canonicalName}（{item.mechanics.status === 'supported' ? '支持' : '未建模'}）</option>{/each}</select></label>
+      <label>持有物效果<SearchableSelect ariaLabel="攻击方持有物效果" listId="damage-attacker-item" options={itemOptions} value={attackerItemId ?? ''} onSelect={(value) => attackerItemId = value || null} placeholder="输入或选择持有物" /></label>
       <div class="damage-basic-inputs">
         <label>等级 <input aria-label="攻击方等级" type="number" min="1" max="100" step="1" bind:value={attackerLevel} /></label>
         <label>性格
-          <select aria-label="攻击方性格" bind:value={attackerNatureId}>{#each data.natures as nature (nature.natureId)}<option value={nature.natureId}>{nature.canonicalName}</option>{/each}</select>
+          <SearchableSelect ariaLabel="攻击方性格" listId="damage-attacker-nature" options={natureOptions} value={attackerNatureId} onSelect={(value) => attackerNatureId = value} placeholder="输入或选择性格" />
         </label>
       </div>
       <table><thead><tr><th>能力</th><th>IV</th><th>EV</th><th>结果</th></tr></thead><tbody>
-        {#each statIds as stat}<tr><th scope="row">{statLabels[stat]}</th><td><input aria-label={`攻击方 ${stat} IV`} type="number" min="0" max="31" bind:value={attackerIvs[stat]} /></td><td><input aria-label={`攻击方 ${stat} EV`} type="number" min="0" max="252" bind:value={attackerEvs[stat]} /></td><td>{attackerStatResult.stats?.[stat] ?? '—'}</td></tr>{/each}
+        {#each statIds as stat}<tr><th scope="row">{statLabels[stat]}</th><td><input aria-label={`攻击方 ${stat} IV`} type="number" min="0" max="31" bind:value={attackerIvs[stat]} /></td><td><input aria-label={`攻击方 ${stat} EV`} type="number" min="0" max={maximumEvFor(attackerEvs, stat)} value={attackerEvDrafts[stat]} oninput={(event) => editAttackerEv(stat, (event.currentTarget as HTMLInputElement).value)} onblur={() => commitAttackerEv(stat)} onkeydown={(event) => commitOnEnter(event, () => commitAttackerEv(stat))} /></td><td>{attackerStatResult.stats?.[stat] ?? '—'}</td></tr>{/each}
       </tbody></table>
       <p class:ev-over={totalEvs(attackerEvs) > 510}>EV：{totalEvs(attackerEvs)} / 510</p>
       {#if attackerStatResult.error}<p class="status error">{attackerStatResult.error}</p>{/if}
@@ -264,27 +290,23 @@
     <section class="damage-side">
       <h3>防守方</h3>
       <label>宝可梦
-        <select bind:value={defenderSpeciesId} onchange={resetDefenderForm}>
-          {#each data.species as species (species.speciesId)}
-            <option value={species.speciesId}>#{species.nationalDexNumber.toString().padStart(4, '0')} {species.zhName}</option>
-          {/each}
-        </select>
+        <SearchableSelect ariaLabel="防守方宝可梦" listId="damage-defender-species" options={speciesOptions} value={defenderSpeciesId} onSelect={selectDefenderSpecies} placeholder="输入名称或图鉴编号" />
       </label>
       <label>形态
         <select bind:value={defenderFormId} onchange={() => defenderAbilityId = null}>
           {#each defenderForms as form (form.formId)}<option value={form.formId}>{displayForm(form, defenderSpecies)}</option>{/each}
         </select>
       </label>
-      <label>太晶状态<select aria-label="防守方太晶状态" bind:value={defenderTeraTypeId}><option value="">未太晶化</option>{#each STANDARD_TERA_TYPE_IDS as typeId}<option value={typeId}>太晶 {typeName(typeId)}</option>{/each}<option value="stellar">Stellar（保留原防守属性）</option></select></label>
+      <label>太晶状态<SearchableSelect ariaLabel="防守方太晶状态" listId="damage-defender-tera" options={teraOptions} value={defenderTeraTypeId} onSelect={setDefenderTera} placeholder="输入或选择太晶状态" /></label>
       <label>特性效果<select aria-label="防守方特性效果" bind:value={defenderAbilityId}><option value={null}>不启用</option>{#each defenderAbilityOptions as { slot, ability } (ability.abilityId)}<option value={ability.abilityId}>{slot} · {ability.zhName ?? ability.canonicalName}（{ability.mechanics.status === 'supported' ? '支持' : '未建模'}）</option>{/each}</select></label>
       <div class="damage-basic-inputs">
         <label>等级 <input aria-label="防守方等级" type="number" min="1" max="100" step="1" bind:value={defenderLevel} /></label>
         <label>性格
-          <select aria-label="防守方性格" bind:value={defenderNatureId}>{#each data.natures as nature (nature.natureId)}<option value={nature.natureId}>{nature.canonicalName}</option>{/each}</select>
+          <SearchableSelect ariaLabel="防守方性格" listId="damage-defender-nature" options={natureOptions} value={defenderNatureId} onSelect={(value) => defenderNatureId = value} placeholder="输入或选择性格" />
         </label>
       </div>
       <table><thead><tr><th>能力</th><th>IV</th><th>EV</th><th>结果</th></tr></thead><tbody>
-        {#each statIds as stat}<tr><th scope="row">{statLabels[stat]}</th><td><input aria-label={`防守方 ${stat} IV`} type="number" min="0" max="31" bind:value={defenderIvs[stat]} /></td><td><input aria-label={`防守方 ${stat} EV`} type="number" min="0" max="252" bind:value={defenderEvs[stat]} /></td><td>{defenderStatResult.stats?.[stat] ?? '—'}</td></tr>{/each}
+        {#each statIds as stat}<tr><th scope="row">{statLabels[stat]}</th><td><input aria-label={`防守方 ${stat} IV`} type="number" min="0" max="31" bind:value={defenderIvs[stat]} /></td><td><input aria-label={`防守方 ${stat} EV`} type="number" min="0" max={maximumEvFor(defenderEvs, stat)} value={defenderEvDrafts[stat]} oninput={(event) => editDefenderEv(stat, (event.currentTarget as HTMLInputElement).value)} onblur={() => commitDefenderEv(stat)} onkeydown={(event) => commitOnEnter(event, () => commitDefenderEv(stat))} /></td><td>{defenderStatResult.stats?.[stat] ?? '—'}</td></tr>{/each}
       </tbody></table>
       <p class:ev-over={totalEvs(defenderEvs) > 510}>EV：{totalEvs(defenderEvs)} / 510</p>
       {#if defenderStatResult.error}<p class="status error">{defenderStatResult.error}</p>{/if}
@@ -336,8 +358,8 @@
         <div class="damage-modifiers">
           <span>攻击方原始属性 {attackerForm ? attackerForm.types.map(typeName).join('/') : '—'}</span>
           <span>防守方原始属性 {defenderForm ? defenderForm.types.map(typeName).join('/') : '—'}</span>
-          {#if attackerTerastallization.kind === 'ordinary'}<span>攻击方当前属性 太晶 {typeName(attackerTerastallization.typeId)}</span>{:else if attackerTerastallization.kind === 'stellar'}<span>攻击方 Stellar；有效防守属性 {damageResult.effectiveAttackerTypeIds.map(typeName).join('/')}</span>{/if}
-          {#if defenderTerastallization.kind === 'ordinary'}<span>防守方当前属性 太晶 {typeName(defenderTerastallization.typeId)}</span>{:else if defenderTerastallization.kind === 'stellar'}<span>防守方 Stellar；有效防守属性 {damageResult.effectiveDefenderTypeIds.map(typeName).join('/')}</span>{/if}
+          {#if attackerTerastallization.kind === 'ordinary'}<span>攻击方当前属性 太晶 {typeName(attackerTerastallization.typeId)}</span>{:else if attackerTerastallization.kind === 'stellar'}<span>攻击方星晶；有效防守属性 {damageResult.effectiveAttackerTypeIds.map(typeName).join('/')}</span>{/if}
+          {#if defenderTerastallization.kind === 'ordinary'}<span>防守方当前属性 太晶 {typeName(defenderTerastallization.typeId)}</span>{:else if defenderTerastallization.kind === 'stellar'}<span>防守方星晶；有效防守属性 {damageResult.effectiveDefenderTypeIds.map(typeName).join('/')}</span>{/if}
           <span>{damageResult.attackingStat.toUpperCase()} {damageResult.attack}{damageResult.effectiveAttack !== damageResult.attack ? ` → ${damageResult.effectiveAttack}` : ''}</span>
           <span>{damageResult.defendingStat.toUpperCase()} {damageResult.defense}{damageResult.effectiveDefense !== damageResult.defense ? ` → ${damageResult.effectiveDefense}` : ''}</span>
           {#if selectedMove.power.kind === 'numeric' && damageResult.effectiveBasePower !== selectedMove.power.value}<span>威力 {selectedMove.power.value} → {damageResult.effectiveBasePower}</span>{/if}
@@ -350,9 +372,9 @@
         {#if terrain !== 'none'}<p class="status">场地着地状态：攻击方{damageResult.attackerGrounded ? '着地' : '未着地'}；防守方{damageResult.defenderGrounded ? '着地' : '未着地'}。</p>{/if}
         {#if damageResult.appliedTerrainEffects.length}<p class="status">场地效果：{damageResult.appliedTerrainEffects.map(terrainEffectLabel).join('、')}</p>{/if}
         {#if damageResult.appliedAbilityEffects.length}<p class="status">已应用：{damageResult.appliedAbilityEffects.map(item => `${data.abilities.find(ability => ability.abilityId === item.abilityId)?.zhName ?? item.abilityId}（${item.effect.kind === 'stab-multiplier' ? `STAB ${damageResult.stabMultiplier}×` : abilityEffectLabel(item.effect)}）`).join('、')}</p>{/if}
-        {#if damageResult.appliedItemEffects.length}<p class="status">持有物：{damageResult.appliedItemEffects.map(item => `${data.items.find(candidate => candidate.itemId === item.itemId)?.canonicalName ?? item.itemId}（${itemEffectLabel(item.effect)}）`).join('、')}</p>{/if}
+        {#if damageResult.appliedItemEffects.length}<p class="status">持有物：{damageResult.appliedItemEffects.map(item => `${supportedItemNames[item.itemId] ?? '未知道具'}（${itemEffectLabel(item.effect)}）`).join('、')}</p>{/if}
         {#if damageResult.unmodeledAbilityIds.length}<p class="status">已选择但未建模：{damageResult.unmodeledAbilityIds.map(id => data.abilities.find(ability => ability.abilityId === id)?.zhName ?? id).join('、')}；结果仅使用核心伤害机制。</p>{/if}
-        {#if damageResult.unmodeledItemIds.length}<p class="status">已选择但未建模的持有物：{damageResult.unmodeledItemIds.map(id => data.items.find(item => item.itemId === id)?.canonicalName ?? id).join('、')}；该物品不会改变结果。</p>{/if}
+        {#if damageResult.unmodeledItemIds.length}<p class="status">已选择但未建模的持有物：{damageResult.unmodeledItemIds.map(id => supportedItemNames[id] ?? '未知道具').join('、')}；该物品不会改变结果。</p>{/if}
         <ModifierTrace trace={damageResult.modifierTrace} />
       {:else if damageResult?.status === 'non-damaging'}
         <p class="status">这是变化招式，不使用普通伤害公式。</p>
@@ -361,9 +383,9 @@
       {:else if damageResult?.status === 'incomplete'}
         <p class="status">招式资料不足，无法可靠计算。</p>
       {:else if damageResult?.status === 'unresolved-context'}
-        <p class="status">需要明确状态：请选择该招式属性的 Stellar 增伤是“尚未使用”还是“已经使用”；计算器不会默认推测。</p>
+        <p class="status">需要明确状态：请选择该招式属性的星晶增伤是“尚未使用”还是“已经使用”；计算器不会默认推测。</p>
       {:else if damageResult?.status === 'unsupported-context'}
-        <p class="status">当前组合暂不计算：{damageResult.reason === 'burn-with-guts' ? '灼伤与“毅力”的能力修正及灼伤豁免尚未建模。' : damageResult.reason === 'sun-with-hydro-steam' ? '“水蒸气”在日照下具有特殊增伤规则，不能套用普通水属性减伤。' : damageResult.reason === 'stellar-tera-blast' ? 'Stellar 太晶爆发会变为 Stellar 属性、威力 100、按攻击与特攻选择分类，并在命中后降低攻击与特攻；本阶段保持显式不支持。' : damageResult.reason === 'stellar-tera-starstorm' ? '晶光星群依赖太乐巴戈斯 Stellar 形态、动态属性/分类和范围目标，本阶段不引入专属形态战斗引擎。' : '觉醒之舞会按使用者当前属性动态改变招式属性，Stellar 状态下不能使用静态招式属性计算。'}</p>
+        <p class="status">当前组合暂不计算：{damageResult.reason === 'burn-with-guts' ? '灼伤与“毅力”的能力修正及灼伤豁免尚未建模。' : damageResult.reason === 'sun-with-hydro-steam' ? '“水蒸气”在日照下具有特殊增伤规则，不能套用普通水属性减伤。' : damageResult.reason === 'stellar-tera-blast' ? '星晶太晶爆发会变为星晶属性、威力 100、按攻击与特攻选择分类，并在命中后降低攻击与特攻；本阶段保持显式不支持。' : damageResult.reason === 'stellar-tera-starstorm' ? '晶光星群依赖太乐巴戈斯星晶形态、动态属性/分类和范围目标，本阶段不引入专属形态战斗引擎。' : '觉醒之舞会按使用者当前属性动态改变招式属性，星晶状态下不能使用静态招式属性计算。'}</p>
       {:else}
         <p class="status">请先修正双方配置。</p>
       {/if}

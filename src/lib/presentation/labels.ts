@@ -1,6 +1,8 @@
 import type { DamageModifierTraceCategory } from '../runtime-data/damage-calculator.js'
 
 export type BilingualLabel = { zh: string; en: string }
+export type PokemonTypePresentation = { label: string; background: string; foreground: string }
+export type MoveCategoryPresentation = { label: string; background: string; foreground: string }
 
 export const appLabels = {
   pokemon: { zh: '宝可梦查询', en: 'Pokémon' }, team: { zh: '队伍构建', en: 'Team Builder' }, moves: { zh: '招式查询', en: 'Moves' },
@@ -19,16 +21,49 @@ const types: Record<string, BilingualLabel> = {
   'type:normal': { zh: '一般', en: 'Normal' }, 'type:fire': { zh: '火', en: 'Fire' }, 'type:water': { zh: '水', en: 'Water' }, 'type:electric': { zh: '电', en: 'Electric' }, 'type:grass': { zh: '草', en: 'Grass' }, 'type:ice': { zh: '冰', en: 'Ice' }, 'type:fighting': { zh: '格斗', en: 'Fighting' }, 'type:poison': { zh: '毒', en: 'Poison' }, 'type:ground': { zh: '地面', en: 'Ground' }, 'type:flying': { zh: '飞行', en: 'Flying' }, 'type:psychic': { zh: '超能力', en: 'Psychic' }, 'type:bug': { zh: '虫', en: 'Bug' }, 'type:rock': { zh: '岩石', en: 'Rock' }, 'type:ghost': { zh: '幽灵', en: 'Ghost' }, 'type:dragon': { zh: '龙', en: 'Dragon' }, 'type:dark': { zh: '恶', en: 'Dark' }, 'type:steel': { zh: '钢', en: 'Steel' }, 'type:fairy': { zh: '妖精', en: 'Fairy' },
 }
 
+const pokemonTypePresentations: Record<string, PokemonTypePresentation> = {
+  'type:normal': { label: '一般', background: '#9FA19F', foreground: '#FFFFFF' },
+  'type:fire': { label: '火', background: '#E62829', foreground: '#FFFFFF' },
+  'type:water': { label: '水', background: '#2980EF', foreground: '#FFFFFF' },
+  'type:grass': { label: '草', background: '#3FA129', foreground: '#FFFFFF' },
+  'type:electric': { label: '电', background: '#FAC000', foreground: '#FFFFFF' },
+  'type:ice': { label: '冰', background: '#3FD8FF', foreground: '#FFFFFF' },
+  'type:fighting': { label: '格斗', background: '#FF8000', foreground: '#FFFFFF' },
+  'type:poison': { label: '毒', background: '#9141CB', foreground: '#FFFFFF' },
+  'type:ground': { label: '地面', background: '#915121', foreground: '#FFFFFF' },
+  'type:flying': { label: '飞行', background: '#81B9EF', foreground: '#FFFFFF' },
+  'type:psychic': { label: '超能', background: '#EF4179', foreground: '#FFFFFF' },
+  'type:bug': { label: '虫', background: '#91A119', foreground: '#FFFFFF' },
+  'type:rock': { label: '岩石', background: '#AFA981', foreground: '#FFFFFF' },
+  'type:ghost': { label: '幽灵', background: '#704170', foreground: '#FFFFFF' },
+  'type:dragon': { label: '龙', background: '#5060E1', foreground: '#FFFFFF' },
+  'type:dark': { label: '恶', background: '#50413F', foreground: '#FFFFFF' },
+  'type:steel': { label: '钢', background: '#60A1B8', foreground: '#FFFFFF' },
+  'type:fairy': { label: '妖精', background: '#EF70EF', foreground: '#FFFFFF' },
+}
+
+const pokemonDetailStats = { hp: 'HP', atk: '攻击', def: '防御', spa: '特攻', spd: '特防', spe: '速度' } as const
+
 const stats: Record<string, BilingualLabel> = { hp: { zh: 'HP', en: 'HP' }, atk: { zh: '攻击', en: 'Attack' }, def: { zh: '防御', en: 'Defense' }, spa: { zh: '特攻', en: 'Special Attack' }, spd: { zh: '特防', en: 'Special Defense' }, spe: { zh: '速度', en: 'Speed' } }
 const categories: Record<string, BilingualLabel> = { physical: { zh: '物理', en: 'Physical' }, special: { zh: '特殊', en: 'Special' }, status: { zh: '变化', en: 'Status' } }
-const growthRates: Record<string, BilingualLabel> = { 'growth:erratic': { zh: '飘忽', en: 'Erratic' }, 'growth:fast': { zh: '快速', en: 'Fast' }, 'growth:medium-fast': { zh: '较快', en: 'Medium Fast' }, 'growth:medium-slow': { zh: '较慢', en: 'Medium Slow' }, 'growth:slow': { zh: '缓慢', en: 'Slow' }, 'growth:fluctuating': { zh: '波动', en: 'Fluctuating' } }
+const moveCategoryPresentations: Record<string, MoveCategoryPresentation> = {
+  physical: { label: '物理', background: '#EB5427', foreground: '#FFFFFF' },
+  special: { label: '特殊', background: '#3665C5', foreground: '#FFFFFF' },
+  status: { label: '变化', background: '#999999', foreground: '#FFFFFF' },
+}
+const growthRates: Record<string, BilingualLabel> = { 'growth:erratic': { zh: '最快', en: 'Erratic' }, 'growth:fast': { zh: '快', en: 'Fast' }, 'growth:medium-fast': { zh: '较快', en: 'Medium Fast' }, 'growth:medium-slow': { zh: '较慢', en: 'Medium Slow' }, 'growth:slow': { zh: '慢', en: 'Slow' }, 'growth:fluctuating': { zh: '最慢', en: 'Fluctuating' } }
+export const growthRatePresentationOrder = ['growth:erratic', 'growth:fast', 'growth:medium-fast', 'growth:medium-slow', 'growth:slow', 'growth:fluctuating'] as const
 const natures: Record<string, BilingualLabel> = { hardy: { zh: '勤奋', en: 'Hardy' }, lonely: { zh: '怕寂寞', en: 'Lonely' }, brave: { zh: '勇敢', en: 'Brave' }, adamant: { zh: '固执', en: 'Adamant' }, naughty: { zh: '顽皮', en: 'Naughty' }, bold: { zh: '大胆', en: 'Bold' }, docile: { zh: '坦率', en: 'Docile' }, relaxed: { zh: '悠闲', en: 'Relaxed' }, impish: { zh: '淘气', en: 'Impish' }, lax: { zh: '乐天', en: 'Lax' }, timid: { zh: '胆小', en: 'Timid' }, hasty: { zh: '急躁', en: 'Hasty' }, serious: { zh: '认真', en: 'Serious' }, jolly: { zh: '爽朗', en: 'Jolly' }, naive: { zh: '天真', en: 'Naive' }, modest: { zh: '内敛', en: 'Modest' }, mild: { zh: '慢吞吞', en: 'Mild' }, quiet: { zh: '冷静', en: 'Quiet' }, bashful: { zh: '害羞', en: 'Bashful' }, rash: { zh: '马虎', en: 'Rash' }, calm: { zh: '温和', en: 'Calm' }, gentle: { zh: '温顺', en: 'Gentle' }, sassy: { zh: '自大', en: 'Sassy' }, careful: { zh: '慎重', en: 'Careful' }, quirky: { zh: '浮躁', en: 'Quirky' } }
 const trace: Record<DamageModifierTraceCategory, BilingualLabel> = { 'stat-stage': { zh: '能力阶级', en: 'Stat Stage' }, 'defensive-weather-stat': { zh: '天气防御修正', en: 'Weather Defense' }, 'ability-stat': { zh: '特性能力修正', en: 'Ability Effect' }, 'item-stat': { zh: '持有物能力修正', en: 'Item Effect' }, 'move-power': { zh: '招式威力修正', en: 'Move Power' }, 'core-base-damage': { zh: '基础伤害', en: 'Core Base Damage' }, weather: { zh: '天气修正', en: 'Weather' }, critical: { zh: '要害', en: 'Critical Hit' }, random: { zh: '随机浮动', en: 'Random (85–100%)' }, 'stellar-usage': { zh: '星晶增伤状态', en: 'Stellar Usage' }, stab: { zh: '属性一致加成', en: 'STAB' }, 'type-effectiveness': { zh: '属性相性', en: 'Type Effectiveness' }, burn: { zh: '灼伤修正', en: 'Burn' }, screen: { zh: '墙类修正', en: 'Reflect / Light Screen' }, 'ability-final': { zh: '特性效果', en: 'Ability Effect' }, 'item-final': { zh: '持有物效果', en: 'Item Effect' }, 'ability-immunity': { zh: '特性免疫', en: 'Ability Immunity' } }
 
 const canonicalFallback = (canonicalName: string): BilingualLabel => ({ zh: '暂无中文', en: canonicalName })
 export const typeLabel = (id: string, canonicalName = id) => types[id] ?? canonicalFallback(canonicalName)
+export const pokemonTypePresentation = (id: string, canonicalName = id): PokemonTypePresentation => pokemonTypePresentations[id] ?? { label: typeLabel(id, canonicalName).zh, background: '#64748B', foreground: '#FFFFFF' }
+export const pokemonDetailStatLabel = (id: keyof typeof pokemonDetailStats): string => pokemonDetailStats[id]
+export const abilitySlotLabel = (slot: '0' | '1' | 'H' | 'S'): string => slot === '0' ? '特性1' : slot === '1' ? '特性2' : slot === 'H' ? '隐藏特性' : '特殊特性'
 export const statLabel = (id: string) => stats[id] ?? canonicalFallback(id)
 export const categoryLabel = (id: string) => categories[id] ?? canonicalFallback(id)
+export const moveCategoryPresentation = (id: string): MoveCategoryPresentation => moveCategoryPresentations[id] ?? { label: categoryLabel(id).zh, background: '#999999', foreground: '#FFFFFF' }
 export const natureLabel = (natureId: string, canonicalName: string) => natures[natureId.replace('nature:', '')] ?? canonicalFallback(canonicalName)
 export const growthRateLabel = (growthRateId: string, canonicalName: string) => growthRates[growthRateId] ?? canonicalFallback(canonicalName)
 export const traceLabel = (category: DamageModifierTraceCategory) => trace[category]

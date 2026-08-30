@@ -1,7 +1,7 @@
 {
   "name": "pokemon-tool",
   "private": true,
-  "version": "0.1.1",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json",
     "data:smoke": "node scripts/data/cli.ts",
-    "data:test": "node --test --test-concurrency=1 scripts/data/tests/smoke.test.ts scripts/data/tests/full-dry-run.test.ts scripts/data/tests/excel-cross-validation.test.ts scripts/data/tests/conflict-resolution.test.ts scripts/data/tests/registry-review.test.ts scripts/data/tests/form-review-round1.test.ts scripts/data/tests/mechanics-resolution.test.ts scripts/data/tests/tags.test.ts scripts/data/tests/runtime-emission.test.ts scripts/data/tests/release-readiness.test.ts scripts/data/tests/type-matchup.test.ts scripts/data/tests/stat-calculator.test.ts scripts/data/tests/experience-calculator.test.ts scripts/data/tests/moves-evolutions-runtime.test.ts scripts/data/tests/learnsets.test.ts scripts/data/tests/damage-calculator.test.ts scripts/data/tests/damage-calculator-structure.test.ts scripts/data/tests/ability-mechanics.test.ts scripts/data/tests/battle-context.test.ts scripts/data/tests/item-mechanics.test.ts scripts/data/tests/critical-screen.test.ts scripts/data/tests/weather-expansion.test.ts scripts/data/tests/terrain-foundation.test.ts scripts/data/tests/terastallization-foundation.test.ts scripts/data/tests/stellar-terastallization-foundation.test.ts scripts/data/tests/battle-state-consistency.test.ts scripts/data/tests/pokemon-search.test.ts scripts/data/tests/learnset-explorer.test.ts scripts/data/tests/team-builder.test.ts scripts/data/tests/team-analysis.test.ts scripts/data/tests/team-persistence.test.ts",
+    "data:test": "node --test --test-concurrency=1 scripts/data/tests/smoke.test.ts scripts/data/tests/full-dry-run.test.ts scripts/data/tests/excel-cross-validation.test.ts scripts/data/tests/conflict-resolution.test.ts scripts/data/tests/registry-review.test.ts scripts/data/tests/form-review-round1.test.ts scripts/data/tests/mechanics-resolution.test.ts scripts/data/tests/tags.test.ts scripts/data/tests/runtime-emission.test.ts scripts/data/tests/release-readiness.test.ts scripts/data/tests/type-matchup.test.ts scripts/data/tests/stat-calculator.test.ts scripts/data/tests/experience-calculator.test.ts scripts/data/tests/input-state.test.ts scripts/data/tests/moves-evolutions-runtime.test.ts scripts/data/tests/learnsets.test.ts scripts/data/tests/damage-calculator.test.ts scripts/data/tests/damage-calculator-structure.test.ts scripts/data/tests/ability-mechanics.test.ts scripts/data/tests/battle-context.test.ts scripts/data/tests/item-mechanics.test.ts scripts/data/tests/critical-screen.test.ts scripts/data/tests/weather-expansion.test.ts scripts/data/tests/terrain-foundation.test.ts scripts/data/tests/terastallization-foundation.test.ts scripts/data/tests/stellar-terastallization-foundation.test.ts scripts/data/tests/battle-state-consistency.test.ts scripts/data/tests/pokemon-search.test.ts scripts/data/tests/learnset-explorer.test.ts scripts/data/tests/team-builder.test.ts scripts/data/tests/team-analysis.test.ts scripts/data/tests/team-persistence.test.ts",
     "release:integrity": "node scripts/release/validate-runtime-data.ts",
     "release:check": "npm run release:integrity && npm run data:test && npm run check && npm run build",
     "data:determinism": "node scripts/data/determinism.ts",

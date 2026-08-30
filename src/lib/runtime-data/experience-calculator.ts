@@ -9,6 +9,11 @@ export type ExperienceProgress = {
   progressFraction: number | null
 }
 
+export const EXPERIENCE_CANDY_VALUES = { xs: 100, s: 800, m: 3000, l: 10000, xl: 30000 } as const
+export const EXPERIENCE_CANDY_MAX_COUNT = 999
+export type ExperienceCandySize = keyof typeof EXPERIENCE_CANDY_VALUES
+export type ExperienceCandyCounts = Record<ExperienceCandySize, number>
+
 function assertLevel(level: number): void {
   if (!Number.isInteger(level) || level < 1 || level > 100) throw new Error('EXPERIENCE_INVALID_LEVEL')
 }
@@ -20,6 +25,26 @@ function assertTotalExp(totalExp: number): void {
 export function levelToTotalExp(growthRate: RuntimeGrowthRate, level: number): number {
   assertLevel(level)
   return growthRate.totalExpByLevel[level - 1]
+}
+
+export function experienceBetweenLevels(growthRate: RuntimeGrowthRate, currentLevel: number, targetLevel: number): number {
+  assertLevel(currentLevel)
+  assertLevel(targetLevel)
+  if (targetLevel < currentLevel) throw new Error('EXPERIENCE_TARGET_BELOW_CURRENT')
+  return levelToTotalExp(growthRate, targetLevel) - levelToTotalExp(growthRate, currentLevel)
+}
+
+export function totalExperienceCandyValue(counts: ExperienceCandyCounts): number {
+  return (Object.keys(EXPERIENCE_CANDY_VALUES) as ExperienceCandySize[]).reduce((total, size) => {
+    const count = counts[size]
+    if (!Number.isInteger(count) || count < 0 || count > EXPERIENCE_CANDY_MAX_COUNT) throw new Error(`EXPERIENCE_CANDY_COUNT_INVALID: ${size}`)
+    return total + count * EXPERIENCE_CANDY_VALUES[size]
+  }, 0)
+}
+
+export function maxCandyCountForTarget(requiredExperience: number, candyValue: number, otherCandyExperience: number): number {
+  if (![requiredExperience, candyValue, otherCandyExperience].every(Number.isInteger) || requiredExperience < 0 || candyValue <= 0 || otherCandyExperience < 0) throw new Error('EXPERIENCE_CANDY_MAX_INPUT_INVALID')
+  return Math.min(EXPERIENCE_CANDY_MAX_COUNT, Math.ceil(Math.max(0, requiredExperience - otherCandyExperience) / candyValue))
 }
 
 export function totalExpToLevel(growthRate: RuntimeGrowthRate, totalExp: number): number {
