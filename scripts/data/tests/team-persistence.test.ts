@@ -2,7 +2,8 @@ import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { buildFullDryRun } from '../full-dry-run.ts'
 import { buildRuntimeData } from '../runtime-emission.ts'
-import { decodeShareTeamState, encodeShareTeamState, normalizeTeamState, parseSerializedTeamState, resolveStartupTeamState, serializeTeamState } from '../../../src/lib/runtime-data/team-persistence.ts'
+import { decodeShareTeamState, encodeShareTeamState, normalizeTeamState, parseSerializedTeamState, revalidateTeamLearnsets, resolveStartupTeamState, serializeTeamState } from '../../../src/lib/runtime-data/team-persistence.ts'
+import { resolveEffectiveLearnsetMoveIds } from '../../../src/lib/runtime-data/learnsets.ts'
 
 const dataPromise = buildFullDryRun().then(buildRuntimeData)
 const validTeam = [{ memberId: 'team-member-1', formId: 'form:0006:base', abilityId: 'ability:0066', moveIds: ['move:0053', 'move:0014'] }]
@@ -37,4 +38,16 @@ test('team persistence partially recovers valid records while discarding invalid
   assert.deepEqual(state?.team[0].moveIds, ['move:0053', 'move:0014', 'move:0015', 'move:0017'])
   assert.equal(state?.team[1].abilityId, null)
   assert.deepEqual(state?.team[1].moveIds, [])
+})
+
+test('persisted Form Ability and Move IDs restore before learnsets load, then only invalid memberships are removed', async () => {
+  const data = await dataPromise
+  const allowed = new Set(resolveEffectiveLearnsetMoveIds(data.learnsets, validTeam[0].formId))
+  const invalidForForm = data.moves.find(move => !allowed.has(move.moveId))!.moveId
+  const serialized = serializeTeamState([{ ...validTeam[0], moveIds: ['move:0053', invalidForForm] }])
+  const core = { forms: data.forms, moves: data.moves }
+  const restored = parseSerializedTeamState(serialized, core)
+  assert.deepEqual(restored?.team, [{ ...validTeam[0], moveIds: ['move:0053', invalidForForm] }])
+  assert.equal(restored?.team[0].abilityId, 'ability:0066')
+  assert.deepEqual(revalidateTeamLearnsets(restored!.team, data.learnsets), validTeam.map(member => ({ ...member, moveIds: ['move:0053'] })))
 })

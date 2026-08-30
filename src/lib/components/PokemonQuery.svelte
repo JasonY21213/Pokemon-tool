@@ -4,13 +4,18 @@
   import { baseStatTotal, orderedSpeciesForms, resolveSearchResult, searchPokemon } from '../runtime-data/pokemon-search'
   import { resolveEffectiveLearnsetMoveIds } from '../runtime-data/learnsets'
   import LearnsetExplorer from './LearnsetExplorer.svelte'
-  import type { PokemonRuntimeData, RuntimeAbility, RuntimeEvolution, RuntimeForm, RuntimeSpecies } from '../runtime-data/types'
+  import type { LearnsetRuntimeData, PokemonRuntimeData, RuntimeAbility, RuntimeEvolution, RuntimeForm, RuntimeSpecies } from '../runtime-data/types'
   import { formatLabel, statLabel, typeLabel } from '../presentation/labels'
   export let data: PokemonRuntimeData
   export let selectedSpecies: RuntimeSpecies | null = null
   export let selectedForm: RuntimeForm | null = null
+  export let learnsets: LearnsetRuntimeData | null = null
+  export let learnsetsLoading = false
+  export let learnsetsError = ''
+  export let onRequestLearnsets: () => void = () => {}
   let query = ''
   let selectedAbilityId: string | null = null
+  let learnsetOpen = false
   const tagLabels: Record<string, string> = { 'tag:starter': '御三家', 'tag:major-legendary': '一级神', 'tag:minor-legendary': '二级神', 'tag:mythical': '幻兽', 'tag:pseudo-legendary': '准神', 'tag:fossil': '化石', 'tag:ultra-beast': '究极异兽', 'tag:paradox': '悖谬种', 'tag:mega': 'Mega', 'tag:primal': '原始回归' }
   const statIds = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'] as const
   const formName = (form: RuntimeForm) => form.zhName ?? form.canonicalName
@@ -32,7 +37,7 @@
   $: previous = selectedForm ? data.evolutions.filter(edge => edge.targetFormId === selectedForm!.formId) : []
   $: next = selectedForm ? data.evolutions.filter(edge => edge.sourceFormId === selectedForm!.formId) : []
   $: tagIds = selectedSpecies && selectedForm ? [...new Set([...selectedSpecies.tagIds, ...selectedForm.tagIds])] : []
-  $: effectiveMoveCount = selectedForm ? resolveEffectiveLearnsetMoveIds(data.learnsets, selectedForm.formId).length : 0
+  $: effectiveMoveCount = selectedForm && learnsets ? resolveEffectiveLearnsetMoveIds(learnsets, selectedForm.formId).length : null
 </script>
 
 <section class="pokemon-query">
@@ -46,7 +51,7 @@
     <section><h3>特性</h3><ul>{#each abilities as { slot, ability } (ability.abilityId)}<li><strong>{stageLabel(slot)}</strong>：{ability.zhName ?? '未本地化'} <small>{ability.canonicalName}</small> · <em>{ability.mechanics.status === 'supported' ? '当前计算器支持' : '当前计算器未建模'}</em>{#if ability.zhDescription}<br />{ability.zhDescription}{/if}</li>{/each}</ul><label>用于防御相性预览的特性<select bind:value={selectedAbilityId}><option value={null}>不启用特性效果</option>{#each abilities as { slot, ability } (ability.abilityId)}<option value={ability.abilityId}>{slot} · {ability.zhName ?? ability.canonicalName}（{ability.mechanics.status === 'supported' ? '支持' : '未建模'}）</option>{/each}</select></label>{#if selectedAbility?.mechanics.status === 'unsupported'}<p class="status">已选择的特性仍可能在游戏中有效；这里只表示当前计算器未建模。</p>{/if}</section>
     <section><h3>防御属性相性</h3><div class="matchup-groups">{#each matchup as group (group.multiplier)}<p><strong>{group.multiplier}×</strong>：{group.entries.map(entry => typeName(entry.attackingTypeId)).join('、')}</p>{/each}</div>{#if adjustedMatchup.length}<p>特性预览变化：</p><ul>{#each adjustedMatchup as entry (entry.attackingTypeId)}<li><strong>{typeName(entry.attackingTypeId)}</strong>：原始 {entry.rawMultiplier}× → 特性后 {entry.adjustedMultiplier}×</li>{/each}</ul>{/if}</section>
     <section class="evolutions"><h3>进化</h3>{#if previous.length || next.length}{#if previous.length}<h4>由以下 Form 进化而来</h4><ul>{#each previous as edge (edge.evolutionId)}<li><strong>{formLabel(edge.sourceFormId)}</strong> → 当前 Form：{condition(edge)}</li>{/each}</ul>{/if}{#if next.length}<h4>可进化为</h4><ul>{#each next as edge (edge.evolutionId)}<li>当前 Form → <strong>{formLabel(edge.targetFormId)}</strong>：{condition(edge)}</li>{/each}</ul>{/if}{:else}<p>当前稳定进化图中没有该 Form 的进化关系。</p>{/if}</section>
-    <section class="learnset-entry"><h3>可学招式</h3><p>当前 Form 有 {effectiveMoveCount} 个固定来源关联招式。下方可按名称、属性、分类、威力和伤害支持状态继续筛选；跨世代关联不代表当前游戏合法性。</p></section>
-    <LearnsetExplorer {data} {selectedForm} />
+    <section class="learnset-entry"><h3>可学招式 <small>Learnsets</small></h3>{#if effectiveMoveCount === null}<p>打开可学招式后加载。<small>Load on demand.</small></p>{:else}<p>当前 Form 有 {effectiveMoveCount} 个固定来源关联招式；跨世代关联不代表当前游戏合法性。</p>{/if}{#if !learnsetOpen}<button type="button" onclick={() => learnsetOpen = true}>打开可学招式 <small>Open Learnsets</small></button>{/if}</section>
+    {#if learnsetOpen}<LearnsetExplorer {data} {selectedForm} {learnsets} {learnsetsLoading} {learnsetsError} {onRequestLearnsets} />{/if}
   </section>{/if}
 </section>

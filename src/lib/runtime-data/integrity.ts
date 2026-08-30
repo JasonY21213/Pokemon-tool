@@ -1,7 +1,7 @@
-import type { PokemonRuntimeData, RuntimeManifest } from './types.ts'
+import type { CoreRuntimeData, LearnsetRuntimeData, RuntimeDataWithLearnsets, RuntimeManifest } from './types.ts'
 
 export const RUNTIME_SCHEMA_VERSION = 1
-export const RUNTIME_DATA_FILES = [
+export const CORE_RUNTIME_DATA_FILES = [
   'species.json',
   'forms.json',
   'abilities.json',
@@ -11,8 +11,9 @@ export const RUNTIME_DATA_FILES = [
   'growth-rates.json',
   'moves.json',
   'evolutions.json',
-  'learnsets.json',
 ] as const
+
+export const RUNTIME_DATA_FILES = [...CORE_RUNTIME_DATA_FILES, 'learnsets.json'] as const
 
 export type RuntimeDataFileName = typeof RUNTIME_DATA_FILES[number]
 
@@ -63,8 +64,8 @@ export function validateRuntimeManifest(value: unknown): RuntimeManifest {
   return value as RuntimeManifest
 }
 
-export function validateLoadedRuntimeData(data: Omit<PokemonRuntimeData, 'manifest'>, manifest: RuntimeManifest): void {
-  const collections: Record<RuntimeDataFileName, unknown[]> = {
+export function validateCoreRuntimeData(data: Omit<CoreRuntimeData, 'manifest'>, manifest: RuntimeManifest): void {
+  const collections: Record<(typeof CORE_RUNTIME_DATA_FILES)[number], unknown[]> = {
     'species.json': data.species,
     'forms.json': data.forms,
     'abilities.json': data.abilities,
@@ -74,15 +75,12 @@ export function validateLoadedRuntimeData(data: Omit<PokemonRuntimeData, 'manife
     'growth-rates.json': data.growthRates,
     'moves.json': data.moves,
     'evolutions.json': data.evolutions,
-    'learnsets.json': data.learnsets?.entries,
   }
-  for (const path of RUNTIME_DATA_FILES) {
+  for (const path of CORE_RUNTIME_DATA_FILES) {
     ensure(Array.isArray(collections[path]), 'DATA_FILE_FORMAT', `${path} must contain the expected collection.`)
     const expectedCount = manifest.files.find(file => file.path === path)?.recordCount
     ensure(collections[path].length === expectedCount, 'DATA_RECORD_COUNT', `${path} record count does not match the manifest.`)
   }
-  ensure(data.learnsets?.scope === 'pinned-showdown-known-association-across-generations', 'LEARNSET_SCOPE', 'Learnset scope is missing or incompatible.')
-
   const speciesIds = unique(data.species.map(record => record.speciesId), 'SPECIES_ID_UNIQUENESS')
   const formIds = unique(data.forms.map(record => record.formId), 'FORM_ID_UNIQUENESS')
   const abilityIds = unique(data.abilities.map(record => record.abilityId), 'ABILITY_ID_UNIQUENESS')
@@ -90,7 +88,7 @@ export function validateLoadedRuntimeData(data: Omit<PokemonRuntimeData, 'manife
   const typeIds = unique(data.types.map(record => record.typeId), 'TYPE_ID_UNIQUENESS')
   unique(data.natures.map(record => record.natureId), 'NATURE_ID_UNIQUENESS')
   const growthRateIds = unique(data.growthRates.map(record => record.growthRateId), 'GROWTH_RATE_ID_UNIQUENESS')
-  const moveIds = unique(data.moves.map(record => record.moveId), 'MOVE_ID_UNIQUENESS')
+  unique(data.moves.map(record => record.moveId), 'MOVE_ID_UNIQUENESS')
   unique(data.evolutions.map(record => record.evolutionId), 'EVOLUTION_ID_UNIQUENESS')
 
   ensure(data.species.every(record => formIds.has(record.defaultFormId) && record.formIds.length > 0 && record.formIds.every(id => formIds.has(id)) && (record.growthRate.status === 'unresolved' ? record.growthRate.id === null : record.growthRate.id !== null && growthRateIds.has(record.growthRate.id))), 'SPECIES_REFERENCE', 'Species data contains a dangling Form or growth-rate reference.')
@@ -98,5 +96,20 @@ export function validateLoadedRuntimeData(data: Omit<PokemonRuntimeData, 'manife
   ensure(data.types.every(record => record.damageTaken.every(entry => typeIds.has(entry.attackingTypeId))), 'TYPE_REFERENCE', 'Type data contains a dangling attacking Type reference.')
   ensure(data.moves.every(record => typeIds.has(record.typeId)), 'MOVE_REFERENCE', 'Move data contains a dangling Type reference.')
   ensure(data.evolutions.every(record => formIds.has(record.sourceFormId) && formIds.has(record.targetFormId)), 'EVOLUTION_REFERENCE', 'Evolution data contains a dangling Form reference.')
-  ensure(data.learnsets.entries.length === formIds.size && data.learnsets.entries.every(record => formIds.has(record.entityId) && (record.parentEntityId === null || formIds.has(record.parentEntityId)) && record.directMoveIds.every(id => moveIds.has(id))), 'LEARNSET_REFERENCE', 'Learnset data contains a dangling Form or Move reference.')
+}
+
+export function validateLearnsetRuntimeData(learnsets: LearnsetRuntimeData, core: Pick<CoreRuntimeData, 'forms' | 'moves' | 'manifest'>): void {
+  ensure(Array.isArray(learnsets?.entries), 'DATA_FILE_FORMAT', 'learnsets.json must contain the expected collection.')
+  const expectedCount = core.manifest.files.find(file => file.path === 'learnsets.json')?.recordCount
+  ensure(learnsets.entries.length === expectedCount, 'DATA_RECORD_COUNT', 'learnsets.json record count does not match the manifest.')
+  ensure(learnsets.scope === 'pinned-showdown-known-association-across-generations', 'LEARNSET_SCOPE', 'Learnset scope is missing or incompatible.')
+  const formIds = new Set(core.forms.map(record => record.formId))
+  const moveIds = new Set(core.moves.map(record => record.moveId))
+  ensure(learnsets.entries.length === formIds.size && learnsets.entries.every(record => formIds.has(record.entityId) && (record.parentEntityId === null || formIds.has(record.parentEntityId)) && record.directMoveIds.every(id => moveIds.has(id))), 'LEARNSET_REFERENCE', 'Learnset data contains a dangling Form or Move reference.')
+}
+
+export function validateLoadedRuntimeData(data: Omit<RuntimeDataWithLearnsets, 'manifest'>, manifest: RuntimeManifest): void {
+  const core = { ...data, manifest }
+  validateCoreRuntimeData(core, manifest)
+  validateLearnsetRuntimeData(data.learnsets, core)
 }

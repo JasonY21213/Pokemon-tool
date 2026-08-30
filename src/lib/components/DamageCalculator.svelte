@@ -5,11 +5,15 @@
   import { totalEvs } from '../runtime-data/stat-calculator'
   import { resolveAttackerItem, resolveCombatantConfiguration, validateDamageCalculatorContext, type CombatantConfiguration, type ResolvedCombatantConfiguration } from '../runtime-data/damage-calculator-state'
   import { INACTIVE_TERASTALLIZATION, STANDARD_TERA_TYPE_IDS, type ResolvedStab, type StellarBoostUsageState, type TeraSelection, type TerastallizationState } from '../runtime-data/terastallization'
-  import type { PokemonRuntimeData, RuntimeAbility, RuntimeAbilityMechanicsEffect, RuntimeForm, RuntimeItem, RuntimeItemMechanicsEffect, RuntimeMove, RuntimeMoveDamageUnsupportedReason, RuntimeSpecies, RuntimeStatBlock } from '../runtime-data/types'
+  import type { LearnsetRuntimeData, PokemonRuntimeData, RuntimeAbility, RuntimeAbilityMechanicsEffect, RuntimeForm, RuntimeItem, RuntimeItemMechanicsEffect, RuntimeMove, RuntimeMoveDamageUnsupportedReason, RuntimeSpecies, RuntimeStatBlock } from '../runtime-data/types'
   import ModifierTrace from './ModifierTrace.svelte'
   import { formatLabel, typeLabel } from '../presentation/labels'
 
   export let data: PokemonRuntimeData
+  export let learnsets: LearnsetRuntimeData | null = null
+  export let learnsetsLoading = false
+  export let learnsetsError = ''
+  export let onRequestLearnsets: () => void = () => {}
 
   const statIds = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'] as const
   const statLabels: Record<(typeof statIds)[number], string> = { hp: 'HP', atk: '攻击', def: '防御', spa: '特攻', spd: '特防', spe: '速度' }
@@ -38,6 +42,10 @@
   let moveQuery = ''
   let learnsetOnly = false
   let selectedMoveId = 'move:0053'
+  function toggleLearnsetOnly(event: Event): void {
+    learnsetOnly = (event.currentTarget as HTMLInputElement).checked
+    if (learnsetOnly && !learnsets) onRequestLearnsets()
+  }
   let attackerAtkStage: BattleStatStage = 0
   let attackerSpaStage: BattleStatStage = 0
   let defenderDefStage: BattleStatStage = 0
@@ -201,7 +209,7 @@
   $: attackerItem = attackerItemConfiguration.value
   $: attackerStatResult = { stats: attackerConfiguration.value?.stats ?? null, error: attackerConfiguration.error }
   $: defenderStatResult = { stats: defenderConfiguration.value?.stats ?? null, error: defenderConfiguration.error }
-  $: knownMoveIds = attackerForm ? new Set(resolveEffectiveLearnsetMoveIds(data.learnsets, attackerForm.formId)) : new Set<string>()
+  $: knownMoveIds = attackerForm && learnsets ? new Set(resolveEffectiveLearnsetMoveIds(learnsets, attackerForm.formId)) : new Set<string>()
   $: normalizedMoveQuery = moveQuery.trim().toLocaleLowerCase()
   $: filteredMoves = data.moves.filter(move => (!learnsetOnly || knownMoveIds.has(move.moveId))
     && (!normalizedMoveQuery || (move.zhName?.includes(moveQuery.trim()) ?? false) || move.canonicalName.toLocaleLowerCase().includes(normalizedMoveQuery)))
@@ -304,7 +312,8 @@
   <section class="damage-move-picker">
     <h3>招式</h3>
     <label class="search"><span>按中文名或英文名筛选</span><input bind:value={moveQuery} placeholder="例如：喷射火焰、Flamethrower、Body Press" /></label>
-    <label class="learnset-toggle"><input type="checkbox" bind:checked={learnsetOnly} /> 只显示固定来源中与攻击方形态关联的招式（跨世代，不代表当前合法）</label>
+    <label class="learnset-toggle"><input type="checkbox" checked={learnsetOnly} onchange={toggleLearnsetOnly} /> 只显示固定来源中与攻击方形态关联的招式（跨世代，不代表当前合法）</label>
+    {#if learnsetOnly && learnsetsLoading}<p class="status" role="status"><strong>正在加载可学招式</strong> <small>Loading Learnsets</small></p>{:else if learnsetOnly && learnsetsError}<div class="status error" role="alert"><strong>可学招式加载失败</strong> <small>Failed to Load Learnsets</small><p>伤害计算器的其他功能不受影响；关闭此筛选可继续浏览全部招式。</p><button type="button" onclick={onRequestLearnsets}>重试 <small>Retry</small></button></div>{/if}
     <p>匹配 {filteredMoves.length} 个；列表最多显示前 60 个，请继续输入名称缩小范围。</p>
     <div class="damage-move-results">
       {#each filteredMoves.slice(0, 60) as move (move.moveId)}

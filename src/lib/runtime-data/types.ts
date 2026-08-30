@@ -181,7 +181,7 @@ export type RuntimeManifest = {
   files: RuntimeManifestFile[]
 }
 
-export type PokemonRuntimeData = {
+export type CoreRuntimeData = {
   species: RuntimeSpecies[]
   forms: RuntimeForm[]
   abilities: RuntimeAbility[]
@@ -191,6 +191,14 @@ export type PokemonRuntimeData = {
   growthRates: RuntimeGrowthRate[]
   moves: RuntimeMove[]
   evolutions: RuntimeEvolution[]
-  learnsets: RuntimeLearnsets
   manifest: RuntimeManifest
 }
+
+export type LearnsetRuntimeData = RuntimeLearnsets
+
+export type RuntimeDataWithLearnsets = CoreRuntimeData & {
+  learnsets: LearnsetRuntimeData
+}
+
+// Retained as the core-data name used by existing calculators and query modules.
+export type PokemonRuntimeData = CoreRuntimeData

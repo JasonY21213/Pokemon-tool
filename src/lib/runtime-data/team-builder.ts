@@ -1,6 +1,6 @@
 import { resolveEffectiveLearnsetMoveIds } from './learnsets.ts'
 import { calculateDefensiveMatchup } from './type-matchup.ts'
-import type { PokemonRuntimeData, RuntimeForm, RuntimeMove, RuntimeType } from './types.js'
+import type { CoreRuntimeData, LearnsetRuntimeData, RuntimeForm, RuntimeMove, RuntimeType } from './types.js'
 
 export type TeamMember = { memberId: string; formId: string; abilityId: string | null; moveIds: string[] }
 export type DefensiveTypeSummary = { attackingTypeId: string; weak: number; fourTimesWeak: number; twoTimesWeak: number; neutral: number; resistOrImmune: number }
@@ -29,18 +29,23 @@ export function removeTeamMember(members: TeamMember[], memberId: string): TeamM
   return members.filter(member => member.memberId !== memberId)
 }
 
-export function formsById(data: Pick<PokemonRuntimeData, 'forms'>): Map<string, RuntimeForm> {
+export function formsById(data: Pick<CoreRuntimeData, 'forms'>): Map<string, RuntimeForm> {
   return new Map(data.forms.map(form => [form.formId, form]))
 }
 
-export function validateTeamMembers(data: PokemonRuntimeData, members: TeamMember[]): void {
+export function validateTeamMembers(data: CoreRuntimeData, members: TeamMember[]): void {
   if (members.length > 6 || new Set(members.map(member => member.memberId)).size !== members.length) throw new Error('TEAM_MEMBER_LIMIT_OR_ID')
   const formMap = formsById(data)
   const moveIds = new Set(data.moves.map(move => move.moveId))
   for (const member of members) {
     const form = formMap.get(member.formId)
     if (!form || member.moveIds.length > 4 || new Set(member.moveIds).size !== member.moveIds.length || member.moveIds.some(id => !moveIds.has(id)) || (member.abilityId !== null && !form.abilities.some(slot => slot.abilityId === member.abilityId))) throw new Error(`TEAM_MEMBER_INVALID: ${member.memberId}`)
-    const allowed = new Set(resolveEffectiveLearnsetMoveIds(data.learnsets, form.formId))
+  }
+}
+
+export function validateTeamMemberLearnsets(learnsets: LearnsetRuntimeData, members: TeamMember[]): void {
+  for (const member of members) {
+    const allowed = new Set(resolveEffectiveLearnsetMoveIds(learnsets, member.formId))
     if (member.moveIds.some(id => !allowed.has(id))) throw new Error(`TEAM_MEMBER_MOVE_NOT_IN_LEARNSET: ${member.memberId}`)
   }
 }

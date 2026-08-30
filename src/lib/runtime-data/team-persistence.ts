@@ -1,6 +1,6 @@
 import { resolveEffectiveLearnsetMoveIds } from './learnsets.ts'
 import type { TeamMember } from './team-builder.ts'
-import type { PokemonRuntimeData } from './types.js'
+import type { CoreRuntimeData, LearnsetRuntimeData } from './types.js'
 
 export const TEAM_STORAGE_KEY = 'pokemon-tool.team-state'
 export const TEAM_STATE_VERSION = 1
@@ -15,7 +15,7 @@ export type StartupTeamState = {
   source: 'url' | 'storage' | 'empty'
 }
 
-type PersistenceData = Pick<PokemonRuntimeData, 'forms' | 'moves' | 'learnsets'>
+type PersistenceData = Pick<CoreRuntimeData, 'forms' | 'moves'>
 type StorageLike = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>
 
 const formIdPattern = /^form:(?:\d{4}|[a-z0-9-]+):[a-z0-9-]+$/
@@ -57,11 +57,17 @@ export function normalizeTeamState(value: unknown, data: PersistenceData): Persi
     const memberId = isStableId(rawMember.memberId, memberIdPattern) && !usedMemberIds.has(rawMember.memberId) ? rawMember.memberId : nextMemberId(index, usedMemberIds)
     usedMemberIds.add(memberId)
     const abilityId = isStableId(rawMember.abilityId, abilityIdPattern) && form.abilities.some(slot => slot.abilityId === rawMember.abilityId) ? rawMember.abilityId : null
-    const allowedMoveIds = new Set(resolveEffectiveLearnsetMoveIds(data.learnsets, form.formId))
-    const moveIdsForMember = Array.isArray(rawMember.moveIds) ? rawMember.moveIds.filter((moveId): moveId is string => isStableId(moveId, moveIdPattern) && moveIds.has(moveId) && allowedMoveIds.has(moveId)) : []
+    const moveIdsForMember = Array.isArray(rawMember.moveIds) ? rawMember.moveIds.filter((moveId): moveId is string => isStableId(moveId, moveIdPattern) && moveIds.has(moveId)) : []
     team.push({ memberId, formId: form.formId, abilityId, moveIds: [...new Set(moveIdsForMember)].slice(0, 4) })
   }
   return { version: TEAM_STATE_VERSION, team }
+}
+
+export function revalidateTeamLearnsets(members: TeamMember[], learnsets: LearnsetRuntimeData): TeamMember[] {
+  return members.map(member => {
+    const allowedMoveIds = new Set(resolveEffectiveLearnsetMoveIds(learnsets, member.formId))
+    return { ...member, moveIds: member.moveIds.filter(moveId => allowedMoveIds.has(moveId)) }
+  })
 }
 
 export function serializeTeamState(members: TeamMember[]): string {

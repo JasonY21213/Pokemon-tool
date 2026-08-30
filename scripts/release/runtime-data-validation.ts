@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto'
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { RUNTIME_DATA_FILES, validateLoadedRuntimeData, validateRuntimeManifest } from '../../src/lib/runtime-data/integrity.ts'
-import type { PokemonRuntimeData } from '../../src/lib/runtime-data/types.ts'
+import type { RuntimeDataWithLearnsets } from '../../src/lib/runtime-data/types.ts'
 
 type ValidationSummary = { schemaVersion: number; files: number; bytes: number; records: number }
 
@@ -34,7 +34,7 @@ export async function validateRuntimeDataDirectory(dataRoot: string, tagsPath: s
     species: values.get('species.json'), forms: values.get('forms.json'), abilities: values.get('abilities.json'), items: values.get('items.json'),
     types: values.get('types.json'), natures: values.get('natures.json'), growthRates: values.get('growth-rates.json'), moves: values.get('moves.json'),
     evolutions: values.get('evolutions.json'), learnsets: values.get('learnsets.json'),
-  } as Omit<PokemonRuntimeData, 'manifest'>
+  } as Omit<RuntimeDataWithLearnsets, 'manifest'>
   validateLoadedRuntimeData(data, manifest)
   const tagIds = asTagIds(parseJson(await readFile(tagsPath, 'utf8'), tagsPath))
   const referencedTagIds = [...data.species.flatMap(record => record.tagIds), ...data.forms.flatMap(record => record.tagIds)]

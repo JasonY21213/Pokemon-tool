@@ -1,12 +1,17 @@
 <script lang="ts">
+  import { onMount } from 'svelte'
   import MoveDetail from './MoveDetail.svelte'
   import { addMoveToMoveset, filterLearnsetMoves, removeMoveFromMoveset, revalidateMoveset, sortLearnsetMoves, type LearnsetCategoryFilter, type LearnsetSort, type LearnsetSupportFilter } from '../runtime-data/learnset-explorer'
   import { resolveEffectiveLearnsetMoveIds } from '../runtime-data/learnsets'
-  import type { PokemonRuntimeData, RuntimeForm, RuntimeMove } from '../runtime-data/types'
+  import type { LearnsetRuntimeData, PokemonRuntimeData, RuntimeForm, RuntimeMove } from '../runtime-data/types'
   import { categoryLabel, formatLabel, typeLabel } from '../presentation/labels'
 
   export let data: PokemonRuntimeData
   export let selectedForm: RuntimeForm
+  export let learnsets: LearnsetRuntimeData | null = null
+  export let learnsetsLoading = false
+  export let learnsetsError = ''
+  export let onRequestLearnsets: () => void = () => {}
   let query = ''
   let typeId = ''
   let category: LearnsetCategoryFilter = 'all'
@@ -21,12 +26,13 @@
   function sameIds(left: string[], right: string[]): boolean { return left.length === right.length && left.every((id, index) => id === right[index]) }
   function add(moveId: string): void { movesetIds = addMoveToMoveset(movesetIds, moveId, allowedIds) }
   function remove(moveId: string): void { movesetIds = removeMoveFromMoveset(movesetIds, moveId) }
-  $: effectiveIds = resolveEffectiveLearnsetMoveIds(data.learnsets, selectedForm.formId)
+  onMount(() => { if (!learnsets) onRequestLearnsets() })
+  $: effectiveIds = learnsets ? resolveEffectiveLearnsetMoveIds(learnsets, selectedForm.formId) : []
   $: allowedIds = new Set(effectiveIds)
   $: effectiveMoves = effectiveIds.map(id => data.moves.find(move => move.moveId === id)).filter((move): move is RuntimeMove => move !== undefined)
   $: filteredMoves = sortLearnsetMoves(filterLearnsetMoves(effectiveMoves, { query, typeId, category, minimumPower, support }), sort)
   $: moveset = movesetIds.map(id => data.moves.find(move => move.moveId === id)).filter((move): move is RuntimeMove => move !== undefined)
-  $: if (previousFormId !== selectedForm.formId) {
+  $: if (learnsets && previousFormId !== selectedForm.formId) {
     const revalidated = revalidateMoveset(movesetIds, allowedIds)
     removalNotice = revalidated.length < movesetIds.length ? '已移除不属于新形态 Learnset 的临时招式。' : ''
     movesetIds = revalidated
@@ -37,6 +43,7 @@
 <section class="learnset">
   <h3>可学招式 / Learnset Explorer</h3>
   <p>固定 Showdown 来源中与当前形态关联的已知招式（跨世代汇总），不代表任何当前游戏中的可用性、获取方式或合法性。</p>
+  {#if learnsets}
   <div class="learnset-filters">
     <label>名称<input bind:value={query} placeholder="中文名或英文名" /></label>
     <label>属性 <small>Type</small><select bind:value={typeId}><option value="">全部 / All</option>{#each data.types as type (type.typeId)}<option value={type.typeId}>{formatLabel(typeLabel(type.typeId, type.canonicalName))}</option>{/each}</select></label>
@@ -53,4 +60,8 @@
   </div>
   <section class="moveset-summary"><h4>临时 4 招式组（{moveset.length} / 4）</h4>{#if removalNotice}<p class="status">{removalNotice}</p>{/if}{#if moveset.length}<ul>{#each moveset as move (move.moveId)}<li><strong>{move.zhName ?? move.canonicalName}</strong>：{data.types.find(type => type.typeId === move.typeId)?.canonicalName ?? move.typeId} · {move.category} · 威力 {move.power.kind === 'numeric' ? move.power.value : '—'} · {move.damageSupport.status === 'supported' ? '普通伤害公式支持' : move.damageSupport.status === 'non-damaging' ? '变化招式' : '普通公式暂不支持'} <button type="button" onclick={() => remove(move.moveId)}>移除</button></li>{/each}</ul>{:else}<p>从当前形态 Learnset 中选择最多四个招式；仅保存在本次页面使用期间。</p>{/if}</section>
   {#if selectedMove}<MoveDetail {data} move={selectedMove} />{/if}
+  {:else if learnsetsLoading}<p class="status" role="status" aria-live="polite"><strong>正在加载可学招式</strong> <small>Loading Learnsets</small></p>
+  {:else if learnsetsError}<div class="status error" role="alert"><strong>可学招式加载失败</strong> <small>Failed to Load Learnsets</small><p>{learnsetsError}</p><button type="button" onclick={onRequestLearnsets}>重试 <small>Retry</small></button></div>
+  {:else}<p class="status" role="status">正在准备可学招式… <small>Preparing Learnsets…</small></p>
+  {/if}
 </section>
