@@ -50,14 +50,17 @@
       persistenceReady = true
       if (restored.source === 'url') shareStatus = '已从分享链接恢复队伍；它优先于本浏览器保存内容。'
     }
-    catch (cause) { error = cause instanceof Error ? cause.message : '无法加载运行时数据。' }
+    catch (cause) {
+      console.error('Runtime data startup failed.', cause)
+      error = cause instanceof Error ? cause.message : '无法加载运行时数据。'
+    }
   })
 </script>
 
 <main>
   <header><h1>Pokémon Tool</h1><p>离线宝可梦资料查询与基础计算工具。</p></header>
   {#if error}<p class="status error" role="alert">{error}</p>
-  {:else if !data}<p class="status">正在加载宝可梦数据…</p>
+  {:else if !data}<p class="status" role="status" aria-live="polite">正在加载宝可梦数据…</p>
   {:else}
     <nav class="app-nav" aria-label="工具导航">{#each sections as section (section.id)}<button class:active={activeSection === section.id} aria-current={activeSection === section.id ? 'page' : undefined} type="button" onclick={() => activeSection = section.id}>{section.label}</button>{/each}</nav>
     {#if activeSection === 'pokemon'}<PokemonQuery {data} bind:selectedSpecies bind:selectedForm />

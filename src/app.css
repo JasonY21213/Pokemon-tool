@@ -36,6 +36,8 @@ header, .search, .detail, .results, .calculator, .stat-calculator, .pokemon-quer
 input { padding: 0.7rem; border: 1px solid #94a3b8; border-radius: 0.4rem; font: inherit; }
 button { cursor: pointer; border: 1px solid #cbd5e1; border-radius: 0.4rem; background: #fff; padding: 0.55rem 0.7rem; color: inherit; font: inherit; }
 button:hover, button.active { border-color: #2563eb; background: #eff6ff; }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
+button:disabled { cursor: not-allowed; opacity: 0.6; }
 .results { display: grid; gap: 0.4rem; max-height: 22rem; overflow-y: auto; }
 .results button { display: grid; grid-template-columns: auto 1fr auto; gap: 0.15rem 0.55rem; align-items: baseline; text-align: left; }
 .results button span { grid-column: 1 / -1; font-size: 0.8rem; }
@@ -133,4 +135,4 @@ h4 { margin: 0; font-size: 1rem; }
 .damage-summary { display: flex; flex-wrap: wrap; gap: 1rem; }
 .damage-modifiers { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .damage-modifiers span { padding: 0.45rem 0.6rem; border-radius: 0.35rem; background: #fff; }
-@media (max-width: 36rem) { main { padding: 1.5rem 0; } .app-nav button { flex: 1 1 8rem; } .damage-sides { grid-template-columns: 1fr; } .results button { grid-template-columns: 1fr; } .results button small { overflow-wrap: anywhere; } .forms button { flex: 1 1 8rem; } }
+@media (max-width: 36rem) { main { padding: 1.5rem 0; } select { max-width: 100%; } .app-nav button { flex: 1 1 8rem; } .damage-sides { grid-template-columns: 1fr; } .results button { grid-template-columns: 1fr; } .results button small { overflow-wrap: anywhere; } .forms button { flex: 1 1 8rem; } }
