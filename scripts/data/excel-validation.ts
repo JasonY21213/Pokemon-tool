@@ -10,10 +10,10 @@ import { serializeJson, writeJson } from './serialization.ts'
 import { loadReviewDecisions, requireDecision, type ReviewDecision } from './review-decisions.ts'
 
 const execFileAsync = promisify(execFile)
-const EXPECTED = {
-  size: 3206646,
-  sha256: 'aa25849772c7d6ccbf56c24943cf97dbe9c34fae3211826b39a82658ddcb49e5',
-  mtimeNs: 1787073126607569400n,
+const FIXED_EXPECTED = {
+  size: 3206663,
+  sha256: '7efe9af08bc11b5f6f28e006da3cc34db9ec637b11732934f71988ad6d553156',
+  mtimeNs: 1788187104562882000n,
 }
 
 export type ComparisonClassification = 'agree' | 'canonical-only' | 'excel-only' | 'conflict'
@@ -136,9 +136,8 @@ export async function fingerprintExcel(path = resolve(getProjectRoot(), 'data-so
 }
 
 export function assertExcelFingerprint(actual: { size: number; sha256: string; mtimeNs: bigint }): void {
-  if (actual.size !== EXPECTED.size || actual.sha256 !== EXPECTED.sha256 || actual.mtimeNs !== EXPECTED.mtimeNs) {
-    throw new Error(`EXCEL_FINGERPRINT_MISMATCH: expected ${EXPECTED.size}/${EXPECTED.sha256}/${EXPECTED.mtimeNs}, received ${actual.size}/${actual.sha256}/${actual.mtimeNs}`)
-  }
+  if (actual.size === FIXED_EXPECTED.size && actual.sha256 === FIXED_EXPECTED.sha256 && actual.mtimeNs === FIXED_EXPECTED.mtimeNs) return
+  throw new Error(`EXCEL_FINGERPRINT_MISMATCH: expected fixed ${FIXED_EXPECTED.size}/${FIXED_EXPECTED.sha256}/${FIXED_EXPECTED.mtimeNs}, received ${actual.size}/${actual.sha256}/${actual.mtimeNs}`)
 }
 
 export class ExcelValidationAdapter {
@@ -146,7 +145,8 @@ export class ExcelValidationAdapter {
   readonly saveCapability = false
 
   async read(workbookPath = resolve(getProjectRoot(), 'data-source', 'Pokemon-data.xlsx')): Promise<ExcelSourceDocument> {
-    assertExcelFingerprint(await fingerprintExcel(workbookPath))
+    const before = await fingerprintExcel(workbookPath)
+    assertExcelFingerprint(before)
     const python = resolve(getProjectRoot(), '.venv', 'Scripts', 'python.exe')
     const helper = resolve(getProjectRoot(), 'scripts', 'data', 'excel', 'read_workbook.py')
     const { stdout } = await execFileAsync(python, [helper, workbookPath], {
@@ -553,7 +553,7 @@ function aggregate(reports: Record<string, DomainReport>, excel: ExcelSourceDocu
   const classifications = Object.fromEntries(['agree', 'canonical-only', 'excel-only', 'conflict', 'representation-difference', 'suspected-legacy-error', 'confirmed-legacy-error', 'unverifiable'].map(key => [key, comparisons.filter(item => item.classification === key).length]))
   const severity = Object.fromEntries(['info', 'warning', 'error', 'blocking'].map(key => [key, comparisons.filter(item => item.severity === key).length]))
   return {
-    schemaVersion: 1, purpose: 'read-only Excel cross-validation', excelRole: 'legacy/migration/validation only',
+    schemaVersion: 1, purpose: 'read-only fixed Pokemon-data.xlsx cross-validation',
     fingerprint: excel.fingerprint, adapter: { name: excel.adapter, readOnly: excel.readOnly, saveCapability: excel.saveCapability, openpyxlVersion: excel.openpyxlVersion },
     canonicalCandidate: { species: canonical.species.length, forms: canonical.forms.length, abilities: canonical.abilities.length, moves: canonical.moves.length, evolutions: canonical.evolutions.length },
     totalComparisonRecords: comparisons.length, classifications, severity,

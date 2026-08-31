@@ -1,0 +1,4538 @@
+[
+  {
+    "itemId": "item:0001",
+    "showdownId": "masterball",
+    "canonicalName": "Master Ball",
+    "zhHansName": "大师球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0002",
+    "showdownId": "ultraball",
+    "canonicalName": "Ultra Ball",
+    "zhHansName": "高级球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0003",
+    "showdownId": "greatball",
+    "canonicalName": "Great Ball",
+    "zhHansName": "超级球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0004",
+    "showdownId": "pokeball",
+    "canonicalName": "Poke Ball",
+    "zhHansName": "精灵球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0005",
+    "showdownId": "safariball",
+    "canonicalName": "Safari Ball",
+    "zhHansName": "狩猎球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0006",
+    "showdownId": "netball",
+    "canonicalName": "Net Ball",
+    "zhHansName": "捕网球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0007",
+    "showdownId": "diveball",
+    "canonicalName": "Dive Ball",
+    "zhHansName": "潜水球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0008",
+    "showdownId": "nestball",
+    "canonicalName": "Nest Ball",
+    "zhHansName": "巢穴球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0009",
+    "showdownId": "repeatball",
+    "canonicalName": "Repeat Ball",
+    "zhHansName": "重复球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0010",
+    "showdownId": "timerball",
+    "canonicalName": "Timer Ball",
+    "zhHansName": "计时球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0011",
+    "showdownId": "luxuryball",
+    "canonicalName": "Luxury Ball",
+    "zhHansName": "豪华球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0012",
+    "showdownId": "premierball",
+    "canonicalName": "Premier Ball",
+    "zhHansName": "纪念球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0013",
+    "showdownId": "duskball",
+    "canonicalName": "Dusk Ball",
+    "zhHansName": "黑暗球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0014",
+    "showdownId": "healball",
+    "canonicalName": "Heal Ball",
+    "zhHansName": "治愈球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0015",
+    "showdownId": "quickball",
+    "canonicalName": "Quick Ball",
+    "zhHansName": "先机球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0016",
+    "showdownId": "cherishball",
+    "canonicalName": "Cherish Ball",
+    "zhHansName": "贵重球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0043",
+    "showdownId": "berryjuice",
+    "canonicalName": "Berry Juice",
+    "zhHansName": "树果汁",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0080",
+    "showdownId": "sunstone",
+    "canonicalName": "Sun Stone",
+    "zhHansName": "日之石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0081",
+    "showdownId": "moonstone",
+    "canonicalName": "Moon Stone",
+    "zhHansName": "月之石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0082",
+    "showdownId": "firestone",
+    "canonicalName": "Fire Stone",
+    "zhHansName": "火之石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0083",
+    "showdownId": "thunderstone",
+    "canonicalName": "Thunder Stone",
+    "zhHansName": "雷之石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0084",
+    "showdownId": "waterstone",
+    "canonicalName": "Water Stone",
+    "zhHansName": "水之石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0085",
+    "showdownId": "leafstone",
+    "canonicalName": "Leaf Stone",
+    "zhHansName": "叶之石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0099",
+    "showdownId": "rootfossil",
+    "canonicalName": "Root Fossil",
+    "zhHansName": "根状化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0100",
+    "showdownId": "clawfossil",
+    "canonicalName": "Claw Fossil",
+    "zhHansName": "爪子化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0101",
+    "showdownId": "helixfossil",
+    "canonicalName": "Helix Fossil",
+    "zhHansName": "贝壳化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0102",
+    "showdownId": "domefossil",
+    "canonicalName": "Dome Fossil",
+    "zhHansName": "甲壳化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0103",
+    "showdownId": "oldamber",
+    "canonicalName": "Old Amber",
+    "zhHansName": "秘密琥珀",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0104",
+    "showdownId": "armorfossil",
+    "canonicalName": "Armor Fossil",
+    "zhHansName": "盾甲化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0105",
+    "showdownId": "skullfossil",
+    "canonicalName": "Skull Fossil",
+    "zhHansName": "头盖化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0106",
+    "showdownId": "rarebone",
+    "canonicalName": "Rare Bone",
+    "zhHansName": "贵重骨头",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0107",
+    "showdownId": "shinystone",
+    "canonicalName": "Shiny Stone",
+    "zhHansName": "光之石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0108",
+    "showdownId": "duskstone",
+    "canonicalName": "Dusk Stone",
+    "zhHansName": "暗之石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0109",
+    "showdownId": "dawnstone",
+    "canonicalName": "Dawn Stone",
+    "zhHansName": "觉醒之石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0110",
+    "showdownId": "ovalstone",
+    "canonicalName": "Oval Stone",
+    "zhHansName": "浑圆之石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0112",
+    "showdownId": "griseousorb",
+    "canonicalName": "Griseous Orb",
+    "zhHansName": "白金宝珠",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0116",
+    "showdownId": "dousedrive",
+    "canonicalName": "Douse Drive",
+    "zhHansName": "水流卡带",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0117",
+    "showdownId": "shockdrive",
+    "canonicalName": "Shock Drive",
+    "zhHansName": "闪电卡带",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0118",
+    "showdownId": "burndrive",
+    "canonicalName": "Burn Drive",
+    "zhHansName": "火焰卡带",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0119",
+    "showdownId": "chilldrive",
+    "canonicalName": "Chill Drive",
+    "zhHansName": "冰冻卡带",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0135",
+    "showdownId": "adamantorb",
+    "canonicalName": "Adamant Orb",
+    "zhHansName": "金刚宝珠",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0136",
+    "showdownId": "lustrousorb",
+    "canonicalName": "Lustrous Orb",
+    "zhHansName": "白玉宝珠",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0137",
+    "showdownId": "mail",
+    "canonicalName": "Mail",
+    "zhHansName": "邮件",
+    "mappingClass": "owner-override",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0149",
+    "showdownId": "cheriberry",
+    "canonicalName": "Cheri Berry",
+    "zhHansName": "樱子果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0150",
+    "showdownId": "chestoberry",
+    "canonicalName": "Chesto Berry",
+    "zhHansName": "零余果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0151",
+    "showdownId": "pechaberry",
+    "canonicalName": "Pecha Berry",
+    "zhHansName": "桃桃果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0152",
+    "showdownId": "rawstberry",
+    "canonicalName": "Rawst Berry",
+    "zhHansName": "莓莓果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0153",
+    "showdownId": "aspearberry",
+    "canonicalName": "Aspear Berry",
+    "zhHansName": "利木果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0154",
+    "showdownId": "leppaberry",
+    "canonicalName": "Leppa Berry",
+    "zhHansName": "苹野果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0155",
+    "showdownId": "oranberry",
+    "canonicalName": "Oran Berry",
+    "zhHansName": "橙橙果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0156",
+    "showdownId": "persimberry",
+    "canonicalName": "Persim Berry",
+    "zhHansName": "柿仔果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0157",
+    "showdownId": "lumberry",
+    "canonicalName": "Lum Berry",
+    "zhHansName": "木子果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0158",
+    "showdownId": "sitrusberry",
+    "canonicalName": "Sitrus Berry",
+    "zhHansName": "文柚果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0159",
+    "showdownId": "figyberry",
+    "canonicalName": "Figy Berry",
+    "zhHansName": "勿花果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0160",
+    "showdownId": "wikiberry",
+    "canonicalName": "Wiki Berry",
+    "zhHansName": "异奇果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0161",
+    "showdownId": "magoberry",
+    "canonicalName": "Mago Berry",
+    "zhHansName": "芒芒果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0162",
+    "showdownId": "aguavberry",
+    "canonicalName": "Aguav Berry",
+    "zhHansName": "乐芭果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0163",
+    "showdownId": "iapapaberry",
+    "canonicalName": "Iapapa Berry",
+    "zhHansName": "芭亚果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0164",
+    "showdownId": "razzberry",
+    "canonicalName": "Razz Berry",
+    "zhHansName": "蔓莓果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0165",
+    "showdownId": "blukberry",
+    "canonicalName": "Bluk Berry",
+    "zhHansName": "墨莓果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0166",
+    "showdownId": "nanabberry",
+    "canonicalName": "Nanab Berry",
+    "zhHansName": "蕉香果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0167",
+    "showdownId": "wepearberry",
+    "canonicalName": "Wepear Berry",
+    "zhHansName": "西梨果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0168",
+    "showdownId": "pinapberry",
+    "canonicalName": "Pinap Berry",
+    "zhHansName": "凰梨果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0169",
+    "showdownId": "pomegberry",
+    "canonicalName": "Pomeg Berry",
+    "zhHansName": "榴石果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0170",
+    "showdownId": "kelpsyberry",
+    "canonicalName": "Kelpsy Berry",
+    "zhHansName": "藻根果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0171",
+    "showdownId": "qualotberry",
+    "canonicalName": "Qualot Berry",
+    "zhHansName": "比巴果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0172",
+    "showdownId": "hondewberry",
+    "canonicalName": "Hondew Berry",
+    "zhHansName": "哈密果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0173",
+    "showdownId": "grepaberry",
+    "canonicalName": "Grepa Berry",
+    "zhHansName": "萄葡果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0174",
+    "showdownId": "tamatoberry",
+    "canonicalName": "Tamato Berry",
+    "zhHansName": "茄番果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0175",
+    "showdownId": "cornnberry",
+    "canonicalName": "Cornn Berry",
+    "zhHansName": "玉黍果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0176",
+    "showdownId": "magostberry",
+    "canonicalName": "Magost Berry",
+    "zhHansName": "岳竹果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0177",
+    "showdownId": "rabutaberry",
+    "canonicalName": "Rabuta Berry",
+    "zhHansName": "茸丹果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0178",
+    "showdownId": "nomelberry",
+    "canonicalName": "Nomel Berry",
+    "zhHansName": "檬柠果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0179",
+    "showdownId": "spelonberry",
+    "canonicalName": "Spelon Berry",
+    "zhHansName": "刺角果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0180",
+    "showdownId": "pamtreberry",
+    "canonicalName": "Pamtre Berry",
+    "zhHansName": "椰木果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0181",
+    "showdownId": "watmelberry",
+    "canonicalName": "Watmel Berry",
+    "zhHansName": "瓜西果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0182",
+    "showdownId": "durinberry",
+    "canonicalName": "Durin Berry",
+    "zhHansName": "金枕果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0183",
+    "showdownId": "belueberry",
+    "canonicalName": "Belue Berry",
+    "zhHansName": "靛莓果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0184",
+    "showdownId": "occaberry",
+    "canonicalName": "Occa Berry",
+    "zhHansName": "巧可果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0185",
+    "showdownId": "passhoberry",
+    "canonicalName": "Passho Berry",
+    "zhHansName": "千香果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0186",
+    "showdownId": "wacanberry",
+    "canonicalName": "Wacan Berry",
+    "zhHansName": "烛木果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0187",
+    "showdownId": "rindoberry",
+    "canonicalName": "Rindo Berry",
+    "zhHansName": "罗子果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0188",
+    "showdownId": "yacheberry",
+    "canonicalName": "Yache Berry",
+    "zhHansName": "番荔果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0189",
+    "showdownId": "chopleberry",
+    "canonicalName": "Chople Berry",
+    "zhHansName": "莲蒲果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0190",
+    "showdownId": "kebiaberry",
+    "canonicalName": "Kebia Berry",
+    "zhHansName": "通通果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0191",
+    "showdownId": "shucaberry",
+    "canonicalName": "Shuca Berry",
+    "zhHansName": "腰木果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0192",
+    "showdownId": "cobaberry",
+    "canonicalName": "Coba Berry",
+    "zhHansName": "棱瓜果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0193",
+    "showdownId": "payapaberry",
+    "canonicalName": "Payapa Berry",
+    "zhHansName": "福禄果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0194",
+    "showdownId": "tangaberry",
+    "canonicalName": "Tanga Berry",
+    "zhHansName": "扁樱果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0195",
+    "showdownId": "chartiberry",
+    "canonicalName": "Charti Berry",
+    "zhHansName": "草蚕果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0196",
+    "showdownId": "kasibberry",
+    "canonicalName": "Kasib Berry",
+    "zhHansName": "佛柑果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0197",
+    "showdownId": "habanberry",
+    "canonicalName": "Haban Berry",
+    "zhHansName": "莓榴果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0198",
+    "showdownId": "colburberry",
+    "canonicalName": "Colbur Berry",
+    "zhHansName": "刺耳果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0199",
+    "showdownId": "babiriberry",
+    "canonicalName": "Babiri Berry",
+    "zhHansName": "霹霹果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0200",
+    "showdownId": "chilanberry",
+    "canonicalName": "Chilan Berry",
+    "zhHansName": "灯浆果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0201",
+    "showdownId": "liechiberry",
+    "canonicalName": "Liechi Berry",
+    "zhHansName": "枝荔果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0202",
+    "showdownId": "ganlonberry",
+    "canonicalName": "Ganlon Berry",
+    "zhHansName": "龙睛果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0203",
+    "showdownId": "salacberry",
+    "canonicalName": "Salac Berry",
+    "zhHansName": "沙鳞果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0204",
+    "showdownId": "petayaberry",
+    "canonicalName": "Petaya Berry",
+    "zhHansName": "龙火果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0205",
+    "showdownId": "apicotberry",
+    "canonicalName": "Apicot Berry",
+    "zhHansName": "杏仔果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0206",
+    "showdownId": "lansatberry",
+    "canonicalName": "Lansat Berry",
+    "zhHansName": "兰萨果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0207",
+    "showdownId": "starfberry",
+    "canonicalName": "Starf Berry",
+    "zhHansName": "星桃果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0208",
+    "showdownId": "enigmaberry",
+    "canonicalName": "Enigma Berry",
+    "zhHansName": "谜芝果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0209",
+    "showdownId": "micleberry",
+    "canonicalName": "Micle Berry",
+    "zhHansName": "奇秘果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0210",
+    "showdownId": "custapberry",
+    "canonicalName": "Custap Berry",
+    "zhHansName": "释陀果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0211",
+    "showdownId": "jabocaberry",
+    "canonicalName": "Jaboca Berry",
+    "zhHansName": "嘉珍果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0212",
+    "showdownId": "rowapberry",
+    "canonicalName": "Rowap Berry",
+    "zhHansName": "雾莲果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0213",
+    "showdownId": "brightpowder",
+    "canonicalName": "Bright Powder",
+    "zhHansName": "光粉",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0214",
+    "showdownId": "whiteherb",
+    "canonicalName": "White Herb",
+    "zhHansName": "白色香草",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0215",
+    "showdownId": "machobrace",
+    "canonicalName": "Macho Brace",
+    "zhHansName": "强制锻炼器",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0217",
+    "showdownId": "quickclaw",
+    "canonicalName": "Quick Claw",
+    "zhHansName": "先制之爪",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0219",
+    "showdownId": "mentalherb",
+    "canonicalName": "Mental Herb",
+    "zhHansName": "心灵香草",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0220",
+    "showdownId": "choiceband",
+    "canonicalName": "Choice Band",
+    "zhHansName": "讲究头带",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0221",
+    "showdownId": "kingsrock",
+    "canonicalName": "King's Rock",
+    "zhHansName": "王者之证",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0222",
+    "showdownId": "silverpowder",
+    "canonicalName": "Silver Powder",
+    "zhHansName": "银粉",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0225",
+    "showdownId": "souldew",
+    "canonicalName": "Soul Dew",
+    "zhHansName": "心之水滴",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0226",
+    "showdownId": "deepseatooth",
+    "canonicalName": "Deep Sea Tooth",
+    "zhHansName": "深海之牙",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0227",
+    "showdownId": "deepseascale",
+    "canonicalName": "Deep Sea Scale",
+    "zhHansName": "深海鳞片",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0230",
+    "showdownId": "focusband",
+    "canonicalName": "Focus Band",
+    "zhHansName": "气势头带",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0232",
+    "showdownId": "scopelens",
+    "canonicalName": "Scope Lens",
+    "zhHansName": "焦点镜",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0233",
+    "showdownId": "metalcoat",
+    "canonicalName": "Metal Coat",
+    "zhHansName": "金属膜",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0234",
+    "showdownId": "leftovers",
+    "canonicalName": "Leftovers",
+    "zhHansName": "吃剩的东西",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0235",
+    "showdownId": "dragonscale",
+    "canonicalName": "Dragon Scale",
+    "zhHansName": "龙之鳞片",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0236",
+    "showdownId": "lightball",
+    "canonicalName": "Light Ball",
+    "zhHansName": "电气球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0237",
+    "showdownId": "softsand",
+    "canonicalName": "Soft Sand",
+    "zhHansName": "柔软沙子",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0238",
+    "showdownId": "hardstone",
+    "canonicalName": "Hard Stone",
+    "zhHansName": "硬石头",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0239",
+    "showdownId": "miracleseed",
+    "canonicalName": "Miracle Seed",
+    "zhHansName": "奇迹种子",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0240",
+    "showdownId": "blackglasses",
+    "canonicalName": "Black Glasses",
+    "zhHansName": "黑色眼镜",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0241",
+    "showdownId": "blackbelt",
+    "canonicalName": "Black Belt",
+    "zhHansName": "黑带",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0242",
+    "showdownId": "magnet",
+    "canonicalName": "Magnet",
+    "zhHansName": "磁铁",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0243",
+    "showdownId": "mysticwater",
+    "canonicalName": "Mystic Water",
+    "zhHansName": "神秘水滴",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0244",
+    "showdownId": "sharpbeak",
+    "canonicalName": "Sharp Beak",
+    "zhHansName": "锐利鸟嘴",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0245",
+    "showdownId": "poisonbarb",
+    "canonicalName": "Poison Barb",
+    "zhHansName": "毒针",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0246",
+    "showdownId": "nevermeltice",
+    "canonicalName": "Never-Melt Ice",
+    "zhHansName": "不融冰",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0247",
+    "showdownId": "spelltag",
+    "canonicalName": "Spell Tag",
+    "zhHansName": "诅咒之符",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0248",
+    "showdownId": "twistedspoon",
+    "canonicalName": "Twisted Spoon",
+    "zhHansName": "弯曲的汤匙",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0249",
+    "showdownId": "charcoal",
+    "canonicalName": "Charcoal",
+    "zhHansName": "木炭",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0250",
+    "showdownId": "dragonfang",
+    "canonicalName": "Dragon Fang",
+    "zhHansName": "龙之牙",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0251",
+    "showdownId": "silkscarf",
+    "canonicalName": "Silk Scarf",
+    "zhHansName": "丝绸围巾",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0252",
+    "showdownId": "upgrade",
+    "canonicalName": "Up-Grade",
+    "zhHansName": "升级数据",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0253",
+    "showdownId": "shellbell",
+    "canonicalName": "Shell Bell",
+    "zhHansName": "贝壳之铃",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0254",
+    "showdownId": "seaincense",
+    "canonicalName": "Sea Incense",
+    "zhHansName": "海潮薰香",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0255",
+    "showdownId": "laxincense",
+    "canonicalName": "Lax Incense",
+    "zhHansName": "悠闲薰香",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0256",
+    "showdownId": "luckypunch",
+    "canonicalName": "Lucky Punch",
+    "zhHansName": "吉利拳",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0257",
+    "showdownId": "metalpowder",
+    "canonicalName": "Metal Powder",
+    "zhHansName": "金属粉",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0258",
+    "showdownId": "thickclub",
+    "canonicalName": "Thick Club",
+    "zhHansName": "粗骨头",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0259",
+    "showdownId": "leek",
+    "canonicalName": "Leek",
+    "zhHansName": "大葱",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0265",
+    "showdownId": "widelens",
+    "canonicalName": "Wide Lens",
+    "zhHansName": "广角镜",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0266",
+    "showdownId": "muscleband",
+    "canonicalName": "Muscle Band",
+    "zhHansName": "力量头带",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0267",
+    "showdownId": "wiseglasses",
+    "canonicalName": "Wise Glasses",
+    "zhHansName": "博识眼镜",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0268",
+    "showdownId": "expertbelt",
+    "canonicalName": "Expert Belt",
+    "zhHansName": "达人带",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0269",
+    "showdownId": "lightclay",
+    "canonicalName": "Light Clay",
+    "zhHansName": "光之黏土",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0270",
+    "showdownId": "lifeorb",
+    "canonicalName": "Life Orb",
+    "zhHansName": "生命宝珠",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0271",
+    "showdownId": "powerherb",
+    "canonicalName": "Power Herb",
+    "zhHansName": "强力香草",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0272",
+    "showdownId": "toxicorb",
+    "canonicalName": "Toxic Orb",
+    "zhHansName": "剧毒宝珠",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0273",
+    "showdownId": "flameorb",
+    "canonicalName": "Flame Orb",
+    "zhHansName": "火焰宝珠",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0274",
+    "showdownId": "quickpowder",
+    "canonicalName": "Quick Powder",
+    "zhHansName": "速度粉",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0275",
+    "showdownId": "focussash",
+    "canonicalName": "Focus Sash",
+    "zhHansName": "气势披带",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0276",
+    "showdownId": "zoomlens",
+    "canonicalName": "Zoom Lens",
+    "zhHansName": "对焦镜",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0277",
+    "showdownId": "metronome",
+    "canonicalName": "Metronome",
+    "zhHansName": "节拍器",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0278",
+    "showdownId": "ironball",
+    "canonicalName": "Iron Ball",
+    "zhHansName": "黑色铁球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0279",
+    "showdownId": "laggingtail",
+    "canonicalName": "Lagging Tail",
+    "zhHansName": "后攻之尾",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0280",
+    "showdownId": "destinyknot",
+    "canonicalName": "Destiny Knot",
+    "zhHansName": "红线",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0281",
+    "showdownId": "blacksludge",
+    "canonicalName": "Black Sludge",
+    "zhHansName": "黑色污泥",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0282",
+    "showdownId": "icyrock",
+    "canonicalName": "Icy Rock",
+    "zhHansName": "冰冷岩石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0283",
+    "showdownId": "smoothrock",
+    "canonicalName": "Smooth Rock",
+    "zhHansName": "沙沙岩石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0284",
+    "showdownId": "heatrock",
+    "canonicalName": "Heat Rock",
+    "zhHansName": "炽热岩石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0285",
+    "showdownId": "damprock",
+    "canonicalName": "Damp Rock",
+    "zhHansName": "潮湿岩石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0286",
+    "showdownId": "gripclaw",
+    "canonicalName": "Grip Claw",
+    "zhHansName": "紧缠钩爪",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0287",
+    "showdownId": "choicescarf",
+    "canonicalName": "Choice Scarf",
+    "zhHansName": "讲究围巾",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0288",
+    "showdownId": "stickybarb",
+    "canonicalName": "Sticky Barb",
+    "zhHansName": "附着针",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0289",
+    "showdownId": "powerbracer",
+    "canonicalName": "Power Bracer",
+    "zhHansName": "力量护腕",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0290",
+    "showdownId": "powerbelt",
+    "canonicalName": "Power Belt",
+    "zhHansName": "力量腰带",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0291",
+    "showdownId": "powerlens",
+    "canonicalName": "Power Lens",
+    "zhHansName": "力量镜",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0292",
+    "showdownId": "powerband",
+    "canonicalName": "Power Band",
+    "zhHansName": "力量束带",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0293",
+    "showdownId": "poweranklet",
+    "canonicalName": "Power Anklet",
+    "zhHansName": "力量护踝",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0294",
+    "showdownId": "powerweight",
+    "canonicalName": "Power Weight",
+    "zhHansName": "力量负重",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0295",
+    "showdownId": "shedshell",
+    "canonicalName": "Shed Shell",
+    "zhHansName": "美丽空壳",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0296",
+    "showdownId": "bigroot",
+    "canonicalName": "Big Root",
+    "zhHansName": "大根茎",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0297",
+    "showdownId": "choicespecs",
+    "canonicalName": "Choice Specs",
+    "zhHansName": "讲究眼镜",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0298",
+    "showdownId": "flameplate",
+    "canonicalName": "Flame Plate",
+    "zhHansName": "火球石板",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0299",
+    "showdownId": "splashplate",
+    "canonicalName": "Splash Plate",
+    "zhHansName": "水滴石板",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0300",
+    "showdownId": "zapplate",
+    "canonicalName": "Zap Plate",
+    "zhHansName": "雷电石板",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0301",
+    "showdownId": "meadowplate",
+    "canonicalName": "Meadow Plate",
+    "zhHansName": "碧绿石板",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0302",
+    "showdownId": "icicleplate",
+    "canonicalName": "Icicle Plate",
+    "zhHansName": "冰柱石板",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0303",
+    "showdownId": "fistplate",
+    "canonicalName": "Fist Plate",
+    "zhHansName": "拳头石板",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0304",
+    "showdownId": "toxicplate",
+    "canonicalName": "Toxic Plate",
+    "zhHansName": "剧毒石板",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0305",
+    "showdownId": "earthplate",
+    "canonicalName": "Earth Plate",
+    "zhHansName": "大地石板",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0306",
+    "showdownId": "skyplate",
+    "canonicalName": "Sky Plate",
+    "zhHansName": "蓝天石板",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0307",
+    "showdownId": "mindplate",
+    "canonicalName": "Mind Plate",
+    "zhHansName": "神奇石板",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0308",
+    "showdownId": "insectplate",
+    "canonicalName": "Insect Plate",
+    "zhHansName": "玉虫石板",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0309",
+    "showdownId": "stoneplate",
+    "canonicalName": "Stone Plate",
+    "zhHansName": "岩石石板",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0310",
+    "showdownId": "spookyplate",
+    "canonicalName": "Spooky Plate",
+    "zhHansName": "妖怪石板",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0311",
+    "showdownId": "dracoplate",
+    "canonicalName": "Draco Plate",
+    "zhHansName": "龙之石板",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0312",
+    "showdownId": "dreadplate",
+    "canonicalName": "Dread Plate",
+    "zhHansName": "恶颜石板",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0313",
+    "showdownId": "ironplate",
+    "canonicalName": "Iron Plate",
+    "zhHansName": "钢铁石板",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0314",
+    "showdownId": "oddincense",
+    "canonicalName": "Odd Incense",
+    "zhHansName": "奇异薰香",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0315",
+    "showdownId": "rockincense",
+    "canonicalName": "Rock Incense",
+    "zhHansName": "岩石薰香",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0316",
+    "showdownId": "fullincense",
+    "canonicalName": "Full Incense",
+    "zhHansName": "饱腹薰香",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0317",
+    "showdownId": "waveincense",
+    "canonicalName": "Wave Incense",
+    "zhHansName": "涟漪薰香",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0318",
+    "showdownId": "roseincense",
+    "canonicalName": "Rose Incense",
+    "zhHansName": "花朵薰香",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0321",
+    "showdownId": "protector",
+    "canonicalName": "Protector",
+    "zhHansName": "护具",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0322",
+    "showdownId": "electirizer",
+    "canonicalName": "Electirizer",
+    "zhHansName": "电力增幅器",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0323",
+    "showdownId": "magmarizer",
+    "canonicalName": "Magmarizer",
+    "zhHansName": "熔岩增幅器",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0324",
+    "showdownId": "dubiousdisc",
+    "canonicalName": "Dubious Disc",
+    "zhHansName": "可疑补丁",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0325",
+    "showdownId": "reapercloth",
+    "canonicalName": "Reaper Cloth",
+    "zhHansName": "灵界之布",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0326",
+    "showdownId": "razorclaw",
+    "canonicalName": "Razor Claw",
+    "zhHansName": "锐利之爪",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0327",
+    "showdownId": "razorfang",
+    "canonicalName": "Razor Fang",
+    "zhHansName": "锐利之牙",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0492",
+    "showdownId": "fastball",
+    "canonicalName": "Fast Ball",
+    "zhHansName": "速度球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0493",
+    "showdownId": "levelball",
+    "canonicalName": "Level Ball",
+    "zhHansName": "等级球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0494",
+    "showdownId": "lureball",
+    "canonicalName": "Lure Ball",
+    "zhHansName": "诱饵球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0495",
+    "showdownId": "heavyball",
+    "canonicalName": "Heavy Ball",
+    "zhHansName": "沉重球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0496",
+    "showdownId": "loveball",
+    "canonicalName": "Love Ball",
+    "zhHansName": "甜蜜球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0497",
+    "showdownId": "friendball",
+    "canonicalName": "Friend Ball",
+    "zhHansName": "友友球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0498",
+    "showdownId": "moonball",
+    "canonicalName": "Moon Ball",
+    "zhHansName": "月亮球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0499",
+    "showdownId": "sportball",
+    "canonicalName": "Sport Ball",
+    "zhHansName": "竞赛球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0500",
+    "showdownId": "parkball",
+    "canonicalName": "Park Ball",
+    "zhHansName": "公园球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0534",
+    "showdownId": "redorb",
+    "canonicalName": "Red Orb",
+    "zhHansName": "朱红色宝珠",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0535",
+    "showdownId": "blueorb",
+    "canonicalName": "Blue Orb",
+    "zhHansName": "靛蓝色宝珠",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0537",
+    "showdownId": "prismscale",
+    "canonicalName": "Prism Scale",
+    "zhHansName": "美丽鳞片",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0538",
+    "showdownId": "eviolite",
+    "canonicalName": "Eviolite",
+    "zhHansName": "进化奇石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0539",
+    "showdownId": "floatstone",
+    "canonicalName": "Float Stone",
+    "zhHansName": "轻石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0540",
+    "showdownId": "rockyhelmet",
+    "canonicalName": "Rocky Helmet",
+    "zhHansName": "凸凸头盔",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0541",
+    "showdownId": "airballoon",
+    "canonicalName": "Air Balloon",
+    "zhHansName": "气球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0542",
+    "showdownId": "redcard",
+    "canonicalName": "Red Card",
+    "zhHansName": "红牌",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0543",
+    "showdownId": "ringtarget",
+    "canonicalName": "Ring Target",
+    "zhHansName": "标靶",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0544",
+    "showdownId": "bindingband",
+    "canonicalName": "Binding Band",
+    "zhHansName": "紧绑束带",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0545",
+    "showdownId": "absorbbulb",
+    "canonicalName": "Absorb Bulb",
+    "zhHansName": "球根",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0546",
+    "showdownId": "cellbattery",
+    "canonicalName": "Cell Battery",
+    "zhHansName": "充电电池",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0547",
+    "showdownId": "ejectbutton",
+    "canonicalName": "Eject Button",
+    "zhHansName": "逃脱按键",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0548",
+    "showdownId": "firegem",
+    "canonicalName": "Fire Gem",
+    "zhHansName": "火之宝石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0549",
+    "showdownId": "watergem",
+    "canonicalName": "Water Gem",
+    "zhHansName": "水之宝石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0550",
+    "showdownId": "electricgem",
+    "canonicalName": "Electric Gem",
+    "zhHansName": "电之宝石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0551",
+    "showdownId": "grassgem",
+    "canonicalName": "Grass Gem",
+    "zhHansName": "草之宝石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0552",
+    "showdownId": "icegem",
+    "canonicalName": "Ice Gem",
+    "zhHansName": "冰之宝石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0553",
+    "showdownId": "fightinggem",
+    "canonicalName": "Fighting Gem",
+    "zhHansName": "格斗宝石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0554",
+    "showdownId": "poisongem",
+    "canonicalName": "Poison Gem",
+    "zhHansName": "毒之宝石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0555",
+    "showdownId": "groundgem",
+    "canonicalName": "Ground Gem",
+    "zhHansName": "地面宝石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0556",
+    "showdownId": "flyinggem",
+    "canonicalName": "Flying Gem",
+    "zhHansName": "飞行宝石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0557",
+    "showdownId": "psychicgem",
+    "canonicalName": "Psychic Gem",
+    "zhHansName": "超能力宝石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0558",
+    "showdownId": "buggem",
+    "canonicalName": "Bug Gem",
+    "zhHansName": "虫之宝石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0559",
+    "showdownId": "rockgem",
+    "canonicalName": "Rock Gem",
+    "zhHansName": "岩石宝石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0560",
+    "showdownId": "ghostgem",
+    "canonicalName": "Ghost Gem",
+    "zhHansName": "幽灵宝石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0561",
+    "showdownId": "dragongem",
+    "canonicalName": "Dragon Gem",
+    "zhHansName": "龙之宝石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0562",
+    "showdownId": "darkgem",
+    "canonicalName": "Dark Gem",
+    "zhHansName": "恶之宝石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0563",
+    "showdownId": "steelgem",
+    "canonicalName": "Steel Gem",
+    "zhHansName": "钢之宝石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0564",
+    "showdownId": "normalgem",
+    "canonicalName": "Normal Gem",
+    "zhHansName": "一般宝石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0571",
+    "showdownId": "prettyfeather",
+    "canonicalName": "Pretty Feather",
+    "zhHansName": "美丽之羽",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0572",
+    "showdownId": "coverfossil",
+    "canonicalName": "Cover Fossil",
+    "zhHansName": "背盖化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0573",
+    "showdownId": "plumefossil",
+    "canonicalName": "Plume Fossil",
+    "zhHansName": "羽毛化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0576",
+    "showdownId": "dreamball",
+    "canonicalName": "Dream Ball",
+    "zhHansName": "梦境球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0581",
+    "showdownId": "bignugget",
+    "canonicalName": "Big Nugget",
+    "zhHansName": "巨大金珠",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0639",
+    "showdownId": "weaknesspolicy",
+    "canonicalName": "Weakness Policy",
+    "zhHansName": "弱点保险",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0640",
+    "showdownId": "assaultvest",
+    "canonicalName": "Assault Vest",
+    "zhHansName": "突击背心",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0644",
+    "showdownId": "pixieplate",
+    "canonicalName": "Pixie Plate",
+    "zhHansName": "妖精石板",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0646",
+    "showdownId": "whippeddream",
+    "canonicalName": "Whipped Dream",
+    "zhHansName": "泡沫奶油",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0647",
+    "showdownId": "sachet",
+    "canonicalName": "Sachet",
+    "zhHansName": "香袋",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0648",
+    "showdownId": "luminousmoss",
+    "canonicalName": "Luminous Moss",
+    "zhHansName": "光苔",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0649",
+    "showdownId": "snowball",
+    "canonicalName": "Snowball",
+    "zhHansName": "雪球",
+    "mappingClass": "owner-override",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0650",
+    "showdownId": "safetygoggles",
+    "canonicalName": "Safety Goggles",
+    "zhHansName": "防尘护目镜",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0656",
+    "showdownId": "gengarite",
+    "canonicalName": "Gengarite",
+    "zhHansName": "耿鬼进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0657",
+    "showdownId": "gardevoirite",
+    "canonicalName": "Gardevoirite",
+    "zhHansName": "沙奈朵进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0658",
+    "showdownId": "ampharosite",
+    "canonicalName": "Ampharosite",
+    "zhHansName": "电龙进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0659",
+    "showdownId": "venusaurite",
+    "canonicalName": "Venusaurite",
+    "zhHansName": "妙蛙花进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0660",
+    "showdownId": "charizarditex",
+    "canonicalName": "Charizardite X",
+    "zhHansName": "喷火龙进化石Ｘ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0661",
+    "showdownId": "blastoisinite",
+    "canonicalName": "Blastoisinite",
+    "zhHansName": "水箭龟进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0662",
+    "showdownId": "mewtwonitex",
+    "canonicalName": "Mewtwonite X",
+    "zhHansName": "超梦进化石Ｘ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0663",
+    "showdownId": "mewtwonitey",
+    "canonicalName": "Mewtwonite Y",
+    "zhHansName": "超梦进化石Ｙ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0664",
+    "showdownId": "blazikenite",
+    "canonicalName": "Blazikenite",
+    "zhHansName": "火焰鸡进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0665",
+    "showdownId": "medichamite",
+    "canonicalName": "Medichamite",
+    "zhHansName": "恰雷姆进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0666",
+    "showdownId": "houndoominite",
+    "canonicalName": "Houndoominite",
+    "zhHansName": "黑鲁加进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0667",
+    "showdownId": "aggronite",
+    "canonicalName": "Aggronite",
+    "zhHansName": "波士可多拉进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0668",
+    "showdownId": "banettite",
+    "canonicalName": "Banettite",
+    "zhHansName": "诅咒娃娃进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0669",
+    "showdownId": "tyranitarite",
+    "canonicalName": "Tyranitarite",
+    "zhHansName": "班基拉斯进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0670",
+    "showdownId": "scizorite",
+    "canonicalName": "Scizorite",
+    "zhHansName": "巨钳螳螂进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0671",
+    "showdownId": "pinsirite",
+    "canonicalName": "Pinsirite",
+    "zhHansName": "凯罗斯进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0672",
+    "showdownId": "aerodactylite",
+    "canonicalName": "Aerodactylite",
+    "zhHansName": "化石翼龙进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0673",
+    "showdownId": "lucarionite",
+    "canonicalName": "Lucarionite",
+    "zhHansName": "路卡利欧进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0674",
+    "showdownId": "abomasite",
+    "canonicalName": "Abomasite",
+    "zhHansName": "暴雪王进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0675",
+    "showdownId": "kangaskhanite",
+    "canonicalName": "Kangaskhanite",
+    "zhHansName": "袋兽进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0676",
+    "showdownId": "gyaradosite",
+    "canonicalName": "Gyaradosite",
+    "zhHansName": "暴鲤龙进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0677",
+    "showdownId": "absolite",
+    "canonicalName": "Absolite",
+    "zhHansName": "阿勃梭鲁进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0678",
+    "showdownId": "charizarditey",
+    "canonicalName": "Charizardite Y",
+    "zhHansName": "喷火龙进化石Ｙ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0679",
+    "showdownId": "alakazite",
+    "canonicalName": "Alakazite",
+    "zhHansName": "胡地进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0680",
+    "showdownId": "heracronite",
+    "canonicalName": "Heracronite",
+    "zhHansName": "赫拉克罗斯进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0681",
+    "showdownId": "mawilite",
+    "canonicalName": "Mawilite",
+    "zhHansName": "大嘴娃进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0682",
+    "showdownId": "manectite",
+    "canonicalName": "Manectite",
+    "zhHansName": "雷电兽进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0683",
+    "showdownId": "garchompite",
+    "canonicalName": "Garchompite",
+    "zhHansName": "烈咬陆鲨进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0684",
+    "showdownId": "latiasite",
+    "canonicalName": "Latiasite",
+    "zhHansName": "拉帝亚斯进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0685",
+    "showdownId": "latiosite",
+    "canonicalName": "Latiosite",
+    "zhHansName": "拉帝欧斯进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0686",
+    "showdownId": "roseliberry",
+    "canonicalName": "Roseli Berry",
+    "zhHansName": "洛玫果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0687",
+    "showdownId": "keeberry",
+    "canonicalName": "Kee Berry",
+    "zhHansName": "亚开果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0688",
+    "showdownId": "marangaberry",
+    "canonicalName": "Maranga Berry",
+    "zhHansName": "香罗果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0710",
+    "showdownId": "jawfossil",
+    "canonicalName": "Jaw Fossil",
+    "zhHansName": "颚之化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0711",
+    "showdownId": "sailfossil",
+    "canonicalName": "Sail Fossil",
+    "zhHansName": "鳍之化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0715",
+    "showdownId": "fairygem",
+    "canonicalName": "Fairy Gem",
+    "zhHansName": "妖精宝石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0752",
+    "showdownId": "swampertite",
+    "canonicalName": "Swampertite",
+    "zhHansName": "巨沼怪进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0753",
+    "showdownId": "sceptilite",
+    "canonicalName": "Sceptilite",
+    "zhHansName": "蜥蜴王进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0754",
+    "showdownId": "sablenite",
+    "canonicalName": "Sablenite",
+    "zhHansName": "勾魂眼进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0755",
+    "showdownId": "altarianite",
+    "canonicalName": "Altarianite",
+    "zhHansName": "七夕青鸟进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0756",
+    "showdownId": "galladite",
+    "canonicalName": "Galladite",
+    "zhHansName": "艾路雷朵进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0757",
+    "showdownId": "audinite",
+    "canonicalName": "Audinite",
+    "zhHansName": "差不多娃娃进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0758",
+    "showdownId": "metagrossite",
+    "canonicalName": "Metagrossite",
+    "zhHansName": "巨金怪进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0759",
+    "showdownId": "sharpedonite",
+    "canonicalName": "Sharpedonite",
+    "zhHansName": "巨牙鲨进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0760",
+    "showdownId": "slowbronite",
+    "canonicalName": "Slowbronite",
+    "zhHansName": "呆壳兽进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0761",
+    "showdownId": "steelixite",
+    "canonicalName": "Steelixite",
+    "zhHansName": "大钢蛇进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0762",
+    "showdownId": "pidgeotite",
+    "canonicalName": "Pidgeotite",
+    "zhHansName": "大比鸟进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0763",
+    "showdownId": "glalitite",
+    "canonicalName": "Glalitite",
+    "zhHansName": "冰鬼护进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0764",
+    "showdownId": "diancite",
+    "canonicalName": "Diancite",
+    "zhHansName": "蒂安希进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0767",
+    "showdownId": "cameruptite",
+    "canonicalName": "Cameruptite",
+    "zhHansName": "喷火驼进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0768",
+    "showdownId": "lopunnite",
+    "canonicalName": "Lopunnite",
+    "zhHansName": "长耳兔进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0769",
+    "showdownId": "salamencite",
+    "canonicalName": "Salamencite",
+    "zhHansName": "暴飞龙进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0770",
+    "showdownId": "beedrillite",
+    "canonicalName": "Beedrillite",
+    "zhHansName": "大针蜂进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0776",
+    "showdownId": "normaliumz",
+    "canonicalName": "Normalium Z",
+    "zhHansName": "一般Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0777",
+    "showdownId": "firiumz",
+    "canonicalName": "Firium Z",
+    "zhHansName": "火Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0778",
+    "showdownId": "wateriumz",
+    "canonicalName": "Waterium Z",
+    "zhHansName": "水Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0779",
+    "showdownId": "electriumz",
+    "canonicalName": "Electrium Z",
+    "zhHansName": "电Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0780",
+    "showdownId": "grassiumz",
+    "canonicalName": "Grassium Z",
+    "zhHansName": "草Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0781",
+    "showdownId": "iciumz",
+    "canonicalName": "Icium Z",
+    "zhHansName": "冰Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0782",
+    "showdownId": "fightiniumz",
+    "canonicalName": "Fightinium Z",
+    "zhHansName": "格斗Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0783",
+    "showdownId": "poisoniumz",
+    "canonicalName": "Poisonium Z",
+    "zhHansName": "毒Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0784",
+    "showdownId": "groundiumz",
+    "canonicalName": "Groundium Z",
+    "zhHansName": "地面Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0785",
+    "showdownId": "flyiniumz",
+    "canonicalName": "Flyinium Z",
+    "zhHansName": "飞行Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0786",
+    "showdownId": "psychiumz",
+    "canonicalName": "Psychium Z",
+    "zhHansName": "超能力Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0787",
+    "showdownId": "buginiumz",
+    "canonicalName": "Buginium Z",
+    "zhHansName": "虫Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0788",
+    "showdownId": "rockiumz",
+    "canonicalName": "Rockium Z",
+    "zhHansName": "岩石Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0789",
+    "showdownId": "ghostiumz",
+    "canonicalName": "Ghostium Z",
+    "zhHansName": "幽灵Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0790",
+    "showdownId": "dragoniumz",
+    "canonicalName": "Dragonium Z",
+    "zhHansName": "龙Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0791",
+    "showdownId": "darkiniumz",
+    "canonicalName": "Darkinium Z",
+    "zhHansName": "恶Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0792",
+    "showdownId": "steeliumz",
+    "canonicalName": "Steelium Z",
+    "zhHansName": "钢Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0793",
+    "showdownId": "fairiumz",
+    "canonicalName": "Fairium Z",
+    "zhHansName": "妖精Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0794",
+    "showdownId": "pikaniumz",
+    "canonicalName": "Pikanium Z",
+    "zhHansName": "皮卡丘Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0795",
+    "showdownId": "bottlecap",
+    "canonicalName": "Bottle Cap",
+    "zhHansName": "银色王冠",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0796",
+    "showdownId": "goldbottlecap",
+    "canonicalName": "Gold Bottle Cap",
+    "zhHansName": "金色王冠",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0798",
+    "showdownId": "decidiumz",
+    "canonicalName": "Decidium Z",
+    "zhHansName": "狙射树枭Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0799",
+    "showdownId": "inciniumz",
+    "canonicalName": "Incinium Z",
+    "zhHansName": "炽焰咆哮虎Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0800",
+    "showdownId": "primariumz",
+    "canonicalName": "Primarium Z",
+    "zhHansName": "西狮海壬Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0801",
+    "showdownId": "tapuniumz",
+    "canonicalName": "Tapunium Z",
+    "zhHansName": "卡璞Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0802",
+    "showdownId": "marshadiumz",
+    "canonicalName": "Marshadium Z",
+    "zhHansName": "玛夏多Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0803",
+    "showdownId": "aloraichiumz",
+    "canonicalName": "Aloraichium Z",
+    "zhHansName": "阿罗雷Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0804",
+    "showdownId": "snorliumz",
+    "canonicalName": "Snorlium Z",
+    "zhHansName": "卡比兽Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0805",
+    "showdownId": "eeviumz",
+    "canonicalName": "Eevium Z",
+    "zhHansName": "伊布Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0806",
+    "showdownId": "mewniumz",
+    "canonicalName": "Mewnium Z",
+    "zhHansName": "梦幻Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0836",
+    "showdownId": "pikashuniumz",
+    "canonicalName": "Pikashunium Z",
+    "zhHansName": "智皮卡Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0846",
+    "showdownId": "adrenalineorb",
+    "canonicalName": "Adrenaline Orb",
+    "zhHansName": "胆怯球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0849",
+    "showdownId": "icestone",
+    "canonicalName": "Ice Stone",
+    "zhHansName": "冰之石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0851",
+    "showdownId": "beastball",
+    "canonicalName": "Beast Ball",
+    "zhHansName": "究极球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0879",
+    "showdownId": "terrainextender",
+    "canonicalName": "Terrain Extender",
+    "zhHansName": "大地膜",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0880",
+    "showdownId": "protectivepads",
+    "canonicalName": "Protective Pads",
+    "zhHansName": "部位护具",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0881",
+    "showdownId": "electricseed",
+    "canonicalName": "Electric Seed",
+    "zhHansName": "电气种子",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0882",
+    "showdownId": "psychicseed",
+    "canonicalName": "Psychic Seed",
+    "zhHansName": "精神种子",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0883",
+    "showdownId": "mistyseed",
+    "canonicalName": "Misty Seed",
+    "zhHansName": "薄雾种子",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0884",
+    "showdownId": "grassyseed",
+    "canonicalName": "Grassy Seed",
+    "zhHansName": "青草种子",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0904",
+    "showdownId": "fightingmemory",
+    "canonicalName": "Fighting Memory",
+    "zhHansName": "战斗存储碟",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0905",
+    "showdownId": "flyingmemory",
+    "canonicalName": "Flying Memory",
+    "zhHansName": "飞翔存储碟",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0906",
+    "showdownId": "poisonmemory",
+    "canonicalName": "Poison Memory",
+    "zhHansName": "毒存储碟",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0907",
+    "showdownId": "groundmemory",
+    "canonicalName": "Ground Memory",
+    "zhHansName": "大地存储碟",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0908",
+    "showdownId": "rockmemory",
+    "canonicalName": "Rock Memory",
+    "zhHansName": "岩石存储碟",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0909",
+    "showdownId": "bugmemory",
+    "canonicalName": "Bug Memory",
+    "zhHansName": "虫子存储碟",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0910",
+    "showdownId": "ghostmemory",
+    "canonicalName": "Ghost Memory",
+    "zhHansName": "幽灵存储碟",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0911",
+    "showdownId": "steelmemory",
+    "canonicalName": "Steel Memory",
+    "zhHansName": "钢铁存储碟",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0912",
+    "showdownId": "firememory",
+    "canonicalName": "Fire Memory",
+    "zhHansName": "火焰存储碟",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0913",
+    "showdownId": "watermemory",
+    "canonicalName": "Water Memory",
+    "zhHansName": "清水存储碟",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0914",
+    "showdownId": "grassmemory",
+    "canonicalName": "Grass Memory",
+    "zhHansName": "青草存储碟",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0915",
+    "showdownId": "electricmemory",
+    "canonicalName": "Electric Memory",
+    "zhHansName": "电子存储碟",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0916",
+    "showdownId": "psychicmemory",
+    "canonicalName": "Psychic Memory",
+    "zhHansName": "精神存储碟",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0917",
+    "showdownId": "icememory",
+    "canonicalName": "Ice Memory",
+    "zhHansName": "冰雪存储碟",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0918",
+    "showdownId": "dragonmemory",
+    "canonicalName": "Dragon Memory",
+    "zhHansName": "龙存储碟",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0919",
+    "showdownId": "darkmemory",
+    "canonicalName": "Dark Memory",
+    "zhHansName": "黑暗存储碟",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0920",
+    "showdownId": "fairymemory",
+    "canonicalName": "Fairy Memory",
+    "zhHansName": "妖精存储碟",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0921",
+    "showdownId": "solganiumz",
+    "canonicalName": "Solganium Z",
+    "zhHansName": "索尔迦雷欧Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0922",
+    "showdownId": "lunaliumz",
+    "canonicalName": "Lunalium Z",
+    "zhHansName": "露奈雅拉Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0923",
+    "showdownId": "ultranecroziumz",
+    "canonicalName": "Ultranecrozium Z",
+    "zhHansName": "究极奈克洛Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0924",
+    "showdownId": "mimikiumz",
+    "canonicalName": "Mimikium Z",
+    "zhHansName": "谜拟ＱＺ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0925",
+    "showdownId": "lycaniumz",
+    "canonicalName": "Lycanium Z",
+    "zhHansName": "鬃岩狼人Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:0926",
+    "showdownId": "kommoniumz",
+    "canonicalName": "Kommonium Z",
+    "zhHansName": "杖尾鳞甲龙Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1103",
+    "showdownId": "rustedsword",
+    "canonicalName": "Rusted Sword",
+    "zhHansName": "腐朽的剑",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1104",
+    "showdownId": "rustedshield",
+    "canonicalName": "Rusted Shield",
+    "zhHansName": "腐朽的盾",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1105",
+    "showdownId": "fossilizedbird",
+    "canonicalName": "Fossilized Bird",
+    "zhHansName": "化石鸟",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1106",
+    "showdownId": "fossilizedfish",
+    "canonicalName": "Fossilized Fish",
+    "zhHansName": "化石鱼",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1107",
+    "showdownId": "fossilizeddrake",
+    "canonicalName": "Fossilized Drake",
+    "zhHansName": "化石龙",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1108",
+    "showdownId": "fossilizeddino",
+    "canonicalName": "Fossilized Dino",
+    "zhHansName": "化石海兽",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1109",
+    "showdownId": "strawberrysweet",
+    "canonicalName": "Strawberry Sweet",
+    "zhHansName": "草莓糖饰",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1110",
+    "showdownId": "lovesweet",
+    "canonicalName": "Love Sweet",
+    "zhHansName": "爱心糖饰",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1111",
+    "showdownId": "berrysweet",
+    "canonicalName": "Berry Sweet",
+    "zhHansName": "野莓糖饰",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1112",
+    "showdownId": "cloversweet",
+    "canonicalName": "Clover Sweet",
+    "zhHansName": "幸运草糖饰",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1113",
+    "showdownId": "flowersweet",
+    "canonicalName": "Flower Sweet",
+    "zhHansName": "花朵糖饰",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1114",
+    "showdownId": "starsweet",
+    "canonicalName": "Star Sweet",
+    "zhHansName": "星星糖饰",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1115",
+    "showdownId": "ribbonsweet",
+    "canonicalName": "Ribbon Sweet",
+    "zhHansName": "蝴蝶结糖饰",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1116",
+    "showdownId": "sweetapple",
+    "canonicalName": "Sweet Apple",
+    "zhHansName": "甜甜苹果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1117",
+    "showdownId": "tartapple",
+    "canonicalName": "Tart Apple",
+    "zhHansName": "酸酸苹果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1118",
+    "showdownId": "throatspray",
+    "canonicalName": "Throat Spray",
+    "zhHansName": "爽喉喷雾",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1119",
+    "showdownId": "ejectpack",
+    "canonicalName": "Eject Pack",
+    "zhHansName": "避难背包",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1120",
+    "showdownId": "heavydutyboots",
+    "canonicalName": "Heavy-Duty Boots",
+    "zhHansName": "厚底靴",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1121",
+    "showdownId": "blunderpolicy",
+    "canonicalName": "Blunder Policy",
+    "zhHansName": "打空保险",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1122",
+    "showdownId": "roomservice",
+    "canonicalName": "Room Service",
+    "zhHansName": "客房服务",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1123",
+    "showdownId": "utilityumbrella",
+    "canonicalName": "Utility Umbrella",
+    "zhHansName": "万能伞",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1130",
+    "showdownId": "tr00",
+    "canonicalName": "TR00",
+    "zhHansName": "招式记录００",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1131",
+    "showdownId": "tr01",
+    "canonicalName": "TR01",
+    "zhHansName": "招式记录０１",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1132",
+    "showdownId": "tr02",
+    "canonicalName": "TR02",
+    "zhHansName": "招式记录０２",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1133",
+    "showdownId": "tr03",
+    "canonicalName": "TR03",
+    "zhHansName": "招式记录０３",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1134",
+    "showdownId": "tr04",
+    "canonicalName": "TR04",
+    "zhHansName": "招式记录０４",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1135",
+    "showdownId": "tr05",
+    "canonicalName": "TR05",
+    "zhHansName": "招式记录０５",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1136",
+    "showdownId": "tr06",
+    "canonicalName": "TR06",
+    "zhHansName": "招式记录０６",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1137",
+    "showdownId": "tr07",
+    "canonicalName": "TR07",
+    "zhHansName": "招式记录０７",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1138",
+    "showdownId": "tr08",
+    "canonicalName": "TR08",
+    "zhHansName": "招式记录０８",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1139",
+    "showdownId": "tr09",
+    "canonicalName": "TR09",
+    "zhHansName": "招式记录０９",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1140",
+    "showdownId": "tr10",
+    "canonicalName": "TR10",
+    "zhHansName": "招式记录１０",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1141",
+    "showdownId": "tr11",
+    "canonicalName": "TR11",
+    "zhHansName": "招式记录１１",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1142",
+    "showdownId": "tr12",
+    "canonicalName": "TR12",
+    "zhHansName": "招式记录１２",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1143",
+    "showdownId": "tr13",
+    "canonicalName": "TR13",
+    "zhHansName": "招式记录１３",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1144",
+    "showdownId": "tr14",
+    "canonicalName": "TR14",
+    "zhHansName": "招式记录１４",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1145",
+    "showdownId": "tr15",
+    "canonicalName": "TR15",
+    "zhHansName": "招式记录１５",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1146",
+    "showdownId": "tr16",
+    "canonicalName": "TR16",
+    "zhHansName": "招式记录１６",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1147",
+    "showdownId": "tr17",
+    "canonicalName": "TR17",
+    "zhHansName": "招式记录１７",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1148",
+    "showdownId": "tr18",
+    "canonicalName": "TR18",
+    "zhHansName": "招式记录１８",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1149",
+    "showdownId": "tr19",
+    "canonicalName": "TR19",
+    "zhHansName": "招式记录１９",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1150",
+    "showdownId": "tr20",
+    "canonicalName": "TR20",
+    "zhHansName": "招式记录２０",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1151",
+    "showdownId": "tr21",
+    "canonicalName": "TR21",
+    "zhHansName": "招式记录２１",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1152",
+    "showdownId": "tr22",
+    "canonicalName": "TR22",
+    "zhHansName": "招式记录２２",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1153",
+    "showdownId": "tr23",
+    "canonicalName": "TR23",
+    "zhHansName": "招式记录２３",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1154",
+    "showdownId": "tr24",
+    "canonicalName": "TR24",
+    "zhHansName": "招式记录２４",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1155",
+    "showdownId": "tr25",
+    "canonicalName": "TR25",
+    "zhHansName": "招式记录２５",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1156",
+    "showdownId": "tr26",
+    "canonicalName": "TR26",
+    "zhHansName": "招式记录２６",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1157",
+    "showdownId": "tr27",
+    "canonicalName": "TR27",
+    "zhHansName": "招式记录２７",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1158",
+    "showdownId": "tr28",
+    "canonicalName": "TR28",
+    "zhHansName": "招式记录２８",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1159",
+    "showdownId": "tr29",
+    "canonicalName": "TR29",
+    "zhHansName": "招式记录２９",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1160",
+    "showdownId": "tr30",
+    "canonicalName": "TR30",
+    "zhHansName": "招式记录３０",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1161",
+    "showdownId": "tr31",
+    "canonicalName": "TR31",
+    "zhHansName": "招式记录３１",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1162",
+    "showdownId": "tr32",
+    "canonicalName": "TR32",
+    "zhHansName": "招式记录３２",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1163",
+    "showdownId": "tr33",
+    "canonicalName": "TR33",
+    "zhHansName": "招式记录３３",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1164",
+    "showdownId": "tr34",
+    "canonicalName": "TR34",
+    "zhHansName": "招式记录３４",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1165",
+    "showdownId": "tr35",
+    "canonicalName": "TR35",
+    "zhHansName": "招式记录３５",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1166",
+    "showdownId": "tr36",
+    "canonicalName": "TR36",
+    "zhHansName": "招式记录３６",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1167",
+    "showdownId": "tr37",
+    "canonicalName": "TR37",
+    "zhHansName": "招式记录３７",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1168",
+    "showdownId": "tr38",
+    "canonicalName": "TR38",
+    "zhHansName": "招式记录３８",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1169",
+    "showdownId": "tr39",
+    "canonicalName": "TR39",
+    "zhHansName": "招式记录３９",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1170",
+    "showdownId": "tr40",
+    "canonicalName": "TR40",
+    "zhHansName": "招式记录４０",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1171",
+    "showdownId": "tr41",
+    "canonicalName": "TR41",
+    "zhHansName": "招式记录４１",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1172",
+    "showdownId": "tr42",
+    "canonicalName": "TR42",
+    "zhHansName": "招式记录４２",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1173",
+    "showdownId": "tr43",
+    "canonicalName": "TR43",
+    "zhHansName": "招式记录４３",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1174",
+    "showdownId": "tr44",
+    "canonicalName": "TR44",
+    "zhHansName": "招式记录４４",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1175",
+    "showdownId": "tr45",
+    "canonicalName": "TR45",
+    "zhHansName": "招式记录４５",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1176",
+    "showdownId": "tr46",
+    "canonicalName": "TR46",
+    "zhHansName": "招式记录４６",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1177",
+    "showdownId": "tr47",
+    "canonicalName": "TR47",
+    "zhHansName": "招式记录４７",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1178",
+    "showdownId": "tr48",
+    "canonicalName": "TR48",
+    "zhHansName": "招式记录４８",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1179",
+    "showdownId": "tr49",
+    "canonicalName": "TR49",
+    "zhHansName": "招式记录４９",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1180",
+    "showdownId": "tr50",
+    "canonicalName": "TR50",
+    "zhHansName": "招式记录５０",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1181",
+    "showdownId": "tr51",
+    "canonicalName": "TR51",
+    "zhHansName": "招式记录５１",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1182",
+    "showdownId": "tr52",
+    "canonicalName": "TR52",
+    "zhHansName": "招式记录５２",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1183",
+    "showdownId": "tr53",
+    "canonicalName": "TR53",
+    "zhHansName": "招式记录５３",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1184",
+    "showdownId": "tr54",
+    "canonicalName": "TR54",
+    "zhHansName": "招式记录５４",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1185",
+    "showdownId": "tr55",
+    "canonicalName": "TR55",
+    "zhHansName": "招式记录５５",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1186",
+    "showdownId": "tr56",
+    "canonicalName": "TR56",
+    "zhHansName": "招式记录５６",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1187",
+    "showdownId": "tr57",
+    "canonicalName": "TR57",
+    "zhHansName": "招式记录５７",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1188",
+    "showdownId": "tr58",
+    "canonicalName": "TR58",
+    "zhHansName": "招式记录５８",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1189",
+    "showdownId": "tr59",
+    "canonicalName": "TR59",
+    "zhHansName": "招式记录５９",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1190",
+    "showdownId": "tr60",
+    "canonicalName": "TR60",
+    "zhHansName": "招式记录６０",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1191",
+    "showdownId": "tr61",
+    "canonicalName": "TR61",
+    "zhHansName": "招式记录６１",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1192",
+    "showdownId": "tr62",
+    "canonicalName": "TR62",
+    "zhHansName": "招式记录６２",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1193",
+    "showdownId": "tr63",
+    "canonicalName": "TR63",
+    "zhHansName": "招式记录６３",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1194",
+    "showdownId": "tr64",
+    "canonicalName": "TR64",
+    "zhHansName": "招式记录６４",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1195",
+    "showdownId": "tr65",
+    "canonicalName": "TR65",
+    "zhHansName": "招式记录６５",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1196",
+    "showdownId": "tr66",
+    "canonicalName": "TR66",
+    "zhHansName": "招式记录６６",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1197",
+    "showdownId": "tr67",
+    "canonicalName": "TR67",
+    "zhHansName": "招式记录６７",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1198",
+    "showdownId": "tr68",
+    "canonicalName": "TR68",
+    "zhHansName": "招式记录６８",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1199",
+    "showdownId": "tr69",
+    "canonicalName": "TR69",
+    "zhHansName": "招式记录６９",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1200",
+    "showdownId": "tr70",
+    "canonicalName": "TR70",
+    "zhHansName": "招式记录７０",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1201",
+    "showdownId": "tr71",
+    "canonicalName": "TR71",
+    "zhHansName": "招式记录７１",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1202",
+    "showdownId": "tr72",
+    "canonicalName": "TR72",
+    "zhHansName": "招式记录７２",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1203",
+    "showdownId": "tr73",
+    "canonicalName": "TR73",
+    "zhHansName": "招式记录７３",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1204",
+    "showdownId": "tr74",
+    "canonicalName": "TR74",
+    "zhHansName": "招式记录７４",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1205",
+    "showdownId": "tr75",
+    "canonicalName": "TR75",
+    "zhHansName": "招式记录７５",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1206",
+    "showdownId": "tr76",
+    "canonicalName": "TR76",
+    "zhHansName": "招式记录７６",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1207",
+    "showdownId": "tr77",
+    "canonicalName": "TR77",
+    "zhHansName": "招式记录７７",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1208",
+    "showdownId": "tr78",
+    "canonicalName": "TR78",
+    "zhHansName": "招式记录７８",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1209",
+    "showdownId": "tr79",
+    "canonicalName": "TR79",
+    "zhHansName": "招式记录７９",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1210",
+    "showdownId": "tr80",
+    "canonicalName": "TR80",
+    "zhHansName": "招式记录８０",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1211",
+    "showdownId": "tr81",
+    "canonicalName": "TR81",
+    "zhHansName": "招式记录８１",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1212",
+    "showdownId": "tr82",
+    "canonicalName": "TR82",
+    "zhHansName": "招式记录８２",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1213",
+    "showdownId": "tr83",
+    "canonicalName": "TR83",
+    "zhHansName": "招式记录８３",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1214",
+    "showdownId": "tr84",
+    "canonicalName": "TR84",
+    "zhHansName": "招式记录８４",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1215",
+    "showdownId": "tr85",
+    "canonicalName": "TR85",
+    "zhHansName": "招式记录８５",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1216",
+    "showdownId": "tr86",
+    "canonicalName": "TR86",
+    "zhHansName": "招式记录８６",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1217",
+    "showdownId": "tr87",
+    "canonicalName": "TR87",
+    "zhHansName": "招式记录８７",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1218",
+    "showdownId": "tr88",
+    "canonicalName": "TR88",
+    "zhHansName": "招式记录８８",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1219",
+    "showdownId": "tr89",
+    "canonicalName": "TR89",
+    "zhHansName": "招式记录８９",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1220",
+    "showdownId": "tr90",
+    "canonicalName": "TR90",
+    "zhHansName": "招式记录９０",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1221",
+    "showdownId": "tr91",
+    "canonicalName": "TR91",
+    "zhHansName": "招式记录９１",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1222",
+    "showdownId": "tr92",
+    "canonicalName": "TR92",
+    "zhHansName": "招式记录９２",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1223",
+    "showdownId": "tr93",
+    "canonicalName": "TR93",
+    "zhHansName": "招式记录９３",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1224",
+    "showdownId": "tr94",
+    "canonicalName": "TR94",
+    "zhHansName": "招式记录９４",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1225",
+    "showdownId": "tr95",
+    "canonicalName": "TR95",
+    "zhHansName": "招式记录９５",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1226",
+    "showdownId": "tr96",
+    "canonicalName": "TR96",
+    "zhHansName": "招式记录９６",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1227",
+    "showdownId": "tr97",
+    "canonicalName": "TR97",
+    "zhHansName": "招式记录９７",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1228",
+    "showdownId": "tr98",
+    "canonicalName": "TR98",
+    "zhHansName": "招式记录９８",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1229",
+    "showdownId": "tr99",
+    "canonicalName": "TR99",
+    "zhHansName": "招式记录９９",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1253",
+    "showdownId": "crackedpot",
+    "canonicalName": "Cracked Pot",
+    "zhHansName": "破裂的茶壶",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1254",
+    "showdownId": "chippedpot",
+    "canonicalName": "Chipped Pot",
+    "zhHansName": "缺损的茶壶",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1582",
+    "showdownId": "galaricacuff",
+    "canonicalName": "Galarica Cuff",
+    "zhHansName": "伽勒豆蔻手环",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1592",
+    "showdownId": "galaricawreath",
+    "canonicalName": "Galarica Wreath",
+    "zhHansName": "伽勒豆蔻花圈",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1777",
+    "showdownId": "adamantcrystal",
+    "canonicalName": "Adamant Crystal",
+    "zhHansName": "大金刚宝玉",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1778",
+    "showdownId": "lustrousglobe",
+    "canonicalName": "Lustrous Globe",
+    "zhHansName": "大白宝玉",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1779",
+    "showdownId": "griseouscore",
+    "canonicalName": "Griseous Core",
+    "zhHansName": "大白金宝玉",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1785",
+    "showdownId": "strangeball",
+    "canonicalName": "Strange Ball",
+    "zhHansName": "奇异球",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1861",
+    "showdownId": "maliciousarmor",
+    "canonicalName": "Malicious Armor",
+    "zhHansName": "咒术之铠",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1880",
+    "showdownId": "boosterenergy",
+    "canonicalName": "Booster Energy",
+    "zhHansName": "驱劲能量",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1881",
+    "showdownId": "abilityshield",
+    "canonicalName": "Ability Shield",
+    "zhHansName": "特性护具",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1882",
+    "showdownId": "clearamulet",
+    "canonicalName": "Clear Amulet",
+    "zhHansName": "清净坠饰",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1883",
+    "showdownId": "mirrorherb",
+    "canonicalName": "Mirror Herb",
+    "zhHansName": "模仿香草",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1884",
+    "showdownId": "punchingglove",
+    "canonicalName": "Punching Glove",
+    "zhHansName": "拳击手套",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1885",
+    "showdownId": "covertcloak",
+    "canonicalName": "Covert Cloak",
+    "zhHansName": "密探斗篷",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:1886",
+    "showdownId": "loadeddice",
+    "canonicalName": "Loaded Dice",
+    "zhHansName": "机变骰子",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2344",
+    "showdownId": "auspiciousarmor",
+    "canonicalName": "Auspicious Armor",
+    "zhHansName": "庆祝之铠",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2401",
+    "showdownId": "fairyfeather",
+    "canonicalName": "Fairy Feather",
+    "zhHansName": "妖精之羽",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2402",
+    "showdownId": "syrupyapple",
+    "canonicalName": "Syrupy Apple",
+    "zhHansName": "蜜汁苹果",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2403",
+    "showdownId": "unremarkableteacup",
+    "canonicalName": "Unremarkable Teacup",
+    "zhHansName": "凡作茶碗",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2404",
+    "showdownId": "masterpieceteacup",
+    "canonicalName": "Masterpiece Teacup",
+    "zhHansName": "杰作茶碗",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2406",
+    "showdownId": "cornerstonemask",
+    "canonicalName": "Cornerstone Mask",
+    "zhHansName": "础石面具",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2407",
+    "showdownId": "wellspringmask",
+    "canonicalName": "Wellspring Mask",
+    "zhHansName": "水井面具",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2408",
+    "showdownId": "hearthflamemask",
+    "canonicalName": "Hearthflame Mask",
+    "zhHansName": "火灶面具",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2482",
+    "showdownId": "metalalloy",
+    "canonicalName": "Metal Alloy",
+    "zhHansName": "复合金属",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2559",
+    "showdownId": "clefablite",
+    "canonicalName": "Clefablite",
+    "zhHansName": "皮可西进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2560",
+    "showdownId": "victreebelite",
+    "canonicalName": "Victreebelite",
+    "zhHansName": "大食花进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2561",
+    "showdownId": "starminite",
+    "canonicalName": "Starminite",
+    "zhHansName": "宝石海星进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2562",
+    "showdownId": "dragoninite",
+    "canonicalName": "Dragoninite",
+    "zhHansName": "快龙进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2563",
+    "showdownId": "meganiumite",
+    "canonicalName": "Meganiumite",
+    "zhHansName": "大竺葵进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2564",
+    "showdownId": "feraligite",
+    "canonicalName": "Feraligite",
+    "zhHansName": "大力鳄进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2565",
+    "showdownId": "skarmorite",
+    "canonicalName": "Skarmorite",
+    "zhHansName": "盔甲鸟进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2566",
+    "showdownId": "froslassite",
+    "canonicalName": "Froslassite",
+    "zhHansName": "雪妖女进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2567",
+    "showdownId": "heatranite",
+    "canonicalName": "Heatranite",
+    "zhHansName": "席多蓝恩进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2568",
+    "showdownId": "darkranite",
+    "canonicalName": "Darkranite",
+    "zhHansName": "达克莱伊进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2569",
+    "showdownId": "emboarite",
+    "canonicalName": "Emboarite",
+    "zhHansName": "炎武王进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2570",
+    "showdownId": "excadrite",
+    "canonicalName": "Excadrite",
+    "zhHansName": "龙头地鼠进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2571",
+    "showdownId": "scolipite",
+    "canonicalName": "Scolipite",
+    "zhHansName": "蜈蚣王进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2572",
+    "showdownId": "scraftinite",
+    "canonicalName": "Scraftinite",
+    "zhHansName": "头巾混混进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2573",
+    "showdownId": "eelektrossite",
+    "canonicalName": "Eelektrossite",
+    "zhHansName": "麻麻鳗鱼王进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2574",
+    "showdownId": "chandelurite",
+    "canonicalName": "Chandelurite",
+    "zhHansName": "水晶灯火灵进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2575",
+    "showdownId": "chesnaughtite",
+    "canonicalName": "Chesnaughtite",
+    "zhHansName": "布里卡隆进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2576",
+    "showdownId": "delphoxite",
+    "canonicalName": "Delphoxite",
+    "zhHansName": "妖火红狐进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2577",
+    "showdownId": "greninjite",
+    "canonicalName": "Greninjite",
+    "zhHansName": "甲贺忍蛙进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2578",
+    "showdownId": "pyroarite",
+    "canonicalName": "Pyroarite",
+    "zhHansName": "火炎狮进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2579",
+    "showdownId": "floettite",
+    "canonicalName": "Floettite",
+    "zhHansName": "花叶蒂进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2580",
+    "showdownId": "malamarite",
+    "canonicalName": "Malamarite",
+    "zhHansName": "乌贼王进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2581",
+    "showdownId": "barbaracite",
+    "canonicalName": "Barbaracite",
+    "zhHansName": "龟足巨铠进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2582",
+    "showdownId": "dragalgite",
+    "canonicalName": "Dragalgite",
+    "zhHansName": "毒藻龙进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2583",
+    "showdownId": "hawluchanite",
+    "canonicalName": "Hawluchanite",
+    "zhHansName": "摔角鹰人进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2584",
+    "showdownId": "zygardite",
+    "canonicalName": "Zygardite",
+    "zhHansName": "基格尔德进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2585",
+    "showdownId": "drampanite",
+    "canonicalName": "Drampanite",
+    "zhHansName": "老翁龙进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2586",
+    "showdownId": "zeraorite",
+    "canonicalName": "Zeraorite",
+    "zhHansName": "捷拉奥拉进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2587",
+    "showdownId": "falinksite",
+    "canonicalName": "Falinksite",
+    "zhHansName": "列阵兵进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2635",
+    "showdownId": "raichunitex",
+    "canonicalName": "Raichunite X",
+    "zhHansName": "雷丘进化石Ｘ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2636",
+    "showdownId": "raichunitey",
+    "canonicalName": "Raichunite Y",
+    "zhHansName": "雷丘进化石Ｙ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2637",
+    "showdownId": "chimechite",
+    "canonicalName": "Chimechite",
+    "zhHansName": "风铃铃进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2638",
+    "showdownId": "absolitez",
+    "canonicalName": "Absolite Z",
+    "zhHansName": "阿勃梭鲁进化石Z",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2639",
+    "showdownId": "staraptite",
+    "canonicalName": "Staraptite",
+    "zhHansName": "姆克鹰进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2640",
+    "showdownId": "garchompitez",
+    "canonicalName": "Garchompite Z",
+    "zhHansName": "烈咬陆鲨进化石Z",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2641",
+    "showdownId": "lucarionitez",
+    "canonicalName": "Lucarionite Z",
+    "zhHansName": "路卡利欧进化石Ｚ",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2642",
+    "showdownId": "golurkite",
+    "canonicalName": "Golurkite",
+    "zhHansName": "泥偶巨人进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2643",
+    "showdownId": "meowsticite",
+    "canonicalName": "Meowsticite",
+    "zhHansName": "超能妙喵进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2644",
+    "showdownId": "crabominite",
+    "canonicalName": "Crabominite",
+    "zhHansName": "好胜毛蟹进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2645",
+    "showdownId": "golisopite",
+    "canonicalName": "Golisopite",
+    "zhHansName": "具甲武者进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2646",
+    "showdownId": "magearnite",
+    "canonicalName": "Magearnite",
+    "zhHansName": "玛机雅娜进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2647",
+    "showdownId": "scovillainite",
+    "canonicalName": "Scovillainite",
+    "zhHansName": "狠辣椒进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2648",
+    "showdownId": "baxcalibrite",
+    "canonicalName": "Baxcalibrite",
+    "zhHansName": "戟脊龙进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2649",
+    "showdownId": "tatsugirinite",
+    "canonicalName": "Tatsugirinite",
+    "zhHansName": "米立龙进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  },
+  {
+    "itemId": "item:2650",
+    "showdownId": "glimmoranite",
+    "canonicalName": "Glimmoranite",
+    "zhHansName": "晶光花进化石",
+    "mappingClass": "automatic",
+    "sourceProvenance": "52poke-wiki-item-names"
+  }
+]

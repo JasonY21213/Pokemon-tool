@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "files": [
     {
       "path": "species.json",
@@ -20,6 +20,11 @@
       "path": "items.json",
       "recordCount": 567,
       "sha256": "a79e79e9dc27e3c4068a42c0971e3add12b4a89cfba5cdf2fb9b14e57872ef7a"
+    },
+    {
+      "path": "item-localization.json",
+      "recordCount": 567,
+      "sha256": "38a662d5aa7ebd3059c46ac2f491b7ceae6c34f3d5a55cdb7489d14c26154c2b"
     },
     {
       "path": "types.json",

@@ -12,9 +12,9 @@ import {
 import type { ExcelCellEvidence, ExcelSourceDocument } from './excel-validation.ts'
 import { getProjectRoot } from './source.ts'
 
-const WORKBOOK_SHA256 = 'aa25849772c7d6ccbf56c24943cf97dbe9c34fae3211826b39a82658ddcb49e5'
-const WORKBOOK_SIZE = 3_206_646
-const WORKBOOK_MTIME_UTC = '2026-08-18T17:12:06.6075694Z'
+const WORKBOOK_SHA256 = '7efe9af08bc11b5f6f28e006da3cc34db9ec637b11732934f71988ad6d553156'
+const WORKBOOK_SIZE = 3_206_663
+const WORKBOOK_MTIME_UTC = '2026-08-31T14:38:24.5628820Z'
 
 const DEFINITIONS: TagDefinition[] = [
   ['tag:starter', 'Starter', 'species'],
@@ -125,13 +125,8 @@ function assignment(
 }
 
 export function buildTagsFromExcel(excel: ExcelSourceDocument, canonical: TagCanonicalInput): TagsData {
-  if (
-    excel.fingerprint.size !== WORKBOOK_SIZE
-    || excel.fingerprint.sha256 !== WORKBOOK_SHA256
-    || excel.fingerprint.mtimeUtc !== WORKBOOK_MTIME_UTC
-    || !excel.readOnly
-    || excel.saveCapability
-  ) {
+  const fixedWorkbook = excel.fingerprint.size === WORKBOOK_SIZE && excel.fingerprint.sha256 === WORKBOOK_SHA256 && excel.fingerprint.mtimeUtc === WORKBOOK_MTIME_UTC
+  if (!fixedWorkbook || !excel.readOnly || excel.saveCapability) {
     throw new Error('TAG_EXCEL_SOURCE_CONTRACT_FAILED')
   }
   const national = rows(excel.sheets['全国图鉴'])

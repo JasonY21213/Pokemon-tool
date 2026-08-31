@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { buildFullDryRun } from '../full-dry-run.ts'
 import { buildRuntimeData } from '../runtime-emission.ts'
-import { addPreparedTeamMember, addTeamMember, defensiveSummary, offensiveCoverage, updateMemberAbility, updateMemberForm, updateMemberMoves, updateMemberNature, type TeamMember } from '../../../src/lib/runtime-data/team-builder.ts'
+import { addPreparedTeamMember, addTeamMember, defensiveSummary, offensiveCoverage, updateMemberAbility, updateMemberForm, updateMemberItem, updateMemberMoves, updateMemberNature, type TeamMember } from '../../../src/lib/runtime-data/team-builder.ts'
 
 const dataPromise = buildFullDryRun().then(buildRuntimeData)
 
@@ -48,6 +48,13 @@ test('Team member Ability selection is explicit, Form-bound, and cleared by an i
   assert.equal(selected.abilityId, 'ability:0009')
   assert.equal(updateMemberForm(selected, alolanRaichu).abilityId, null)
   assert.throws(() => updateMemberAbility(member, 'ability:0026', raichu), /TEAM_MEMBER_ABILITY_NOT_AVAILABLE/)
+})
+
+test('Team member Item selection is stable-ID based and rejects unknown Items', async () => {
+  const data = await dataPromise
+  const member: TeamMember = { memberId: 'charizard', formId: 'form:0006:base', abilityId: null, natureId: null, itemId: null, moveIds: [] }
+  assert.equal(updateMemberItem(member, 'item:0270', new Set(data.items.map(item => item.itemId))).itemId, 'item:0270')
+  assert.throws(() => updateMemberItem(member, 'item:9999', new Set(data.items.map(item => item.itemId))), /TEAM_MEMBER_ITEM_MISSING/)
 })
 
 test('prepared query selections preserve valid temporary Moves and Team nature selection uses stable IDs', async () => {

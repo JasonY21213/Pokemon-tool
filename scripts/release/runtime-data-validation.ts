@@ -31,7 +31,7 @@ export async function validateRuntimeDataDirectory(dataRoot: string, tagsPath: s
     values.set(file.path, parseJson(text, file.path))
   }
   const data = {
-    species: values.get('species.json'), forms: values.get('forms.json'), abilities: values.get('abilities.json'), items: values.get('items.json'),
+    species: values.get('species.json'), forms: values.get('forms.json'), abilities: values.get('abilities.json'), items: values.get('items.json'), itemLocalizations: values.get('item-localization.json'),
     types: values.get('types.json'), natures: values.get('natures.json'), growthRates: values.get('growth-rates.json'), moves: values.get('moves.json'),
     evolutions: values.get('evolutions.json'), learnsets: values.get('learnsets.json'),
   } as Omit<RuntimeDataWithLearnsets, 'manifest'>

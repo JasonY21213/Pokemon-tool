@@ -1,5 +1,5 @@
 /// <reference types="vite/client" />
-import type { CoreRuntimeData, LearnsetRuntimeData, RuntimeAbility, RuntimeEvolution, RuntimeForm, RuntimeGrowthRate, RuntimeItem, RuntimeManifest, RuntimeMove, RuntimeNature, RuntimeSpecies, RuntimeType } from './types.ts'
+import type { CoreRuntimeData, LearnsetRuntimeData, RuntimeAbility, RuntimeEvolution, RuntimeForm, RuntimeGrowthRate, RuntimeItem, RuntimeItemLocalization, RuntimeManifest, RuntimeMove, RuntimeNature, RuntimeSpecies, RuntimeType } from './types.ts'
 import { CORE_RUNTIME_DATA_FILES, RuntimeDataIntegrityError, runtimeDataUrl, validateCoreRuntimeData, validateLearnsetRuntimeData, validateRuntimeManifest } from './integrity.ts'
 
 export class RuntimeDataLoadError extends Error {
@@ -34,8 +34,8 @@ export async function loadCoreRuntimeDataFrom(baseUrl: string, fetcher: typeof f
     throw new RuntimeDataLoadError('INCOMPATIBLE_MANIFEST', '运行时数据版本不兼容，请重新构建并发布站点。', { cause })
   }
   const values = await Promise.all(CORE_RUNTIME_DATA_FILES.map(path => fetchJson(path, baseUrl, fetcher)))
-  const [species, forms, abilities, items, types, natures, growthRates, moves, evolutions] = values as [RuntimeSpecies[], RuntimeForm[], RuntimeAbility[], RuntimeItem[], RuntimeType[], RuntimeNature[], RuntimeGrowthRate[], RuntimeMove[], RuntimeEvolution[]]
-  const data = { species, forms, abilities, items, types, natures, growthRates, moves, evolutions }
+  const [species, forms, abilities, items, itemLocalizations, types, natures, growthRates, moves, evolutions] = values as [RuntimeSpecies[], RuntimeForm[], RuntimeAbility[], RuntimeItem[], RuntimeItemLocalization[], RuntimeType[], RuntimeNature[], RuntimeGrowthRate[], RuntimeMove[], RuntimeEvolution[]]
+  const data = { species, forms, abilities, items, itemLocalizations, types, natures, growthRates, moves, evolutions }
   try { validateCoreRuntimeData(data, manifest) }
   catch (cause) {
     const code = cause instanceof RuntimeDataIntegrityError ? cause.code : 'UNKNOWN_INTEGRITY_FAILURE'

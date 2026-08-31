@@ -1,10 +1,12 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import TeamAnalysis from './TeamAnalysis.svelte'
+  import SearchableSelect from './SearchableSelect.svelte'
   import { abilitySlotLabel, moveCategoryPresentation, natureLabel, pokemonTypePresentation, statLabel } from '../presentation/labels'
+  import { itemName, itemSearchLabel } from '../presentation/item-localization'
   import { resolveEffectiveLearnsetMoveIds } from '../runtime-data/learnsets'
-  import { addTeamMember, defensiveSummary, formsById, offensiveCoverage, removeTeamMember, updateMemberAbility, updateMemberMoves, updateMemberNature, validateTeamMembers, type TeamMember } from '../runtime-data/team-builder'
-  import type { LearnsetRuntimeData, PokemonRuntimeData, RuntimeAbility, RuntimeForm, RuntimeMove, RuntimeNature } from '../runtime-data/types'
+  import { addTeamMember, defensiveSummary, formsById, offensiveCoverage, removeTeamMember, updateMemberAbility, updateMemberItem, updateMemberMoves, updateMemberNature, validateTeamMembers, type TeamMember } from '../runtime-data/team-builder'
+  import type { LearnsetRuntimeData, PokemonRuntimeData, RuntimeAbility, RuntimeForm, RuntimeItem, RuntimeMove, RuntimeNature } from '../runtime-data/types'
 
   export let data: PokemonRuntimeData
   export let selectedForm: RuntimeForm | null
@@ -32,6 +34,8 @@
   function abilitiesFor(form: RuntimeForm): Array<{ slot: RuntimeForm['abilities'][number]['slot']; ability: RuntimeAbility }> { return form.abilities.flatMap(slot => { const ability = data.abilities.find(candidate => candidate.abilityId === slot.abilityId); return ability ? [{ slot: slot.slot, ability }] : [] }) }
   function setAbility(member: TeamMember, form: RuntimeForm, abilityId: string | null): void { setMembers(members.map(item => item.memberId === member.memberId ? updateMemberAbility(item, abilityId, form) : item)) }
   function setNature(member: TeamMember, natureId: string | null): void { const ids = new Set(data.natures.map(nature => nature.natureId)); setMembers(members.map(item => item.memberId === member.memberId ? updateMemberNature(item, natureId, ids) : item)) }
+  function setItem(member: TeamMember, itemId: string): void { const itemIds = new Set(data.items.map(item => item.itemId)); setMembers(members.map(item => item.memberId === member.memberId ? updateMemberItem(item, itemId || null, itemIds) : item)) }
+  function selectedItem(member: TeamMember): RuntimeItem | null { return data.items.find(item => item.itemId === member.itemId) ?? null }
   function natureEffect(nature: RuntimeNature): string { return nature.neutral ? '无能力修正' : `${statLabel(nature.plusStat!).zh}+ · ${statLabel(nature.minusStat!).zh}-` }
   function natureOption(nature: RuntimeNature): string { return `${natureLabel(nature.natureId, nature.canonicalName).zh}（${natureEffect(nature)}）` }
   function selectedNature(member: TeamMember): RuntimeNature | null { return data.natures.find(nature => nature.natureId === member.natureId) ?? null }
@@ -43,6 +47,7 @@
   function setMoveQuery(memberId: string, value: string): void { moveQueryByMember = { ...moveQueryByMember, [memberId]: value } }
   function handleMoveKeydown(event: KeyboardEvent, member: TeamMember, formId: string): void { const results = moveSuggestions(member, formId, moveQueryByMember[member.memberId] ?? ''); if (event.key === 'Escape') setMoveQuery(member.memberId, ''); else if (event.key === 'Enter' && results.length) { event.preventDefault(); addMove(member, results[0].moveId) } }
   function typePresentation(typeId: string) { return pokemonTypePresentation(typeId, data.types.find(type => type.typeId === typeId)?.canonicalName) }
+  $: itemOptions = [{ value: '', label: '未选择', keywords: '清除' }, ...data.items.map(item => ({ value: item.itemId, label: itemSearchLabel(item, data.itemLocalizations), keywords: `${item.canonicalName} ${itemName(item, data.itemLocalizations)}` }))]
   onMount(() => { if (!learnsets) onRequestLearnsets() })
   $: formMap = formsById(data)
   $: resolvedMembers = members.flatMap(member => { const form = formMap.get(member.formId); return form ? [{ member, form }] : [] })
@@ -63,7 +68,7 @@
       {#each resolvedMembers as { member, form } (member.memberId)}
         <article class="team-member">
           <header class="team-member-header"><div><h3>{formDisplay(form)}</h3><div class="type-badges">{#each form.types as typeId (typeId)}{@const type = typePresentation(typeId)}<span class="type-badge" style={`--type-background: ${type.background}; --type-foreground: ${type.foreground}`}>{type.label}</span>{/each}</div></div><button type="button" onclick={() => removeMember(member.memberId)}>移除</button></header>
-          <section class="team-card-field"><strong>携带道具</strong><p class="team-data-note">当前运行时数据没有中文道具名称，暂不开放选择。</p></section>
+          <section class="team-card-field"><strong>携带道具</strong><div class="team-item-selection"><SearchableSelect ariaLabel={`${formDisplay(form)}携带道具`} listId={`item-options-${member.memberId}`} options={itemOptions} value={member.itemId ?? ''} onSelect={(value) => setItem(member, value)} placeholder="输入中文或英文道具名" /><button type="button" disabled={!member.itemId} onclick={() => setItem(member, '')}>清除</button></div>{#if selectedItem(member)}<small>{itemSearchLabel(selectedItem(member)!, data.itemLocalizations)}；{selectedItem(member)!.mechanics.status === 'supported' ? '伤害计算器已建模' : '仅选择与显示，伤害机制未建模'}</small>{/if}</section>
           <label class="team-card-field">性格<input type="search" list={`nature-options-${member.memberId}`} value={natureInputValue(member)} oninput={(event) => handleNatureInput(member, (event.currentTarget as HTMLInputElement).value)} onkeydown={(event) => handleNatureKeydown(event, member)} placeholder="输入或选择性格" /><datalist id={`nature-options-${member.memberId}`}>{#each data.natures as nature (nature.natureId)}<option value={natureOption(nature)}></option>{/each}</datalist>{#if selectedNature(member)}<small>{natureEffect(selectedNature(member)!)}</small>{/if}</label>
           <label class="team-card-field">特性<select value={member.abilityId ?? ''} onchange={(event) => setAbility(member, form, (event.currentTarget as HTMLSelectElement).value || null)}><option value="">未选择</option>{#each abilitiesFor(form) as { slot, ability } (ability.abilityId)}<option value={ability.abilityId}>{abilitySlotLabel(slot)} · {ability.zhName ?? '暂无中文'}</option>{/each}</select></label>
           {#if member.abilityId && data.abilities.find(ability => ability.abilityId === member.abilityId)?.mechanics.status === 'unsupported'}<p class="status">该特性机制尚未建模，不会改变事实分析。</p>{/if}

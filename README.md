@@ -7,13 +7,14 @@ Pokémon Tool 是一个以固定来源数据构建的轻量静态 Web 工具。�
 - 按名称、全国图鉴编号和实际 Form 查询宝可梦，展示属性、种族值、特性、标签、进化与已知招式关联。
 - 招式查询、属性相性、能力值、经验等级和第九世代限定范围的单次伤害计算。
 - 本地队伍构建与客观队伍分析，使用浏览器 `localStorage` 保存，并可通过 URL 查询参数分享。
+- 队伍构建支持全部 567 个正式 Item 的简体中文/英文搜索、选择、清除和保存；Item mechanics 是否建模仍由伤害计算器单独判断。
 - 普通太晶与 Stellar 的已实现直接伤害交互，以及明确的未支持机制提示。
 
 ## 架构与运行边界
 
-应用是纯静态站点。构建期管线把固定提交的上游来源、项目维护的稳定 ID/审查决策和只读 Excel 验证输入转换为 `public/data/*.json`。浏览器只加载经过裁剪的运行时 JSON，不读取 Excel、构建报告、本地文件系统或上游仓库，也不联网查询宝可梦数据。
+应用是纯静态站点。构建期管线把固定提交的上游来源、项目维护的稳定 ID/审查决策、独立的 Item 名称本地化输入和只读 Excel 验证输入转换为 `public/data/*.json`。浏览器只加载经过裁剪的运行时 JSON，不读取 Excel、构建报告、本地文件系统或上游仓库，也不联网查询宝可梦数据。
 
-`public/data/manifest.json` 固定运行时 schema 版本、文件清单、记录数与 SHA-256。`npm run release:integrity` 在发布前验证文件存在性、哈希、记录数及 Species、Form、Ability、Move、Item、Type、Growth Rate、Learnset、Evolution 和 Tag 引用。浏览器启动时执行较轻的版本、文件集、记录数和引用检查，避免在正常加载时重复计算所有文件哈希。
+`public/data/manifest.json` 固定运行时 schema 版本、文件清单、记录数与 SHA-256。当前 `schemaVersion: 2` 表示运行时 manifest 的 exact file-set / validation contract 版本；它因新增正式的 `item-localization.json` 而升级，不改变 `items.json` 的 identity schema、stable ID 或既有运行时文件格式。`npm run release:integrity` 在发布前验证文件存在性、哈希、记录数及 Species、Form、Ability、Move、Item、Type、Growth Rate、Learnset、Evolution 和 Tag 引用。浏览器启动时执行较轻的版本、文件集、记录数和引用检查，避免在正常加载时重复计算所有文件哈希。
 
 ## 环境要求与安装
 
@@ -61,9 +62,10 @@ npm run build -- --base=/Pokemon-tool/
 
 - [Pokémon Showdown](https://github.com/smogon/pokemon-showdown/tree/84d7ceb4f009928221fce7a00e711bab263c5f4e)，固定提交 `84d7ceb4f009928221fce7a00e711bab263c5f4e`，用于规范化的宝可梦、Form、招式、特性、道具、属性和 Learnset 等数据。
 - [pokemon-dataset-zh](https://github.com/42arch/pokemon-dataset-zh/tree/82ce04e611d19a12556c3955125b048b36187f52)，固定提交 `82ce04e611d19a12556c3955125b048b36187f52`，用于选定的简体中文本地化数据。
-- `data-source/Pokemon-data.xlsx` 是项目原始/历史数据源副本，只用于迁移、交叉验证和审查，不是浏览器运行时输入，也不进入 Git。
+- [神奇宝贝百科 / 52Poké Wiki](https://wiki.52poke.com/wiki/道具列表（在其他语言中）)，用于当前 567 个 Item 的短简体中文名称；独立人工来源为 `data-source/52poke-item-localization.xlsx`，正式输入为 [`data-curated/item-localization.json`](data-curated/item-localization.json)，运行时输出为 `public/data/item-localization.json`。该输入是人工复制的列表快照，具体映射、owner override 和来源边界见输入文件。
+- `data-source/Pokemon-data.xlsx` 是项目原始/历史数据源副本，只用于既有迁移、交叉验证和审查，不是 Item localization 来源，也不是浏览器运行时输入；它不进入 Git。
 
-上游数据已转换为本项目的稳定 ID 和运行时结构，并非上游文件的直接镜像。两个固定上游仓库在对应提交均包含 MIT License；完整归属与许可文本见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。Pokémon 相关名称和商标归其各自权利人所有；本项目不声明与 Nintendo、GAME FREAK、Creatures 或 The Pokémon Company 存在官方关联。
+上游数据已转换为本项目的稳定 ID 和运行时结构，并非上游文件的直接镜像。两个固定上游仓库在对应提交均包含 MIT License；Item 短名称本地化受 52Poké Wiki 的 CC BY-NC-SA 3.0 归属边界约束。完整归属与许可文本见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。Pokémon 相关名称和商标归其各自权利人所有；本项目不声明与 Nintendo、GAME FREAK、Creatures 或 The Pokémon Company 存在官方关联。
 
 ## 已知范围限制
 

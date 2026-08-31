@@ -28,6 +28,11 @@ export function updateMemberNature(member: TeamMember, natureId: string | null, 
   return { ...member, natureId }
 }
 
+export function updateMemberItem(member: TeamMember, itemId: string | null, itemIds: Set<string>): TeamMember {
+  if (itemId !== null && !itemIds.has(itemId)) throw new Error(`TEAM_MEMBER_ITEM_MISSING: ${member.memberId}:${itemId}`)
+  return { ...member, itemId }
+}
+
 export function updateMemberForm(member: TeamMember, form: RuntimeForm): TeamMember {
   return { ...member, formId: form.formId, abilityId: member.abilityId !== null && form.abilities.some(slot => slot.abilityId === member.abilityId) ? member.abilityId : null, moveIds: [] }
 }
