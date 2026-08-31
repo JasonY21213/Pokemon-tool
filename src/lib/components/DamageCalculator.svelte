@@ -8,6 +8,7 @@
   import type { LearnsetRuntimeData, PokemonRuntimeData, RuntimeAbility, RuntimeAbilityMechanicsEffect, RuntimeForm, RuntimeItem, RuntimeItemMechanicsEffect, RuntimeMove, RuntimeMoveDamageUnsupportedReason, RuntimeSpecies, RuntimeStatBlock } from '../runtime-data/types'
   import ModifierTrace from './ModifierTrace.svelte'
   import SearchableSelect from './SearchableSelect.svelte'
+  import { itemName, itemSearchLabel } from '../presentation/item-localization'
   import { natureLabel, statLabel, typeLabel } from '../presentation/labels'
   import { editableInteger, normalizeEditableInteger } from '../presentation/editable-number'
 
@@ -22,14 +23,7 @@
   const all31 = (): RuntimeStatBlock => ({ hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 })
   const all0 = (): RuntimeStatBlock => ({ hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 })
   const stageOptions: BattleStatStage[] = [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6]
-  const supportedItemNames: Record<string, string> = {
-    'item:0220': '讲究头带',
-    'item:0243': '神秘水滴',
-    'item:0249': '木炭',
-    'item:0268': '达人带',
-    'item:0270': '生命宝珠',
-    'item:0297': '讲究眼镜',
-  }
+  const supportedItemIds = new Set(['item:0220', 'item:0243', 'item:0249', 'item:0268', 'item:0270', 'item:0297'])
 
   let attackerSpeciesId = 'species:0006'
   let attackerFormId = 'form:0006:base'
@@ -141,6 +135,8 @@
     catch { return { value: null, error: '持有物配置无效。' } }
   }
 
+  function displayItemName(itemId: string): string { return itemName(data.items.find(item => item.itemId === itemId), data.itemLocalizations) }
+
   function contextError(context: BattleContext): string | null {
     try { validateDamageCalculatorContext(context); return null } catch { return '战斗状态配置无效。' }
   }
@@ -230,7 +226,7 @@
   $: speciesOptions = data.species.map(species => ({ value: species.speciesId, label: `#${species.nationalDexNumber.toString().padStart(4, '0')} ${species.zhName}` }))
   $: teraOptions = [{ value: '', label: '未太晶化' }, ...STANDARD_TERA_TYPE_IDS.map(typeId => ({ value: typeId, label: `太晶 ${typeName(typeId)}` })), { value: 'stellar', label: '星晶（保留原防守属性）' }]
   $: natureOptions = data.natures.map(nature => ({ value: nature.natureId, label: natureOption(nature), keywords: nature.canonicalName }))
-  $: itemOptions = [{ value: '', label: '无持有物' }, ...data.items.filter(item => supportedItemNames[item.itemId]).map(item => ({ value: item.itemId, label: `${supportedItemNames[item.itemId]}（${item.mechanics.status === 'supported' ? '已支持' : '未建模'}）`, keywords: item.canonicalName }))]
+  $: itemOptions = [{ value: '', label: '无持有物' }, ...data.items.filter(item => supportedItemIds.has(item.itemId)).map(item => ({ value: item.itemId, label: `${itemSearchLabel(item, data.itemLocalizations)}（${item.mechanics.status === 'supported' ? '已支持' : '未建模'}）`, keywords: `${item.canonicalName} ${itemName(item, data.itemLocalizations)}` }))]
   $: attackerConfiguration = resolveCombatant({ speciesId: attackerSpeciesId, formId: attackerFormId, level: attackerLevel, natureId: attackerNatureId, ivs: attackerIvs, evs: attackerEvs, abilityId: attackerAbilityId, teraTypeId: attackerTeraTypeId })
   $: defenderConfiguration = resolveCombatant({ speciesId: defenderSpeciesId, formId: defenderFormId, level: defenderLevel, natureId: defenderNatureId, ivs: defenderIvs, evs: defenderEvs, abilityId: defenderAbilityId, teraTypeId: defenderTeraTypeId })
   $: attackerAbility = attackerConfiguration.value?.ability ?? null
@@ -372,9 +368,9 @@
         {#if terrain !== 'none'}<p class="status">场地着地状态：攻击方{damageResult.attackerGrounded ? '着地' : '未着地'}；防守方{damageResult.defenderGrounded ? '着地' : '未着地'}。</p>{/if}
         {#if damageResult.appliedTerrainEffects.length}<p class="status">场地效果：{damageResult.appliedTerrainEffects.map(terrainEffectLabel).join('、')}</p>{/if}
         {#if damageResult.appliedAbilityEffects.length}<p class="status">已应用：{damageResult.appliedAbilityEffects.map(item => `${data.abilities.find(ability => ability.abilityId === item.abilityId)?.zhName ?? item.abilityId}（${item.effect.kind === 'stab-multiplier' ? `STAB ${damageResult.stabMultiplier}×` : abilityEffectLabel(item.effect)}）`).join('、')}</p>{/if}
-        {#if damageResult.appliedItemEffects.length}<p class="status">持有物：{damageResult.appliedItemEffects.map(item => `${supportedItemNames[item.itemId] ?? '未知道具'}（${itemEffectLabel(item.effect)}）`).join('、')}</p>{/if}
+        {#if damageResult.appliedItemEffects.length}<p class="status">持有物：{damageResult.appliedItemEffects.map(item => `${displayItemName(item.itemId)}（${itemEffectLabel(item.effect)}）`).join('、')}</p>{/if}
         {#if damageResult.unmodeledAbilityIds.length}<p class="status">已选择但未建模：{damageResult.unmodeledAbilityIds.map(id => data.abilities.find(ability => ability.abilityId === id)?.zhName ?? id).join('、')}；结果仅使用核心伤害机制。</p>{/if}
-        {#if damageResult.unmodeledItemIds.length}<p class="status">已选择但未建模的持有物：{damageResult.unmodeledItemIds.map(id => supportedItemNames[id] ?? '未知道具').join('、')}；该物品不会改变结果。</p>{/if}
+        {#if damageResult.unmodeledItemIds.length}<p class="status">已选择但未建模的持有物：{damageResult.unmodeledItemIds.map(displayItemName).join('、')}；该物品不会改变结果。</p>{/if}
         <ModifierTrace trace={damageResult.modifierTrace} />
       {:else if damageResult?.status === 'non-damaging'}
         <p class="status">这是变化招式，不使用普通伤害公式。</p>
