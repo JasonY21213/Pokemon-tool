@@ -36,9 +36,9 @@ test('runtime data URLs preserve root and repository base paths', () => {
 
 test('production runtime directory passes manifest hashes, counts, stable references, and Tags', async () => {
   const summary = await validateRuntimeDataDirectory(publicData, tagsPath)
-  assert.equal(summary.schemaVersion, 1)
-  assert.equal(summary.files, 11)
-  assert.equal(summary.records, 6196)
+  assert.equal(summary.schemaVersion, 2)
+  assert.equal(summary.files, 12)
+  assert.equal(summary.records, 6763)
   assert.ok(summary.bytes > 3_000_000)
 })
 
@@ -47,10 +47,18 @@ test('core loader validates the manifest and loads every core file without reque
   const requested: string[] = []
   const data = await loadCoreRuntimeDataFrom('/Pokemon-tool/', mockFetch(responses, requested))
   assert.equal(requested[0], '/Pokemon-tool/data/manifest.json')
-  assert.equal(requested.length, 10)
+  assert.equal(requested.length, 11)
   assert.equal(requested.includes('/Pokemon-tool/data/learnsets.json'), false)
   assert.equal(data.species.length, 1025)
   assert.equal(data.forms.length, 1380)
+})
+
+test('schema 1 manifests are rejected by the schema 2 exact file-set contract', async () => {
+  const responses = await runtimeResponses()
+  await assert.rejects(
+    loadCoreRuntimeDataFrom('/', mockFetch(responses, [], { 'manifest.json': JSON.stringify({ schemaVersion: 1, files: [] }) })),
+    error => error instanceof RuntimeDataLoadError && error.code === 'INCOMPATIBLE_MANIFEST' && /版本不兼容/.test(error.message),
+  )
 })
 
 test('core loader returns stable user-facing failures for missing, malformed, incompatible, and unreachable data', async () => {
@@ -58,7 +66,7 @@ test('core loader returns stable user-facing failures for missing, malformed, in
   const cases: Array<{ overrides: Partial<Record<string, string | null>>; code: string; message: RegExp }> = [
     { overrides: { 'manifest.json': null }, code: 'HTTP', message: /数据清单/ },
     { overrides: { 'manifest.json': '{' }, code: 'MALFORMED_JSON', message: /格式损坏/ },
-    { overrides: { 'manifest.json': JSON.stringify({ schemaVersion: 2, files: [] }) }, code: 'INCOMPATIBLE_MANIFEST', message: /版本不兼容/ },
+    { overrides: { 'manifest.json': JSON.stringify({ schemaVersion: 3, files: [] }) }, code: 'INCOMPATIBLE_MANIFEST', message: /版本不兼容/ },
     { overrides: { 'forms.json': null }, code: 'HTTP', message: /数据不完整/ },
     { overrides: { 'moves.json': '{' }, code: 'MALFORMED_JSON', message: /格式损坏/ },
   ]

@@ -18,9 +18,9 @@ from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
 
 
-EXPECTED_SIZE = 3_206_646
-EXPECTED_SHA256 = "aa25849772c7d6ccbf56c24943cf97dbe9c34fae3211826b39a82658ddcb49e5"
-EXPECTED_MTIME_NS = 1_787_073_126_607_569_400
+EXPECTED_SIZE = 3_206_663
+EXPECTED_SHA256 = "7efe9af08bc11b5f6f28e006da3cc34db9ec637b11732934f71988ad6d553156"
+EXPECTED_MTIME_NS = 1_788_187_104_562_882_000
 
 RANGES: dict[str, tuple[int, int, int, int]] = {
     "属性克制": (1, 80, 1, 36),
@@ -63,12 +63,9 @@ def fingerprint(path: Path) -> dict[str, Any]:
 
 
 def assert_expected_fingerprint(value: dict[str, Any]) -> None:
-    if value["size"] != EXPECTED_SIZE:
-        raise RuntimeError(f"EXCEL_FINGERPRINT_SIZE: expected {EXPECTED_SIZE}, received {value['size']}")
-    if value["sha256"] != EXPECTED_SHA256:
-        raise RuntimeError(f"EXCEL_FINGERPRINT_SHA256: expected {EXPECTED_SHA256}, received {value['sha256']}")
-    if value["mtimeNs"] != EXPECTED_MTIME_NS:
-        raise RuntimeError(f"EXCEL_FINGERPRINT_MTIME: expected {EXPECTED_MTIME_NS}, received {value['mtimeNs']}")
+    if value["size"] == EXPECTED_SIZE and value["sha256"] == EXPECTED_SHA256 and value["mtimeNs"] == EXPECTED_MTIME_NS:
+        return
+    raise RuntimeError(f"EXCEL_FINGERPRINT_MISMATCH: expected fixed {EXPECTED_SIZE}/{EXPECTED_SHA256}/{EXPECTED_MTIME_NS}, received {value['size']}/{value['sha256']}/{value['mtimeNs']}")
 
 
 def json_value(value: Any) -> Any:

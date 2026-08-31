@@ -70,6 +70,15 @@ export type RuntimeItem = {
   mechanics: RuntimeItemMechanics
 }
 
+export type RuntimeItemLocalization = {
+  itemId: string
+  showdownId: string
+  canonicalName: string
+  zhHansName: string
+  mappingClass: 'automatic' | 'owner-override'
+  sourceProvenance: string
+}
+
 export type RuntimeTypeEffectiveness = 0 | 0.5 | 1 | 2
 
 export type RuntimeType = {
@@ -177,7 +186,7 @@ export type RuntimeManifestFile = {
 }
 
 export type RuntimeManifest = {
-  schemaVersion: 1
+  schemaVersion: 2
   files: RuntimeManifestFile[]
 }
 
@@ -186,6 +195,7 @@ export type CoreRuntimeData = {
   forms: RuntimeForm[]
   abilities: RuntimeAbility[]
   items: RuntimeItem[]
+  itemLocalizations: RuntimeItemLocalization[]
   types: RuntimeType[]
   natures: RuntimeNature[]
   growthRates: RuntimeGrowthRate[]

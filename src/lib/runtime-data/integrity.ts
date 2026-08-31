@@ -1,11 +1,15 @@
 import type { CoreRuntimeData, LearnsetRuntimeData, RuntimeDataWithLearnsets, RuntimeManifest } from './types.ts'
 
-export const RUNTIME_SCHEMA_VERSION = 1
+// The manifest version is the exact runtime file-set and validation-contract version.
+// Version 2 adds item-localization.json to the required runtime file set; it does not
+// change the items.json identity schema or any existing runtime collection format.
+export const RUNTIME_SCHEMA_VERSION = 2
 export const CORE_RUNTIME_DATA_FILES = [
   'species.json',
   'forms.json',
   'abilities.json',
   'items.json',
+  'item-localization.json',
   'types.json',
   'natures.json',
   'growth-rates.json',
@@ -70,6 +74,7 @@ export function validateCoreRuntimeData(data: Omit<CoreRuntimeData, 'manifest'>,
     'forms.json': data.forms,
     'abilities.json': data.abilities,
     'items.json': data.items,
+    'item-localization.json': data.itemLocalizations,
     'types.json': data.types,
     'natures.json': data.natures,
     'growth-rates.json': data.growthRates,
@@ -84,7 +89,9 @@ export function validateCoreRuntimeData(data: Omit<CoreRuntimeData, 'manifest'>,
   const speciesIds = unique(data.species.map(record => record.speciesId), 'SPECIES_ID_UNIQUENESS')
   const formIds = unique(data.forms.map(record => record.formId), 'FORM_ID_UNIQUENESS')
   const abilityIds = unique(data.abilities.map(record => record.abilityId), 'ABILITY_ID_UNIQUENESS')
-  unique(data.items.map(record => record.itemId), 'ITEM_ID_UNIQUENESS')
+  const itemIds = unique(data.items.map(record => record.itemId), 'ITEM_ID_UNIQUENESS')
+  const localizedItemIds = unique(data.itemLocalizations.map(record => record.itemId), 'ITEM_LOCALIZATION_ID_UNIQUENESS')
+  ensure(data.itemLocalizations.length === data.items.length && data.itemLocalizations.every(record => itemIds.has(record.itemId) && record.showdownId.length > 0 && record.canonicalName.length > 0 && record.zhHansName.length > 0 && (record.mappingClass === 'automatic' || record.mappingClass === 'owner-override') && record.sourceProvenance.length > 0) && localizedItemIds.size === itemIds.size, 'ITEM_LOCALIZATION_REFERENCE', 'Item localization data must cover every Item exactly once.')
   const typeIds = unique(data.types.map(record => record.typeId), 'TYPE_ID_UNIQUENESS')
   unique(data.natures.map(record => record.natureId), 'NATURE_ID_UNIQUENESS')
   const growthRateIds = unique(data.growthRates.map(record => record.growthRateId), 'GROWTH_RATE_ID_UNIQUENESS')
