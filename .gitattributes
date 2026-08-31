@@ -1,0 +1,2 @@
+# Runtime JSON is hashed byte-for-byte by public/data/manifest.json.
+public/data/*.json text eol=lf
